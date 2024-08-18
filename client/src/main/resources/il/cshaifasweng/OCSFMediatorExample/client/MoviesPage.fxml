@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="618.0" prefWidth="915.0" style="-fx-background-color: black" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.MoviesPage">
+   <children>
+      <Label fx:id="soon" layoutX="249.0" layoutY="11.0" prefHeight="30.0" prefWidth="223.0" text="Coming Soon" textFill="#f6d9d9">
+         <font>
+            <Font name="Britannic Bold" size="30.0" />
+         </font>
+      </Label>
+      <Label fx:id="NowInCinema" layoutX="220.0" layoutY="307.0" prefHeight="30.0" prefWidth="263.0" text="Now in the cinema" textFill="#f6d9d9" textOverrun="CLIP">
+         <font>
+            <Font name="Britannic Bold" size="30.0" />
+         </font>
+      </Label>
+
+      <Label layoutX="700.0" layoutY="20.0" text="Search by Name:" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="searchByNameField" layoutX="700.0" layoutY="40.0" prefWidth="200.0" />
+
+      <!-- ComboBox for genre search -->
+      <Label layoutX="700.0" layoutY="80.0" text="Search by Genre:" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="searchByGenreBox" layoutX="700.0" layoutY="100.0" prefWidth="200.0" />
+
+      <!-- ComboBox for cinema search -->
+      <Label layoutX="700.0" layoutY="140.0" text="Search by Cinema:" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="searchByCinemaBox" layoutX="700.0" layoutY="160.0" prefWidth="200.0" />
+
+      <!-- DatePicker for specific date search -->
+      <Label layoutX="700.0" layoutY="200.0" text="Search by Date:" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="searchByDatePicker" layoutX="700.0" layoutY="220.0" prefWidth="200.0" />
+
+      <!-- Button to trigger the search -->
+      <Button fx:id="searchButton" layoutX="800.0" layoutY="260.0" mnemonicParsing="false" onAction="#handleSearch" text="Search" />
+
+      <ImageView fx:id="cinemaImageView1" fitHeight="220.0" fitWidth="155.0" layoutX="80.0" layoutY="360.0" preserveRatio="true" />
+      <Label fx:id="cinemaLabel1" layoutX="98.0" layoutY="590.0" prefHeight="25.0" prefWidth="111.0" text="Movie 1" textFill="#f6d9d9">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+
+      <ImageView fx:id="cinemaImageView2" fitHeight="220.0" fitWidth="155.0" layoutX="280.0" layoutY="360.0" preserveRatio="true" />
+      <Label fx:id="cinemaLabel2" layoutX="290.0" layoutY="590.0" prefHeight="25.0" prefWidth="111.0" text="Movie 2" textFill="#f6d9d9">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+
+      <ImageView fx:id="cinemaImageView3" fitHeight="220.0" fitWidth="155.0" layoutX="480.0" layoutY="360.0" preserveRatio="true" />
+      <Label fx:id="cinemaLabel3" layoutX="501.0" layoutY="590.0" prefHeight="25.0" prefWidth="111.0" text="Movie 3" textFill="#f6d9d9">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+
+      <ImageView fx:id="cinemaImageView4" fitHeight="220.0" fitWidth="155.0" layoutX="680.0" layoutY="360.0" preserveRatio="true" />
+      <Label fx:id="cinemaLabel4" layoutX="723.0" layoutY="590.0" prefHeight="25.0" prefWidth="111.0" text="Movie 4" textFill="#f6d9d9">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+
+      <!-- ImageView להצגת התמונה של הסרטים הקרובים -->
+      <ImageView fx:id="soonImageView1" fitHeight="185.0" fitWidth="147.0" layoutX="25.0" layoutY="55.0" preserveRatio="true" />
+      <Label fx:id="soonLabel1" layoutX="63.0" layoutY="250.0" prefHeight="40.0" prefWidth="127.0" text="Movie 1" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+
+      <ImageView fx:id="soonImageView2" fitHeight="185.0" fitWidth="147.0" layoutX="230.0" layoutY="55.0" preserveRatio="true" />
+      <Label fx:id="soonLabel2" layoutX="249.0" layoutY="250.0" prefHeight="40.0" prefWidth="127.0" text="Movie 2" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+
+      <ImageView fx:id="soonImageView3" fitHeight="190.0" fitWidth="147.0" layoutX="430.0" layoutY="55.0" preserveRatio="true" />
+      <Label fx:id="soonLabel3" layoutX="449.0" layoutY="250.0" prefHeight="40.0" prefWidth="127.0" text="Movie 3" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+
+      <!-- כפתורים למעבר בין התמונות -->
+      <Button fx:id="leftButton" graphicTextGap="1.0" layoutX="-19.0" layoutY="403.0" mnemonicParsing="false" onAction="#handleLeftButton" prefHeight="95.0" prefWidth="82.0" style="-fx-background-color: black;" text="&lt;" textAlignment="CENTER" textOverrun="CLIP">
+         <font>
+            <Font name="System Bold" size="37.0" />
+         </font>
+         <textFill>
+            <RadialGradient centerX="1.0" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill>
+      </Button>
+      <Button fx:id="rightButton" graphicTextGap="1.0" layoutX="835.0" layoutY="403.0" mnemonicParsing="false" onAction="#handleRightButton" prefHeight="95.0" prefWidth="76.0" style="-fx-background-color: black;" text="&gt;" textAlignment="CENTER" textOverrun="CLIP">
+         <font>
+            <Font name="System Bold" size="37.0" />
+         </font>
+         <textFill>
+            <RadialGradient centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill>
+      </Button>
+      <MenuBar layoutX="190.0" layoutY="12.0" prefHeight="22.0" prefWidth="511.0">
+         <menus>
+            <Menu fx:id="moviesMenue" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Movies">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Movies List" onAction="#switchToMoviesPage"/>
+               </items>
+            </Menu>
+            <Menu fx:id="cardsMenue" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="  Cards">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Cards" onAction="#switchToCardsPage"/>
+               </items>
+            </Menu>
+            <Menu fx:id="comlaintsMenue" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="  Complaints">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="File a Complaint" onAction="#switchToComplaintPage"/>
+               </items>
+            </Menu>
+            <Menu fx:id="chargebackMenue" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="  Chargeback">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Cancel Purchases and chargeback" onAction="#switchToChargebackPage" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <AnchorPane prefHeight="400.0" prefWidth="180.0" style="-fx-background-color: #9fc5e8;">
+         <children>
+            <ImageView fitHeight="110.0" fitWidth="118.0" layoutX="36.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/cinema.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="53.0" layoutY="124.0" text="Welcome">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="loginBtn" layoutX="34.0" layoutY="250.0" mnemonicParsing="false" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="      Login" onAction="#switchToLoginPage">
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@images/login.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="homePageBtn" layoutX="34.0" layoutY="208.0" mnemonicParsing="false" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Home Page" onAction="#switchToHomePage">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@images/home.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="signUpBtn" layoutX="28.0" layoutY="292.0" mnemonicParsing="false" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="Sign Up">
+               <graphic>
+                  <ImageView fitHeight="38.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@images/signUp.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="changeHostBtn" layoutX="45.0" layoutY="424.0" mnemonicParsing="false" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" onAction="#switchToHostPage" text="Change Host IP" underline="true" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

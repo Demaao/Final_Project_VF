@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
+            prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="il.cshaifasweng.OCSFMediatorExample.client.CardsPage">
+    <children>
+        <AnchorPane prefHeight="500.0" prefWidth="190.0" style="-fx-background-color: #9fc5e8;">
+            <children>
+                <ImageView fitHeight="110.0" fitWidth="118.0" layoutX="36.0" layoutY="42.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@images/cinema.png"/>
+                    </image>
+                </ImageView>
+                <Label layoutX="53.0" layoutY="124.0" text="Welcome">
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
+                </Label>
+                <Button fx:id="loginBtn" layoutX="34.0" layoutY="250.0" mnemonicParsing="false"
+                        onAction="#switchToLoginPage"
+                        style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;"
+                        text="      Login">
+                    <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true"
+                                   style="-fx-cursor: hand;">
+                            <image>
+                                <Image url="@images/login.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="homePageBtn" layoutX="34.0" layoutY="208.0" mnemonicParsing="false"
+                        onAction="#switchToHomePage"
+                        style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;"
+                        text="   Home Page">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true"
+                                   style="-fx-cursor: hand;">
+                            <image>
+                                <Image url="@images/home.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="signUpBtn" layoutX="28.0" layoutY="292.0" mnemonicParsing="false"
+                        style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;"
+                        text="Sign Up">
+                    <graphic>
+                        <ImageView fitHeight="38.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true"
+                                   style="-fx-cursor: hand;">
+                            <image>
+                                <Image url="@images/signUp.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="changeHostBtn" layoutX="45.0" layoutY="424.0" mnemonicParsing="false"
+                        onAction="#switchToHostPage"
+                        style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;"
+                        text="Change Host IP" underline="true"/>
+            </children>
+        </AnchorPane>
+        <MenuBar layoutX="190.0" layoutY="1.0" prefHeight="22.0" prefWidth="511.0">
+            <menus>
+                <Menu fx:id="moviesMenue" mnemonicParsing="false"
+                      style="-fx-background-color: transparent; -fx-cursor: hand;" text="Movies">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#switchToMoviesPage" text="Movies List"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="cardsMenue" mnemonicParsing="false"
+                      style="-fx-background-color: transparent; -fx-cursor: hand;" text="  Cards">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#switchToCardsPage" text="Cards"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="comlaintsMenue" mnemonicParsing="false"
+                      style="-fx-background-color: transparent; -fx-cursor: hand;" text="  Complaints">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#switchToComplaintPage" text="File a Complaint"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="chargebackMenue" mnemonicParsing="false"
+                      style="-fx-background-color: transparent; -fx-cursor: hand;" text="  Chargeback">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#switchToChargebackPage"
+                                  text="Cancel Purchases and chargeback"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <Label layoutX="281.0" layoutY="50.0" text="Save money by buying a card! ">
+            <font>
+                <Font name="System Bold" size="20.0"/>
+            </font>
+        </Label>
+        <Button layoutX="594.0" layoutY="375.0" mnemonicParsing="false" onAction="#switchToCheckTicketsPage"
+                prefHeight="31.0" prefWidth="58.0"
+                style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;"
+                text="here" underline="true">
+            <font>
+                <Font name="System Bold" size="15.0"/>
+            </font>
+        </Button>
+        <Label fx:id="selectProductText" layoutX="215.0" layoutY="380.0"
+               text="Already own a card? Check how many tickets you have left">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <Button fx:id="purchaseCardBtn" layoutX="520.0" layoutY="295.0" mnemonicParsing="false"
+                onAction="#switchToPurchaseProductsPage" prefHeight="34.0" prefWidth="98.0"
+                style="-fx-background-color: #9fc5e8; -fx-background-radius: 10; -fx-cursor: hand;" text="Purchase">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Button>
+        <Label layoutX="215.0" layoutY="112.0" text="at any of our cinemas.">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <Label layoutX="215.0" layoutY="134.0" text="Note: Entry is subject to seat availability.">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <Label layoutX="215.0" layoutY="90.0" text="Each card containts 20 tickets, allowing you to watch any movie">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <Label layoutX="215.0" layoutY="178.0" text="Purchase Cards:">
+            <font>
+                <Font name="System Bold" size="15.0"/>
+            </font>
+        </Label>
+        <Label layoutX="271.0" layoutY="210.0" text="Tickets type">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <Label layoutX="271.0" layoutY="257.0" text="Quantity">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <Spinner fx:id="ticketTypeChooser" layoutX="364.0" layoutY="208.0" prefHeight="26.0" prefWidth="98.0"/>
+        <Spinner fx:id="cardsQuantityChooser" editable="true" layoutX="364.0" layoutY="255.0" prefHeight="26.0"
+                 prefWidth="98.0"/>
+    </children>
+</AnchorPane>
