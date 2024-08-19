@@ -20,20 +20,11 @@ public class HomePage {
     @FXML // fx:id="cardsBtn"
     private Button cardsBtn; // Value injected by FXMLLoader
 
-    @FXML // fx:id="cardsMenue"
-    private Menu cardsMenue; // Value injected by FXMLLoader
-
     @FXML // fx:id="changeHostBtn"
     private Button changeHostBtn; // Value injected by FXMLLoader
 
     @FXML // fx:id="chargebackBtn"
     private Button chargebackBtn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="chargebackMenue"
-    private Menu chargebackMenue; // Value injected by FXMLLoader
-
-    @FXML // fx:id="comlaintsMenue"
-    private Menu comlaintsMenue; // Value injected by FXMLLoader
 
     @FXML // fx:id="complaintBtn"
     private Button complaintBtn; // Value injected by FXMLLoader
@@ -47,14 +38,8 @@ public class HomePage {
     @FXML // fx:id="moviesBtn"
     private Button moviesBtn; // Value injected by FXMLLoader
 
-    @FXML // fx:id="moviesMenue"
-    private Menu moviesMenue; // Value injected by FXMLLoader
-
     @FXML // fx:id="signUpBtn"
     private Button signUpBtn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="soonInCinemaList"
-    private ListView<String> soonInCinemaList; // Value injected by FXMLLoader
 
     @FXML
     private void switchToHostPage() throws IOException {
@@ -91,6 +76,11 @@ public class HomePage {
         App.switchScreen("CardsPage");
     }
 
+    /*
+
+    @FXML // fx:id="soonInCinemaList"
+    private ListView<String> soonInCinemaList; // Value injected by FXMLLoader
+
     private ObservableList<String> movieList;
 
     static List<Movie> movieL2 = new ArrayList<Movie>();
@@ -119,6 +109,8 @@ public class HomePage {
             }
         });
     }
+
+     */
 
 
 }

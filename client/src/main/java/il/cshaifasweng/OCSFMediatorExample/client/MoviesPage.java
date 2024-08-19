@@ -4,6 +4,7 @@ import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import il.cshaifasweng.OCSFMediatorExample.entities.SoonMovie;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -214,6 +215,13 @@ public class MoviesPage {
         String cinema = searchByCinemaBox.getValue();
         LocalDate date = searchByDatePicker.getValue();
         // Implement search functionality here
+    }
+
+    public void handleHomeRightButton(ActionEvent actionEvent) {
+    }
+
+    public void handleHomeLeftButton(ActionEvent actionEvent) {
+
     }
 }
 

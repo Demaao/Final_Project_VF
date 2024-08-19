@@ -69,6 +69,11 @@ public class ChargebackPage {
     }
 
     @FXML
+    private void switchToChargebackPage() throws IOException {
+        App.switchScreen("ChargebackPage");
+    }
+
+    @FXML
     private void switchToHostPage() throws IOException {
         App.switchScreen("HostPage");
     }
