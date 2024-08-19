@@ -3,37 +3,36 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class ComplaintPage {
+public class FiledComplaintsPage {
+
+    @FXML
+    private Button ChargebackBtn;
 
     @FXML
     private TextField IDNumText;
 
     @FXML
-    private Menu cardsMenue;
+    private Button OKBtn;
+
+    @FXML
+    private Button cardsBtn;
 
     @FXML
     private Button changeHostBtn;
 
     @FXML
-    private Menu chargebackMenue;
+    private TableView<?> complaintTable;
 
     @FXML
-    private Menu comlaintsMenue;
+    private Button complaintsBtn;
 
     @FXML
-    private TextArea complaintText;
-
-    @FXML
-    private TextField emailText;
-
-    @FXML
-    private TextField fullNameText;
+    private Button enterBtn;
 
     @FXML
     private Button homePageBtn;
@@ -42,19 +41,12 @@ public class ComplaintPage {
     private Button loginBtn;
 
     @FXML
-    private Menu moviesMenue;
+    private Button moviesBtn;
 
     @FXML
-    private TextField phoneText;
-
-    @FXML
-    private Button signUpBtn;
-
-    @FXML
-    private Button submitComplaintBtn;
-
-    @FXML
-    void submitComplaint(ActionEvent event) {
+    void showComplaintTable(ActionEvent event) {
+        complaintTable.setVisible(true);
+        OKBtn.setVisible(true);
 
     }
 
@@ -69,7 +61,7 @@ public class ComplaintPage {
     }
 
     @FXML
-   private void switchToHostPage() throws IOException {
+    private void switchToHostPage() throws IOException {
         App.switchScreen("HostPage");
     }
 
@@ -93,11 +85,5 @@ public class ComplaintPage {
         App.switchScreen("MoviesPage");
     }
 
-    @FXML
-    public void switchToFiledComplaintsPage() throws IOException {
-        App.switchScreen("FiledComplaintsPage");
-    }
-
 }
-
 

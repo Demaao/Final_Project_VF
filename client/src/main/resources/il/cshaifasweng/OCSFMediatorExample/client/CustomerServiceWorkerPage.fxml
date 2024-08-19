@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.CustomerServiceWorkerPage">
+   <children>
+      <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
+         <children>
+            <ImageView fitHeight="110.0" fitWidth="118.0" layoutX="31.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/cinema.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="53.0" layoutY="125.0" text="Welcome">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="homePageBtn" layoutX="19.0" layoutY="200.0" mnemonicParsing="false" onAction="#switchToHomePage" prefHeight="47.0" prefWidth="142.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Home Page">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@images/home.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="changeHostBtn" layoutX="41.0" layoutY="574.0" mnemonicParsing="false" onAction="#switchToHostPage" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" text="Change Host IP" underline="true" />
+            <Button fx:id="logOutBtn" layoutX="23.0" layoutY="250.0" mnemonicParsing="false" onAction="#switchToHomePage" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Log Out">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@images/logOut.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Button fx:id="handleComplaintBtn" layoutX="680.0" layoutY="572.0" mnemonicParsing="false" onAction="#switchToHandleComplaintPage" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Handle Complaint">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Label layoutX="224.0" layoutY="50.0" text="Welcome Back!" textFill="#f6d9d9">
+         <font>
+            <Font name="Britannic Bold" size="40.0" />
+         </font>
+      </Label>
+      <Label layoutX="230.0" layoutY="120.0" text="Here is all the complaints, please handle them as soon as possible." textFill="#f6d9d9">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TableView fx:id="complaintTable" layoutX="230.0" layoutY="207.0" prefHeight="344.0" prefWidth="630.0">
+         <columns>
+            <TableColumn prefWidth="114.39990234375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint NO." />
+            <TableColumn prefWidth="155.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint Subject" />
+            <TableColumn prefWidth="115.20004272460938" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Customer ID" />
+            <TableColumn prefWidth="134.4000244140625" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Submission Time" />
+            <TableColumn prefWidth="116.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Status" />
+         </columns>
+      </TableView>
+      <Label layoutX="230.0" layoutY="157.0" text="Select the complaint that you want to handle" textFill="#f6d9d9">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

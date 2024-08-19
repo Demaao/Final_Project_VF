@@ -184,6 +184,33 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "FiledComplaintsPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("FiledComplaintsPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "CustomerServiceWorkerPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("CustomerServiceWorkerPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "HandleComplaintPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("HandleComplaintPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
 
         }
     }

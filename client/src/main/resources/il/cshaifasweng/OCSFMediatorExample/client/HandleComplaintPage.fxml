@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.HandleComplaintPage">
+   <children>
+      <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
+         <children>
+            <ImageView fitHeight="110.0" fitWidth="118.0" layoutX="31.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/cinema.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="53.0" layoutY="125.0" text="Welcome">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="homePageBtn" layoutX="19.0" layoutY="200.0" mnemonicParsing="false" onAction="#switchToHomePage" prefHeight="47.0" prefWidth="142.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Home Page">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@images/home.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="changeHostBtn" layoutX="41.0" layoutY="574.0" mnemonicParsing="false" onAction="#switchToHostPage" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" text="Change Host IP" underline="true" />
+            <Button fx:id="logOutBtn" layoutX="23.0" layoutY="250.0" mnemonicParsing="false" onAction="#switchToHomePage" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Log Out">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@images/logOut.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Button fx:id="submitAnswerBtn" layoutX="677.0" layoutY="485.0" mnemonicParsing="false" onAction="#submitAnswer" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Submit Answer">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Label layoutX="230.0" layoutY="207.0" text="Write your answer to the compalint" textFill="#f6d9d9">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TableView fx:id="complaintTable" layoutX="227.0" layoutY="74.0" prefHeight="116.0" prefWidth="630.0">
+         <columns>
+            <TableColumn prefWidth="114.39996337890625" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Subject" />
+            <TableColumn prefWidth="107.20001220703125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Customer Id" />
+            <TableColumn prefWidth="132.80001831054688" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Customer Name" />
+            <TableColumn prefWidth="279.2000732421875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint" />
+         </columns>
+      </TableView>
+      <Label layoutX="227.0" layoutY="270.0" prefHeight="30.0" prefWidth="130.0" text="Answer:" textFill="#f6d9d9">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="answerText" layoutX="334.0" layoutY="270.0" prefHeight="197.0" prefWidth="454.0" promptText="Answer">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextArea>
+   </children>
+</AnchorPane>

@@ -95,16 +95,16 @@
                 </Button>
             </children>
         </AnchorPane>
-        <Label layoutX="224.0" layoutY="165.0" prefHeight="30.0" prefWidth="104.0" text="Full Name" textFill="#f6d9d9">
+        <Label layoutX="224.0" layoutY="143.0" prefHeight="30.0" prefWidth="104.0" text="Full Name" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <TextField fx:id="fullNameText" layoutX="393.0" layoutY="165.0" prefHeight="34.0" prefWidth="370.0" promptText="Full Name">
+        <TextField fx:id="fullNameText" layoutX="393.0" layoutY="143.0" prefHeight="34.0" prefWidth="370.0" promptText="Full Name">
          <font>
             <Font size="15.0" />
          </font></TextField>
-        <Button fx:id="submitComplaintBtn" layoutX="716.0" layoutY="563.0" mnemonicParsing="false" onAction="#submitComplaint" prefHeight="40.0" prefWidth="99.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Submit">
+        <Button fx:id="submitComplaintBtn" layoutX="716.0" layoutY="540.0" mnemonicParsing="false" onAction="#submitComplaint" prefHeight="40.0" prefWidth="99.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Submit">
             <font>
                 <Font size="18.0" />
             </font>
@@ -119,41 +119,61 @@
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="224.0" layoutY="220.0" prefHeight="30.0" prefWidth="118.0" text="ID Number" textFill="#f6d9d9">
+        <Label layoutX="224.0" layoutY="198.0" prefHeight="30.0" prefWidth="118.0" text="ID Number" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <TextField fx:id="IDNumText" layoutX="393.0" layoutY="220.0" prefHeight="34.0" prefWidth="370.0" promptText="ID Number">
+        <TextField fx:id="IDNumText" layoutX="393.0" layoutY="198.0" prefHeight="34.0" prefWidth="370.0" promptText="ID Number">
          <font>
             <Font size="15.0" />
          </font></TextField>
-        <Label layoutX="224.0" layoutY="275.0" prefHeight="30.0" prefWidth="142.0" text="Phone Number" textFill="#f6d9d9">
+        <Label layoutX="224.0" layoutY="253.0" prefHeight="30.0" prefWidth="142.0" text="Phone Number" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <TextField fx:id="phoneText" layoutX="393.0" layoutY="275.0" prefHeight="34.0" prefWidth="370.0" promptText="Phone Number">
+        <TextField fx:id="phoneText" layoutX="393.0" layoutY="253.0" prefHeight="34.0" prefWidth="370.0" promptText="Phone Number">
          <font>
             <Font size="15.0" />
          </font></TextField>
-        <TextField fx:id="emailText" layoutX="393.0" layoutY="330.0" prefHeight="34.0" prefWidth="370.0" promptText="Email Address">
+        <TextField fx:id="emailText" layoutX="393.0" layoutY="308.0" prefHeight="34.0" prefWidth="370.0" promptText="Email Address">
          <font>
             <Font size="15.0" />
          </font></TextField>
-        <Label layoutX="224.0" layoutY="330.0" prefHeight="30.0" prefWidth="142.0" text="Email Address" textFill="#f6d9d9">
+        <Label layoutX="224.0" layoutY="308.0" prefHeight="30.0" prefWidth="142.0" text="Email Address" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="224.0" layoutY="385.0" prefHeight="30.0" prefWidth="130.0" text="Complaint" textFill="#f6d9d9">
+        <Label layoutX="224.0" layoutY="363.0" prefHeight="30.0" prefWidth="130.0" text="Subject" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <TextArea fx:id="complaintText" layoutX="393.0" layoutY="385.0" prefHeight="135.0" prefWidth="370.0" promptText="Complaint">
+        <TextArea fx:id="complaintText" layoutX="393.0" layoutY="418.0" prefHeight="102.0" prefWidth="370.0" promptText="Complaint">
          <font>
             <Font size="15.0" />
          </font></TextArea>
+      <Button layoutX="640.0" layoutY="574.0" mnemonicParsing="false" onAction="#switchToFiledComplaintsPage" prefHeight="43.0" prefWidth="83.0" style="-fx-text-fill: #f6d9d9; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" text="here" textFill="#f6d9d9" underline="true">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Button>
+      <Label fx:id="selectProductText" layoutX="224.0" layoutY="581.0" text="Filed a complaint? check your complaint's status" textFill="#f6d9d9">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="224.0" layoutY="418.0" prefHeight="30.0" prefWidth="130.0" text="Complaint" textFill="#f6d9d9">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="subjectText" layoutX="393.0" layoutY="363.0" prefHeight="34.0" prefWidth="370.0" promptText="Subject">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
     </children>
 </AnchorPane>
