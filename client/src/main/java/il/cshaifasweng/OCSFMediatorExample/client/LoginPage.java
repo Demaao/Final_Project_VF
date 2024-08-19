@@ -45,7 +45,7 @@ public class LoginPage {
             App.switchScreen("HomePage");
         }
         else if(userNAmeText.getText().equals("content manager")){
-            App.switchScreen("HomePage");
+            App.switchScreen("ContentManagerPage");
         }
         else if(userNAmeText.getText().equals("customer service worker")){
             App.switchScreen("CustomerServiceWorkerPage");

@@ -41,6 +41,11 @@ public class HandleComplaintPage {
         App.switchScreen("HomePage");
     }
 
+    @FXML
+    private void switchToCustomerServiceWorkerPage() throws IOException {
+        App.switchScreen("CustomerServiceWorkerPage");
+    }
+
 
     @FXML
     private void switchToHostPage() throws IOException {

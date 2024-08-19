@@ -7,6 +7,11 @@ import java.io.IOException;
 
 public class CustomerServiceWorkerPage {
     @FXML
+    private void switchToCustomerServiceWorkerPage() throws IOException {
+        App.switchScreen("CustomerServiceWorkerPage");
+    }
+
+    @FXML
     private void switchToHomePage() throws IOException {
         App.switchScreen("HomePage");
     }

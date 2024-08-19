@@ -211,7 +211,51 @@ public class App extends Application {
                     }
                 });
                 break;
-
+            case "ContentManagerPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("ContentManagerPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "AddMoviePage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("AddMoviePage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "RemoveMoviePage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("RemoveMoviePage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "EditPricesPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("EditPricesPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "EditScreeningPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("EditScreeningPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
         }
     }
 
