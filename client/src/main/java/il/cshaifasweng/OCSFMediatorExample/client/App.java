@@ -256,6 +256,51 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "HeadManagerPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("HeadManagerPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "TicketsReportPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("TicketsReportPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "CardsAndLinksReportPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("CardsAndLinksReportPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "ComplaintsReportPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("ComplaintsReportPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "ConfirmPricesUpdatesPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("ConfirmPricesUpdatesPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
         }
     }
 

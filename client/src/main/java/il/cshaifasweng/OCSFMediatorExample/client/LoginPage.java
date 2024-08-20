@@ -39,7 +39,7 @@ public class LoginPage {
     private void switchToRightHomePage() throws IOException {
         //////////////////////////  NEED TO CHANGE ... THIS IS ONLY TO SEE THE WORKERS PAGES
         if(userNAmeText.getText().equals("head manager")){
-            App.switchScreen("HomePage");
+            App.switchScreen("HeadManagerPage");
         }
         else if(userNAmeText.getText().equals("branch manager")){
             App.switchScreen("HomePage");
