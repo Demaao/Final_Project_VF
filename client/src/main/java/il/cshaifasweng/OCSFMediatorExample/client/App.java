@@ -301,6 +301,15 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "BranchManagerPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("BranchManagerPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
         }
     }
 

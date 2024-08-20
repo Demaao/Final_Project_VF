@@ -42,7 +42,7 @@ public class LoginPage {
             App.switchScreen("HeadManagerPage");
         }
         else if(userNAmeText.getText().equals("branch manager")){
-            App.switchScreen("HomePage");
+            App.switchScreen("BranchManagerPage");
         }
         else if(userNAmeText.getText().equals("content manager")){
             App.switchScreen("ContentManagerPage");
