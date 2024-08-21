@@ -61,14 +61,14 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/images/1.jpg");
-		byte[] image2 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/images/2.jpg");
-		byte[] image3 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/images/3.jpg");
-		byte[] image4 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/images/4.jpg");
-		byte[] image5 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/images/5.jpg");
-		byte[] image6 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/images/6.jpg");
-		byte[] image7 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/images/7.jpg");
-		byte[] image8 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/images/8.jpg");
+		byte[] image1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
+		byte[] image2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
+		byte[] image3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
+		byte[] image4 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\4.jpg");
+		byte[] image5 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\5.jpg");
+		byte[] image6 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\6.jpg");
+		byte[] image7 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\7.jpg");
+		byte[] image8 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\8.jpg");
 
 
 		// יצירת אובייקטי סרט ושמירתם עם התמונות כ-Byte Array
@@ -106,9 +106,9 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateSoonMovies(Session session) throws Exception {
-		byte[] Soonimage1 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/SoonImages/1.jpg");
-		byte[] Soonimage2 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/SoonImages/2.jpg");
-		byte[] Soonimage3 = loadImageFromFile("C:/Users/USER/IdeaProjects/Final_Project/server/src/main/resources/SoonImages/3.jpg");
+		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
+		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
+		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
 
 		SoonMovie soonMovie1 = new SoonMovie(1,"Blink Twice", "Sep 5,2024", Soonimage1);
 		session.save(soonMovie1);
