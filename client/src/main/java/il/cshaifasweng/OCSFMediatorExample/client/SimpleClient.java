@@ -1,5 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.HomeMovie;
 import il.cshaifasweng.OCSFMediatorExample.entities.SoonMovie;
 import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
@@ -27,17 +28,19 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("soonMovies")) {
 					List<SoonMovie> soonMovies = (List<SoonMovie>) message.getObject();
 					EventBus.getDefault().post(new UpdateSoonMoviesEvent(soonMovies));
+				} else if (message.getMessage().equals("homeMovies")) {  // טיפול בהודעת homeMovies
+					List<HomeMovie> homeMovies = (List<HomeMovie>) message.getObject();
+					EventBus.getDefault().post(new UpdateHomeMoviesEvent(homeMovies));
 				}
 			});
 		}
 	}
 
 
-
 	// Singleton pattern to get the client instance
 	public static SimpleClient getClient() {
 		if (client == null) {
-			client = new SimpleClient("localhost", 3000); // Example host and port
+			client = new SimpleClient("localhost", 3000);
 		}
 		return client;
 	}
@@ -45,7 +48,6 @@ public class SimpleClient extends AbstractClient {
 		SimpleClient.client= client;
 	}
 }
-
 
 
 

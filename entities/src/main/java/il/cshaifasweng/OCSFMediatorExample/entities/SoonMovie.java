@@ -13,7 +13,7 @@ public class SoonMovie implements Serializable {
     private int id;
 
     private String Engtitle;
-
+    private String Hebtitle;
     private String releaseDate;
 
     @Lob
@@ -24,43 +24,37 @@ public class SoonMovie implements Serializable {
     public SoonMovie() {
     }
 
-    public SoonMovie(int id,String Engtitle, String releaseDate, byte[] imageData) {
+    public SoonMovie(int id,String Engtitle,String Hebtitle, String releaseDate, byte[] imageData) {
         this.id=id;
         this.Engtitle = Engtitle;
+        this.Hebtitle = Hebtitle;
         this.releaseDate = releaseDate;
         this.imageData = imageData;
     }
 
     // Getters and setters
-    public int getId() {
-        return id;
+    public int getId() {return id;}
+
+    public void setId(int id) {this.id = id;}
+
+    public String getEngtitle() {return Engtitle;}
+
+    public void setEngtitle(String Engtitle) {this.Engtitle = Engtitle;}
+
+    public String getHebtitle() {
+        return Hebtitle;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setHebtitle(String Hebtitle) {
+        this.Hebtitle = Hebtitle;
     }
 
-    public String getEngtitle() {
-        return Engtitle;
-    }
+    public String getReleaseDate() {return releaseDate;}
 
-    public void setEngtitle(String Engtitle) {
-        this.Engtitle = Engtitle;
-    }
+    public void setReleaseDate(String releaseDate) {this.releaseDate = releaseDate;}
 
-    public String getReleaseDate() {
-        return releaseDate;
-    }
+    public byte[] getImageData() {return imageData;}
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
+    public void setImageData(byte[] imageData) {this.imageData = imageData;}
 
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
-    }
 }
