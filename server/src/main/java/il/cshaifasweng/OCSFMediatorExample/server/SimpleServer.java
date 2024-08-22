@@ -46,6 +46,10 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(SoonMovie.class);
 		configuration.addAnnotatedClass(HomeMovie.class);
 		configuration.addAnnotatedClass(Branch.class);
+		configuration.addAnnotatedClass(HeadManager.class); //////////////////
+		configuration.addAnnotatedClass(BranchManager.class); /////////////
+		configuration.addAnnotatedClass(ContentManager.class); /////////////////
+		configuration.addAnnotatedClass(CustomerServiceWorker.class); /////////////
 
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
@@ -60,10 +64,90 @@ public class SimpleServer extends AbstractServer {
 			generateSoonMovies(session);
 			generateHomeMovies(session);
 			generateBranches(session);
+			generateHeadManager(session); /////////////////////
+			generateBranchManager(session); /////////////////////
+			generateContentManager(session); /////////////////////
+			generateCustomerServiceWorker(session); //////////////
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
+		Branch telAvivCinema = session.get(Branch.class, 2);
+		Branch eilatCinema = session.get(Branch.class, 3);
+		Branch karmielCinema = session.get(Branch.class, 4);
+		Branch jerusalemCinema = session.get(Branch.class, 5);
+
+		List<Branch> CinemaBranches = new ArrayList<>();  // יצירת רשימת בתי קולנוע עבור הסרט הראשון
+		CinemaBranches.add(haifaCinema);
+		CinemaBranches.add(telAvivCinema);
+		CinemaBranches.add(eilatCinema);
+		CinemaBranches.add(telAvivCinema);
+		CinemaBranches.add(karmielCinema);
+		CinemaBranches.add(jerusalemCinema);
+
+		HeadManager headManager = new HeadManager(324122258, "Shada Ghanem", "shadaGh0512",
+				"shada0512", "Head Manager", false, "0527990807",
+				"shada.5.12.2001@gmail.com", CinemaBranches);
+		session.save(headManager);
+		session.flush();
+	}
+
+	private static void generateBranchManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+		Branch haifaCinema = session.get(Branch.class, 1);
+		Branch telAvivCinema = session.get(Branch.class, 2);
+		Branch eilatCinema = session.get(Branch.class, 3);
+		Branch karmielCinema = session.get(Branch.class, 4);
+		Branch jerusalemCinema = session.get(Branch.class, 5);
+
+		BranchManager branchManager1 = new BranchManager(200134667, "Dema Omar","dema123",
+				"dema123", "Branch Manager", false, "0508873332",
+				"dema@gmail.com", haifaCinema);
+		session.save(branchManager1);
+		session.flush();
+
+		BranchManager branchManager2 = new BranchManager(304134667, "Hala Ishan","hala123",
+				"hala123", "Branch Manager", false, "0520073332",
+				"hala@gmail.com", telAvivCinema);
+		session.save(branchManager2);
+		session.flush();
+
+		BranchManager branchManager3 = new BranchManager(230134667, "Shatha Maree","shatha123",
+				"shatha123", "Branch Manager", false, "0508855532",
+				"shatha@gmail.com", eilatCinema);
+		session.save(branchManager3);
+		session.flush();
+
+		BranchManager branchManager4 = new BranchManager(300664667, "Lian Natour","lian99",
+				"lian99", "Branch Manager", false, "0508866332",
+				"lain@gmail.com", karmielCinema);
+		session.save(branchManager4);
+		session.flush();
+
+		BranchManager branchManager5 = new BranchManager(200100667, "Rozaline Kozly","roza123",
+				"roza123", "Branch Manager", false, "0520073332",
+				"raza@gmail.com", jerusalemCinema);
+		session.save(branchManager5);
+		session.flush();
+	}
+
+	private static void generateContentManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+		ContentManager contentManager1 = new ContentManager(300134667, "Anna Collins","anna123",
+				"anna123", "Content Manager", false, "0508000032",
+				"annaa@gmail.com");
+		session.save(contentManager1);
+		session.flush();
+	}
+
+	private static void generateCustomerServiceWorker(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+		CustomerServiceWorker customerServiceWorker1 = new CustomerServiceWorker(300100007, "Emma Thompson","emma123",
+				"emma123", "Customer Service Worker", false, "0500000032",
+				"annaa@gmail.com");
+		session.save(customerServiceWorker1);
+		session.flush();
 	}
 
 
@@ -222,8 +306,6 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
-
-
 	private static byte[] loadImageFromFile(String filePath) throws IOException {
 		File file = new File(filePath);
 		try (InputStream inputStream = new FileInputStream(file)) {
@@ -252,6 +334,40 @@ public class SimpleServer extends AbstractServer {
 		return session.createQuery(query).getResultList();
 	}
 
+	private static HeadManager getHeadManager(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<HeadManager> query = builder.createQuery(HeadManager.class);
+		query.from(HeadManager.class);
+		return session.createQuery(query).getSingleResult();
+	}
+
+	private static List<BranchManager> getBranchManager(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<BranchManager> query = builder.createQuery(BranchManager.class);
+		query.from(BranchManager.class);
+		return session.createQuery(query).getResultList();
+	}
+
+	private static ContentManager getContentManager(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ContentManager> query = builder.createQuery(ContentManager.class);
+		query.from(ContentManager.class);
+		return session.createQuery(query).getSingleResult();
+	}
+
+	private static CustomerServiceWorker getCustomerServiceWorker(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<CustomerServiceWorker> query = builder.createQuery(CustomerServiceWorker.class);
+		query.from(CustomerServiceWorker.class);
+		return session.createQuery(query).getSingleResult();
+	}
+
+	private static List<Employee> getAllEmployees(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Employee> query = builder.createQuery(Employee.class);
+		query.from(Employee.class);
+		return session.createQuery(query).getResultList();
+	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -295,6 +411,59 @@ public class SimpleServer extends AbstractServer {
 					exception.printStackTrace();
 				}
 			}
+			else if(msgString.equals("login")){  ////////////////////////////////////////
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					String userNameString = message.getUserName();
+					String passwordString = message.getPassword();
+					List<Employee> employees = getAllEmployees(session);
+					NewMessage newMessage;
+					int flag = 0;
+					for (Employee employee : employees) {
+						flag = 0;
+						if(userNameString.equals(employee.getUsername()) && passwordString.equals(employee.getPassword())){
+							if(employee.isOnline()){
+								newMessage = new NewMessage("Alreadylogin");
+                            }
+							else{
+								employee.setIsOnline(true);
+								newMessage = new NewMessage(employee, "login");
+                            }
+                            client.sendToClient(newMessage);
+                            session.getTransaction().commit();
+                            break;
+						}
+						else flag = 1;
+					}
+					if(flag == 1) {
+						newMessage = new NewMessage("loginDenied");
+						client.sendToClient(newMessage);
+						session.getTransaction().commit();
+					}
+
+                } catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}
+			else if (msgString.equals("logOut")) {  //////////////////////////////////////////////
+			try (Session session = sessionFactory.openSession()) {
+				session.beginTransaction();
+				List<Employee> employees = getAllEmployees(session);
+				Employee employee = message.getEmployee();
+				for(Employee emp : employees){
+					if(emp.getId() == employee.getId()){
+						emp.setIsOnline(false);
+					}
+				}
+				NewMessage newMessage = new NewMessage("logOut");
+				client.sendToClient(newMessage);
+				session.getTransaction().commit();
+			} catch (Exception exception) {
+				System.err.println("An error occurred, changes have been rolled back.");
+				exception.printStackTrace();
+			}
+		}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

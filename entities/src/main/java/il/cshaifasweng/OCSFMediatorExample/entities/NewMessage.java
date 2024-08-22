@@ -5,6 +5,10 @@ import java.io.Serializable;
 public class NewMessage implements Serializable {
     Object object;
     String message;
+    String userName;//////////////////////
+    String password;////////////////////////////
+    Employee employee; //////////////////////////
+
     public NewMessage(Object object, String message) {
         this.object = object;
         this.message = message;
@@ -13,6 +17,27 @@ public class NewMessage implements Serializable {
     public NewMessage(String message) {
         this.message = message;
     }
+
+    public NewMessage(String message, String username, String password) {////////////////////////////////
+        this.message = message;;
+        this.userName = username;
+        this.password = password;
+    }
+    public NewMessage(String message, Employee employee) { //////////////////////////
+        this.message = message;
+        this.employee = employee;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public String getUserName(){
+        return userName;
+    }
+    public String getPassword(){
+        return password;
+    } //////////////////////////////////////////////////////
 
     public Object getObject() {
         return object;

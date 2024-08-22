@@ -1,12 +1,12 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class HostPage {
     static int flag = 0;
@@ -31,10 +31,9 @@ public class HostPage {
     void enterHostIP(ActionEvent event) throws IOException {
         flag = 1;
         if (!HostIP.getText().startsWith("localhost")) {
-            SimpleClient client;// = new SimpleClient(HostIP.getText(), 3000);
-            client = SimpleClient.getClient();
-            client.setHost(HostIP.getText());
-            client.openConnection();
+            SimpleClient.client.closeConnection();
+            SimpleClient.client.setHost(HostIP.getText());
+            SimpleClient.client.openConnection();
         }
         try {
             switchToHomePage();
@@ -46,9 +45,23 @@ public class HostPage {
 
     @FXML
     private void switchToHomePage() throws IOException {
-        App.switchScreen("HomePage");
+        if(LoginPage.employee1 != null){
+        String position = LoginPage.employee1.getPosition();
+            if(Objects.equals(position, "Head Manager")){
+                App.switchScreen("HeadManagerPage");
+            } else if (Objects.equals(position, "Branch Manager")) {
+                App.switchScreen("BranchManagerPage");
+            } else if (Objects.equals(position, "Content Manager")) {
+                App.switchScreen("ContentManagerPage");
+            } else if(Objects.equals(position, "Customer Service Worker")) {
+                App.switchScreen("CustomerServiceWorkerPage");
+            }
+        }
+        else
+            App.switchScreen("HomePage");
     }
-}
+    }
+
 
         // try {//////////////////////////////////////////////////////////////////////////////////////
         // SimpleClient.getClient().sendToServer(new NewMessage("movieList"));
