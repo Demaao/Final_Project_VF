@@ -1,12 +1,10 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.entities.HomeMovie;
-import il.cshaifasweng.OCSFMediatorExample.entities.SoonMovie;
+import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
-import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
-import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
+
 import java.util.List;
 
 public class SimpleClient extends AbstractClient {
@@ -32,6 +30,20 @@ public class SimpleClient extends AbstractClient {
 					List<HomeMovie> homeMovies = (List<HomeMovie>) message.getObject();
 					EventBus.getDefault().post(new UpdateHomeMoviesEvent(homeMovies));
 				}
+				 else if (message.getMessage().equals("login")) {  ///////////////////////////////////////////////////////
+					Employee employee = (Employee) message.getObject();
+					EventBus.getDefault().post(new UpdateLoginEvent(employee));
+			}
+				 else if (message.getMessage().equals("loginDenied")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("User name or Password is incorrect!")));
+				}
+				else if (message.getMessage().equals("Alreadylogin")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("User is already logged in!")));
+				}
+				else if (message.getMessage().equals("logOut")) {
+					EventBus.getDefault().post(new MessageEvent("Logged out successfully"));
+					EventBus.getDefault().post(new WarningEvent(new Warning("Logged out successfully")));
+				}
 			});
 		}
 	}
@@ -43,9 +55,6 @@ public class SimpleClient extends AbstractClient {
 			client = new SimpleClient("localhost", 3000);
 		}
 		return client;
-	}
-	public static void setClient(SimpleClient client) {
-		SimpleClient.client= client;
 	}
 }
 

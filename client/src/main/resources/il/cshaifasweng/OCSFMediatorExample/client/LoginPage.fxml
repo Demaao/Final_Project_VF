@@ -38,12 +38,12 @@
                 <Button fx:id="changeHostBtn" layoutX="41.0" layoutY="574.0" mnemonicParsing="false" onAction="#switchToHostPage" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" text="Change Host IP" underline="true" />
             </children>
         </AnchorPane>
-    <Button fx:id="loginBtn" layoutX="349.0" layoutY="452.0" mnemonicParsing="false" onAction="#switchToRightHomePage" prefHeight="40.0" prefWidth="348.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Login">
+    <Button fx:id="loginBtn" layoutX="349.0" layoutY="452.0" mnemonicParsing="false" onAction="#requestEmployeeFromServer" prefHeight="40.0" prefWidth="348.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Login">
         <font>
             <Font size="23.0" />
         </font>
     </Button>
-    <TextField fx:id="userNAmeText" layoutX="349.0" layoutY="297.0" prefHeight="40.0" prefWidth="348.0" promptText="User Name">
+    <TextField fx:id="userNameText" layoutX="349.0" layoutY="297.0" prefHeight="40.0" prefWidth="348.0" promptText="User Name">
          <font>
             <Font size="18.0" />
          </font></TextField>

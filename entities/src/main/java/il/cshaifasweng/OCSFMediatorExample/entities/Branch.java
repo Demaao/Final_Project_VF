@@ -7,7 +7,6 @@ import java.util.List;
 @Entity
 @Table(name = "branches")
 public class Branch implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,6 +19,13 @@ public class Branch implements Serializable {
 
     @ManyToMany(mappedBy = "branches")
     private List<Movie> movies;
+
+    @ManyToOne
+    private HeadManager headManager;
+
+    @OneToOne
+    @JoinColumn(name = "branch_manager_id")  // This side owns the relationship
+    private BranchManager branchManager;
 
     public Branch() {}
 
@@ -59,5 +65,12 @@ public class Branch implements Serializable {
 
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
+    }
+
+    public BranchManager getBranchManager() {
+        return branchManager;
+    }
+    public void setBranchManager(BranchManager branchManager) {
+        this.branchManager = branchManager;
     }
 }

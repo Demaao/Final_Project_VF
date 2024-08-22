@@ -1,16 +1,29 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import static java.lang.Thread.sleep;
 
 public class App extends Application {
 
@@ -315,13 +328,31 @@ public class App extends Application {
 
     @Subscribe
     public void onWarningEvent(WarningEvent event) {
+            Platform.runLater(() -> {
+                if (event.getWarning().getMessage().equals("Logged out successfully")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                            String.format("%s\n",
+                                    event.getWarning().getMessage())
+                    );
+                    alert.show();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING,
+                            String.format("%s\n",
+                                    event.getWarning().getMessage())
+                    );
+                    alert.show();
+                }
+            });
+    }
+
+    @Subscribe
+    public void onMessageEvent(MessageEvent event) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING,
-                    String.format("Message: %s\nTimestamp: %s\n",
-                            event.getWarning().getMessage(),
-                            event.getWarning().getTime().toString())
-            );
-            alert.show();
+            LoginPage.employee1 = null;
+            try {
+                AddMoviePage.switchToHomePage();
+            }
+            catch (IOException e) {}
         });
     }
 

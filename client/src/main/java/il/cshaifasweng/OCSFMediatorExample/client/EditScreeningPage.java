@@ -1,5 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,6 +9,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.IOException;
 
 public class EditScreeningPage {
@@ -111,4 +116,31 @@ public class EditScreeningPage {
     private void switchToContentManagerPage() throws IOException {
         App.switchScreen("ContentManagerPage");
     }
+
+
+    @FXML
+    private void requestLogoutFromServer() {
+        try { ///////////////////////////////////////////////////////////////
+            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+  /*
+    public void initialize() {//////////////////////////////////////
+        EventBus.getDefault().register(this);
+    }
+    @Subscribe
+    public void onMessageEvent(MessageEvent event) {
+        Platform.runLater(() -> {
+            LoginPage.employee1 = null;
+            try {
+                switchToHomePage();
+            }
+            catch (IOException e) {}
+        });
+    }*/
 }

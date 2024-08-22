@@ -36,7 +36,7 @@
                </graphic>
             </Button>
             <Button fx:id="changeHostBtn" layoutX="41.0" layoutY="574.0" mnemonicParsing="false" onAction="#switchToHostPage" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" text="Change Host IP" underline="true" />
-            <Button fx:id="logOutBtn" layoutX="23.0" layoutY="250.0" mnemonicParsing="false" onAction="#switchToHomePage" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Log Out">
+            <Button fx:id="logOutBtn" layoutX="23.0" layoutY="250.0" mnemonicParsing="false" onAction="#requestLogoutFromServer" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Log Out">
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                      <image>
@@ -52,17 +52,17 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Label layoutX="224.0" layoutY="50.0" text="Welcome Back!" textFill="#f6d9d9">
+      <Label layoutX="221.0" layoutY="80.0" text="Welcome Back!" textFill="#f6d9d9">
          <font>
             <Font name="Britannic Bold" size="40.0" />
          </font>
       </Label>
-      <Label layoutX="230.0" layoutY="120.0" text="Here is all the complaints, please handle them as soon as possible." textFill="#f6d9d9">
+      <Label layoutX="229.0" layoutY="135.0" text="Here is all the complaints, please handle them as soon as possible." textFill="#f6d9d9">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="complaintTable" layoutX="230.0" layoutY="207.0" prefHeight="344.0" prefWidth="630.0">
+      <TableView fx:id="complaintTable" layoutX="229.0" layoutY="215.0" prefHeight="344.0" prefWidth="630.0">
          <columns>
             <TableColumn prefWidth="114.39990234375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint NO." />
             <TableColumn prefWidth="155.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint Subject" />
@@ -71,9 +71,14 @@
             <TableColumn prefWidth="116.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Status" />
          </columns>
       </TableView>
-      <Label layoutX="230.0" layoutY="157.0" text="Select the complaint that you want to handle" textFill="#f6d9d9">
+      <Label layoutX="229.0" layoutY="172.0" text="Select the complaint that you want to handle" textFill="#f6d9d9">
          <font>
             <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="customerServiceWorkerNameLabel" alignment="CENTER" layoutX="221.0" layoutY="28.0" text="Manager Name" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font name="Britannic Bold" size="40.0" />
          </font>
       </Label>
    </children>
