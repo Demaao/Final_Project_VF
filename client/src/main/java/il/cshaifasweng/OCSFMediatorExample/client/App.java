@@ -2,6 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -12,13 +13,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -326,20 +330,40 @@ public class App extends Application {
         }
     }
 
+    public static int loginDeniedCounter = 0;
+
     @Subscribe
     public void onWarningEvent(WarningEvent event) {
             Platform.runLater(() -> {
-                if (event.getWarning().getMessage().equals("Logged out successfully")) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                            String.format("%s\n",
-                                    event.getWarning().getMessage())
-                    );
+                Alert alert;
+                if (event.getWarning().getMessage().equals("Logged out successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.setHeaderText("Logged Out");
                     alert.show();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING,
-                            String.format("%s\n",
-                                    event.getWarning().getMessage())
-                    );
+                }
+                else if (loginDeniedCounter >= 5) {
+                    Stage dialogStage = new Stage();
+                    dialogStage.initStyle(StageStyle.UNDECORATED); // No window decorations
+                    dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+                    Label label = new Label("Too many incorrect login attempts!\n Try again in 10 seconds");
+                    StackPane pane = new StackPane(label);
+                    pane.setPrefSize(350, 190); // Set your preferred size
+                    pane.setStyle("-fx-background-color: white; -fx-border-color:  lightgray; " +
+                            "-fx-border-width: 1px; -fx-font-size: 15; ");
+
+                    Scene scene = new Scene(pane);
+                    dialogStage.setScene(scene);
+                    dialogStage.centerOnScreen(); // Center dialog on screen
+                    dialogStage.show();
+
+                    // Automatically close the dialog after 30 seconds
+                    PauseTransition delay = new PauseTransition(Duration.seconds(10));
+                    delay.setOnFinished(event1 -> dialogStage.close());
+                    delay.play();
+                }
+                else {
+                    alert = new Alert(Alert.AlertType.WARNING, event.getWarning().getMessage());
                     alert.show();
                 }
             });
@@ -347,13 +371,15 @@ public class App extends Application {
 
     @Subscribe
     public void onMessageEvent(MessageEvent event) {
-        Platform.runLater(() -> {
-            LoginPage.employee1 = null;
-            try {
-                AddMoviePage.switchToHomePage();
-            }
-            catch (IOException e) {}
-        });
+        if(event.getMessage().equals("Log out")) {
+            Platform.runLater(() -> {
+                LoginPage.employee1 = null;
+                try {
+                    AddMoviePage.switchToHomePage();
+                } catch (IOException e) {
+                }
+            });
+        }
     }
 
 	public static void main(String[] args) {
