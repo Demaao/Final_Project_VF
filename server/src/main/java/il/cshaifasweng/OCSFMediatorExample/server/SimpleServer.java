@@ -152,16 +152,16 @@ public class SimpleServer extends AbstractServer {
 
 
 	private static void generateMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
-		byte[] image2 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
-		byte[] image3 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
-		byte[] image4 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\4.jpg");
-		byte[] image5 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\5.jpg");
-		byte[] image6 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\6.jpg");
-		byte[] image7 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\7.jpg");
-		byte[] image8 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\8.jpg");
-		byte[] image9 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\9.jpg");
-		byte[] image10 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\10.jpg");
+		byte[] image1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
+		byte[] image2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
+		byte[] image3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
+		byte[] image4 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\4.jpg");
+		byte[] image5 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\5.jpg");
+		byte[] image6 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\6.jpg");
+		byte[] image7 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\7.jpg");
+		byte[] image8 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\8.jpg");
+		byte[] image9 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\9.jpg");
+		byte[] image10 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\10.jpg");
 
 
 		/*
@@ -242,7 +242,7 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 
 		Movie num8 = new Movie(8, "The creator", "היוצר", "Gareth Edward", 2023, image8,"Action","Against the backdrop of a war between humans and robots with artificial intelligence, a former soldier finds the secret weapon, a robot in the form of a young child."
-<
+
 				,"John Washington,Madeleine Voyles,Gemma Chan","2h 13m");
 
 		session.save(num8);
@@ -265,9 +265,9 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateSoonMovies(Session session) throws Exception {
-		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
-		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
-		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
+		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
+		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
+		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
 
 		SoonMovie soonMovie1 = new SoonMovie(1, "Blink Twice","צאי מזה" ,"Sep 5,2024", Soonimage1);
 		session.save(soonMovie1);
@@ -283,12 +283,12 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateHomeMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\1.jpg");
-		byte[] image2 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\2.jpg");
-		byte[] image3 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\3.jpg");
-		byte[] image4 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\4.jpg");
-		byte[] image5 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\5.jpg");
-		byte[] image6 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\6.jpg");
+		byte[] image1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\1.jpg");
+		byte[] image2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\2.jpg");
+		byte[] image3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\3.jpg");
+		byte[] image4 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\4.jpg");
+		byte[] image5 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\5.jpg");
+		byte[] image6 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\6.jpg");
 
 		HomeMovie homeMovie1 = new HomeMovie(1, "Despicable Me 4", "גנוב על החיים", "Chris Renaud", 2024, image1, "https://Despicable_Me_4_Movie_link.com","Adventure","Gru, Lucy, Margo, Edith, and Agnes welcome a new member to the family, Gru Jr., who is intent on tormenting his dad. Gru faces a new nemesis in Maxime Le Mal and his girlfriend Valentina, and the family is forced to go on the run."
 				,"Steve Carell,Kristen Wiig,Pierre Coffin","1h 34m");
@@ -334,17 +334,6 @@ public class SimpleServer extends AbstractServer {
 		Movie movie10 = session.get(Movie.class, 10);
 
 		Branch haifaCinema = new Branch(1,"Haifa Cinema","Haifa");
-
-		Movie movie1 = session.get(Movie.class, 1);   //שליפת הסרטים מהמוסד
-		Movie movie2 = session.get(Movie.class, 2);
-		Movie movie3 = session.get(Movie.class, 3);
-		Movie movie4 = session.get(Movie.class, 4);
-		Movie movie5 = session.get(Movie.class, 5);
-		Movie movie6 = session.get(Movie.class, 6);
-		Movie movie7 = session.get(Movie.class, 7);
-		Movie movie8 = session.get(Movie.class, 8);
-		Movie movie9 = session.get(Movie.class, 9);
-		Movie movie10 = session.get(Movie.class, 10);
 
 		haifaCinema.addMovie(movie1, movie2, movie6, movie7, movie8);
 		session.save(haifaCinema);
