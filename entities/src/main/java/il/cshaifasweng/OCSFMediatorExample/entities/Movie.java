@@ -2,6 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class Movie implements Serializable {
     @Column(columnDefinition="BLOB")  // הגדרה של עמודת BLOB במסד הנתונים
     private byte[] imageData;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "movie_branch",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -63,6 +64,7 @@ public class Movie implements Serializable {
         this.description = description;
         this.mainActors = mainActors;
         this.length = length;
+        this.branches = new ArrayList<Branch>(); ////////////////////////
     }
 
 
@@ -151,6 +153,7 @@ public class Movie implements Serializable {
     public void setLength(String length) {
         this.length = length;
     }
+
     public List<Branch> getBranches() {
         return branches;
     }

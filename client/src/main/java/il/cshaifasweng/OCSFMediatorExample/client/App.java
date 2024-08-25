@@ -327,6 +327,15 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "MovieDetailsPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("MovieDetailsPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
         }
     }
 
