@@ -2,6 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,7 +21,8 @@ public class Branch implements Serializable {
     private int numberOfHalls;
 
     @ManyToMany(mappedBy = "branches", fetch = FetchType.EAGER)
-    private List<Movie> movies  = new ArrayList<>();
+
+    private List<Movie> movies;
 
     @ManyToOne
     private HeadManager headManager;
@@ -35,6 +37,9 @@ public class Branch implements Serializable {
         this.id = id;
         this.name = haifaCinema;
         this.location = location;
+        this.movies = new ArrayList<>(); /////////////////////////
+       // this.branchManager = branchManager; //////////////////////
+       // setHeadManager(headManager); ////////////////////////////////
         // this.branchManager = branchManager; //////////////////////
         // setHeadManager(headManager); ////////////////////////////////
     }
