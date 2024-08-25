@@ -58,7 +58,3 @@ public class SimpleClient extends AbstractClient {
 	}
 }
 
-
-
-
-

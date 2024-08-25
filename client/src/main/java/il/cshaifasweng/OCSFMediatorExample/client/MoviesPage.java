@@ -6,30 +6,32 @@ import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import il.cshaifasweng.OCSFMediatorExample.entities.SoonMovie;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MoviesPage {
-
     @FXML
     private AnchorPane rootPane;
-
     @FXML
     private Label soon;
     @FXML
     private Label NowInCinema;
     @FXML
     private Label WatchFromHome;
-
     @FXML
     private ImageView cinemaImageView1;
     @FXML
@@ -77,37 +79,32 @@ public class MoviesPage {
     private Label homeLabel3;
     @FXML
     private Label homeLabel4;
-
     @FXML
     private Button leftButton;
     @FXML
     private Button rightButton;
-
     @FXML
     private Button HomePageB;
-
     @FXML
     private Button homeLeftButton;
     @FXML
     private Button homeRightButton;
-
-
     @FXML
     private ComboBox<String> searchByNameBox;
     @FXML
     private ComboBox<String> searchByGenreBox;
     @FXML
     private ComboBox<String> searchByCinemaBox;
-
     @FXML
     private DatePicker searchByDatePicker;
+
 
     private List<Movie> movies;
     private List<SoonMovie> soonMovies;
     private List<HomeMovie> homeMovies;
 
     private List<Movie> filteredCinemaMovies;
-    private List<HomeMovie> filteredHomeMovies;
+    private List<HomeMovie> filteredHomeMovies = new ArrayList<>(); ////////////////////////////////////////////
 
     private int cinemaCurrentIndex = 0;
     private int homeCurrentIndex = 0;
@@ -126,17 +123,61 @@ public class MoviesPage {
 
 
         searchByCinemaBox.getItems().addAll(" Haifa Cinema", "Tel Aviv Cinema", "Eilat Cinema", "Karmiel Cinema", "Jerusalem Cinema");
+        searchByDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);  // If the date is before today it will not be available for selection
+                if (date.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                }
+            }
+        });
 
-        searchByGenreBox.setOnAction(event -> {      // מאזין לבחירת ז'אנר
+        searchByNameBox.setOnAction(event -> {        // מאזין לבחירת שם סרט
+            String selectedMovieName = searchByNameBox.getValue();
+            if (selectedMovieName != null) {
+                Movie selectedMovie = findMovieByName(selectedMovieName);
+                if (selectedMovie != null) {
+                    openMovieDetailsPage(selectedMovie);
+                }
+            }
+        });
+        searchByGenreBox.setOnAction(event -> {       // מאזין לבחירת ז'אנר
             String selectedGenre = searchByGenreBox.getValue();
 
-            filterMoviesByGenre(selectedGenre);  //  קריאה לפונקציה לסינון הסרטים ךפי הסוג
+            filterMoviesByGenre(selectedGenre);       //  קריאה לפונקציה לסינון הסרטים לפי הסוג
 
         });
-        // searchByCinemaBox.setOnAction(event -> {     //מאיזין לבחירת בית קלנוע
-        // String selectedCinema = searchByCinemaBox.getValue();
-        // filterMoviesByCinema(selectedCinema);        // קריאה לפונקציה לסינון  הסרטים לפי בית הקלנוע
-        // });
+        searchByCinemaBox.setOnAction(event -> {     //מאיזין לבחירת בית קלנוע
+            String selectedCinema = searchByCinemaBox.getValue();
+            filterMoviesByCinema(selectedCinema);    // קריאה לפונקציה לסינון  הסרטים לפי בית הקלנוע
+        });
+
+
+        cinemaImageView1.setOnMouseClicked(event -> openMovieDetailsPage(movies.get(cinemaCurrentIndex)));
+        cinemaLabel1.setOnMouseClicked(event -> openMovieDetailsPage(movies.get(cinemaCurrentIndex)));
+
+
+        cinemaImageView2.setOnMouseClicked(event -> openMovieDetailsPage(movies.get(cinemaCurrentIndex + 1)));
+        cinemaLabel2.setOnMouseClicked(event -> openMovieDetailsPage(movies.get(cinemaCurrentIndex + 1)));
+
+        cinemaImageView3.setOnMouseClicked(event -> openMovieDetailsPage(movies.get(cinemaCurrentIndex + 2)));
+        cinemaLabel3.setOnMouseClicked(event -> openMovieDetailsPage(movies.get(cinemaCurrentIndex + 2)));
+
+        cinemaImageView4.setOnMouseClicked(event -> openMovieDetailsPage(movies.get(cinemaCurrentIndex + 3)));
+        cinemaLabel4.setOnMouseClicked(event -> openMovieDetailsPage(movies.get(cinemaCurrentIndex + 3)));
+
+        homeImageView1.setOnMouseClicked(event -> openMovieDetailsPage(homeMovies.get(homeCurrentIndex)));
+        homeLabel1.setOnMouseClicked(event -> openMovieDetailsPage(homeMovies.get(homeCurrentIndex)));
+
+        homeImageView2.setOnMouseClicked(event -> openMovieDetailsPage(homeMovies.get(homeCurrentIndex + 1)));
+        homeLabel2.setOnMouseClicked(event -> openMovieDetailsPage(homeMovies.get(homeCurrentIndex + 1)));
+
+        homeImageView3.setOnMouseClicked(event -> openMovieDetailsPage(homeMovies.get(homeCurrentIndex + 2)));
+        homeLabel3.setOnMouseClicked(event -> openMovieDetailsPage(homeMovies.get(homeCurrentIndex + 2)));
+
+        homeImageView4.setOnMouseClicked(event -> openMovieDetailsPage(homeMovies.get(homeCurrentIndex + 3)));
+        homeLabel4.setOnMouseClicked(event -> openMovieDetailsPage(homeMovies.get(homeCurrentIndex + 3)));
     }
 
     @Subscribe
@@ -302,6 +343,16 @@ public class MoviesPage {
         }
     }
 
+    private Movie findMovieByName(String movieName) {   //if we want to search by name
+        for (Movie movie : movies) {
+            if (movie.getEngtitle().equalsIgnoreCase(movieName)) {
+                return movie;
+            }
+        }
+        return null;
+    }
+
+
     // we call this method after the movies updated to add options to  searchByNameBox
     private void populateSearchByNameBox() {
         if (movies != null) {
@@ -420,44 +471,42 @@ public class MoviesPage {
         homeLabel4.setText("");
     }
 
-    //private void filterMoviesByCinema(String selectedCinema) {
-    // if (movies != null ) {
-    // סינון סרטים המוקרנים בבית הקולנוע שנבחר
-    //   filteredCinemaMovies = movies.stream()
-    //     .filter(movie -> movie.getBranches().stream()
-    //       .anyMatch(branch -> branch.getName().equalsIgnoreCase(selectedCinema)))
-    //.collect(Collectors.toList());
+    private void filterMoviesByCinema(String selectedCinema) {
+        if (movies != null ) {
+            //סינון סרטים המוקרנים בבית הקולנוע שנבחר
+            filteredCinemaMovies = movies.stream()
+                    .filter(movie -> movie.getBranches().stream()
+                            .anyMatch(branch -> branch.getName().equalsIgnoreCase(selectedCinema)))
+                    .collect(Collectors.toList());
 
-    // איפוס אינדקס כדי להתחיל מהסרט הראשון
-    //   cinemaCurrentIndex = 0;
-
-
-    // updateFilteredCinemaMovies();
-    // } else {
-    //   displayAllMovies(); // הצגת כל הסרטים כאשר בוחרים "ALL MOVIES"
-    //  }
-    //}
-
-    //private void updateFilteredCinemaMovies() {
-    // clearCinemaDisplay(); // ניקוי התצוגה הקודמת
-
-    // if (!filteredCinemaMovies.isEmpty()) {
-    //   for (int i = 0; i < Math.min(filteredCinemaMovies.size(), 4); i++) {
-    //       updateMovieView(getCinemaImageView(i), getCinemaLabel(i), filteredCinemaMovies.get(i));
-    //  }
-    // }
+            // איפוס אינדקס כדי להתחיל מהסרט הראשון
+            cinemaCurrentIndex = 0;
 
 
-    //  NowInCinema.setText("Now in " + searchByCinemaBox.getValue());
-    // }
-
-    @FXML
-    private void handleSearch() {
-        String name = searchByNameBox.getValue();
-        String genre = searchByGenreBox.getValue();
-        String cinema = searchByCinemaBox.getValue();
-        LocalDate date = searchByDatePicker.getValue();
+            updateFilteredCinemaMovies();
+        } else {
+            //displayAllMovies(); // הצגת כל הסרטים כאשר בוחרים "ALL MOVIES"
+        }
     }
+
+    private void updateFilteredCinemaMovies() {
+        clearCinemaDisplay(); // ניקוי התצוגה הקודמת
+
+        if (!filteredCinemaMovies.isEmpty()) {
+            for (int i = 0; i < Math.min(filteredCinemaMovies.size(), 4); i++) {
+                updateMovieView(getCinemaImageView(i), getCinemaLabel(i), filteredCinemaMovies.get(i));
+            }
+        }
+
+        NowInCinema.setText("Now in " + searchByCinemaBox.getValue());
+    }
+
+    private void openMovieDetailsPage(Movie movie) {
+        MovieDetailsPage.setSelectedMovie(movie);  // שמור את הסרט שנבחר
+
+            App.switchScreen("MovieDetailsPage");  // מעבר לדף
+        }
+
 
     @FXML
     private void switchToHomePage() throws IOException {
@@ -494,4 +543,3 @@ public class MoviesPage {
         App.switchScreen("CardsPage");
     }
 }
-

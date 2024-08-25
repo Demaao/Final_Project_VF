@@ -23,7 +23,7 @@ public class Movie implements Serializable {
     @Column(columnDefinition="BLOB")  // הגדרה של עמודת BLOB במסד הנתונים
     private byte[] imageData;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "movie_branch",
             joinColumns = @JoinColumn(name = "movie_id"),
