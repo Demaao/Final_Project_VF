@@ -152,28 +152,40 @@ public class SimpleServer extends AbstractServer {
 
 
 	private static void generateMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
-		byte[] image2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
-		byte[] image3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
-		byte[] image4 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\4.jpg");
-		byte[] image5 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\5.jpg");
-		byte[] image6 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\6.jpg");
-		byte[] image7 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\7.jpg");
-		byte[] image8 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\8.jpg");
-		byte[] image9 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\9.jpg");
-		byte[] image10 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\10.jpg");
+		byte[] image1 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
+		byte[] image2 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
+		byte[] image3 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
+		byte[] image4 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\4.jpg");
+		byte[] image5 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\5.jpg");
+		byte[] image6 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\6.jpg");
+		byte[] image7 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\7.jpg");
+		byte[] image8 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\8.jpg");
+		byte[] image9 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\9.jpg");
+		byte[] image10 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\10.jpg");
+
 
 		/*
 		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
+		Branch haifaCinema = session.get(Branch.class, 1);
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
 		Branch karmielCinema = session.get(Branch.class, 4);
 		Branch jerusalemCinema = session.get(Branch.class, 5);
 
+
 		List<Branch> CinemaBranches1 = new ArrayList<>();  // יצירת רשימת בתי קולנוע עבור הסרט הראשון
 		CinemaBranches1.add(haifaCinema);
 		CinemaBranches1.add(telAvivCinema);
 		CinemaBranches1.add(eilatCinema);
+
+		List<Branch> CinemaBranches1 = new ArrayList<>();
+		CinemaBranches1.add(haifaCinema);
+		CinemaBranches1.add(telAvivCinema);
+		CinemaBranches1.add(eilatCinema);
+
+		List<Branch> CinemaBranches2 = new ArrayList<>();
+		CinemaBranches2.add(karmielCinema);
+		CinemaBranches2.add(jerusalemCinema);
 
 		List<Branch> CinemaBranches2 = new ArrayList<>();  // יצירת רשימת בתי קולנוע עבור הסרט הראשון
 		CinemaBranches2.add(karmielCinema);
@@ -181,61 +193,81 @@ public class SimpleServer extends AbstractServer {
 		*/
 
 		Movie num1 = new Movie(1, "A quiet place", "מקום שקט 2", "Michael Sarnoski", 2020, image1,"Drama","Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path."
+
 				,"Emily Blunt,John Krasinski,Cillian Murphy","1h 37m");
+
 		session.save(num1);
 		session.flush();
 
 		Movie num2 = new Movie(2, "Barbie", "ברבי", "Greta Gerwig", 2023, image2,"Comedy","Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans."
+
 				,"Margot Robbie,Issa Rae,Ryan Gosling","1h 54m");
+
 		session.save(num2);
 		session.flush();
 
 		Movie num3 = new Movie(3, "Fast X", "מהיר ועצבני 10", "Louis Leterrier", 2023,image3,"Action","Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes."
+
 				,"Vin Diesel,Michelle Rodriguez,Jason Statham","2h 21m");
+
 		session.save(num3);
 		session.flush();
 
 		Movie num4 = new Movie(4, "Inside out", "הקול בראש 2", "Kelsey Mann", 2024, image4,"Adventure","A sequel that features Riley entering puberty and experiencing brand new, more complex emotions as a result. As Riley tries to adapt to her teenage years, her old emotions try to adapt to the possibility of being replaced."
+
 				,"Amy Poehler,Maya Hawke,Kensington Tallman","1h 36m");
+
 		session.save(num4);
 		session.flush();
 
 		Movie num5 = new Movie(5, "It Ends With Us", "איתנו זה נגמר", "Justin Baldoni", 2024, image5,"Drama","When a woman's first love suddenly reenters her life, her relationship with a charming, but abusive neurosurgeon is upended and she realizes she must learn to rely on her own strength to make an impossible choice for her future."
+
 				,"Blake Lively,Justin Baldoni,Jenny Slate","2h 10m");
+
 		session.save(num5);
 		session.flush();
 
 		Movie num6 = new Movie(6, "Joker", "ג'וקר", "Todd Philips", 2019, image6,"Drama","Arthur Fleck, a party clown and a failed stand-up comedian, leads an impoverished life with his ailing mother. However, when society shuns him and brands him as a freak, he decides to embrace the life of crime and chaos in Gotham City."
+
 				,"Joaquin Phoenix,Robert De Niro,Zazie Beetz","2h 2m");
+
 		session.save(num6);
 		session.flush();
 
 		Movie num7 = new Movie(7, "Oppenheimer", "אופנהיימר", "Christopher Nolan", 2023, image7,"Documentary","The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb."
+
 				,"Cillian Murphy Emily BluntRobert Downey","3h 10m");
+
 		session.save(num7);
 		session.flush();
 
 		Movie num8 = new Movie(8, "The creator", "היוצר", "Gareth Edward", 2023, image8,"Action","Against the backdrop of a war between humans and robots with artificial intelligence, a former soldier finds the secret weapon, a robot in the form of a young child."
+<
 				,"John Washington,Madeleine Voyles,Gemma Chan","2h 13m");
+
 		session.save(num8);
 		session.flush();
 
 		Movie num9 = new Movie(9, "Daughters", "הבנות", "Angela Patton", 2024, image9,"Documentary","Four young girls prepare for a special Daddy Daughter Dance with their incarcerated fathers, as part of a unique fatherhood program in a Washington"
+
 				,"Veronica Ngo,Ian Verdun,Sturgill Simpson","1h 48m");
+
 		session.save(num9);
 		session.flush();
 
 		Movie num10 = new Movie(10, "In the Rearview", "מבט לאחור", "Maciek Hamela", 2023, image10,"Documentary","A small van traverses war-torn roads, picking up Ukrainians as they abandon their homes at the front. Shuttling them across the battered landscape into exile, the van becomes a fragile refuge, a zone for its passengers' confidences."
+
 				,"Maciek Hamela,Frances Conroy,Hannah Gross","1h 24m");
+
 		session.save(num10);
 		session.flush();
 
 	}
 
 	private static void generateSoonMovies(Session session) throws Exception {
-		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
-		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
-		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
+		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
+		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
+		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
 
 		SoonMovie soonMovie1 = new SoonMovie(1, "Blink Twice","צאי מזה" ,"Sep 5,2024", Soonimage1);
 		session.save(soonMovie1);
@@ -251,12 +283,12 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateHomeMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\1.jpg");
-		byte[] image2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\2.jpg");
-		byte[] image3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\3.jpg");
-		byte[] image4 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\4.jpg");
-		byte[] image5 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\5.jpg");
-		byte[] image6 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\6.jpg");
+		byte[] image1 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\1.jpg");
+		byte[] image2 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\2.jpg");
+		byte[] image3 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\3.jpg");
+		byte[] image4 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\4.jpg");
+		byte[] image5 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\5.jpg");
+		byte[] image6 = loadImageFromFile("C:\\Users\\demao\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\6.jpg");
 
 		HomeMovie homeMovie1 = new HomeMovie(1, "Despicable Me 4", "גנוב על החיים", "Chris Renaud", 2024, image1, "https://Despicable_Me_4_Movie_link.com","Adventure","Gru, Lucy, Margo, Edith, and Agnes welcome a new member to the family, Gru Jr., who is intent on tormenting his dad. Gru faces a new nemesis in Maxime Le Mal and his girlfriend Valentina, and the family is forced to go on the run."
 				,"Steve Carell,Kristen Wiig,Pierre Coffin","1h 34m");
@@ -302,6 +334,18 @@ public class SimpleServer extends AbstractServer {
 		Movie movie10 = session.get(Movie.class, 10);
 
 		Branch haifaCinema = new Branch(1,"Haifa Cinema","Haifa");
+
+		Movie movie1 = session.get(Movie.class, 1);   //שליפת הסרטים מהמוסד
+		Movie movie2 = session.get(Movie.class, 2);
+		Movie movie3 = session.get(Movie.class, 3);
+		Movie movie4 = session.get(Movie.class, 4);
+		Movie movie5 = session.get(Movie.class, 5);
+		Movie movie6 = session.get(Movie.class, 6);
+		Movie movie7 = session.get(Movie.class, 7);
+		Movie movie8 = session.get(Movie.class, 8);
+		Movie movie9 = session.get(Movie.class, 9);
+		Movie movie10 = session.get(Movie.class, 10);
+
 		haifaCinema.addMovie(movie1, movie2, movie6, movie7, movie8);
 		session.save(haifaCinema);
 
@@ -442,14 +486,14 @@ public class SimpleServer extends AbstractServer {
 						if(userNameString.equals(employee.getUsername()) && passwordString.equals(employee.getPassword())){
 							if(employee.isOnline()){
 								newMessage = new NewMessage("Alreadylogin");
-                            }
+							}
 							else{
 								employee.setIsOnline(true);
 								newMessage = new NewMessage(employee, "login");
-                            }
-                            client.sendToClient(newMessage);
-                            session.getTransaction().commit();
-                            break;
+							}
+							client.sendToClient(newMessage);
+							session.getTransaction().commit();
+							break;
 						}
 						else flag = 1;
 					}
@@ -459,29 +503,29 @@ public class SimpleServer extends AbstractServer {
 						session.getTransaction().commit();
 					}
 
-                } catch (Exception exception) {
+				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
 			}
 			else if (msgString.equals("logOut")) {  //////////////////////////////////////////////
-			try (Session session = sessionFactory.openSession()) {
-				session.beginTransaction();
-				List<Employee> employees = getAllEmployees(session);
-				Employee employee = message.getEmployee();
-				for(Employee emp : employees){
-					if(emp.getId() == employee.getId()){
-						emp.setIsOnline(false);
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Employee> employees = getAllEmployees(session);
+					Employee employee = message.getEmployee();
+					for(Employee emp : employees){
+						if(emp.getId() == employee.getId()){
+							emp.setIsOnline(false);
+						}
 					}
+					NewMessage newMessage = new NewMessage("logOut");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
 				}
-				NewMessage newMessage = new NewMessage("logOut");
-				client.sendToClient(newMessage);
-				session.getTransaction().commit();
-			} catch (Exception exception) {
-				System.err.println("An error occurred, changes have been rolled back.");
-				exception.printStackTrace();
 			}
-		}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
