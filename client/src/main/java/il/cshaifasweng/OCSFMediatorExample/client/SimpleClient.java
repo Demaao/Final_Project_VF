@@ -31,18 +31,20 @@ public class SimpleClient extends AbstractClient {
 					EventBus.getDefault().post(new UpdateHomeMoviesEvent(homeMovies));
 				}
 				 else if (message.getMessage().equals("login")) {  ///////////////////////////////////////////////////////
-					Employee employee = (Employee) message.getObject();
+					 App.loginDeniedCounter = 0;
+					 Employee employee = (Employee) message.getObject();
 					EventBus.getDefault().post(new UpdateLoginEvent(employee));
 			}
 				 else if (message.getMessage().equals("loginDenied")) {
-					EventBus.getDefault().post(new WarningEvent(new Warning("User name or Password is incorrect!")));
+					 App.loginDeniedCounter++;
+					 EventBus.getDefault().post(new WarningEvent(new Warning("User name or Password is incorrect!")));
 				}
 				else if (message.getMessage().equals("Alreadylogin")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("User is already logged in!")));
 				}
 				else if (message.getMessage().equals("logOut")) {
-					EventBus.getDefault().post(new MessageEvent("Logged out successfully"));
-					EventBus.getDefault().post(new WarningEvent(new Warning("Logged out successfully")));
+					EventBus.getDefault().post(new MessageEvent("Log out"));
+					EventBus.getDefault().post(new WarningEvent(new Warning("Logged out successfully!")));
 				}
 			});
 		}
