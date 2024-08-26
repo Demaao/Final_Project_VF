@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MoviesPage {
@@ -147,10 +148,10 @@ public class MoviesPage {
             filterMoviesByGenre(selectedGenre);  //  קריאה לפונקציה לסינון הסרטים ךפי הסוג
 
         });
-         searchByCinemaBox.setOnAction(event -> {     //מאיזין לבחירת בית קלנוע
-         String selectedCinema = searchByCinemaBox.getValue();
-         filterMoviesByCinema(selectedCinema);        // קריאה לפונקציה לסינון  הסרטים לפי בית הקלנוע
-         });
+        searchByCinemaBox.setOnAction(event -> {     //מאיזין לבחירת בית קלנוע
+            String selectedCinema = searchByCinemaBox.getValue();
+            filterMoviesByCinema(selectedCinema);        // קריאה לפונקציה לסינון  הסרטים לפי בית הקלנוע
+        });
 
         cinemaImageView1.setOnMouseClicked(event -> openMovieDetailsPage(filteredCinemaMovies.get(filteredCinemaCurrentIndex)));
         cinemaLabel1.setOnMouseClicked(event -> openMovieDetailsPage(filteredCinemaMovies.get(filteredCinemaCurrentIndex)));
@@ -480,11 +481,11 @@ public class MoviesPage {
             }
         }
 
-       // if (Objects.equals(searchByCinemaBox.getValue(), "All")) {/////////////////////////////////////
-         //   NowInCinema.setText("Now in the cinema");
+        // if (Objects.equals(searchByCinemaBox.getValue(), "All")) {/////////////////////////////////////
+        //   NowInCinema.setText("Now in the cinema");
         //} else {
-          //  NowInCinema.setText("Now in " + searchByCinemaBox.getValue());
-       // }
+        //  NowInCinema.setText("Now in " + searchByCinemaBox.getValue());
+        // }
     }
 
     private void updateFilteredHomeMovies() {
@@ -566,42 +567,42 @@ public class MoviesPage {
 
 
     private void filterMoviesByCinema(String selectedCinema) {
-     if (movies != null && !selectedCinema.equals("All")) {
-         if(searchByGenreBox.getValue() == null) {
-             searchByGenreBox.setValue("All");
-         }
+        if (movies != null && !selectedCinema.equals("All")) {
+            if(searchByGenreBox.getValue() == null) {
+                searchByGenreBox.setValue("All");
+            }
      /*    filteredCinemaMovies = movies.stream()
                  .filter(movie -> movie.getBranches().stream()
                          .anyMatch(branch -> branch.getName().equalsIgnoreCase(selectedCinema)))
                  .collect(Collectors.toList()); */
-         filteredCinemaMovies = movies.stream()
-                 .filter(movie -> (searchByGenreBox.getValue().equals("All") || movie.getGenre().equalsIgnoreCase(searchByGenreBox.getValue())))
-                 .filter(movie -> (movie.getBranches().stream()
-                         .anyMatch(branch -> branch.getName().equalsIgnoreCase(selectedCinema))))
-                 .collect(Collectors.toList());
+            filteredCinemaMovies = movies.stream()
+                    .filter(movie -> (searchByGenreBox.getValue().equals("All") || movie.getGenre().equalsIgnoreCase(searchByGenreBox.getValue())))
+                    .filter(movie -> (movie.getBranches().stream()
+                            .anyMatch(branch -> branch.getName().equalsIgnoreCase(selectedCinema))))
+                    .collect(Collectors.toList());
 
-         if(!searchByGenreBox.getValue().equals("All")){
-             NowInCinema.setText(searchByGenreBox.getValue() + " movies in " + selectedCinema);///////////////////////////
-         }
-         else
-             NowInCinema.setText("Now in " + selectedCinema);////////////////////////////
-     }
-     else if(searchByGenreBox.getValue().equals("All")){
-         filteredCinemaMovies = new ArrayList<>(movies);
-         NowInCinema.setText("Now in the Cinema");
-     }
+            if(!searchByGenreBox.getValue().equals("All")){
+                NowInCinema.setText(searchByGenreBox.getValue() + " movies in " + selectedCinema);///////////////////////////
+            }
+            else
+                NowInCinema.setText("Now in " + selectedCinema);////////////////////////////
+        }
+        else if(searchByGenreBox.getValue().equals("All")){
+            filteredCinemaMovies = new ArrayList<>(movies);
+            NowInCinema.setText("Now in the Cinema");
+        }
 
-     else {
-       //  filteredCinemaMovies = new ArrayList<>(movies);
-        // NowInCinema.setText("Now in the Cinema");
-         filterMoviesByGenre(searchByGenreBox.getValue());
-     }
-    // איפוס אינדקס כדי להתחיל מהסרט הראשון
-     filteredCinemaCurrentIndex = 0;
-   //  filteredHomeMovies = new ArrayList<>(homeMovies);
-    // filteredHomeCurrentIndex = 0;
+        else {
+            //  filteredCinemaMovies = new ArrayList<>(movies);
+            // NowInCinema.setText("Now in the Cinema");
+            filterMoviesByGenre(searchByGenreBox.getValue());
+        }
+        // איפוס אינדקס כדי להתחיל מהסרט הראשון
+        filteredCinemaCurrentIndex = 0;
+        //  filteredHomeMovies = new ArrayList<>(homeMovies);
+        // filteredHomeCurrentIndex = 0;
 
-     updateFilteredCinemaMovies();
+        updateFilteredCinemaMovies();
 
     }
 /*
