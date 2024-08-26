@@ -54,7 +54,7 @@ public class PaymentPage {
     @FXML
     private Label totalPriceLabel;
 
-    @FXML
+   /* @FXML
     void payForProduct(ActionEvent event) {
         if(IDNumText.getText().isEmpty()) {
             Platform.runLater(() -> {
@@ -66,8 +66,23 @@ public class PaymentPage {
             });
         }
 
-    }
+    }*/
 
+   @FXML
+   void payForProduct(ActionEvent event) {
+       if (fullNameText.getText().isEmpty() || IDNumText.getText().isEmpty() ||
+               phoneText.getText().isEmpty() || emailText.getText().isEmpty() ||
+               creditCardTxt.getText().isEmpty()) {
+
+           Platform.runLater(() -> {
+               Alert alert = new Alert(Alert.AlertType.WARNING,
+                       "All fields must be filled out to complete the payment.");
+               alert.show();
+           });
+       }
+
+           return;
+       }
 
     @FXML
     private void switchToCardsPage() throws IOException {
