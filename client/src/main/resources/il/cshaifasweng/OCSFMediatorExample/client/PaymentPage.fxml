@@ -8,7 +8,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PaymentPage">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <children>
         <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
             <children>
@@ -100,9 +104,9 @@
             </font>
         </Label>
         <TextField fx:id="fullNameText" layoutX="389.0" layoutY="198.0" prefHeight="34.0" prefWidth="370.0" promptText="Full Name">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
+            <font>
+                <Font size="15.0" />
+            </font></TextField>
         <Label layoutX="220.0" layoutY="134.0" text="Total Price:" textFill="#f6d9d9">
             <font>
                 <Font name="System Bold" size="24.0" />
@@ -114,22 +118,22 @@
             </font>
         </Label>
         <TextField fx:id="IDNumText" layoutX="389.0" layoutY="253.0" prefHeight="34.0" prefWidth="370.0" promptText="ID Number">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
+            <font>
+                <Font size="15.0" />
+            </font></TextField>
         <Label layoutX="220.0" layoutY="308.0" prefHeight="30.0" prefWidth="144.0" text="Phone Number" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
         <TextField fx:id="phoneText" layoutX="389.0" layoutY="308.0" prefHeight="34.0" prefWidth="370.0" promptText="Phone Number">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
+            <font>
+                <Font size="15.0" />
+            </font></TextField>
         <TextField fx:id="emailText" layoutX="389.0" layoutY="363.0" prefHeight="34.0" prefWidth="370.0" promptText="Email Address">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
+            <font>
+                <Font size="15.0" />
+            </font></TextField>
         <Label layoutX="220.0" layoutY="363.0" prefHeight="30.0" prefWidth="170.0" text="Email Address" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
@@ -151,9 +155,9 @@
             </font>
         </Button>
         <TextField fx:id="creditCardTxt" layoutX="389.0" layoutY="418.0" prefHeight="34.0" prefWidth="370.0" promptText="Credit Card Number">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
+            <font>
+                <Font size="15.0" />
+            </font></TextField>
         <Label layoutX="448.0" layoutY="48.0" text="Payment Details" textFill="#f6d9d9">
             <font>
                 <Font name="Britannic Bold" size="30.0" />
