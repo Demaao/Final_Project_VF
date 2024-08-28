@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SimpleServer extends AbstractServer {
@@ -46,6 +48,7 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(SoonMovie.class);
 		configuration.addAnnotatedClass(HomeMovie.class);
 		configuration.addAnnotatedClass(Branch.class);
+		configuration.addAnnotatedClass(Screening.class);
 		configuration.addAnnotatedClass(HeadManager.class); //////////////////
 		configuration.addAnnotatedClass(BranchManager.class); /////////////
 		configuration.addAnnotatedClass(ContentManager.class); /////////////////
@@ -64,6 +67,7 @@ public class SimpleServer extends AbstractServer {
 			generateSoonMovies(session);
 			generateHomeMovies(session);
 			generateBranches(session);
+			generateScreenings(session);
 			generateHeadManager(session); /////////////////////
 			generateBranchManager(session); /////////////////////
 			generateContentManager(session); /////////////////////
@@ -357,6 +361,148 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
+	private static void generateScreenings(Session session) throws Exception {
+
+		// ××¢× ××ª ××ª× ××§××× ××¢ ×××¡× ×× ×ª×× ××
+		Branch haifaCinema = session.get(Branch.class, 1);
+		Branch telAvivCinema = session.get(Branch.class, 2);
+		Branch eilatCinema = session.get(Branch.class, 3);
+		Branch karmielCinema = session.get(Branch.class, 4);
+		Branch jerusalemCinema = session.get(Branch.class, 5);
+
+		// ××¢× ××ª ××¡×¨××× ×××¡× ×× ×ª×× ××
+		Movie movie1 = session.get(Movie.class, 1);
+		Movie movie2 = session.get(Movie.class, 2);
+		Movie movie3 = session.get(Movie.class, 3);
+		Movie movie4 = session.get(Movie.class, 4);
+		Movie movie5 = session.get(Movie.class, 5);
+		Movie movie6 = session.get(Movie.class, 6);
+		Movie movie7 = session.get(Movie.class, 7);
+		Movie movie8 = session.get(Movie.class, 8);
+		Movie movie9 = session.get(Movie.class, 9);
+		Movie movie10 = session.get(Movie.class, 10);
+
+		//  ×¨×©××× ×©× ××× × ××§×¨× ×
+		List<LocalDateTime> screeningTimes = Arrays.asList(
+				LocalDateTime.of(2024, 9, 24, 18, 30),
+				LocalDateTime.of(2024, 9, 24, 20, 30),
+				LocalDateTime.of(2024, 9, 24, 22, 00),
+				LocalDateTime.of(2024, 9, 25, 18, 30),
+				LocalDateTime.of(2024, 9, 25, 20, 30),
+				LocalDateTime.of(2024, 9, 25, 23, 00),
+				LocalDateTime.of(2024, 9, 26, 17, 00),
+				LocalDateTime.of(2024, 9, 26, 20, 00),
+				LocalDateTime.of(2024, 9, 26, 23, 00),
+				LocalDateTime.of(2024, 9, 27, 17, 00),
+				LocalDateTime.of(2024, 9, 27, 20, 00),
+				LocalDateTime.of(2024, 9, 27, 23, 00),
+				LocalDateTime.of(2024, 9, 28, 18, 00),
+				LocalDateTime.of(2024, 9, 28, 20, 00),
+				LocalDateTime.of(2024, 9, 28, 23, 00),
+				LocalDateTime.of(2024, 9, 29, 18, 00),
+				LocalDateTime.of(2024, 9, 29, 22, 00),
+				LocalDateTime.of(2024, 9, 29, 23, 30),
+				LocalDateTime.of(2024, 9, 30, 17, 00),
+				LocalDateTime.of(2024, 9, 30, 19, 00),
+				LocalDateTime.of(2024, 9, 30, 22, 30)
+		);
+
+		for (LocalDateTime time : screeningTimes) {    // ××××× ××××¡×¤×ª ×× ××× × ×××§×¨× × ××¡×¨×××
+			movie1.addScreening(time, haifaCinema);
+			movie1.addScreening(time, telAvivCinema);
+			movie1.addScreening(time, eilatCinema);
+
+			movie2.addScreening(time, haifaCinema);
+			movie2.addScreening(time, telAvivCinema);
+			movie2.addScreening(time, eilatCinema);
+
+			movie3.addScreening(time, karmielCinema);
+			movie3.addScreening(time, jerusalemCinema);
+
+			movie4.addScreening(time, karmielCinema);
+			movie4.addScreening(time, jerusalemCinema);
+
+			movie5.addScreening(time, karmielCinema);
+			movie5.addScreening(time, jerusalemCinema);
+
+			movie6.addScreening(time, haifaCinema);
+			movie6.addScreening(time, telAvivCinema);
+			movie6.addScreening(time, eilatCinema);
+
+			movie7.addScreening(time, haifaCinema);
+			movie7.addScreening(time, telAvivCinema);
+			movie7.addScreening(time, eilatCinema);
+
+			movie8.addScreening(time, haifaCinema);
+			movie8.addScreening(time, telAvivCinema);
+			movie8.addScreening(time, eilatCinema);
+
+			movie9.addScreening(time, karmielCinema);
+			movie9.addScreening(time, jerusalemCinema);
+
+			movie10.addScreening(time, karmielCinema);
+			movie10.addScreening(time, jerusalemCinema);
+
+		}
+		// ××¦××¨×ª ×¨×©××× ×©× ×× ××¡×¨××× ××× ××¢×××¨ ×¢× ×××× ×××©×××¨ ×××ª×
+		List<Movie> movies = Arrays.asList(movie1, movie2, movie3, movie4, movie5, movie6, movie7, movie8, movie9, movie10);
+		for (Movie movie : movies) {
+			session.save(movie);
+		}
+		session.flush();
+
+
+		// ××¢× ××ª ××¡×¨××× ×©× ××××ª  ×××¡× ×× ×ª×× ××
+		Movie movie11 = session.get(Movie.class, 11);
+		Movie movie12 = session.get(Movie.class, 12);
+		Movie movie13 = session.get(Movie.class, 13);
+		Movie movie14 = session.get(Movie.class, 14);
+		Movie movie15 = session.get(Movie.class, 15);
+		Movie movie16 = session.get(Movie.class, 16);
+
+
+		List<LocalDateTime> HomeScreeningTimes = Arrays.asList(
+				LocalDateTime.of(2024, 9, 24, 15, 00),
+				LocalDateTime.of(2024, 9, 24, 19, 00),
+				LocalDateTime.of(2024, 9, 24, 23, 00),
+				LocalDateTime.of(2024, 9, 25, 15, 00),
+				LocalDateTime.of(2024, 9, 25, 19, 00),
+				LocalDateTime.of(2024, 9, 25, 23, 00),
+				LocalDateTime.of(2024, 9, 26, 15, 00),
+				LocalDateTime.of(2024, 9, 26, 19, 00),
+				LocalDateTime.of(2024, 9, 26, 23, 00),
+				LocalDateTime.of(2024, 9, 27, 15, 00),
+				LocalDateTime.of(2024, 9, 27, 19, 00),
+				LocalDateTime.of(2024, 9, 27, 23, 00),
+				LocalDateTime.of(2024, 9, 28, 15, 00),
+				LocalDateTime.of(2024, 9, 28, 19, 00),
+				LocalDateTime.of(2024, 9, 28, 23, 00),
+				LocalDateTime.of(2024, 9, 29, 15, 00),
+				LocalDateTime.of(2024, 9, 29, 19, 00),
+				LocalDateTime.of(2024, 9, 29, 23, 00),
+				LocalDateTime.of(2024, 9, 30, 15, 00),
+				LocalDateTime.of(2024, 9, 30, 19, 00),
+				LocalDateTime.of(2024, 9, 30, 23, 00)
+		);
+		for (LocalDateTime time : HomeScreeningTimes) {    // ××××× ××××¡×¤×ª ×× ××× × ×××§×¨× × ××¡×¨×××
+			movie11.addScreening(time,null);
+			movie12.addScreening(time,null);
+			movie13.addScreening(time,null);
+			movie14.addScreening(time,null);
+			movie15.addScreening(time,null);
+			movie16.addScreening(time,null);
+		}
+
+		session.save(movie11);
+		session.save(movie12);
+		session.save(movie13);
+		session.save(movie14);
+		session.save(movie15);
+		session.save(movie16);
+
+		session.flush();
+	}
+
 	private static byte[] loadImageFromFile(String filePath) throws IOException {
 		File file = new File(filePath);
 		try (InputStream inputStream = new FileInputStream(file)) {
@@ -418,6 +564,11 @@ public class SimpleServer extends AbstractServer {
 		CriteriaQuery<Employee> query = builder.createQuery(Employee.class);
 		query.from(Employee.class);
 		return session.createQuery(query).getResultList();
+	}
+
+	private static List<Screening> getScreeningsForMovie(Session session, int movieId) {
+		Movie movie = session.get(Movie.class, movieId);
+		return new ArrayList<>(movie.getScreenings());
 	}
 
 	@Override
@@ -508,6 +659,22 @@ public class SimpleServer extends AbstractServer {
 						}
 					}
 					NewMessage newMessage = new NewMessage("logOut");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}
+			else if (msgString.equals("screeningTimesRequest")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Movie requestedMovie = message.getMovie();
+					List<Screening> screenings = session.createQuery(
+									"from Screening where movie.id = :movieId", Screening.class)
+							.setParameter("movieId", requestedMovie.getId())
+							.getResultList();
+					NewMessage newMessage = new NewMessage(screenings, "screeningTimes");
 					client.sendToClient(newMessage);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
