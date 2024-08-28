@@ -2,40 +2,59 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "movies")
 public class Movie implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String Engtitle;
     private String Hebtitle;
     private String director;
-    private int newYear ;
-    private String screeningTime;
+    private int RlsYear;
+    private String genre;
+    private String description;
+    private String mainActors;
+    private String length;
 
-    @Lob  // מציין שזהו שדה גדול (Large Object)
+    @Lob
     @Column(columnDefinition="BLOB")  // הגדרה של עמודת BLOB במסד הנתונים
     private byte[] imageData;
 
-    // Constructors
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "movie_branch",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "branch_id")
+    )
+    private List<Branch> branches = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Screening> screenings = new ArrayList<>();
+
     public Movie() {
     }
 
-    public Movie(int id, String Engtitle, String Hebtitle, String director, int year, String screeningTime, byte[] imageData) {
+    public Movie(int id, String Engtitle, String Hebtitle, String director, int RlsYear, byte[] imageData, String genre, String description, String mainActors, String length) {
         this.id = id;
         this.Engtitle = Engtitle;
         this.Hebtitle = Hebtitle;
         this.director = director;
-        this.newYear = year;
-        this.screeningTime = screeningTime;
+        this.RlsYear = RlsYear;
         this.imageData = imageData;
+        this.genre = genre;
+        this.description = description;
+        this.mainActors = mainActors;
+        this.length = length;
     }
 
     // Getters and setters
+
     public int getId() {
         return id;
     }
@@ -69,19 +88,43 @@ public class Movie implements Serializable {
     }
 
     public int getYear() {
-        return newYear;
+        return RlsYear;
     }
 
-    public void setYear(int year) {
-        this.newYear = year;
+    public void setYear(int RlsYear) {
+        this.RlsYear = RlsYear;
     }
 
-    public String getScreeningTime() {
-        return screeningTime;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setScreeningTime(String screeningTime) {
-        this.screeningTime = screeningTime;
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getMainActors() {
+        return mainActors;
+    }
+
+    public void setMainActors(String mainActors) {
+        this.mainActors = mainActors;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
     }
 
     public byte[] getImageData() {
@@ -90,5 +133,30 @@ public class Movie implements Serializable {
 
     public void setImageData(byte[] imageData) {
         this.imageData = imageData;
+    }
+
+    public List<Branch> getBranches() {
+        return branches;
+    }
+
+    public void setBranches(List<Branch> branches) {
+        this.branches = branches;
+    }
+
+    public List<Screening> getScreenings() {
+        return screenings;
+    }
+
+    public void setScreenings(List<Screening> screenings) {
+        this.screenings = screenings;
+    }
+
+    public void addScreening(LocalDateTime screeningTime, Branch branch) {
+        Screening screening = new Screening(screeningTime, this, branch);
+        screenings.add(screening);
+    }
+
+    public void removeScreening(Screening screening) {
+        screenings.remove(screening);
     }
 }

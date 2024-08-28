@@ -1,9 +1,13 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
@@ -80,6 +84,35 @@ public class ContentManagerPage {
         App.switchScreen("ContentManagerPage");
     }
 
+    public void initialize() {
+        contentManagerNameLabel.setText(LoginPage.employee1.getFullName());
+    }
+
+    @FXML
+    private void requestLogoutFromServer() {
+        try { ///////////////////////////////////////////////////////////////
+            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+/*
+ public void initialize() {//////////////////////////////////////
+        EventBus.getDefault().register(this);
+    }
+    @Subscribe
+    public void onMessageEvent(MessageEvent event) {
+        Platform.runLater(() -> {
+            LoginPage.employee1 = null;
+            try {
+                switchToHomePage();
+            }
+            catch (IOException e) {}
+        });
+    }*/
 
 
 }

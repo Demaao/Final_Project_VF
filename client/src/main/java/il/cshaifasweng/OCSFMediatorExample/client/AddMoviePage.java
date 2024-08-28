@@ -1,11 +1,15 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.InputMethodEvent;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
@@ -72,6 +76,7 @@ public class AddMoviePage {
 
     @FXML
     public void initialize() {
+       // EventBus.getDefault().register(this);
         SpinnerValueFactory<String> valueFactory2 =
                 new SpinnerValueFactory.ListSpinnerValueFactory<String>(ScreeningType);
         screeningTypeSpinner.setValueFactory(valueFactory2);
@@ -124,7 +129,7 @@ public class AddMoviePage {
     }
 
     @FXML
-    private void switchToHomePage() throws IOException {
+    public static void switchToHomePage() throws IOException {
         App.switchScreen("HomePage");
     }
 
@@ -133,5 +138,26 @@ public class AddMoviePage {
         App.switchScreen("ContentManagerPage");
     }
 
+
+    @FXML
+    private void requestLogoutFromServer() {
+        try { ///////////////////////////////////////////////////////////////
+            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+/*
+    @Subscribe
+    public void onMessageEvent(MessageEvent event) {
+        Platform.runLater(() -> {
+            LoginPage.employee1 = null;
+            try {
+                switchToHomePage();
+            }
+            catch (IOException e) {}
+        });
+    }*/
 
 }

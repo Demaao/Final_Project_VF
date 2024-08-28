@@ -1,9 +1,13 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
@@ -57,4 +61,32 @@ public class CardsAndLinksReportPage {
     private void switchToConfirmPricesUpdatesPage() throws IOException{
         App.switchScreen("ConfirmPricesUpdatesPage");
     }
+
+
+    @FXML
+    private void requestLogoutFromServer() {
+        try { ///////////////////////////////////////////////////////////////
+            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+ /*
+    public void initialize() {//////////////////////////////////////
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onMessageEvent(MessageEvent event) {
+        Platform.runLater(() -> {
+            LoginPage.employee1 = null;
+            try {
+                switchToHomePage();
+            }
+            catch (IOException e) {}
+        });
+    }*/
 }

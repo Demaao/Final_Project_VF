@@ -113,10 +113,11 @@
       </TextField>
       <TableView fx:id="complaintTable" layoutX="220.0" layoutY="188.0" prefHeight="274.0" prefWidth="630.0" visible="false">
          <columns>
-            <TableColumn prefWidth="145.5999755859375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint NO." />
-            <TableColumn prefWidth="166.40005493164062" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint Subject" />
-            <TableColumn prefWidth="186.39996337890625" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Submission Time" />
-            <TableColumn prefWidth="134.4000244140625" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Status" />
+            <TableColumn prefWidth="125.5999755859375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint NO." />
+            <TableColumn prefWidth="113.5999755859375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Subject" />
+            <TableColumn prefWidth="138.40005493164062" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Submission Time" />
+            <TableColumn prefWidth="88.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Status" />
+            <TableColumn prefWidth="165.60003662109375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Response" />
          </columns>
       </TableView>
       <Button fx:id="enterBtn" layoutX="687.0" layoutY="115.0" mnemonicParsing="false" onAction="#showComplaintTable" prefHeight="34.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Enter">

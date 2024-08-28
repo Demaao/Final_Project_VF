@@ -1,10 +1,14 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
@@ -19,6 +23,15 @@ public class TicketsReportPage {
     private Button logOutBtn;
 
     @FXML
+    private Button confirmPricesBtn;
+
+    @FXML
+    private Button complaintsReportBtn;
+
+    @FXML
+    private Button cardAndLinkReportBtn;
+
+    @FXML
     private ComboBox<?> monthComboBox;
 
     @FXML
@@ -26,7 +39,19 @@ public class TicketsReportPage {
 
     @FXML
     private void switchToHeadManagerPage() throws IOException {
-        App.switchScreen("HeadManagerPage");
+        if(LoginPage.employee1.getPosition().equals("Head Manager"))
+            App.switchScreen("HeadManagerPage");
+        else
+            App.switchScreen("BranchManagerPage");
+    }
+
+    public void initialize() {
+        if(LoginPage.employee1.getPosition().equals("Branch Manager")){
+            cardAndLinkReportBtn.setVisible(false);
+            confirmPricesBtn.setVisible(false);
+            complaintsReportBtn.setLayoutY(300);
+            logOutBtn.setLayoutY(350);
+        }
     }
 
     @FXML
@@ -58,4 +83,31 @@ public class TicketsReportPage {
     private void switchToConfirmPricesUpdatesPage() throws IOException{
         App.switchScreen("ConfirmPricesUpdatesPage");
     }
+
+
+    @FXML
+    private void requestLogoutFromServer() {
+        try { ///////////////////////////////////////////////////////////////
+            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+/*
+ public void initialize() {//////////////////////////////////////
+        EventBus.getDefault().register(this);
+    }
+    @Subscribe
+    public void onMessageEvent(MessageEvent event) {
+        Platform.runLater(() -> {
+            LoginPage.employee1 = null;
+            try {
+                switchToHomePage();
+            }
+            catch (IOException e) {}
+        });
+    }*/
 }

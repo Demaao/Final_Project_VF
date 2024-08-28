@@ -1,16 +1,33 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import static java.lang.Thread.sleep;
 
 public class App extends Application {
 
@@ -310,19 +327,68 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "MovieDetailsPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("MovieDetailsPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
         }
     }
 
+    public static int loginDeniedCounter = 0;
+
     @Subscribe
     public void onWarningEvent(WarningEvent event) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING,
-                    String.format("Message: %s\nTimestamp: %s\n",
-                            event.getWarning().getMessage(),
-                            event.getWarning().getTime().toString())
-            );
-            alert.show();
-        });
+            Platform.runLater(() -> {
+                Alert alert;
+                if (event.getWarning().getMessage().equals("Logged out successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.setHeaderText("Logged Out");
+                    alert.show();
+                }
+                else if (loginDeniedCounter >= 5) {
+                    Stage dialogStage = new Stage();
+                    dialogStage.initStyle(StageStyle.UNDECORATED); // No window decorations
+                    dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+                    Label label = new Label("Too many incorrect login attempts!\n Try again in 10 seconds");
+                    StackPane pane = new StackPane(label);
+                    pane.setPrefSize(350, 190); // Set your preferred size
+                    pane.setStyle("-fx-background-color: white; -fx-border-color:  lightgray; " +
+                            "-fx-border-width: 1px; -fx-font-size: 15; ");
+
+                    Scene scene = new Scene(pane);
+                    dialogStage.setScene(scene);
+                    dialogStage.centerOnScreen(); // Center dialog on screen
+                    dialogStage.show();
+
+                    // Automatically close the dialog after 30 seconds
+                    PauseTransition delay = new PauseTransition(Duration.seconds(10));
+                    delay.setOnFinished(event1 -> dialogStage.close());
+                    delay.play();
+                }
+                else {
+                    alert = new Alert(Alert.AlertType.WARNING, event.getWarning().getMessage());
+                    alert.show();
+                }
+            });
+    }
+
+    @Subscribe
+    public void onMessageEvent(MessageEvent event) {
+        if(event.getMessage().equals("Log out")) {
+            Platform.runLater(() -> {
+                LoginPage.employee1 = null;
+                try {
+                    AddMoviePage.switchToHomePage();
+                } catch (IOException e) {
+                }
+            });
+        }
     }
 
 	public static void main(String[] args) {
