@@ -159,6 +159,17 @@ public class MoviesPage {
 
         homeImageView4.setOnMouseClicked(event -> openMovieDetailsPage(filteredHomeMovies.get(filteredHomeCurrentIndex + 3)));
         homeLabel4.setOnMouseClicked(event -> openMovieDetailsPage(filteredHomeMovies.get(filteredHomeCurrentIndex + 3)));
+
+
+        soonImageView1.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(0)));
+        homeLabel1.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(0)));
+
+        soonImageView2.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(1)));
+        homeLabel2.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(1)));
+
+        soonImageView3.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(2)));
+        homeLabel3.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(2)));
+
     }
 
     @Subscribe
