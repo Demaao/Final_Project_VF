@@ -12,6 +12,10 @@ public class MessageEvent {
         this.movieList = movieList;
     }
 
+    public MessageEvent(String message) { /////////////////////////////////////
+        this.message = message;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -28,5 +32,4 @@ public class MessageEvent {
         this.movieList = movieList;
     }
 
-    public MessageEvent(String message) {}
 }

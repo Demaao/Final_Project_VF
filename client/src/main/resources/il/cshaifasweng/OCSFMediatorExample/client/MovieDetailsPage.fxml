@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<?import java.net.URL?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PaymentPage">
-    <stylesheets>
-        <URL value="@styles.css" />
-    </stylesheets>
+<?import javafx.scene.control.DatePicker?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.MovieDetailsPage">
     <children>
+
+        <TextArea fx:id="movieDescriptionTextArea" editable="false" layoutX="198.0" layoutY="78.0" prefHeight="115.0" prefWidth="410.0" style="-fx-control-inner-background: black;            -fx-text-fill: #f6d9d9;            -fx-border-color: black;             -fx-focus-color: transparent;            -fx-faint-focus-color: transparent;            -fx-background-color: black;" wrapText="true">
+            <font>
+                <Font size="14.0" />
+            </font></TextArea>
+
         <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
             <children>
                 <ImageView fitHeight="110.0" fitWidth="118.0" layoutX="31.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
@@ -98,75 +102,41 @@
                 </Button>
             </children>
         </AnchorPane>
-        <Label layoutX="220.0" layoutY="198.0" prefHeight="30.0" prefWidth="99.0" text="Full Name" textFill="#f6d9d9">
+
+        <!-- דף פרטי סרט -->
+        <Label fx:id="movieTitleLabel" layoutX="200.0" layoutY="20.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Movie Title" />
+
+        <Label fx:id="directorLabel" layoutX="200.0" layoutY="270.0" style="-fx-font-size: 16px; -fx-text-fill: #f6d9d9;" text="Director : " />
+
+        <Label fx:id="actorsLabel" layoutX="200.0" layoutY="230.0" style="-fx-font-size: 16px; -fx-text-fill: #f6d9d9;" text="Actors : " />
+
+        <Label fx:id="yearLabel" layoutX="200.0" layoutY="310.0" style="-fx-font-size: 16px; -fx-text-fill: #f6d9d9;" text="Year : " />
+
+        <Label fx:id="genreLabel" layoutX="200.0" layoutY="350.0" style="-fx-font-size: 16px; -fx-text-fill: #f6d9d9;" text="Genre : " />
+
+        <Label fx:id="lengthLabel" layoutX="200.0" layoutY="390.0" style="-fx-font-size: 16px; -fx-text-fill: #f6d9d9;" text="Length : " />
+
+        <ImageView fx:id="moviePosterImageView" fitHeight="280.0" fitWidth="210.0" layoutX="658.0" layoutY="78.0" />
+        <Label fx:id="hebtitle" layoutX="684.0" layoutY="30.0" prefHeight="35.0" prefWidth="180.0" textFill="#f6d9d9">
             <font>
-                <Font size="20.0" />
+                <Font size="21.0" />
             </font>
         </Label>
-        <TextField fx:id="fullNameText" layoutX="389.0" layoutY="198.0" prefHeight="34.0" prefWidth="370.0" promptText="Full Name">
+        <Label fx:id="engtitle" layoutX="229.0" layoutY="29.0" prefHeight="17.0" prefWidth="180.0" textFill="#f6d9d9">
             <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <Label layoutX="220.0" layoutY="134.0" text="Total Price:" textFill="#f6d9d9">
-            <font>
-                <Font name="System Bold" size="24.0" />
+                <Font size="21.0" />
             </font>
         </Label>
-        <Label layoutX="220.0" layoutY="253.0" prefHeight="30.0" prefWidth="98.0" text="ID Number" textFill="#f6d9d9">
+        <Label layoutX="222.0" layoutY="426.0" prefHeight="35.0" prefWidth="127.0" text="Book Now" textFill="#42ef3f">
             <font>
-                <Font size="20.0" />
+                <Font name="System Bold" size="22.0" />
             </font>
         </Label>
-        <TextField fx:id="IDNumText" layoutX="389.0" layoutY="253.0" prefHeight="34.0" prefWidth="370.0" promptText="ID Number">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <Label layoutX="220.0" layoutY="308.0" prefHeight="30.0" prefWidth="144.0" text="Phone Number" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <TextField fx:id="phoneText" layoutX="389.0" layoutY="308.0" prefHeight="34.0" prefWidth="370.0" promptText="Phone Number">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <TextField fx:id="emailText" layoutX="389.0" layoutY="363.0" prefHeight="34.0" prefWidth="370.0" promptText="Email Address">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <Label layoutX="220.0" layoutY="363.0" prefHeight="30.0" prefWidth="170.0" text="Email Address" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <Label layoutX="220.0" layoutY="418.0" prefHeight="22.0" prefWidth="104.0" text="Credit Card" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <Label fx:id="totalPriceLabel" layoutX="361.0" layoutY="134.0" text="100$" textFill="#f6d9d9">
-            <font>
-                <Font name="System Bold" size="24.0" />
-            </font>
-        </Label>
-        <Button fx:id="payBtn" layoutX="750.0" layoutY="560.0" mnemonicParsing="false" onAction="#payForProduct" prefHeight="40.0" prefWidth="90.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Pay">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Button>
-        <TextField fx:id="creditCardTxt" layoutX="389.0" layoutY="418.0" prefHeight="34.0" prefWidth="370.0" promptText="Credit Card Number">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <Label layoutX="448.0" layoutY="48.0" text="Payment Details" textFill="#f6d9d9">
-            <font>
-                <Font name="Britannic Bold" size="30.0" />
-            </font>
-        </Label>
-        <Label layoutX="334.0" layoutY="88.0" text="Complete your purchase by providing payment details" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
+
+
+        <ComboBox fx:id="cinemaComboBox" layoutX="229.0" layoutY="480.0" prefWidth="150.0"  promptText="Select Cinema" visible="false" />
+        <DatePicker fx:id="chooseDatePicker" layoutX="403.0" layoutY="480.0" prefWidth="150.0" promptText="Select Day" />
+        <ComboBox fx:id="timeComboBox" layoutX="575.0" layoutY="480.0" prefWidth="150.0" promptText="Select Time" />
+
     </children>
 </AnchorPane>

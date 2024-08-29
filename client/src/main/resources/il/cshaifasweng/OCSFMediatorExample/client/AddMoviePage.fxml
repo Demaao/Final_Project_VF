@@ -40,7 +40,7 @@
                     </graphic>
                 </Button>
                 <Button fx:id="changeHostBtn" layoutX="41.0" layoutY="574.0" mnemonicParsing="false" onAction="#switchToHostPage" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" text="Change Host IP" underline="true" />
-                <Button fx:id="logOutBtn" layoutX="23.0" layoutY="450.0" mnemonicParsing="false" onAction="#switchToHomePage" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Log Out">
+                <Button fx:id="logOutBtn" layoutX="23.0" layoutY="450.0" mnemonicParsing="false" onAction="#requestLogoutFromServer" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="   Log Out">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                             <image>

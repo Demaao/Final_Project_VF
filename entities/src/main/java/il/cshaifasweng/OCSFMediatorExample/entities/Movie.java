@@ -2,6 +2,8 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,51 +15,37 @@ public class Movie implements Serializable {
     private String Engtitle;
     private String Hebtitle;
     private String director;
-    private int RlsYear ;
+    private int RlsYear;
     private String genre;
     private String description;
     private String mainActors;
     private String length;
-    //private String screeningTime;
+
     @Lob
     @Column(columnDefinition="BLOB")  // הגדרה של עמודת BLOB במסד הנתונים
     private byte[] imageData;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "movie_branch",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "branch_id")
     )
-    private List<Branch> branches;
+    private List<Branch> branches = new ArrayList<>();
 
-    // Constructors
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Screening> screenings = new ArrayList<>();
+
     public Movie() {
     }
 
-    public Movie(int Id,String engtitle, String hebtitle, String director, int rlsYear, byte[] imageData,
-                 String genre, String description, String mainActors, String length,List<Branch> branches) {
-        this.id=Id;
-        this.Engtitle = engtitle;
-        this.Hebtitle = hebtitle;
+    public Movie(int id, String Engtitle, String Hebtitle, String director, int RlsYear, byte[] imageData, String genre, String description, String mainActors, String length) {
+        this.id = id;
+        this.Engtitle = Engtitle;
+        this.Hebtitle = Hebtitle;
         this.director = director;
-        this.RlsYear = rlsYear;
-        // this.screeningTime = screeningTime;
-        this.imageData = imageData;
-        this.genre = genre;
-        this.description = description;
-        this.mainActors = mainActors;
-        this.length = length;
-        this.branches = branches;
-    }
-
-    public Movie(int id, String engTitle, String hebTitle, String director, int rlsYear, byte[] imageData, String genre, String description, String mainActors, String length) {
-        this.id=id;
-        this.Engtitle = engTitle;
-        this.Hebtitle = hebTitle;
-        this.director = director;
-        this.RlsYear = rlsYear;
-        // this.screeningTime = screeningTime;
+        this.RlsYear = RlsYear;
         this.imageData = imageData;
         this.genre = genre;
         this.description = description;
@@ -65,13 +53,8 @@ public class Movie implements Serializable {
         this.length = length;
     }
 
-
-    //public Movie(String engTitle, String hebTitle, byte[] imageData) {
-    // this.Engtitle = engTitle;
-    //this.Hebtitle = hebTitle;
-    // this.imageData = imageData;
-    //}
     // Getters and setters
+
     public int getId() {
         return id;
     }
@@ -108,18 +91,10 @@ public class Movie implements Serializable {
         return RlsYear;
     }
 
-    public void setYear(int year) {
-        this.RlsYear = year;
+    public void setYear(int RlsYear) {
+        this.RlsYear = RlsYear;
     }
 
-
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
-    }
     public String getGenre() {
         return genre;
     }
@@ -151,10 +126,37 @@ public class Movie implements Serializable {
     public void setLength(String length) {
         this.length = length;
     }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
+
     public List<Branch> getBranches() {
         return branches;
     }
+
     public void setBranches(List<Branch> branches) {
         this.branches = branches;
+    }
+
+    public List<Screening> getScreenings() {
+        return screenings;
+    }
+
+    public void setScreenings(List<Screening> screenings) {
+        this.screenings = screenings;
+    }
+
+    public void addScreening(LocalDateTime screeningTime, Branch branch) {
+        Screening screening = new Screening(screeningTime, this, branch);
+        screenings.add(screening);
+    }
+
+    public void removeScreening(Screening screening) {
+        screenings.remove(screening);
     }
 }
