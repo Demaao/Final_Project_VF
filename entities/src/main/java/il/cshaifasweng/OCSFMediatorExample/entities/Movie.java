@@ -1,5 +1,9 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -25,7 +29,8 @@ public class Movie implements Serializable {
     @Column(columnDefinition="BLOB")  // הגדרה של עמודת BLOB במסד הנתונים
     private byte[] imageData;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie_branch",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -34,7 +39,8 @@ public class Movie implements Serializable {
     private List<Branch> branches = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Screening> screenings = new ArrayList<>();
 
     public Movie() {
