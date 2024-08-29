@@ -162,13 +162,13 @@ public class MoviesPage {
 
 
         soonImageView1.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(0)));
-        homeLabel1.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(0)));
+        soonLabel1.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(0)));
 
         soonImageView2.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(1)));
-        homeLabel2.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(1)));
+        soonLabel2.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(1)));
 
         soonImageView3.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(2)));
-        homeLabel3.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(2)));
+        soonLabel3.setOnMouseClicked(event -> openMovieDetailsPage(soonMovies.get(2)));
 
     }
 
