@@ -339,38 +339,35 @@ public class SimpleServer extends AbstractServer {
 
 		Branch haifaCinema = new Branch(1,"Haifa Cinema","Haifa");
 
-		haifaCinema.addMovie(movie1, movie2, movie6, movie7, movie8);
+		haifaCinema.addMovie(movie2, movie4, movie6, movie8, movie10);
 		session.save(haifaCinema);
 
 		Branch telAvivCinema = new Branch(2,"Tel Aviv Cinema","Tel Aviv");
-		telAvivCinema.addMovie(movie1, movie2, movie6, movie7, movie8);
+		telAvivCinema.addMovie(movie1, movie3, movie5, movie7, movie9);
 		session.save(telAvivCinema);
 
 		Branch eilatCinema = new Branch(3,"Eilat Cinema","Eilat");
-		eilatCinema.addMovie(movie1, movie2, movie6, movie7, movie8);
+		eilatCinema.addMovie(movie1, movie2, movie5, movie6, movie9, movie10);
 		session.save(eilatCinema);
 
 		Branch karmielCinema = new Branch(4,"Karmiel Cinema","Karmiel");
-		karmielCinema.addMovie(movie3, movie4, movie5, movie9, movie10);
+		karmielCinema.addMovie(movie3, movie4, movie6, movie8, movie9, movie10);
 		session.save(karmielCinema);
 
 		Branch jerusalemCinema = new Branch(5,"Jerusalem Cinema","Jerusalem");
-		jerusalemCinema.addMovie(movie3, movie4, movie5, movie9, movie10);
+		jerusalemCinema.addMovie(movie1, movie2, movie3, movie7, movie8, movie9, movie10);
 		session.save(jerusalemCinema);
 
 		session.flush();
 	}
 
 	private static void generateScreenings(Session session) throws Exception {
-
-		// ××¢× ××ª ××ª× ××§××× ××¢ ×××¡× ×× ×ª×× ××
 		Branch haifaCinema = session.get(Branch.class, 1);
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
 		Branch karmielCinema = session.get(Branch.class, 4);
 		Branch jerusalemCinema = session.get(Branch.class, 5);
 
-		// ××¢× ××ª ××¡×¨××× ×××¡× ×× ×ª×× ××
 		Movie movie1 = session.get(Movie.class, 1);
 		Movie movie2 = session.get(Movie.class, 2);
 		Movie movie3 = session.get(Movie.class, 3);
@@ -382,7 +379,6 @@ public class SimpleServer extends AbstractServer {
 		Movie movie9 = session.get(Movie.class, 9);
 		Movie movie10 = session.get(Movie.class, 10);
 
-		//  ×¨×©××× ×©× ××× × ××§×¨× ×
 		List<LocalDateTime> screeningTimes = Arrays.asList(
 				LocalDateTime.of(2024, 9, 24, 18, 30),
 				LocalDateTime.of(2024, 9, 24, 20, 30),
@@ -407,44 +403,48 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 22, 30)
 		);
 
-		for (LocalDateTime time : screeningTimes) {    // ××××× ××××¡×¤×ª ×× ××× × ×××§×¨× × ××¡×¨×××
-			movie1.addScreening(time, haifaCinema);
+		for (LocalDateTime time : screeningTimes) {
+			movie1.addScreening(time, jerusalemCinema);
 			movie1.addScreening(time, telAvivCinema);
 			movie1.addScreening(time, eilatCinema);
 
 			movie2.addScreening(time, haifaCinema);
-			movie2.addScreening(time, telAvivCinema);
+			movie2.addScreening(time, jerusalemCinema);
 			movie2.addScreening(time, eilatCinema);
 
 			movie3.addScreening(time, karmielCinema);
 			movie3.addScreening(time, jerusalemCinema);
+			movie3.addScreening(time, telAvivCinema);
 
 			movie4.addScreening(time, karmielCinema);
-			movie4.addScreening(time, jerusalemCinema);
+			movie4.addScreening(time, haifaCinema);
 
-			movie5.addScreening(time, karmielCinema);
-			movie5.addScreening(time, jerusalemCinema);
+			movie5.addScreening(time, telAvivCinema);
+			movie5.addScreening(time, eilatCinema);
 
 			movie6.addScreening(time, haifaCinema);
-			movie6.addScreening(time, telAvivCinema);
+			movie6.addScreening(time, karmielCinema);
 			movie6.addScreening(time, eilatCinema);
 
-			movie7.addScreening(time, haifaCinema);
+			movie7.addScreening(time, jerusalemCinema);
 			movie7.addScreening(time, telAvivCinema);
-			movie7.addScreening(time, eilatCinema);
 
 			movie8.addScreening(time, haifaCinema);
-			movie8.addScreening(time, telAvivCinema);
-			movie8.addScreening(time, eilatCinema);
+			movie8.addScreening(time, karmielCinema);
+			movie8.addScreening(time, jerusalemCinema);
 
+			movie9.addScreening(time, telAvivCinema);
+			movie9.addScreening(time, eilatCinema);
 			movie9.addScreening(time, karmielCinema);
 			movie9.addScreening(time, jerusalemCinema);
 
 			movie10.addScreening(time, karmielCinema);
 			movie10.addScreening(time, jerusalemCinema);
+			movie10.addScreening(time, haifaCinema);
+			movie10.addScreening(time, eilatCinema);
 
 		}
-		// ××¦××¨×ª ×¨×©××× ×©× ×× ××¡×¨××× ××× ××¢×××¨ ×¢× ×××× ×××©×××¨ ×××ª×
+
 		List<Movie> movies = Arrays.asList(movie1, movie2, movie3, movie4, movie5, movie6, movie7, movie8, movie9, movie10);
 		for (Movie movie : movies) {
 			session.save(movie);
@@ -452,7 +452,6 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 
 
-		// ××¢× ××ª ××¡×¨××× ×©× ××××ª  ×××¡× ×× ×ª×× ××
 		Movie movie11 = session.get(Movie.class, 11);
 		Movie movie12 = session.get(Movie.class, 12);
 		Movie movie13 = session.get(Movie.class, 13);
@@ -484,7 +483,7 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 19, 00),
 				LocalDateTime.of(2024, 9, 30, 23, 00)
 		);
-		for (LocalDateTime time : HomeScreeningTimes) {    // ××××× ××××¡×¤×ª ×× ××× × ×××§×¨× × ××¡×¨×××
+		for (LocalDateTime time : HomeScreeningTimes) {
 			movie11.addScreening(time,null);
 			movie12.addScreening(time,null);
 			movie13.addScreening(time,null);
