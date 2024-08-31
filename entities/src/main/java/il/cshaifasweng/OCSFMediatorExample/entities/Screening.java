@@ -1,7 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -63,9 +62,4 @@ public class Screening implements Serializable {
     public void setBranch(Branch branch) {
         this.branch = branch;
     }
-
-    public LocalDate getScreeningDate() {
-        return screeningTime.toLocalDate();
-    }
-
 }

@@ -127,7 +127,7 @@
                 <Font size="21.0" />
             </font>
         </Label>
-        <Label layoutX="222.0" layoutY="426.0" prefHeight="35.0" prefWidth="127.0" text="Book Now" textFill="#42ef3f">
+        <Label fx:id="bookNowLabel" layoutX="222.0" layoutY="426.0" prefHeight="35.0" prefWidth="127.0" text="Book Now" textFill="#42ef3f">
             <font>
                 <Font name="System Bold" size="22.0" />
             </font>

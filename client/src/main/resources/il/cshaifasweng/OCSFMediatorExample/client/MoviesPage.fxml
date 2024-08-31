@@ -100,23 +100,23 @@
       </AnchorPane>
       <Label fx:id="soon" layoutX="190.0" layoutY="8.0" prefHeight="30.0" prefWidth="223.0" text="Coming Soon" textFill="#f6d9d9">
          <font>
-            <Font name="Britannic Bold" size="30.0" />
+            <Font name="Britannic Bold" size="27.0" />
          </font>
       </Label>
       <ComboBox fx:id="searchByNameBox" layoutX="604.0" layoutY="100.0" prefHeight="26.0" prefWidth="125.0" promptText="Search  Movie" />
 
 
-      <Label fx:id="NowInCinema" layoutX="190.0" layoutY="225.0" prefHeight="30.0" prefWidth="500.0" text="Now in the cinema" textFill="#f6d9d9" textOverrun="CLIP">
+      <Label fx:id="NowInCinema" layoutX="190.0" layoutY="225.0" prefHeight="30.0" prefWidth="706.0" text="Now in the cinema" textFill="#f6d9d9" textOverrun="CLIP">
          <font>
-            <Font name="Britannic Bold" size="30.0" />
+            <Font name="Britannic Bold" size="27.0" />
          </font>
       </Label>
-      <Label layoutX="631.0" layoutY="39.0" prefHeight="47.0" prefWidth="205.0" text="Find your movie" textFill="#f6d9d9">
+      <Label layoutX="631.0" layoutY="35.0" prefHeight="47.0" prefWidth="205.0" text="Find your movie" textFill="#f6d9d9">
          <font>
             <Font name="Britannic Bold" size="26.0" />
          </font></Label>
-      <ComboBox fx:id="searchByGenreBox" layoutX="746.0" layoutY="150.0" prefHeight="26.0" prefWidth="125.0" promptText="Choose Genre" />
-      <ComboBox fx:id="searchByCinemaBox" layoutX="604.0" layoutY="150.0" prefHeight="26.0" prefWidth="125.0" promptText="Choose Cinema" />
+      <ComboBox fx:id="searchByGenreBox" layoutX="746.0" layoutY="155.0" prefHeight="26.0" prefWidth="125.0" promptText="Choose Genre" />
+      <ComboBox fx:id="searchByCinemaBox" layoutX="604.0" layoutY="155.0" prefHeight="26.0" prefWidth="125.0" promptText="Choose Cinema" />
       <DatePicker fx:id="searchByDatePicker" editable="false" layoutX="746.0" layoutY="100.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="125.0" promptText="Choose Date" />
       <ImageView fx:id="cinemaImageView1" fitHeight="140.0" fitWidth="120.0" layoutX="250.0" layoutY="275.0" preserveRatio="true" style="-fx-cursor: hand;" />
       <Label fx:id="cinemaLabel1" layoutX="255.0" layoutY="425.0" prefHeight="20.0" prefWidth="98.0" style="-fx-cursor: hand;" text="Movie 1" textAlignment="CENTER" textFill="#f6d9d9">
@@ -190,19 +190,31 @@
             </RadialGradient>
          </textFill>
       </Button>
-      <Label fx:id="WatchFromHome" layoutX="190.0" layoutY="446.0" prefHeight="30.0" prefWidth="521.0" text="Watch from home" textFill="#f6d9d9" textOverrun="CLIP">
+      <Label fx:id="WatchFromHome" layoutX="190.0" layoutY="446.0" prefHeight="30.0" prefWidth="706.0" text="Watch from home" textFill="#f6d9d9" textOverrun="CLIP">
          <font>
-            <Font name="Britannic Bold" size="28.0" />
+            <Font name="Britannic Bold" size="27.0" />
          </font>
       </Label>
       <ImageView fx:id="homeImageView1" fitHeight="130.0" fitWidth="112.0" layoutX="250.0" layoutY="482.0" preserveRatio="true" style="-fx-cursor: hand;" />
       <ImageView fx:id="homeImageView2" fitHeight="130.0" fitWidth="112.0" layoutX="400.0" layoutY="482.0" preserveRatio="true" style="-fx-cursor: hand;" />
       <ImageView fx:id="homeImageView3" fitHeight="130.0" fitWidth="112.0" layoutX="550.0" layoutY="482.0" preserveRatio="true" style="-fx-cursor: hand;" />
       <ImageView fx:id="homeImageView4" fitHeight="130.0" fitWidth="112.0" layoutX="700.0" layoutY="482.0" preserveRatio="true" style="-fx-cursor: hand;" />
-      <Label fx:id="homeLabel1" layoutX="252.0" layoutY="616.0" prefHeight="20.0" prefWidth="115.0" style="-fx-cursor: hand;" text="Movie 1" textAlignment="CENTER" textFill="#f6d9d9" />
-      <Label fx:id="homeLabel2" layoutX="400.0" layoutY="616.0" prefHeight="20.0" prefWidth="115.0" style="-fx-cursor: hand;" text="Movie 2" textAlignment="CENTER" textFill="#f6d9d9" />
-      <Label fx:id="homeLabel3" layoutX="560.0" layoutY="616.0" prefHeight="20.0" prefWidth="115.0" style="-fx-cursor: hand;" text="Movie 3" textAlignment="CENTER" textFill="#f6d9d9" />
-      <Label fx:id="homeLabel4" layoutX="704.0" layoutY="616.0" prefHeight="20.0" prefWidth="115.0" style="-fx-cursor: hand;" text="Movie 4" textAlignment="CENTER" textFill="#f6d9d9" />
+      <Label fx:id="homeLabel1" layoutX="252.0" layoutY="616.0" prefHeight="20.0" prefWidth="115.0" style="-fx-cursor: hand;" text="Movie 1" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Label fx:id="homeLabel2" layoutX="400.0" layoutY="616.0" prefHeight="20.0" prefWidth="115.0" style="-fx-cursor: hand;" text="Movie 2" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Label fx:id="homeLabel3" layoutX="560.0" layoutY="616.0" prefHeight="20.0" prefWidth="115.0" style="-fx-cursor: hand;" text="Movie 3" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Label fx:id="homeLabel4" layoutX="704.0" layoutY="616.0" prefHeight="20.0" prefWidth="115.0" style="-fx-cursor: hand;" text="Movie 4" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
       <Button fx:id="homeRightButton" graphicTextGap="1.0" layoutX="815.0" layoutY="513.0" mnemonicParsing="false" onAction="#handleHomeRightButton" prefHeight="78.0" prefWidth="52.0" style="-fx-background-color: black; -fx-cursor: hand;" text="&gt;" textAlignment="CENTER" textOverrun="CLIP">
          <font>
             <Font name="System Bold" size="30.0" />
@@ -245,5 +257,25 @@
             </RadialGradient>
          </textFill>
       </Button>
+      <Label layoutX="606.0" layoutY="135.0" prefHeight="20.0" prefWidth="98.0" text="Cinema:" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="746.0" layoutY="135.0" prefHeight="20.0" prefWidth="98.0" text="Genre:" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="606.0" layoutY="80.0" prefHeight="20.0" prefWidth="98.0" text="Name:" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="746.0" layoutY="80.0" prefHeight="20.0" prefWidth="98.0" text="Date:" textAlignment="CENTER" textFill="#f6d9d9">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

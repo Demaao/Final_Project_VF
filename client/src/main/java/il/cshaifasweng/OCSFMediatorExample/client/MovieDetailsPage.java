@@ -1,9 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.entities.HomeMovie;
-import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
-import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
-import il.cshaifasweng.OCSFMediatorExample.entities.Screening;
+import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -63,6 +60,9 @@ public class MovieDetailsPage {
     @FXML
     private ComboBox<String> timeComboBox;
 
+    @FXML
+    private Label bookNowLabel;
+
     public static void setSelectedMovie(Movie movie) {
         selectedMovie = movie;
     }
@@ -106,8 +106,15 @@ public class MovieDetailsPage {
                 //אם בחרנו סרט בית אז אנחנו עוברים לעדכן את התאריכים והשעות כי לסרטי הבית אין בתי קלנוע
                 chooseDatePicker.setOnAction(event -> updateAvailableTimes(selectedMovie.getScreenings()));
 
-
-            } else {
+            }
+            else if(selectedMovie instanceof SoonMovie) {
+                cinemaComboBox.setVisible(false);
+                chooseDatePicker.setVisible(false);
+                timeComboBox.setVisible(false);
+                bookNowLabel.setVisible(false);
+                lengthLabel.setVisible(false);
+            }
+            else {
                 cinemaComboBox.setVisible(true);
                 chooseDatePicker.setVisible(true);
                 timeComboBox.setVisible(true);
@@ -145,7 +152,7 @@ public class MovieDetailsPage {
         if (selectedMovie instanceof HomeMovie) {
             updateAvailableDays(screenings);  //  אם מדובר בסרט ביתי, אין צורך לעדכן את  בתי הקולנוע נעבור לעדכן את  לעדכון הימים
         } else {
-                // קבלת רשימה של בתי קולנוע מתוך רשימת ההקרנות
+            // קבלת רשימה של בתי קולנוע מתוך רשימת ההקרנות
             Set<String> availableCinemas = screenings.stream()
                     .filter(screening -> screening.getBranch() != null)  // לוודא ש-Branch אינו null
                     .map(screening -> screening.getBranch().getName())
@@ -167,7 +174,7 @@ public class MovieDetailsPage {
         }
 
         if (selectedMovie instanceof HomeMovie) {
-                                                                         // עדכון הימים בהם יש הקרנות לסרטי הבית
+            // עדכון הימים בהם יש הקרנות לסרטי הבית
             Set<LocalDate> availableDays = screenings.stream()
                     .filter(screening -> screening.getBranch() == null)
                     .map(screening -> screening.getScreeningTime().toLocalDate())
