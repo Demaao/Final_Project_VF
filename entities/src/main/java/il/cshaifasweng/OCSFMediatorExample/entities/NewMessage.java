@@ -8,6 +8,7 @@ public class NewMessage implements Serializable {
     String userName;//////////////////////
     String password;////////////////////////////
     Employee employee; //////////////////////////
+    Movie movie;
 
     public NewMessage(Object object, String message) {
         this.object = object;
@@ -50,5 +51,12 @@ public class NewMessage implements Serializable {
     }
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void setMovie(Movie selectedMovie) {
+        this.movie = selectedMovie;
+    }
+    public Movie getMovie() {
+        return movie;
     }
 }

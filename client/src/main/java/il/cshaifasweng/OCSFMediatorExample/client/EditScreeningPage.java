@@ -1,6 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import il.cshaifasweng.OCSFMediatorExample.entities.Screening;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.util.List;
 
 public class EditScreeningPage {
     @FXML
@@ -65,6 +67,9 @@ public class EditScreeningPage {
 
     @FXML
     private Button removeTimeBtn;
+
+    public EditScreeningPage(List<Screening> screenings) {
+    }
 
     @FXML
     void addTime(ActionEvent event) {

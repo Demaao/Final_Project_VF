@@ -29,23 +29,23 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("homeMovies")) {  // טיפול בהודעת homeMovies
 					List<HomeMovie> homeMovies = (List<HomeMovie>) message.getObject();
 					EventBus.getDefault().post(new UpdateHomeMoviesEvent(homeMovies));
-				}
-				 else if (message.getMessage().equals("login")) {  ///////////////////////////////////////////////////////
-					 App.loginDeniedCounter = 0;
-					 Employee employee = (Employee) message.getObject();
+				} else if (message.getMessage().equals("login")) {  ///////////////////////////////////////////////////////
+					App.loginDeniedCounter = 0;
+					Employee employee = (Employee) message.getObject();
 					EventBus.getDefault().post(new UpdateLoginEvent(employee));
-			}
-				 else if (message.getMessage().equals("loginDenied")) {
-					 App.loginDeniedCounter++;
-					 EventBus.getDefault().post(new WarningEvent(new Warning("User name or Password is incorrect!")));
-				}
-				else if (message.getMessage().equals("Alreadylogin")) {
+				} else if (message.getMessage().equals("loginDenied")) {
+					App.loginDeniedCounter++;
+					EventBus.getDefault().post(new WarningEvent(new Warning("User name or Password is incorrect!")));
+				} else if (message.getMessage().equals("Alreadylogin")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("User is already logged in!")));
-				}
-				else if (message.getMessage().equals("logOut")) {
+				} else if (message.getMessage().equals("logOut")) {
 					EventBus.getDefault().post(new MessageEvent("Log out"));
 					EventBus.getDefault().post(new WarningEvent(new Warning("Logged out successfully!")));
+				} else if (message.getMessage().equals("screeningTimes")) {
+					List<Screening> screenings = (List<Screening>) message.getObject();
+					EventBus.getDefault().post(new UpdateScreeningTimesEvent(screenings));
 				}
+
 			});
 		}
 	}
@@ -59,4 +59,3 @@ public class SimpleClient extends AbstractClient {
 		return client;
 	}
 }
-
