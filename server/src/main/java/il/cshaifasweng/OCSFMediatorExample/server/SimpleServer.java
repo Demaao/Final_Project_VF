@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -322,7 +323,7 @@ public class SimpleServer extends AbstractServer {
 		session.save(homeMovie5);
 		session.flush();
 
-		HomeMovie homeMovie6 = new HomeMovie(6, "his Time Next Year", "מזל שנפגשנו", "Nick Moore", 2024, image6, "https://This_Time_Next_Year_Movie_link.com","Comedy","Minnie and Quinn are born on the same day, one minute apart. Their lives may begin together, but their worlds couldn't be more different. Years later they find themselves together again. Maybe it's time to take a chance on love."
+		HomeMovie homeMovie6 = new HomeMovie(6, "This Time Next Year", "מזל שנפגשנו", "Nick Moore", 2024, image6, "https://This_Time_Next_Year_Movie_link.com","Comedy","Minnie and Quinn are born on the same day, one minute apart. Their lives may begin together, but their worlds couldn't be more different. Years later they find themselves together again. Maybe it's time to take a chance on love."
 				,"Sophie Cookson, Lucien Laviscount, Golda Rosheuvel","1h 56m");
 		session.save(homeMovie6);
 		session.flush();
@@ -365,6 +366,8 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateScreenings(Session session) throws Exception {
+
+
 		Branch haifaCinema = session.get(Branch.class, 1);
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
@@ -455,12 +458,12 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 
 
-		Movie movie11 = session.get(Movie.class, 11);
-		Movie movie12 = session.get(Movie.class, 12);
-		Movie movie13 = session.get(Movie.class, 13);
 		Movie movie14 = session.get(Movie.class, 14);
 		Movie movie15 = session.get(Movie.class, 15);
 		Movie movie16 = session.get(Movie.class, 16);
+		Movie movie17 = session.get(Movie.class, 17);
+		Movie movie18 = session.get(Movie.class, 18);
+		Movie movie19 = session.get(Movie.class, 19);
 
 
 		List<LocalDateTime> HomeScreeningTimes = Arrays.asList(
@@ -487,20 +490,20 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 23, 00)
 		);
 		for (LocalDateTime time : HomeScreeningTimes) {
-			movie11.addScreening(time,null);
-			movie12.addScreening(time,null);
-			movie13.addScreening(time,null);
-			movie14.addScreening(time,null);
-			movie15.addScreening(time,null);
-			movie16.addScreening(time,null);
+			movie14.addScreening(time, null);
+			movie15.addScreening(time, null);
+			movie16.addScreening(time, null);
+			movie17.addScreening(time, null);
+			movie18.addScreening(time, null);
+			movie19.addScreening(time, null);
 		}
 
-		session.save(movie11);
-		session.save(movie12);
-		session.save(movie13);
 		session.save(movie14);
 		session.save(movie15);
 		session.save(movie16);
+		session.save(movie17);
+		session.save(movie18);
+		session.save(movie19);
 
 		session.flush();
 	}
@@ -530,6 +533,13 @@ public class SimpleServer extends AbstractServer {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<HomeMovie> query = builder.createQuery(HomeMovie.class);
 		query.from(HomeMovie.class);
+		return session.createQuery(query).getResultList();
+	}
+
+	private static List<Branch> getAllBranches(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Branch> query = builder.createQuery(Branch.class);
+		query.from(Branch.class);
 		return session.createQuery(query).getResultList();
 	}
 
@@ -614,8 +624,7 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if(msgString.equals("login")){  ////////////////////////////////////////
+			} else if (msgString.equals("login")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					String userNameString = message.getUserName();
@@ -625,21 +634,19 @@ public class SimpleServer extends AbstractServer {
 					int flag = 0;
 					for (Employee employee : employees) {
 						flag = 0;
-						if(userNameString.equals(employee.getUsername()) && passwordString.equals(employee.getPassword())){
-							if(employee.isOnline()){
+						if (userNameString.equals(employee.getUsername()) && passwordString.equals(employee.getPassword())) {
+							if (employee.isOnline()) {
 								newMessage = new NewMessage("Alreadylogin");
-							}
-							else{
+							} else {
 								employee.setIsOnline(true);
 								newMessage = new NewMessage(employee, "login");
 							}
 							client.sendToClient(newMessage);
 							session.getTransaction().commit();
 							break;
-						}
-						else flag = 1;
+						} else flag = 1;
 					}
-					if(flag == 1) {
+					if (flag == 1) {
 						newMessage = new NewMessage("loginDenied");
 						client.sendToClient(newMessage);
 						session.getTransaction().commit();
@@ -649,14 +656,13 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if (msgString.equals("logOut")) {  //////////////////////////////////////////////
+			} else if (msgString.equals("logOut")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					List<Employee> employees = getAllEmployees(session);
 					Employee employee = message.getEmployee();
-					for(Employee emp : employees){
-						if(emp.getId() == employee.getId()){
+					for (Employee emp : employees) {
+						if (emp.getId() == employee.getId()) {
 							emp.setIsOnline(false);
 						}
 					}
@@ -667,8 +673,7 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if (msgString.equals("screeningTimesRequest")) {
+			} else if (msgString.equals("screeningTimesRequest")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Movie requestedMovie = message.getMovie();
@@ -683,8 +688,135 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
+			} else if (msgString.equals("removeHomeMovie")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					HomeMovie movie = (HomeMovie) message.getObject();
+					HomeMovie movieToDelete = session.get(HomeMovie.class, movie.getId());
+					session.remove(movieToDelete);
+					List<Movie> movies = getAllMovies(session);
+					List<HomeMovie> homeMovies = getAllHomeMovies(session);
+					NewMessage newMessage = new NewMessage(homeMovies, "homeMovies");
+					sendToAllClients(newMessage);
+					NewMessage newMessage3 = new NewMessage(movies, "movies");
+					client.sendToClient(newMessage3);
+					NewMessage newMessage2 = new NewMessage("movieRemoved");
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("removeCinemaMovie")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Movie movie = (Movie) message.getObject();
+					Movie movieToDelete = session.get(Movie.class, movie.getId());
+					String branch = message.getBranchName();
+					if(branch.equals("All") || movieToDelete.getBranches().size() == 1){
+						session.remove(movieToDelete);
+					}
+					else {
+						Movie movieToDeleteBranch = session.get(Movie.class, movie.getId());
+						List<Branch> branches = getAllBranches(session);
+						List<Screening> screenings = getScreeningsForMovie(session, movie.getId());
+						for (Screening screening : screenings) {
+							if (screening.getBranch().getName().equals(branch)) {
+								movieToDeleteBranch.getScreenings().remove(screening);
+								session.remove(screening);
+							}
+						}
+						for(Branch x : branches) {
+							if (x.getName().equals(branch)) {
+								x.getMovies().remove(movie);
+								movieToDeleteBranch.getBranches().remove(x);
+							}
+						}
+					}
+					List<Movie> movies = getAllMovies(session);
+					NewMessage newMessage = new NewMessage(movies, "movies");
+					sendToAllClients(newMessage);
+
+					NewMessage newMessage2 = new NewMessage("movieRemoved");
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("addCinemaMovie")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים לצפייה מהבית
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Movie movie = (Movie) message.getObject();
+					List<Branch> branches = getAllBranches(session);
+					List<Branch> movieBranches = message.getBranches();
+					List<Branch> newBranches = new ArrayList<>();
+					List<Screening> screenings = new ArrayList<>();
+					List<LocalDateTime> times = message.getDateTimes();
+					int i;
+					for(Branch x : branches){
+						i = 0;
+						for(Branch y : movieBranches) {
+							if(x.getName().equals(y.getName())){
+								if (!newBranches.contains(x))
+									newBranches.add(x);
+								if(!x.getMovies().contains(movie))
+									x.addMovie(movie);
+								session.save(x);
+								Screening screening = new Screening(times.get(i), movie, x);
+								screenings.add(screening);
+							}
+							i++;
+						}
+					}
+					/*for(Branch y : movieBranches) {
+						String hql = "from Branch where name = :branchName";
+						Query<Branch> query = session.createQuery(hql, Branch.class);
+						query.setParameter("branchName", y.getName());
+						Branch branch = query.getSingleResult();
+						branch.getMovies().add(movie);
+						session.save(branch);
+						newBranches.add(branch);
+						Screening screening = new Screening(times.get(i), movie, branch);
+						screenings.add(screening);
+						i++;
+					}*/
+					movie.setBranches(newBranches);
+					movie.setScreenings(screenings);
+					session.save(movie);
+					session.flush();
+					NewMessage newMessage = new NewMessage("movieAdded");  // שליחת רשימת הסרטים לבית ללקוח עם המחרוזת "homeMovies"
+					client.sendToClient(newMessage);
+					List<Movie> movies = getAllMovies(session);
+					NewMessage newMessage1 = new NewMessage(movies, "movies");
+					sendToAllClients(newMessage1);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("addHomeMovie")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים לצפייה מהבית
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					HomeMovie homeMovie = (HomeMovie) message.getObject();
+					session.save(homeMovie);
+					NewMessage newMessage = new NewMessage("movieAdded");  // שליחת רשימת הסרטים לבית ללקוח עם המחרוזת "homeMovies"
+					client.sendToClient(newMessage);
+					List<Movie> movies = getAllMovies(session);
+					NewMessage newMessage1 = new NewMessage(movies, "movies");
+					client.sendToClient(newMessage1);
+					//sendToAllClients(newMessage1);
+					List<HomeMovie> homeMovies = getAllHomeMovies(session);
+					NewMessage newMessage2 = new NewMessage(homeMovies, "homeMovies");
+					sendToAllClients(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
 			}
-		} catch (IOException e) {
+		}
+		 catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

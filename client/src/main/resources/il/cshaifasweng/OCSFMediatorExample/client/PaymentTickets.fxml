@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import java.net.URL?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.HomePage">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PaymentTickets">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <children>
+        <!-- Left Navigation Panel -->
         <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
             <children>
                 <ImageView fitHeight="110.0" fitWidth="118.0" layoutX="31.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
@@ -93,58 +97,87 @@
                 </Button>
             </children>
         </AnchorPane>
-        <Button fx:id="moviesBtn" layoutX="300.0" layoutY="275.0" mnemonicParsing="false" onAction="#switchToMoviesPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #d5a6bd; -fx-text-fill: black; -fx-font-size: 20; -fx-cursor: hand; -fx-background-radius: 10;" text="  Movies" textAlignment="RIGHT">
+
+        <!-- Radio Buttons for Payment Method -->
+        <RadioButton fx:id="creditCardRadioBtn" layoutX="350.0" layoutY="80.0" mnemonicParsing="false" text="Credit Card" toggleGroup="$paymentMethodToggleGroup">
             <font>
-                <Font size="24.0" />
+                <Font size="16.0" />
             </font>
-            <graphic>
-                <ImageView fitHeight="55.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                    <image>
-                        <Image url="@images/movie.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
-        <Button fx:id="cardsBtn" layoutX="573.0" layoutY="275.0" mnemonicParsing="false" onAction="#switchToCardsPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #a64d79; -fx-text-fill: black; -fx-font-size: 20; -fx-cursor: hand; -fx-background-radius: 10;" text="    Cards" textAlignment="RIGHT">
+        </RadioButton>
+        <RadioButton fx:id="ticketTabRadioBtn" layoutX="450.0" layoutY="80.0" mnemonicParsing="false" text="Ticket Tab" toggleGroup="$paymentMethodToggleGroup">
             <font>
-                <Font size="24.0" />
+                <Font size="16.0" />
             </font>
-            <graphic>
-                <ImageView fitHeight="46.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                    <image>
-                        <Image url="@images/cards.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
-        <Button fx:id="complaintBtn" layoutX="300.0" layoutY="426.0" mnemonicParsing="false" onAction="#switchToComplaintPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #c27ba0; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Complaints" textAlignment="RIGHT">
+        </RadioButton>
+
+        <!-- Credit Card or Ticket Tab Number Pane -->
+        <AnchorPane fx:id="creditCardPane" layoutX="220.0" layoutY="120.0" prefHeight="300.0" prefWidth="600.0">
+            <children>
+                <Label fx:id="creditCardLabel" layoutX="0.0" layoutY="260.0" prefHeight="22.0" prefWidth="104.0" text="Credit Card" textFill="#f6d9d9">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="creditCardTxt" layoutX="169.0" layoutY="260.0" prefHeight="34.0" prefWidth="370.0" promptText="Credit Card Number">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </TextField>
+                <Label layoutX="0.0" layoutY="20.0" prefHeight="30.0" prefWidth="99.0" text="Full Name" textFill="#f6d9d9">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="fullNameText" layoutX="169.0" layoutY="20.0" prefHeight="34.0" prefWidth="370.0" promptText="Full Name">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </TextField>
+                <Label layoutX="0.0" layoutY="80.0" prefHeight="30.0" prefWidth="99.0" text="ID Number" textFill="#f6d9d9">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="IDNumText" layoutX="169.0" layoutY="80.0" prefHeight="34.0" prefWidth="370.0" promptText="ID Number">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </TextField>
+                <Label layoutX="0.0" layoutY="140.0" prefHeight="30.0" prefWidth="144.0" text="Phone Number" textFill="#f6d9d9">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="phoneText" layoutX="169.0" layoutY="140.0" prefHeight="34.0" prefWidth="370.0" promptText="Phone Number">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </TextField>
+                <Label layoutX="0.0" layoutY="200.0" prefHeight="30.0" prefWidth="170.0" text="Email Address" textFill="#f6d9d9">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="emailText" layoutX="169.0" layoutY="200.0" prefHeight="34.0" prefWidth="370.0" promptText="Email Address">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </TextField>
+            </children>
+        </AnchorPane>
+
+        <!-- Confirm Payment Button -->
+        <Button fx:id="payBtn" layoutX="650.0" layoutY="480.0" mnemonicParsing="false" onAction="#payForProduct" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm Payment">
             <font>
-                <Font size="24.0" />
+                <Font size="18.0" />
             </font>
-            <graphic>
-                <ImageView fitHeight="62.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                    <image>
-                        <Image url="@images/complaint.png" />
-                    </image>
-                </ImageView>
-            </graphic>
         </Button>
-        <Button fx:id="bigChargebackBtn" layoutX="573.0" layoutY="426.0" mnemonicParsing="false" onAction="#switchToChargebackPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #ead1dc; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Chargeback" textAlignment="RIGHT">
+
+        <!-- Total Price Label -->
+        <Label fx:id="totalPriceLabel" layoutX="220.0" layoutY="480.0" text="Total Price: $100" textFill="#f6d9d9">
             <font>
-                <Font size="24.0" />
+                <Font name="System Bold" size="24.0" />
             </font>
-            <graphic>
-                <ImageView fitHeight="47.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                    <image>
-                        <Image url="@images/chargeback.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
-      <Label layoutX="317.0" layoutY="116.0" text="Welcome to &quot;our&quot; Cinema" textFill="#f6d9d9">
-         <font>
-            <Font name="Britannic Bold" size="40.0" />
-         </font>
-      </Label>
+        </Label>
     </children>
 </AnchorPane>

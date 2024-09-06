@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "soon_movies")
 public class SoonMovie extends Movie implements Serializable {
     // Constructors
     public SoonMovie() {

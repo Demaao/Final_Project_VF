@@ -42,6 +42,15 @@ public class HomePage {
     private Button signUpBtn; // Value injected by FXMLLoader
 
     @FXML
+    private Button bigChargebackBtn;
+
+    /*
+    @FXML
+    public void initialize() {
+        bigChargebackBtn.setText("Purchases\n& Refunds"); ////////////////////////////////////////////
+    }*/
+
+    @FXML
     private void switchToHostPage() throws IOException {
         App.switchScreen("HostPage");
     }
@@ -75,6 +84,8 @@ public class HomePage {
     private void switchToCardsPage() throws IOException {
         App.switchScreen("CardsPage");
     }
+
+
 
     /*
 
