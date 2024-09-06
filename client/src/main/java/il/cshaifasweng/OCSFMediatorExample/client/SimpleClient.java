@@ -37,6 +37,7 @@ public class SimpleClient extends AbstractClient {
 					App.loginDeniedCounter++;
 					EventBus.getDefault().post(new WarningEvent(new Warning("User name or Password is incorrect!")));
 				} else if (message.getMessage().equals("Alreadylogin")) {
+					App.loginDeniedCounter = 0;
 					EventBus.getDefault().post(new WarningEvent(new Warning("User is already logged in!")));
 				} else if (message.getMessage().equals("logOut")) {
 					EventBus.getDefault().post(new MessageEvent("Log out"));
@@ -44,6 +45,12 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("screeningTimes")) {
 					List<Screening> screenings = (List<Screening>) message.getObject();
 					EventBus.getDefault().post(new UpdateScreeningTimesEvent(screenings));
+				}
+				else if (message.getMessage().equals("movieRemoved")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Movie removed successfully!")));
+				}
+				else if(message.getMessage().equals("movieAdded")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Movie added successfully!")));
 				}
 
 			});

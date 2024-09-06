@@ -350,6 +350,13 @@ public class App extends Application {
                     alert.setHeaderText("Logged Out");
                     alert.show();
                 }
+                else   if (event.getWarning().getMessage().equals("Movie removed successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else   if (event.getWarning().getMessage().equals("Movie added successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                }
                 else if (loginDeniedCounter >= 5) {
                     Stage dialogStage = new Stage();
                     dialogStage.initStyle(StageStyle.UNDECORATED); // No window decorations
@@ -365,6 +372,19 @@ public class App extends Application {
                     dialogStage.setScene(scene);
                     dialogStage.centerOnScreen(); // Center dialog on screen
                     dialogStage.show();
+
+                    final int[] countdown = {10};
+
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event1 -> {
+                        countdown[0]--;
+                        label.setText("Too many incorrect login attempts!\nTry again in " + countdown[0] + " seconds");
+
+                        if (countdown[0] <= 0) {
+                            dialogStage.close();
+                        }
+                    }));
+                    timeline.setCycleCount(10); // Repeat the KeyFrame 10 times (once per second)
+                    timeline.play();
 
                     // Automatically close the dialog after 30 seconds
                     PauseTransition delay = new PauseTransition(Duration.seconds(10));

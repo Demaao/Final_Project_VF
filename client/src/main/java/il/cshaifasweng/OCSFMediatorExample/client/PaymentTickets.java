@@ -199,4 +199,6 @@ public class PaymentTickets {
     public void switchToMoviesPage() throws IOException {
         App.switchScreen("MoviesPage");
     }
+
 }
+

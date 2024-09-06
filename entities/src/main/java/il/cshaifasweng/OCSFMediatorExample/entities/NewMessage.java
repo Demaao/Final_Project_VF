@@ -1,30 +1,48 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class NewMessage implements Serializable {
     Object object;
     String message;
-    String userName;//////////////////////
-    String password;////////////////////////////
-    Employee employee; //////////////////////////
+    String userName;
+    String password;
+    Employee employee;
     Movie movie;
+    String branchName;
+    List<Branch> branches;
+    List<LocalDateTime> dateTimes;
 
     public NewMessage(Object object, String message) {
         this.object = object;
         this.message = message;
     }
 
+    public NewMessage(Object object, String message, String branchName) {////////////////////
+        this.object = object;
+        this.message = message;
+        this.branchName = branchName;
+    }
+
+    public NewMessage(Object object, String message, List<Branch> branches, List<LocalDateTime> dateTimes) {////////////////////
+        this.object = object;
+        this.message = message;
+        this.branches = branches;
+        this.dateTimes = dateTimes;
+    }
+
     public NewMessage(String message) {
         this.message = message;
     }
 
-    public NewMessage(String message, String username, String password) {////////////////////////////////
+    public NewMessage(String message, String username, String password) {
         this.message = message;;
         this.userName = username;
         this.password = password;
     }
-    public NewMessage(String message, Employee employee) { //////////////////////////
+    public NewMessage(String message, Employee employee) {
         this.message = message;
         this.employee = employee;
     }
@@ -38,7 +56,8 @@ public class NewMessage implements Serializable {
     }
     public String getPassword(){
         return password;
-    } //////////////////////////////////////////////////////
+    }
+    public String getBranchName(){ return branchName; }
 
     public Movie getMovie(){
         return movie;
@@ -57,4 +76,7 @@ public class NewMessage implements Serializable {
         this.message = message;
     }
     public void setMovie(Movie movie) { this.movie = movie; }
+
+    public List<Branch> getBranches() {return branches;}
+    public List<LocalDateTime> getDateTimes() {return dateTimes;}
 }
