@@ -537,7 +537,9 @@ public class AddMoviePage {
 
     private void highlightFieldError(Control control) {
         Platform.runLater(() -> {
-        control.getStyleClass().add("error");});
+            if (!control.getStyleClass().contains("error")) {
+                control.getStyleClass().add("error");
+            }});
     }
 
     private boolean validateMovieLength() {
