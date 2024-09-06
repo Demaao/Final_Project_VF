@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SimpleClient extends AbstractClient {
@@ -44,12 +45,29 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("screeningTimes")) {
 					List<Screening> screenings = (List<Screening>) message.getObject();
 					EventBus.getDefault().post(new UpdateScreeningTimesEvent(screenings));
+				} else if (message.getMessage().equals("screeningUpdated")) {
+					requestMoviesFromServer();// Request updated data from the server
 				}
+				else if (message.getMessage().equals("ScreeningRemoveUpdated")) {
+					requestMoviesFromServer();
+					System.out.println("Screening removed updated, requesting updated movies from server");
+				}
+
+
 
 			});
 		}
 	}
 
+	// Method to request updated movie data from the server
+	private void requestMoviesFromServer() {
+		try {
+			NewMessage message = new NewMessage("moviesList");
+			SimpleClient.getClient().sendToServer(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	// Singleton pattern to get the client instance
 	public static SimpleClient getClient() {

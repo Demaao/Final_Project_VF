@@ -1,6 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -140,11 +141,13 @@ public class MovieDetailsPage {
         }
     }
 
+
     @Subscribe
     public void onUpdateScreeningTimes(UpdateScreeningTimesEvent event) {
         List<Screening> screenings = event.getScreenings();
-        updateUIWithScreeningTimes(screenings);
+        Platform.runLater(() -> updateUIWithScreeningTimes(screenings));
     }
+
 
     private void updateUIWithScreeningTimes(List<Screening> screenings) {
         cinemaComboBox.getItems().clear();
@@ -167,7 +170,6 @@ public class MovieDetailsPage {
 
 
     private void updateAvailableDays(List<Screening> screenings) {
-        System.out.println("updateAvailableDays called for movie: " + selectedMovie.getEngtitle());
 
         if (screenings == null || screenings.isEmpty()) {
             screenings = selectedMovie.getScreenings();
@@ -184,7 +186,7 @@ public class MovieDetailsPage {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    if (!availableDays.contains(date) || date.isBefore(LocalDate.of(2024, 9, 24))) {
+                    if (date.isBefore(LocalDate.now())) {
                         setDisable(true);
                     }
                 }
@@ -203,7 +205,7 @@ public class MovieDetailsPage {
                     @Override
                     public void updateItem(LocalDate date, boolean empty) {
                         super.updateItem(date, empty);
-                        if (!availableDays.contains(date) || date.isBefore(LocalDate.of(2024, 9, 24))) {
+                        if (date.isBefore(LocalDate.now())) {
                             setDisable(true);
                         }
                     }

@@ -98,13 +98,11 @@
                 </ImageView>
             </graphic>
         </Button>
-        <TableView fx:id="complaintTable" layoutX="207.0" layoutY="106.0" prefHeight="287.0" prefWidth="666.0">
+        <TableView fx:id="complaintTable" layoutX="205.0" layoutY="106.0" prefHeight="287.0" prefWidth="671.0">
             <columns>
-                <TableColumn prefWidth="114.39990234375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Name (ENG)" />
-                <TableColumn prefWidth="116.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Name (HEB)" />
-                <TableColumn prefWidth="155.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Screenig Type" />
-                <TableColumn prefWidth="127.2000732421875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Cinema/Link" />
-                <TableColumn prefWidth="152.7999267578125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Screening Time" />
+                <TableColumn fx:id="nameEngColumn" prefWidth="137.99996948242188" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="English title" />
+                <TableColumn fx:id="TypeColumn" prefWidth="131.33328247070312" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Screening type" />
+                <TableColumn fx:id="ScreeningTimes" prefWidth="390.66668701171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Screening times" />
             </columns>
         </TableView>
         <Button fx:id="addTimeBtn" layoutX="662.0" layoutY="415.0" mnemonicParsing="false" onAction="#addTime" prefHeight="40.0" prefWidth="71.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Add">
@@ -112,7 +110,7 @@
                 <Font size="18.0" />
             </font>
         </Button>
-        <Label layoutX="207.0" layoutY="50.0" prefHeight="30.0" prefWidth="439.0" text="Select the movie you want to edit" textFill="#f6d9d9">
+        <Label layoutX="200.0" layoutY="38.0" prefHeight="47.0" prefWidth="225.0" text="Edit screening times:" textFill="#f6d9d9">
             <font>
                 <Font size="24.0" />
             </font>
@@ -156,5 +154,7 @@
             <Font size="18.0" />
          </font>
       </Button>
+      <ComboBox fx:id="chooseCinemaBox" layoutX="608.0" layoutY="49.0" prefHeight="30.0" prefWidth="135.0" promptText="Choose Cinema" />
+      <ComboBox fx:id="chooseMovieBox" layoutX="431.0" layoutY="49.0" prefHeight="30.0" prefWidth="163.0" promptText="Choose movie" />
     </children>
 </AnchorPane>

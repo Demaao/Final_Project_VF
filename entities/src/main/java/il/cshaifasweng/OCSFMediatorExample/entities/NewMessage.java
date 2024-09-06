@@ -8,6 +8,8 @@ public class NewMessage implements Serializable {
     String userName;//////////////////////
     String password;////////////////////////////
     Employee employee; //////////////////////////
+    Movie movie;
+    private int screeningId; // שדה חדש למזהה ההקרנה
 
     public NewMessage(Object object, String message) {
         this.object = object;
@@ -28,6 +30,17 @@ public class NewMessage implements Serializable {
         this.employee = employee;
     }
 
+    // Constructor to handle String and Movie
+    public NewMessage(String message, Movie movie) {
+        this.message = message;
+        this.object = movie;
+    }
+
+    public NewMessage(String message, int screeningId) {
+        this.message = message;
+        this.screeningId = screeningId;
+    }
+
     public Employee getEmployee() {
         return employee;
     }
@@ -38,6 +51,10 @@ public class NewMessage implements Serializable {
     public String getPassword(){
         return password;
     } //////////////////////////////////////////////////////
+
+    public Movie getMovie(){
+        return movie;
+    }
 
     public Object getObject() {
         return object;
@@ -51,4 +68,14 @@ public class NewMessage implements Serializable {
     public void setMessage(String message) {
         this.message = message;
     }
+    public void setMovie(Movie movie) { this.movie = movie; }
+
+    public int getScreeningId() {
+        return screeningId; // גטר למזהה ההקרנה
+    }
+
+    public void setScreeningId(int screeningId) {
+        this.screeningId = screeningId; // סטר למזהה ההקרנה
+    }
+
 }

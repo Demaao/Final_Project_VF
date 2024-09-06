@@ -5,7 +5,6 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "home_movies")
 public class HomeMovie extends Movie implements Serializable {
     private String link;
 
