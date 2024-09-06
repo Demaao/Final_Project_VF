@@ -41,9 +41,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        EventBus.getDefault().register(this);
-        client = SimpleClient.getClient();
-        client.openConnection();
+    	EventBus.getDefault().register(this);
+    	client = SimpleClient.getClient();
+    	client.openConnection();
         scene = new Scene(loadFXML("HostPage"), 900, 650);
         appStage = stage;
         stage.setScene(scene);
@@ -60,13 +60,13 @@ public class App extends Application {
     }
 
     @Override
-    public void stop() throws Exception {
-        // TODO Auto-generated method stub
-        EventBus.getDefault().unregister(this);
-        super.stop();
-    }
+	public void stop() throws Exception {
+		// TODO Auto-generated method stub
+    	EventBus.getDefault().unregister(this);
+		super.stop();
+	}
 
-    public static void setContent(String pageName) throws IOException {
+   public static void setContent(String pageName) throws IOException {
         Parent root = loadFXML(pageName);
         scene = new Scene(root);
         appStage.setScene(scene);
@@ -343,39 +343,39 @@ public class App extends Application {
 
     @Subscribe
     public void onWarningEvent(WarningEvent event) {
-        Platform.runLater(() -> {
-            Alert alert;
-            if (event.getWarning().getMessage().equals("Logged out successfully!")) {
-                alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
-                alert.setHeaderText("Logged Out");
-                alert.show();
-            }
-            else if (loginDeniedCounter >= 5) {
-                Stage dialogStage = new Stage();
-                dialogStage.initStyle(StageStyle.UNDECORATED); // No window decorations
-                dialogStage.initModality(Modality.APPLICATION_MODAL);
+            Platform.runLater(() -> {
+                Alert alert;
+                if (event.getWarning().getMessage().equals("Logged out successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.setHeaderText("Logged Out");
+                    alert.show();
+                }
+                else if (loginDeniedCounter >= 5) {
+                    Stage dialogStage = new Stage();
+                    dialogStage.initStyle(StageStyle.UNDECORATED); // No window decorations
+                    dialogStage.initModality(Modality.APPLICATION_MODAL);
 
-                Label label = new Label("Too many incorrect login attempts!\n Try again in 10 seconds");
-                StackPane pane = new StackPane(label);
-                pane.setPrefSize(350, 190); // Set your preferred size
-                pane.setStyle("-fx-background-color: white; -fx-border-color:  lightgray; " +
-                        "-fx-border-width: 1px; -fx-font-size: 15; ");
+                    Label label = new Label("Too many incorrect login attempts!\n Try again in 10 seconds");
+                    StackPane pane = new StackPane(label);
+                    pane.setPrefSize(350, 190); // Set your preferred size
+                    pane.setStyle("-fx-background-color: white; -fx-border-color:  lightgray; " +
+                            "-fx-border-width: 1px; -fx-font-size: 15; ");
 
-                Scene scene = new Scene(pane);
-                dialogStage.setScene(scene);
-                dialogStage.centerOnScreen(); // Center dialog on screen
-                dialogStage.show();
+                    Scene scene = new Scene(pane);
+                    dialogStage.setScene(scene);
+                    dialogStage.centerOnScreen(); // Center dialog on screen
+                    dialogStage.show();
 
-                // Automatically close the dialog after 30 seconds
-                PauseTransition delay = new PauseTransition(Duration.seconds(10));
-                delay.setOnFinished(event1 -> dialogStage.close());
-                delay.play();
-            }
-            else {
-                alert = new Alert(Alert.AlertType.WARNING, event.getWarning().getMessage());
-                alert.show();
-            }
-        });
+                    // Automatically close the dialog after 30 seconds
+                    PauseTransition delay = new PauseTransition(Duration.seconds(10));
+                    delay.setOnFinished(event1 -> dialogStage.close());
+                    delay.play();
+                }
+                else {
+                    alert = new Alert(Alert.AlertType.WARNING, event.getWarning().getMessage());
+                    alert.show();
+                }
+            });
     }
 
     @Subscribe
@@ -391,7 +391,7 @@ public class App extends Application {
         }
     }
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
         launch();
     }
 }

@@ -86,7 +86,6 @@ public class MoviesPage {
     private List<Movie> filteredCinemaMovies = movies;
     private List<HomeMovie> filteredHomeMovies = homeMovies;
 
-
     private int cinemaCurrentIndex = 0;
     private int homeCurrentIndex = 0;
 
@@ -105,7 +104,6 @@ public class MoviesPage {
         searchByCinemaBox.getItems().addAll("All", "Haifa Cinema", "Tel Aviv Cinema", "Eilat Cinema", "Karmiel Cinema", "Jerusalem Cinema");
 
         searchByDatePicker.setDayCellFactory(picker -> new DateCell() {
-
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);  // If the date is before today it will not be available for selection
@@ -113,7 +111,6 @@ public class MoviesPage {
                     setDisable(true);
                 }
             }
-
         });
 
         searchByNameBox.setOnAction(event -> {        // מאזין לבחירת שם סרט
@@ -175,15 +172,10 @@ public class MoviesPage {
 
     }
 
-
     @Subscribe
     public void onUpdateMoviesEvent(UpdateMoviesEvent event) {
-        Platform.runLater(() -> {
-            this.movies = event.getMovies();
-            filterMovies();  // הפעל את הפונקציה המסננת כדי לעדכן את התצוגה בהתאם לסינון הנוכחי
-        });
+        Platform.runLater(() -> updateMovies(event.getMovies()));
     }
-
 
     @Subscribe
     public void onUpdateSoonMoviesEvent(UpdateSoonMoviesEvent event) {
@@ -197,7 +189,8 @@ public class MoviesPage {
     public void onUpdateHomeMoviesEvent(UpdateHomeMoviesEvent event) {
         Platform.runLater(() -> {
             this.homeMovies = event.getHomeMovies();
-            filterMovies();  // הפעל את הפונקציה המסננת כדי לעדכן את התצוגה בהתאם לסינון הנוכחי
+            this.filteredHomeMovies = event.getHomeMovies();
+            updateHomeMovies();
         });
     }
 
@@ -209,7 +202,6 @@ public class MoviesPage {
             e.printStackTrace();
         }
     }
-
 
     private void requestSoonMoviesFromServer() {
         try {
