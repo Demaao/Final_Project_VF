@@ -231,4 +231,7 @@ public class RemoveMoviePage {
             e.printStackTrace();
         }
     }
+
+    @Subscribe
+    public void onUpdateScreeningEvent(UpdateScreeningTimesEvent event) {}
 }

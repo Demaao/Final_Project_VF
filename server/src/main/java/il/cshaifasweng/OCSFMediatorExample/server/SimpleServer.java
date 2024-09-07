@@ -157,18 +157,10 @@ public class SimpleServer extends AbstractServer {
 
 
 	private static void generateMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
-		byte[] image2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
-		byte[] image3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
-		byte[] image4 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\4.jpg");
-		byte[] image5 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\5.jpg");
-		byte[] image6 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\6.jpg");
-		byte[] image7 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\7.jpg");
-		byte[] image8 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\8.jpg");
-		byte[] image9 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\9.jpg");
-		byte[] image10 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\10.jpg");
-
-
+		byte[][] images = new byte[10][];
+		for (int i = 1; i <= 10; i++) {
+			images[i - 1] = loadImageFromFile(String.format("images/%d.jpg", i));
+		}
 		/*
 		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
 		Branch haifaCinema = session.get(Branch.class, 1);
@@ -197,70 +189,70 @@ public class SimpleServer extends AbstractServer {
 		CinemaBranches2.add(jerusalemCinema);
 		*/
 
-		Movie num1 = new Movie(1, "A quiet place", "מקום שקט 2", "Michael Sarnoski", 2020, image1,"Drama","Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path."
+		Movie num1 = new Movie(1, "A quiet place", "מקום שקט 2", "Michael Sarnoski", 2020, images[0],"Drama","Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path."
 
 				,"Emily Blunt, John Krasinski, Cillian Murphy","1h 37m");
 
 		session.save(num1);
 		session.flush();
 
-		Movie num2 = new Movie(2, "Barbie", "ברבי", "Greta Gerwig", 2023, image2,"Comedy","Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans."
+		Movie num2 = new Movie(2, "Barbie", "ברבי", "Greta Gerwig", 2023, images[1],"Comedy","Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans."
 
 				,"Margot Robbie, Issa Rae, Ryan Gosling","1h 54m");
 
 		session.save(num2);
 		session.flush();
 
-		Movie num3 = new Movie(3, "Fast X", "מהיר ועצבני 10", "Louis Leterrier", 2023,image3,"Action","Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes."
+		Movie num3 = new Movie(3, "Fast X", "מהיר ועצבני 10", "Louis Leterrier", 2023,images[2],"Action","Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes."
 
 				,"Vin Diesel, Michelle Rodriguez, Jason Statham","2h 21m");
 
 		session.save(num3);
 		session.flush();
 
-		Movie num4 = new Movie(4, "Inside out", "הקול בראש 2", "Kelsey Mann", 2024, image4,"Adventure","A sequel that features Riley entering puberty and experiencing brand new, more complex emotions as a result. As Riley tries to adapt to her teenage years, her old emotions try to adapt to the possibility of being replaced."
+		Movie num4 = new Movie(4, "Inside out", "הקול בראש 2", "Kelsey Mann", 2024, images[3],"Adventure","A sequel that features Riley entering puberty and experiencing brand new, more complex emotions as a result. As Riley tries to adapt to her teenage years, her old emotions try to adapt to the possibility of being replaced."
 
 				,"Amy Poehler, Maya Hawke, Kensington Tallman","1h 36m");
 
 		session.save(num4);
 		session.flush();
 
-		Movie num5 = new Movie(5, "It Ends With Us", "איתנו זה נגמר", "Justin Baldoni", 2024, image5,"Drama","When a woman's first love suddenly reenters her life, her relationship with a charming, but abusive neurosurgeon is upended and she realizes she must learn to rely on her own strength to make an impossible choice for her future."
+		Movie num5 = new Movie(5, "It Ends With Us", "איתנו זה נגמר", "Justin Baldoni", 2024, images[4],"Drama","When a woman's first love suddenly reenters her life, her relationship with a charming, but abusive neurosurgeon is upended and she realizes she must learn to rely on her own strength to make an impossible choice for her future."
 
 				,"Blake Lively, Justin Baldoni, Jenny Slate","2h 10m");
 
 		session.save(num5);
 		session.flush();
 
-		Movie num6 = new Movie(6, "Joker", "ג'וקר", "Todd Philips", 2019, image6,"Drama","Arthur Fleck, a party clown and a failed stand-up comedian, leads an impoverished life with his ailing mother. However, when society shuns him and brands him as a freak, he decides to embrace the life of crime and chaos in Gotham City."
+		Movie num6 = new Movie(6, "Joker", "ג'וקר", "Todd Philips", 2019, images[5],"Drama","Arthur Fleck, a party clown and a failed stand-up comedian, leads an impoverished life with his ailing mother. However, when society shuns him and brands him as a freak, he decides to embrace the life of crime and chaos in Gotham City."
 
 				,"Joaquin Phoenix, Robert De Niro, Zazie Beetz","2h 2m");
 
 		session.save(num6);
 		session.flush();
 
-		Movie num7 = new Movie(7, "Oppenheimer", "אופנהיימר", "Christopher Nolan", 2023, image7,"Documentary","The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb."
+		Movie num7 = new Movie(7, "Oppenheimer", "אופנהיימר", "Christopher Nolan", 2023, images[6],"Documentary","The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb."
 
 				,"Cillian Murphy, Emily Blunt, Robert Downey","3h 10m");
 
 		session.save(num7);
 		session.flush();
 
-		Movie num8 = new Movie(8, "The creator", "היוצר", "Gareth Edward", 2023, image8,"Action","Against the backdrop of a war between humans and robots with artificial intelligence, a former soldier finds the secret weapon, a robot in the form of a young child."
+		Movie num8 = new Movie(8, "The creator", "היוצר", "Gareth Edward", 2023, images[7],"Action","Against the backdrop of a war between humans and robots with artificial intelligence, a former soldier finds the secret weapon, a robot in the form of a young child."
 
 				,"John Washington, Madeleine Voyles, Gemma Chan","2h 13m");
 
 		session.save(num8);
 		session.flush();
 
-		Movie num9 = new Movie(9, "Daughters", "הבנות", "Angela Patton", 2024, image9,"Documentary","Four young girls prepare for a special Daddy Daughter Dance with their incarcerated fathers, as part of a unique fatherhood program in a Washington"
+		Movie num9 = new Movie(9, "Daughters", "הבנות", "Angela Patton", 2024, images[8],"Documentary","Four young girls prepare for a special Daddy Daughter Dance with their incarcerated fathers, as part of a unique fatherhood program in a Washington"
 
 				,"Veronica Ngo, Ian Verdun, Sturgill Simpson","1h 48m");
 
 		session.save(num9);
 		session.flush();
 
-		Movie num10 = new Movie(10, "In the Rearview", "מבט לאחור", "Maciek Hamela", 2023, image10,"Documentary","A small van traverses war-torn roads, picking up Ukrainians as they abandon their homes at the front. Shuttling them across the battered landscape into exile, the van becomes a fragile refuge, a zone for its passengers' confidences."
+		Movie num10 = new Movie(10, "In the Rearview", "מבט לאחור", "Maciek Hamela", 2023, images[9],"Documentary","A small van traverses war-torn roads, picking up Ukrainians as they abandon their homes at the front. Shuttling them across the battered landscape into exile, the van becomes a fragile refuge, a zone for its passengers' confidences."
 
 				,"Maciek Hamela, Frances Conroy, Hannah Gross","1h 24m");
 
@@ -270,60 +262,58 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateSoonMovies(Session session) throws Exception {
-		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
-		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
-		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
+		byte[] SoonImage1 = loadImageFromFile("SoonImages/1.jpg");
+		byte[] SoonImage2 = loadImageFromFile("SoonImages/2.jpg");
+		byte[] SoonImage3 = loadImageFromFile("SoonImages/3.jpg");
 
-		SoonMovie soonMovie1 = new SoonMovie(1, "Blink Twice","צאי מזה" ,"Zoë Kravitz", 2024, Soonimage1, "Mystery" ,"When tech billionaire Slater King meets cocktail waitress Frida at his fundraising gala, he invites her to join him and his friends on a dream vacation on his private island. As strange things start to happen, Frida questions her reality.",
+		SoonMovie soonMovie1 = new SoonMovie(1, "Blink Twice","צאי מזה" ,"Zoë Kravitz", 2024, SoonImage1, "Mystery" ,"When tech billionaire Slater King meets cocktail waitress Frida at his fundraising gala, he invites her to join him and his friends on a dream vacation on his private island. As strange things start to happen, Frida questions her reality.",
 				"Naomi Ackie, Channing Tatum, Alia Shawkat", "1h42m");
 		session.save(soonMovie1);
 		session.flush();
 
-		SoonMovie soonMovie2 = new SoonMovie(2, "African Giants","ענקים אפריקאים", "Omar S. Kamara", 2024, Soonimage2, "Drama", "Over a weekend visit in Los Angeles, two first-generation Sierra Leonean American brothers navigate the changing dynamics of brotherhood after a surprise announcement.",
+		SoonMovie soonMovie2 = new SoonMovie(2, "African Giants","ענקים אפריקאים", "Omar S. Kamara", 2024, SoonImage2, "Drama", "Over a weekend visit in Los Angeles, two first-generation Sierra Leonean American brothers navigate the changing dynamics of brotherhood after a surprise announcement.",
 						"Tanyell Waivers, Kathleen Kenny, Jerry Hernandez", "1h42m");
 		session.save(soonMovie2);
 		session.flush();
 
-		SoonMovie soonMovie3 = new SoonMovie(3, "The Killer's Game","המשחק הרוצח" , "J.J. Perry", 2024, Soonimage3, "Action", "A veteran assassin is diagnosed with a life-threatening illness and authorizes a kill on himself. After ordering the kill, an army of former colleagues pounce and a new piece of information comes to light. Insanity ensues.",
+		SoonMovie soonMovie3 = new SoonMovie(3, "The Killer's Game","המשחק הרוצח" , "J.J. Perry", 2024, SoonImage3, "Action", "A veteran assassin is diagnosed with a life-threatening illness and authorizes a kill on himself. After ordering the kill, an army of former colleagues pounce and a new piece of information comes to light. Insanity ensues.",
 				"Sofia Boutella, Lucy Cork, Dave Bautista", "1h44m");
 		session.save(soonMovie3);
 		session.flush();
 	}
 
 	private static void generateHomeMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\1.jpg");
-		byte[] image2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\2.jpg");
-		byte[] image3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\3.jpg");
-		byte[] image4 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\4.jpg");
-		byte[] image5 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\5.jpg");
-		byte[] image6 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\6.jpg");
+		byte[][] homeImages = new byte[6][];  // מערך לאחסון התמונות של סרטי הבית
+		for (int i = 1; i <= 6; i++) {       //טוענים את התמונות ושומרים אותם במערך
+			homeImages[i - 1] = loadImageFromFile(String.format("forHome_images/%d.jpg", i));
+		}
 
-		HomeMovie homeMovie1 = new HomeMovie(1, "Despicable Me 4", "גנוב על החיים", "Chris Renaud", 2024, image1, "https://Despicable_Me_4_Movie_link.com","Adventure","Gru, Lucy, Margo, Edith, and Agnes welcome a new member to the family, Gru Jr., who is intent on tormenting his dad. Gru faces a new nemesis in Maxime Le Mal and his girlfriend Valentina, and the family is forced to go on the run."
+		HomeMovie homeMovie1 = new HomeMovie(1, "Despicable Me 4", "גנוב על החיים", "Chris Renaud", 2024, homeImages[0], "https://Despicable_Me_4_Movie_link.com","Adventure","Gru, Lucy, Margo, Edith, and Agnes welcome a new member to the family, Gru Jr., who is intent on tormenting his dad. Gru faces a new nemesis in Maxime Le Mal and his girlfriend Valentina, and the family is forced to go on the run."
 				,"Steve Carell, Kristen Wiig, Pierre Coffin","1h 34m");
 		session.save(homeMovie1);
 		session.flush();
 
-		HomeMovie homeMovie2 = new HomeMovie(2, "Bad Boys", "בחורים רעים", "Adil El Arbi", 2024, image2, "https://Bad_Boys_Movie_link.com","Comedy","When their late police captain gets linked to drug cartels, wisecracking Miami cops Mike Lowrey and Marcus Burnett embark on a dangerous mission to clear his name."
+		HomeMovie homeMovie2 = new HomeMovie(2, "Bad Boys", "בחורים רעים", "Adil El Arbi", 2024, homeImages[1], "https://Bad_Boys_Movie_link.com","Comedy","When their late police captain gets linked to drug cartels, wisecracking Miami cops Mike Lowrey and Marcus Burnett embark on a dangerous mission to clear his name."
 				,"Will Smith, Martin Lawrence, Vanessa Hudgens","1h 55m");
 		session.save(homeMovie2);
 		session.flush();
 
-		HomeMovie homeMovie3 = new HomeMovie(3, "Wire Room", "מלכוד בחדר", "Matt Eskandari", 2022, image3, "https://Wire_Room_Movie_link.com","Action","While on wire room duty, a federal agent listens in as the target is attacked in his home by a hit squad. Without burning the wire, he must protect the investigation and the target's life from the confines of a room fifty miles away."
+		HomeMovie homeMovie3 = new HomeMovie(3, "Wire Room", "מלכוד בחדר", "Matt Eskandari", 2022, homeImages[2], "https://Wire_Room_Movie_link.com","Action","While on wire room duty, a federal agent listens in as the target is attacked in his home by a hit squad. Without burning the wire, he must protect the investigation and the target's life from the confines of a room fifty miles away."
 				,"Kevin Dillon, Bruce Willis, Oliver Trevena","1h 36m");
 		session.save(homeMovie3);
 		session.flush();
 
-		HomeMovie homeMovie4 = new HomeMovie(4, "Mission Impossible", "משימה לא אפשרית", "Christopher McQuarrie", 2023, image4, "https://Mission_Impossible_Movie_link.com","Comedy","Ethan Hunt and his IMF team must track down a dangerous weapon before it falls into the wrong hands."
+		HomeMovie homeMovie4 = new HomeMovie(4, "Mission Impossible", "משימה לא אפשרית", "Christopher McQuarrie", 2023, homeImages[3], "https://Mission_Impossible_Movie_link.com","Comedy","Ethan Hunt and his IMF team must track down a dangerous weapon before it falls into the wrong hands."
 				,"Tom Cruise, Hayley Atwell, Ving Rhames","2h 43m");
 		session.save(homeMovie4);
 		session.flush();
 
-		HomeMovie homeMovie5 = new HomeMovie(5, "Deadpool Wolverine", "דדפול & וולברין ", "Shawn Levy", 2024, image5, "https://Deadpool_Wolverine_Movie_link.com","Adventure","Deadpool is offered a place in the Marvel Cinematic Universe by the Time Variance Authority, but instead recruits a variant of Wolverine to save his universe from extinction"
+		HomeMovie homeMovie5 = new HomeMovie(5, "Deadpool Wolverine", "דדפול & וולברין ", "Shawn Levy", 2024, homeImages[4], "https://Deadpool_Wolverine_Movie_link.com","Adventure","Deadpool is offered a place in the Marvel Cinematic Universe by the Time Variance Authority, but instead recruits a variant of Wolverine to save his universe from extinction"
 				,"Ryan Reynolds, Hugh Jackman, Emma Corrin","2h 8m");
 		session.save(homeMovie5);
 		session.flush();
 
-		HomeMovie homeMovie6 = new HomeMovie(6, "This Time Next Year", "מזל שנפגשנו", "Nick Moore", 2024, image6, "https://This_Time_Next_Year_Movie_link.com","Comedy","Minnie and Quinn are born on the same day, one minute apart. Their lives may begin together, but their worlds couldn't be more different. Years later they find themselves together again. Maybe it's time to take a chance on love."
+		HomeMovie homeMovie6 = new HomeMovie(6, "This Time Next Year", "מזל שנפגשנו", "Nick Moore", 2024, homeImages[5], "https://This_Time_Next_Year_Movie_link.com","Comedy","Minnie and Quinn are born on the same day, one minute apart. Their lives may begin together, but their worlds couldn't be more different. Years later they find themselves together again. Maybe it's time to take a chance on love."
 				,"Sophie Cookson, Lucien Laviscount, Golda Rosheuvel","1h 56m");
 		session.save(homeMovie6);
 		session.flush();
@@ -508,11 +498,12 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
-	private static byte[] loadImageFromFile(String filePath) throws IOException {
-		File file = new File(filePath);
-		try (InputStream inputStream = new FileInputStream(file)) {
-			return inputStream.readAllBytes();
+	private static byte[] loadImageFromFile(String relativePath) throws IOException {
+		InputStream inputStream = SimpleServer.class.getClassLoader().getResourceAsStream(relativePath);
+		if (inputStream == null) {
+			throw new FileNotFoundException("File not found: " + relativePath);
 		}
+		return inputStream.readAllBytes();
 	}
 
 	private static List<Movie> getAllMovies(Session session) throws Exception {
@@ -702,6 +693,8 @@ public class SimpleServer extends AbstractServer {
 					client.sendToClient(newMessage3);
 					NewMessage newMessage2 = new NewMessage("movieRemoved");
 					client.sendToClient(newMessage2);
+					NewMessage newMessage4 = new NewMessage(movie.getId(), "movieNotAvailable");
+					sendToAllClients(newMessage4);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
@@ -715,6 +708,10 @@ public class SimpleServer extends AbstractServer {
 					String branch = message.getBranchName();
 					if(branch.equals("All") || movieToDelete.getBranches().size() == 1){
 						session.remove(movieToDelete);
+						NewMessage newMessage4 = new NewMessage(movie.getId(), "movieNotAvailable");
+						sendToAllClients(newMessage4);
+						NewMessage newMessage2 = new NewMessage("movieRemoved");
+						client.sendToClient(newMessage2);
 					}
 					else {
 						Movie movieToDeleteBranch = session.get(Movie.class, movie.getId());
@@ -732,13 +729,18 @@ public class SimpleServer extends AbstractServer {
 								movieToDeleteBranch.getBranches().remove(x);
 							}
 						}
+						if(movieToDeleteBranch != null) {
+							List<Screening> screeningsForMovie = getScreeningsForMovie(session, movie.getId());
+							NewMessage newMessage3 = new NewMessage(screeningsForMovie, "screeningTimes");
+							sendToAllClients(newMessage3);
+						}
+						NewMessage newMessage2 = new NewMessage("movieRemoved");
+						client.sendToClient(newMessage2);
 					}
 					List<Movie> movies = getAllMovies(session);
 					NewMessage newMessage = new NewMessage(movies, "movies");
 					sendToAllClients(newMessage);
 
-					NewMessage newMessage2 = new NewMessage("movieRemoved");
-					client.sendToClient(newMessage2);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
@@ -765,6 +767,7 @@ public class SimpleServer extends AbstractServer {
 								session.save(x);
 								Screening screening = new Screening(times.get(i), movie, x);
 								screenings.add(screening);
+								movie.addScreening(times.get(i), x);
 							}
 							i++;
 						}
@@ -782,7 +785,7 @@ public class SimpleServer extends AbstractServer {
 						i++;
 					}*/
 					movie.setBranches(newBranches);
-					movie.setScreenings(screenings);
+					//movie.setScreenings(screenings);
 					session.save(movie);
 					session.flush();
 					NewMessage newMessage = new NewMessage("movieAdded");  // שליחת רשימת הסרטים לבית ללקוח עם המחרוזת "homeMovies"
@@ -813,6 +816,178 @@ public class SimpleServer extends AbstractServer {
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
+				}
+			} else if (msgString.equals("removeScreening")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+
+					// קבלת הנתונים מההודעה
+					ScreeningData data = (ScreeningData) message.getObject();
+					Movie movie = session.get(Movie.class, data.getMovieId());
+
+					if(movie instanceof HomeMovie){
+						HomeMovie homeMovie = session.get(HomeMovie.class, movie.getId());
+						LocalDateTime screeningTime = data.getScreeningTime();
+
+						// חיפוש ההקרנה להסרה
+						Screening screeningToRemove = movie.getScreenings().stream()
+								.filter(screening -> screening.getScreeningTime().equals(screeningTime))
+								.findFirst()
+								.orElse(null);
+
+						if (screeningToRemove != null) {
+							movie.getScreenings().remove(screeningToRemove); // הסרת ההקרנה מהסרט
+							session.remove(screeningToRemove); // הסרה מהמסד
+						} else {
+							System.err.println("Screening not found.");
+						}
+						session.save(movie); ///////////////////////
+					} else {
+					Branch branch = session.get(Branch.class, data.getBranchId());
+					LocalDateTime screeningTime = data.getScreeningTime();
+
+					if (movie == null || branch == null) {
+						System.err.println("Movie or branch not found.");
+						return;
+					}
+
+					// חיפוש ההקרנה להסרה
+					Screening screeningToRemove = movie.getScreenings().stream()
+							.filter(screening -> screening.getScreeningTime().equals(screeningTime) && screening.getBranch().equals(branch))
+							.findFirst()
+							.orElse(null);
+
+					if (screeningToRemove != null) {
+						movie.getScreenings().remove(screeningToRemove); // הסרת ההקרנה מהסרט
+						branch.getScreenings().remove(screeningToRemove); // הסרת ההקרנה מהסניף
+						session.remove(screeningToRemove); // הסרה מהמסד
+					} else {
+						System.err.println("Screening not found.");
+					}
+					session.save(movie); ///////////////////////
+					}
+
+					// שליחת עדכון לכל הלקוחות
+					List<Movie> movies = getAllMovies(session);
+					NewMessage newMessage = new NewMessage(movies, "movies");
+					sendToAllClients(newMessage);
+
+					List<HomeMovie> homeMovies = getAllHomeMovies(session);
+					NewMessage homeMoviesMessage = new NewMessage(homeMovies, "homeMovies");
+					sendToAllClients(homeMoviesMessage);
+
+					NewMessage newMessage2 = new NewMessage("screeningRemoved");
+					client.sendToClient(newMessage2);
+
+					List<Screening> screenings = getScreeningsForMovie(session, movie.getId());
+					NewMessage newMessage3 = new NewMessage(screenings, "screeningTimes");
+					sendToAllClients(newMessage3);
+
+					session.getTransaction().commit();
+
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}
+			else if (msgString.equals("addScreening")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+
+					// Extract screening data from the message
+					ScreeningData data = (ScreeningData) message.getObject();
+					Movie movie = session.get(Movie.class, data.getMovieId());
+					Branch branch = data.getBranchId() != null ? session.get(Branch.class, data.getBranchId()) : null;
+					LocalDateTime screeningTime = data.getScreeningTime();
+
+					// Check if the screening already exists
+					boolean screeningExists = movie.getScreenings().stream()
+							.anyMatch(screening -> screening.getScreeningTime().equals(screeningTime) && (branch == null || screening.getBranch().equals(branch)));
+
+					if (!screeningExists) {
+						// Create and add the new screening
+						Screening newScreening = new Screening();
+						newScreening.setMovie(movie);
+						newScreening.setScreeningTime(screeningTime);
+						newScreening.setBranch(branch);
+						session.persist(newScreening);
+						movie.getScreenings().add(newScreening);
+						if (branch != null) {
+							branch.getScreenings().add(newScreening);
+						}
+						session.getTransaction().commit();
+
+						// Load updated movie list and send to all clients
+						List<Movie> movies = getAllMovies(session);
+						NewMessage updateMessage = new NewMessage(movies, "movies");
+						sendToAllClients(updateMessage);  // שליחת העדכון לכל הלקוחות
+
+						List<HomeMovie> homeMovies = getAllHomeMovies(session);
+						NewMessage homeMoviesMessage = new NewMessage(homeMovies, "homeMovies");
+						sendToAllClients(homeMoviesMessage);
+
+						// Send success message to the client who initiated the request
+						NewMessage newMessage = new NewMessage("screeningAdded");
+						client.sendToClient(newMessage);
+
+						List<Screening> screenings = getScreeningsForMovie(session, movie.getId());
+						NewMessage newMessage3 = new NewMessage(screenings, "screeningTimes");
+						sendToAllClients(newMessage3);
+					} else {
+						session.getTransaction().rollback();
+						NewMessage newMessage = new NewMessage("Screening already exists");
+						client.sendToClient(newMessage);
+					}
+				} catch (Exception exception) {
+					System.err.println("An error occurred while adding a screening: " + exception.getMessage());
+				}
+			} else if (msgString.equals("editScreening")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+
+					// Extract screening data from the message
+					ScreeningData data = (ScreeningData) message.getObject();
+					Movie movie = session.get(Movie.class, data.getMovieId());
+					Branch branch = data.getBranchId() != null ? session.get(Branch.class, data.getBranchId()) : null;
+					LocalDateTime newScreeningTime = data.getScreeningTime();
+
+					// Attempt to find the existing screening to update
+					Screening screeningToUpdate = movie.getScreenings().stream()
+							.filter(screening -> screening.getBranch().equals(branch))
+							.filter(screening -> !screening.getScreeningTime().equals(newScreeningTime)) // Ensure we're not comparing with the new time
+							.findFirst().orElse(null);
+
+					if (screeningToUpdate != null) {
+						// Update the screening time
+						screeningToUpdate.setScreeningTime(newScreeningTime);
+						session.update(screeningToUpdate);
+
+						// Commit transaction
+						session.getTransaction().commit();
+
+						// Load updated movie list and send to all clients
+						List<Movie> movies = getAllMovies(session);
+						NewMessage updateMessage = new NewMessage(movies, "movies");
+						sendToAllClients(updateMessage);
+
+						List<HomeMovie> homeMovies = getAllHomeMovies(session);
+						NewMessage homeMoviesMessage = new NewMessage(homeMovies, "homeMovies");
+						sendToAllClients(homeMoviesMessage);
+
+						// Send success message to the client who initiated the request
+						NewMessage successMessage = new NewMessage("Screening updated");
+						client.sendToClient(successMessage);
+
+						List<Screening> screenings = getScreeningsForMovie(session, movie.getId());
+						NewMessage screeningTimesMessage = new NewMessage(screenings, "screeningTimes");
+						sendToAllClients(screeningTimesMessage);
+					} else {
+						session.getTransaction().rollback();
+						NewMessage errorMessage = new NewMessage("Screening not found");
+						client.sendToClient(errorMessage);
+					}
+				} catch (Exception exception) {
+					System.err.println("An error occurred while editing a screening: " + exception.getMessage());
 				}
 			}
 		}

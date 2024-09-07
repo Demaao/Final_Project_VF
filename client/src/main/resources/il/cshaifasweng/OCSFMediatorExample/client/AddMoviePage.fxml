@@ -194,11 +194,6 @@
             <Font size="15.0" />
          </font>
       </TextArea>
-      <TextField fx:id="imagePath" layoutX="718.0" layoutY="28.0" prefHeight="34.0" prefWidth="152.0" promptText="Image Path">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </TextField>
       <TextField fx:id="movieLength" layoutX="718.0" layoutY="78.0" prefHeight="34.0" prefWidth="152.0" promptText="Movie Length">
          <font>
             <Font size="15.0" />
@@ -302,5 +297,10 @@
             </TableView>
          </children>
       </AnchorPane>
+      <Button fx:id="importImageBtn" layoutX="718.0" layoutY="28.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="152.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 5; -fx-cursor: hand;" text="Import Image">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
