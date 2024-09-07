@@ -1,10 +1,12 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import net.bytebuddy.asm.Advice;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import java.io.ByteArrayInputStream;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class MovieDetailsPage {
 
-    private static Movie selectedMovie;
+    public static Movie selectedMovie;
 
     @FXML
     private Label movieTitleLabel;
@@ -83,7 +85,7 @@ public class MovieDetailsPage {
             hebtitle.setText(selectedMovie.getHebtitle());
             engtitle.setText(selectedMovie.getEngtitle());
 
-            requestScreeningTimesFromServer(); // בקשה לשרת לקבל את זמני ההקרנה
+            requestScreeningTimesFromServer(); // ××§×©× ××©×¨×ª ××§×× ××ª ××× × ×××§×¨× ×
 
             chooseDatePicker.setDayCellFactory(picker -> new DateCell() {
                 @Override
@@ -103,7 +105,7 @@ public class MovieDetailsPage {
                 chooseDatePicker.setLayoutX(230.0);
                 timeComboBox.setLayoutX(430.0);
 
-                //אם בחרנו סרט בית אז אנחנו עוברים לעדכן את התאריכים והשעות כי לסרטי הבית אין בתי קלנוע
+                //×× ×××¨× × ×¡×¨× ×××ª ×× ×× ×× × ×¢×××¨×× ××¢××× ××ª ××ª××¨×××× ×××©×¢××ª ×× ××¡×¨×× ××××ª ××× ××ª× ×§×× ××¢
                 chooseDatePicker.setOnAction(event -> updateAvailableTimes(selectedMovie.getScreenings()));
 
             }
@@ -123,7 +125,7 @@ public class MovieDetailsPage {
                 chooseDatePicker.setLayoutX(430.0);
                 timeComboBox.setLayoutX(630.0);
 
-                //אם בחרנו סרט שמוצג בבית קלנוע אז אנחנו עוברים לעדכן בבוקס באיזה סניפים הוא נמצאיובהתאם מעדכנים את התאירכים והשעות
+                //×× ×××¨× × ×¡×¨× ×©×××¦× ××××ª ×§×× ××¢ ×× ×× ×× × ×¢×××¨×× ××¢××× ××××§×¡ ××××× ×¡× ××¤×× ××× × ××¦××××××ª×× ××¢××× ×× ××ª ××ª×××¨××× ×××©×¢××ª
                 cinemaComboBox.setOnAction(event -> updateAvailableDays(null));
                 chooseDatePicker.setOnAction(event -> updateAvailableTimes(null));
             }
@@ -144,21 +146,25 @@ public class MovieDetailsPage {
     public void onUpdateScreeningTimes(UpdateScreeningTimesEvent event) {
         List<Screening> screenings = event.getScreenings();
         updateUIWithScreeningTimes(screenings);
+        updateAvailableDays(screenings); // ×¨×¢× ×× ××××× ××××× ××
+        updateAvailableTimes(screenings); // ×¨×¢× ×× ××©×¢××ª ××××× ××ª
     }
 
     private void updateUIWithScreeningTimes(List<Screening> screenings) {
         cinemaComboBox.getItems().clear();
+        timeComboBox.getItems().clear();
+        chooseDatePicker.setValue(null);
 
         if (selectedMovie instanceof HomeMovie) {
-            updateAvailableDays(screenings);  //  אם מדובר בסרט ביתי, אין צורך לעדכן את  בתי הקולנוע נעבור לעדכן את  לעדכון הימים
+            updateAvailableDays(screenings);  //  ×× ×××××¨ ××¡×¨× ×××ª×, ××× ×¦××¨× ××¢××× ××ª  ××ª× ××§××× ××¢ × ×¢×××¨ ××¢××× ××ª  ××¢×××× ×××××
         } else {
-            // קבלת רשימה של בתי קולנוע מתוך רשימת ההקרנות
+            // ×§×××ª ×¨×©××× ×©× ××ª× ×§××× ××¢ ××ª×× ×¨×©×××ª ×××§×¨× ××ª
             Set<String> availableCinemas = screenings.stream()
-                    .filter(screening -> screening.getBranch() != null)  // לוודא ש-Branch אינו null
+                    .filter(screening -> screening.getBranch() != null)  // ××××× ×©-Branch ××× × null
                     .map(screening -> screening.getBranch().getName())
                     .collect(Collectors.toSet());
 
-            // הוספת בתי הקולנוע ל-ComboBox
+            // ×××¡×¤×ª ××ª× ××§××× ××¢ ×-ComboBox
             cinemaComboBox.getItems().addAll(availableCinemas);
 
             cinemaComboBox.setOnAction(event -> updateAvailableDays(screenings));
@@ -167,14 +173,15 @@ public class MovieDetailsPage {
 
 
     private void updateAvailableDays(List<Screening> screenings) {
-        System.out.println("updateAvailableDays called for movie: " + selectedMovie.getEngtitle());
+        timeComboBox.getItems().clear(); ///////////////////////////////////////////////
+        chooseDatePicker.setValue(null); ///////////////////////////////////////////////
 
         if (screenings == null || screenings.isEmpty()) {
             screenings = selectedMovie.getScreenings();
         }
 
         if (selectedMovie instanceof HomeMovie) {
-            // עדכון הימים בהם יש הקרנות לסרטי הבית
+            // ×¢×××× ××××× ××× ××© ××§×¨× ××ª ××¡×¨×× ××××ª
             Set<LocalDate> availableDays = screenings.stream()
                     .filter(screening -> screening.getBranch() == null)
                     .map(screening -> screening.getScreeningTime().toLocalDate())
@@ -211,7 +218,7 @@ public class MovieDetailsPage {
             }
         }
 
-        // עידכון זמני ההקרנה על פי היום שנבחר
+        // ×¢××××× ××× × ×××§×¨× × ×¢× ×¤× ×××× ×©× ×××¨
         List<Screening> finalScreenings = screenings;
         chooseDatePicker.setOnAction(event -> updateAvailableTimes(finalScreenings));
     }
@@ -257,39 +264,47 @@ public class MovieDetailsPage {
         }
     }
 
+    static int movieDetailsPage;
 
     @FXML
     private void switchToHomePage() throws IOException {
+        movieDetailsPage = 0;
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
+        movieDetailsPage = 0;
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
+        movieDetailsPage = 0;
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToHostPage() throws IOException {
+        movieDetailsPage = 0;
         App.switchScreen("HostPage");
     }
 
     @FXML
     public void switchToMoviesPage() throws IOException {
+        movieDetailsPage = 0;
         App.switchScreen("MoviesPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
+        movieDetailsPage = 0;
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     private void switchToCardsPage() throws IOException {
+        movieDetailsPage = 0;
         App.switchScreen("CardsPage");
     }
 }

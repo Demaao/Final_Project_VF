@@ -175,8 +175,10 @@ public class MoviesPage {
     @Subscribe
     public void onUpdateMoviesEvent(UpdateMoviesEvent event) {
         Platform.runLater(() -> {
-            this.filteredCinemaMovies = event.getMovies();  //////////////////////////////////
-            updateMovies(event.getMovies());
+            this.filteredCinemaMovies = event.getMovies();
+            this.movies = event.getMovies();
+            filterMovies();
+            //updateMovies(event.getMovies());
         });
     }
 
@@ -191,9 +193,10 @@ public class MoviesPage {
     @Subscribe
     public void onUpdateHomeMoviesEvent(UpdateHomeMoviesEvent event) {
         Platform.runLater(() -> {
-            this.homeMovies = event.getHomeMovies();
             this.filteredHomeMovies = event.getHomeMovies();
-            updateHomeMovies();
+            this.homeMovies = event.getHomeMovies();
+            filterMovies();
+          //  updateHomeMovies();
         });
     }
 
@@ -358,13 +361,11 @@ public class MoviesPage {
     private void populateSearchByNameBox() {
         if (movies != null) {
             searchByNameBox.getItems().clear();// Clear existing items
-          //  searchByNameBox.getItems().add("All");
             for (Movie movie : movies) {
                 searchByNameBox.getItems().add(movie.getEngtitle());
             }
         }
         if (homeMovies != null) {
-            //  searchByNameBox.getItems().add("All");
             for (HomeMovie movie : homeMovies) {
                 searchByNameBox.getItems().add(movie.getEngtitle());
             }
@@ -483,6 +484,7 @@ public class MoviesPage {
 
     private void openMovieDetailsPage(Movie movie) {
         MovieDetailsPage.setSelectedMovie(movie);  // שמור את הסרט שנבחר
+        MovieDetailsPage.movieDetailsPage = 1;
         App.switchScreen("MovieDetailsPage");  // מעבר לדף
     }
 
@@ -529,13 +531,15 @@ public class MoviesPage {
         if (movies != null) {
             filteredCinemaMovies = movies.stream()
                     .filter(movie -> !(movie instanceof HomeMovie))
+                    .filter(movie -> !(movie instanceof SoonMovie))
                     .filter(movie -> selectedGenre == null || selectedGenre.equals("All") ||
                             movie.getGenre().equalsIgnoreCase(selectedGenre))
                     .filter(movie -> selectedCinema == null || selectedCinema.equals("All") ||
                             movie.getBranches().stream().anyMatch(branch ->
                                     branch.getName().equalsIgnoreCase(selectedCinema)))
-                    .filter(movie -> selectedDate == null || movie.getScreenings().stream().anyMatch(screening ->
-                            screening.getScreeningTime().toLocalDate().equals(selectedDate)))
+                    .filter(movie -> selectedDate == null || ((selectedCinema == null || selectedCinema.equals("All")) && movie.getScreenings().stream().anyMatch(screening ->
+                                    screening.getScreeningTime().toLocalDate().equals(selectedDate) ) || movie.getScreenings().stream().anyMatch(screening ->
+                            screening.getScreeningTime().toLocalDate().equals(selectedDate) && screening.getBranch().getName().equalsIgnoreCase(selectedCinema))))
                     .collect(Collectors.toList());
 
             NowInCinema.setText(buildCinemaLabel(selectedDate, selectedCinema, selectedGenre));
@@ -557,6 +561,7 @@ public class MoviesPage {
 
         updateFilteredCinemaMovies();
         updateFilteredHomeMovies();
+        populateSearchByNameBox();
     }
 
     private String buildCinemaLabel(LocalDate date, String cinema, String genre) {
@@ -592,4 +597,7 @@ public class MoviesPage {
         }
         return label.toString();
     }
+
+    @Subscribe
+    public void onUpdateScreeningEvent(UpdateScreeningTimesEvent event) {}
 }

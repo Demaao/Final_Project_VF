@@ -3,6 +3,7 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
+import java.io.IOException;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
 import java.util.List;
@@ -51,12 +52,21 @@ public class SimpleClient extends AbstractClient {
 				}
 				else if(message.getMessage().equals("movieAdded")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Movie added successfully!")));
-				}
+				}  else if (message.getMessage().equals("screeningAdded")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Screening added successfully!")));
+			} else if (message.getMessage().equals("screeningRemoved")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Screening removed successfully!")));
+			} else if (message.getMessage().equals("movieNotAvailable")) {
+					EventBus.getDefault().post(new NewMessage(message.getObject() ,"movieNotAvailable"));
+			} else if (message.getMessage().equals("screeningUpdated")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Screening time updated successfully!")));
+			} else if (message.getMessage().equals("screeningUpdateFailed")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Failed to update screening time.")));
+			}
 
 			});
 		}
 	}
-
 
 	// Singleton pattern to get the client instance
 	public static SimpleClient getClient() {

@@ -1,6 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -18,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -356,6 +358,15 @@ public class App extends Application {
                 } else   if (event.getWarning().getMessage().equals("Movie added successfully!")) {
                     alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
                     alert.show();
+                }  else   if (event.getWarning().getMessage().equals("Screening removed successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else   if (event.getWarning().getMessage().equals("Screening added successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else   if (event.getWarning().getMessage().equals("Screening time updated successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
                 }
                 else if (loginDeniedCounter >= 5) {
                     Stage dialogStage = new Stage();
@@ -408,6 +419,23 @@ public class App extends Application {
                 } catch (IOException e) {
                 }
             });
+        }
+    }
+
+    @Subscribe
+    public void onMovieUpdateEvent(NewMessage event){
+        event.getMessage();
+        if(Objects.equals(event.getMessage(), "movieNotAvailable") && (MovieDetailsPage.movieDetailsPage == 1)
+        && ((int)event.getObject() == MovieDetailsPage.selectedMovie.getId())){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Sorry, the movie is no longer available.");
+            alert.show();
+            try {
+                MovieDetailsPage.movieDetailsPage = 0;
+                switchScreen("MoviesPage");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
