@@ -56,7 +56,7 @@ public class PurchaseLink {
     }
     @FXML
     private void switchToMovieDetailsPage() throws IOException {
-        App.switchScreen("MovieDetailsPage");
+        App.switchScreen("MovieLinkDetailsPage");
     }
 
 

@@ -485,7 +485,14 @@ public class MoviesPage {
     private void openMovieDetailsPage(Movie movie) {
         MovieDetailsPage.setSelectedMovie(movie);  // שמור את הסרט שנבחר
         MovieDetailsPage.movieDetailsPage = 1;
-        App.switchScreen("MovieDetailsPage");  // מעבר לדף
+        if (movie instanceof HomeMovie) {
+            App.switchScreen("MovieLinkDetailsPage");  // Navigate to HomeMovieDetailsPage
+        }
+        else {
+            //MovieDetailsPage.setSelectedMovie(movie);
+            App.switchScreen("MovieDetailsPage");  // Navigate to MovieDetailsPage
+        }
+        //App.switchScreen("MovieDetailsPage");  // מעבר לדף
     }
 
     @FXML
