@@ -185,10 +185,28 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "PurchaseLink":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PurchaseLink");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
             case "PaymentPage":
                 Platform.runLater(() -> {
                     try {
                         setContent("PaymentPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "PaymentLink":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PaymentLink");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -333,6 +351,15 @@ public class App extends Application {
                 Platform.runLater(() -> {
                     try {
                         setContent("MovieDetailsPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "MovieLinkDetailsPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("MovieLinkDetailsPage");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
