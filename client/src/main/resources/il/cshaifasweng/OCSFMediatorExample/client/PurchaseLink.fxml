@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PaymentLink">
-    <stylesheets>
-        <URL value="@styles.css" />
-    </stylesheets>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PurchaseLink">
     <children>
         <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
             <children>
@@ -98,80 +95,38 @@
                 </Button>
             </children>
         </AnchorPane>
-        <Label layoutX="220.0" layoutY="198.0" prefHeight="30.0" prefWidth="99.0" text="Full Name" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <TextField fx:id="fullNameText" layoutX="389.0" layoutY="198.0" prefHeight="34.0" prefWidth="370.0" promptText="Full Name">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <Label layoutX="220.0" layoutY="134.0" text="Total Price:" textFill="#f6d9d9">
-            <font>
-                <Font name="System Bold" size="24.0" />
-            </font>
-        </Label>
-        <Label layoutX="220.0" layoutY="253.0" prefHeight="30.0" prefWidth="98.0" text="ID Number" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <TextField fx:id="IDNumText" layoutX="389.0" layoutY="253.0" prefHeight="34.0" prefWidth="370.0" promptText="ID Number">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <Label layoutX="220.0" layoutY="308.0" prefHeight="30.0" prefWidth="144.0" text="Phone Number" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <TextField fx:id="phoneText" layoutX="389.0" layoutY="308.0" prefHeight="34.0" prefWidth="370.0" promptText="Phone Number">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <TextField fx:id="emailText" layoutX="389.0" layoutY="363.0" prefHeight="34.0" prefWidth="370.0" promptText="Email Address">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <Label layoutX="220.0" layoutY="363.0" prefHeight="30.0" prefWidth="170.0" text="Email Address" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <Label layoutX="220.0" layoutY="418.0" prefHeight="22.0" prefWidth="104.0" text="Credit Card" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <Label fx:id="totalPriceLabel" layoutX="361.0" layoutY="134.0" text="100$" textFill="#f6d9d9">
-            <font>
-                <Font name="System Bold" size="24.0" />
-            </font>
-        </Label>
-        <Button fx:id="payBtn" layoutX="669.0" layoutY="487.0" mnemonicParsing="false" onAction="#payForProduct" prefHeight="40.0" prefWidth="90.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm">
+        <Button fx:id="nextBtn" layoutX="718.0" layoutY="421.0" mnemonicParsing="false" onAction="#switchToPaymentPage" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Next">
             <font>
                 <Font size="18.0" />
             </font>
         </Button>
-        <TextField fx:id="creditCardTxt" layoutX="389.0" layoutY="418.0" prefHeight="34.0" prefWidth="370.0" promptText="Credit Card Number">
-            <font>
-                <Font size="15.0" />
-            </font></TextField>
-        <Label layoutX="359.0" layoutY="49.0" text="Payment for HomeMovie Details:" textFill="#f6d9d9">
-            <font>
-                <Font name="Britannic Bold" size="30.0" />
-            </font>
-        </Label>
-        <Label layoutX="334.0" layoutY="88.0" text="Complete your purchase by providing payment details" textFill="#f6d9d9">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <Button fx:id="backBtn" layoutX="389.0" layoutY="487.0" mnemonicParsing="false" onAction="#switchToPreviousPage" prefHeight="40.0" prefWidth="90.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Back">
+        <Button fx:id="cancelBtn" layoutX="585.0" layoutY="421.0" mnemonicParsing="false" onAction="#switchToMovieDetailsPage" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel">
             <font>
                 <Font size="18.0" />
             </font>
         </Button>
+        <TableView layoutX="229.0" layoutY="83.0" prefHeight="250.0" prefWidth="612.0">
+            <columns>
+                <TableColumn prefWidth="123.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Product NO." />
+                <TableColumn prefWidth="132.800048828125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Type" />
+                <TableColumn prefWidth="248.79995727539062" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Details" />
+                <TableColumn minWidth="0.0" prefWidth="108.7999267578125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Price" />
+            </columns>
+        </TableView>
+        <Label layoutX="229.0" layoutY="372.0" text="Total Price:" textFill="#f6d9d9">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <Label layoutX="350.0" layoutY="372.0" text="100$" textFill="#f6d9d9">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+      <Label layoutX="229.0" layoutY="43.0" prefHeight="30.0" prefWidth="389.0" text="Purchase Details" textFill="#f6d9d9">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

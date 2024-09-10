@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
 public class MovieDetailsPage {
 
     public static Movie selectedMovie;
-
+    @FXML
+    private Button cancelBtn;
     @FXML
     private Label movieTitleLabel;
 
@@ -64,6 +65,9 @@ public class MovieDetailsPage {
 
     @FXML
     private Label bookNowLabel;
+    @FXML
+    private Button purchaseCardBtn;
+
 
     public static void setSelectedMovie(Movie movie) {
         selectedMovie = movie;
@@ -307,4 +311,29 @@ public class MovieDetailsPage {
         movieDetailsPage = 0;
         App.switchScreen("CardsPage");
     }
+
+    @FXML
+    private void switchToPurchaseProductsPage() throws IOException {
+
+        if (selectedMovie instanceof HomeMovie) {
+            //System.out.println("Navigating to PurchaseLink");
+            App.switchScreen("PurchaseLink");
+        } else {
+           // System.out.println("Navigating to PurchaseProductsPage");
+            App.switchScreen("PurchaseProductsPage");
+        }
+        //App.switchScreen("PurchaseProductsPage");
+        //System.out.println("Selected movie type: " + selectedMovie.getClass().getSimpleName());
+
+       /* if (selectedMovie instanceof HomeMovie){
+            App.switchScreen("PurchaseLink");
+            System.out.println("PurchaseLink");
+
+        }
+        else {
+        App.switchScreen("PurchaseProductsPage");
+    }*/
+  }
+
+
 }
