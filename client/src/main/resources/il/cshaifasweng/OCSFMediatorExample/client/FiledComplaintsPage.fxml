@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -111,13 +112,38 @@
             <Font size="18.0" />
          </font>
       </TextField>
-      <TableView fx:id="complaintTable" layoutX="220.0" layoutY="188.0" prefHeight="274.0" prefWidth="630.0" visible="false">
+      <TableView fx:id="complaintTable" layoutX="203.0" layoutY="188.0" prefHeight="274.0" prefWidth="676.0" visible="false">
          <columns>
-            <TableColumn prefWidth="125.5999755859375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint NO." />
-            <TableColumn prefWidth="113.5999755859375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Subject" />
-            <TableColumn prefWidth="138.40005493164062" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Submission Time" />
-            <TableColumn prefWidth="88.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Status" />
-            <TableColumn prefWidth="165.60003662109375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Response" />
+            <TableColumn fx:id="complaintNOColumn" prefWidth="34.0" style="-fx-font-size: 15;" text="NO.">
+               <cellValueFactory>
+                  <PropertyValueFactory property="id" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="subjectColumn" prefWidth="125.0" style="-fx-font-size: 15;" text="Subject">
+               <cellValueFactory>
+                  <PropertyValueFactory property="subject" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="complaintColumn" prefWidth="172.0" style="-fx-font-size: 15;" text="Complaint">
+               <cellValueFactory>
+                  <PropertyValueFactory property="complaintDescription" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="subTimeColumn" prefWidth="126.5" style="-fx-font-size: 15;" text="Submission Time">
+               <cellValueFactory>
+                  <PropertyValueFactory property="submissionDate" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="statusColumn" prefWidth="65.0" style="-fx-font-size: 15;" text="Status">
+               <cellValueFactory>
+                  <PropertyValueFactory property="status" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="responseColumn" prefWidth="173.0" style="-fx-font-size: 15;" text="Response">
+               <cellValueFactory>
+                  <PropertyValueFactory property="response" />
+               </cellValueFactory>
+            </TableColumn>
          </columns>
       </TableView>
       <Button fx:id="enterBtn" layoutX="687.0" layoutY="115.0" mnemonicParsing="false" onAction="#showComplaintTable" prefHeight="34.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Enter">
