@@ -97,6 +97,7 @@ public class PaymentLink {
                     "Payment completed successfully!");
             alert.show();
         });
+        MovieDetailsPage.movieDetailsPage = 0;
     }
 
     private void resetFieldStyles() {
@@ -144,36 +145,43 @@ public class PaymentLink {
 
     @FXML
     private void switchToCardsPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("CardsPage");
     }
 
     @FXML
     private void switchToHostPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HostPage");
     }
 
     @FXML
     private void switchToHomePage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     public void switchToMoviesPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("MoviesPage");
     }
 }
