@@ -268,54 +268,52 @@ public class MovieLinkDetailsPage {
         }
     }
 
-    static int movieDetailsPage;
+   // static int movieDetailsPage;
 
     @FXML
     private void switchToHomePage() throws IOException {
-        movieDetailsPage = 0;
+       MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
-        movieDetailsPage = 0;
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
-        movieDetailsPage = 0;
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToHostPage() throws IOException {
-        movieDetailsPage = 0;
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HostPage");
     }
 
     @FXML
     public void switchToMoviesPage() throws IOException {
-        movieDetailsPage = 0;
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("MoviesPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
-        movieDetailsPage = 0;
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     private void switchToCardsPage() throws IOException {
-        movieDetailsPage = 0;
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("CardsPage");
     }
 
     @FXML
     private void switchToPurchaseProductsPage() throws IOException {
-
-
         App.switchScreen("PurchaseLink");
     }
 
