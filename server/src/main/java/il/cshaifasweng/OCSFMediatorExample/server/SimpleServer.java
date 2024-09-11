@@ -54,6 +54,7 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(BranchManager.class); /////////////
 		configuration.addAnnotatedClass(ContentManager.class); /////////////////
 		configuration.addAnnotatedClass(CustomerServiceWorker.class); /////////////
+		configuration.addAnnotatedClass(Complaint.class); ///////////////////////////////////
 
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
@@ -73,13 +74,37 @@ public class SimpleServer extends AbstractServer {
 			generateBranchManager(session); /////////////////////
 			generateContentManager(session); /////////////////////
 			generateCustomerServiceWorker(session); //////////////
+			generateComplaints(session);  //////////////////////////////////////////////////////////////
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+
+	private static void generateComplaints(Session session) throws Exception {
+		Complaint complaint1 = new Complaint("John Doe", 123456789L, "1234567890",
+				"Purchases", "john@example.com", "Overcharged for my last order.", LocalDateTime.of(2024, 9, 1, 18, 30),
+				"Thank you for reaching out,\nyou will be refunded accordingly.", true);
+		Complaint complaint2 = new Complaint("Jane Smith", 987654321L, "0987654321",
+				"Movie link", "jane@example.com", "Unable to access the link.", LocalDateTime.of(2024, 8, 3, 16, 56),
+				"Thank you for reaching out,\nthe link will be activated at the screening's scheduled time.", true);
+		Complaint complaint3 = new Complaint("Alice Johnson", 555666777L, "1122334455",
+				"Other", "alice@example.com", "Loved the new movie selection!", LocalDateTime.of(2024, 9, 9, 11, 32),
+				"Thank you for reaching out,\nnew movies are coming out soon!", true);
+		Complaint complaint4 = new Complaint("Bob Brown", 444555666L, "9988776655",
+				"Screening", "bob@example.com", "When will the new movie be released?", LocalDateTime.of(2024, 9, 5, 22, 4),
+                "Thank you for reaching out,\nthe release date for the new movie has not yet been announced.\nPlease stay tuned for future updates.", true);
+
+		session.save(complaint1);
+		session.save(complaint2);
+		session.save(complaint3);
+		session.save(complaint4);
+		session.flush();
+	}
+
+
+		private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
 		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
@@ -498,6 +523,13 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
+	private static List<Movie> getAllMovies(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Movie> query = builder.createQuery(Movie.class);
+		query.from(Movie.class);
+		return session.createQuery(query).getResultList();
+	}
+
 	private static byte[] loadImageFromFile(String relativePath) throws IOException {
 		InputStream inputStream = SimpleServer.class.getClassLoader().getResourceAsStream(relativePath);
 		if (inputStream == null) {
@@ -506,12 +538,6 @@ public class SimpleServer extends AbstractServer {
 		return inputStream.readAllBytes();
 	}
 
-	private static List<Movie> getAllMovies(Session session) throws Exception {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Movie> query = builder.createQuery(Movie.class);
-		query.from(Movie.class);
-		return session.createQuery(query).getResultList();
-	}
 
 	private static List<SoonMovie> getAllSoonMovies(Session session) throws Exception {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -572,6 +598,13 @@ public class SimpleServer extends AbstractServer {
 	private static List<Screening> getScreeningsForMovie(Session session, int movieId) {
 		Movie movie = session.get(Movie.class, movieId);
 		return new ArrayList<>(movie.getScreenings());
+	}
+
+	private static List<Complaint> getAllComplaints(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Complaint> query = builder.createQuery(Complaint.class);
+		query.from(Complaint.class);
+		return session.createQuery(query).getResultList();
 	}
 
 	@Override
@@ -889,8 +922,7 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if (msgString.equals("addScreening")) {
+			} else if (msgString.equals("addScreening")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 
@@ -988,6 +1020,32 @@ public class SimpleServer extends AbstractServer {
 					}
 				} catch (Exception exception) {
 					System.err.println("An error occurred while editing a screening: " + exception.getMessage());
+				}
+			} else if (msgString.equals("submitComplaint")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Complaint complaint = (Complaint) message.getObject();
+					session.save(complaint);
+					NewMessage newMessage = new NewMessage("complaintSubmitted");
+					client.sendToClient(newMessage);
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage2 = new NewMessage(complaints, "complaints");
+					sendToAllClients(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("complaintsList")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage = new NewMessage(complaints, "complaints");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
 				}
 			}
 		}

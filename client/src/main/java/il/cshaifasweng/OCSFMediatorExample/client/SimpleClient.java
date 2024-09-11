@@ -62,8 +62,12 @@ public class SimpleClient extends AbstractClient {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Screening time updated successfully!")));
 			} else if (message.getMessage().equals("screeningUpdateFailed")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Failed to update screening time.")));
-			}
-
+			} else if(message.getMessage().equals("complaintSubmitted")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Complaint submitted successfully!")));
+			} else 	if (message.getMessage().equals("complaints")) {
+					List<Complaint> complaints = (List<Complaint>) message.getObject();
+					EventBus.getDefault().post(new UpdateComplaintsEvent(complaints));
+				}
 			});
 		}
 	}
