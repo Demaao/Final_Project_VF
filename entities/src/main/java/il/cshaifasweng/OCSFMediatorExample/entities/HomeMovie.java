@@ -23,4 +23,3 @@ public class HomeMovie extends Movie implements Serializable {
         this.link = link;
     }
 }
-

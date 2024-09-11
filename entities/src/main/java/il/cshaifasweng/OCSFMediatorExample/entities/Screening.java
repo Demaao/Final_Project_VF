@@ -62,4 +62,11 @@ public class Screening implements Serializable {
     public void setBranch(Branch branch) {
         this.branch = branch;
     }
+
+    public String myToString() {
+        if(this.movie instanceof HomeMovie)
+            return this.screeningTime.toLocalDate().toString() + "      " + this.screeningTime.toLocalTime();
+        else
+            return this.screeningTime.toLocalDate().toString() + "      " + this.screeningTime.toLocalTime() + "        " + this.branch.getName();
+    }
 }

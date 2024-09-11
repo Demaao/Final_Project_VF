@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -161,6 +163,8 @@ public class AddMoviePage {
         EventBus.getDefault().register(this);
         requestMoviesFromServer();
 
+        importImageBtn.setOnAction(event -> importImage());
+
         SpinnerValueFactory<String> valueFactory2 =
                 new SpinnerValueFactory.ListSpinnerValueFactory<String>(ScreeningType);
         screeningTypeSpinner.setValueFactory(valueFactory2);
@@ -215,6 +219,26 @@ public class AddMoviePage {
         movieTable.setItems(movies);
     }
 
+    private byte[] imageData;
+
+    @FXML
+    private void importImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            try {
+                // Convert the image to a byte array
+                imageData = Files.readAllBytes(selectedFile.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void changeScreeningType() {
         if (Objects.equals(screeningTypeSpinner.getValue(), "In The Cinema")) {
             cinemaLabel.setVisible(true);
@@ -262,6 +286,9 @@ public class AddMoviePage {
     private TableColumn<Screening, String> cinemaColumn;
 
     @FXML
+    private Button importImageBtn;
+
+    @FXML
     void AddMovie(ActionEvent event) throws IOException {
         String screeningType = screeningTypeSpinner.getValue();
 
@@ -272,7 +299,7 @@ public class AddMoviePage {
         String movieGenre = genre.getText();
         String descriptionText = description.getText();
 
-        String image = imagePath.getText();
+     //   String image = imagePath.getText();  //////////////////////////////////////////
         String length = movieLength.getText();
 
         String link = linkText.getText();
@@ -310,9 +337,9 @@ public class AddMoviePage {
             highlightFieldError(description);
             errorMessages.add("Please enter a movie genre.");
         }
-        if (image.isEmpty()) {
-            highlightFieldError(imagePath);
-            errorMessages.add("Please enter a the movie image path on your computer.");
+        if (imageData == null) {
+            highlightFieldError(importImageBtn);
+            errorMessages.add("Please choose an image.");
         }
         if (length.isEmpty() || !validateMovieLength()) {
             highlightFieldError(movieLength);
@@ -378,16 +405,16 @@ public class AddMoviePage {
 
         resetFieldStyles();
 
-        byte[] image1 = loadImageFromFile(image);
+       // byte[] image1 = loadImageFromFile(imageData);
 
         int movieYear =  Integer.parseInt(year.getText());
 
         if(screeningType.equals("In The Cinema")) {
-            Movie movie = new Movie(30, movieNameEng, movieNameHeb, directorName, movieYear, image1, movieGenre, descriptionText, mainActors, length);
+            Movie movie = new Movie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, movieGenre, descriptionText, mainActors, length);
             NewMessage msg = new NewMessage(movie, "addCinemaMovie", movieBranches, movieCinemaDateTimes);
             SimpleClient.getClient().sendToServer(msg);
         } else if(screeningType.equals("Link")) {
-            HomeMovie homeMovie = new HomeMovie(30, movieNameEng, movieNameHeb, directorName, movieYear, image1, link, movieGenre, descriptionText, mainActors, length);
+            HomeMovie homeMovie = new HomeMovie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, link, movieGenre, descriptionText, mainActors, length);
             for(Screening x: movieLinkScreenings){
                homeMovie.addScreening(x.getScreeningTime(), x.getBranch());
             }
@@ -400,7 +427,8 @@ public class AddMoviePage {
         actors.clear();
         genre.clear();
         description.clear();
-        imagePath.clear();
+      //  imagePath.clear();
+        imageData = null;
         linkText.clear();
         year.clear();
         movieLength.clear();
@@ -524,7 +552,8 @@ public class AddMoviePage {
             actors.getStyleClass().remove("error");
             genre.getStyleClass().remove("error");
             description.getStyleClass().remove("error");
-            imagePath.getStyleClass().remove("error");
+           // imagePath.getStyleClass().remove("error");
+            importImageBtn.getStyleClass().remove("error");
             linkText.getStyleClass().remove("error");
             year.getStyleClass().remove("error");
             movieLength.getStyleClass().remove("error");
@@ -537,7 +566,9 @@ public class AddMoviePage {
 
     private void highlightFieldError(Control control) {
         Platform.runLater(() -> {
-        control.getStyleClass().add("error");});
+            if (!control.getStyleClass().contains("error")) {
+                control.getStyleClass().add("error");
+            }});
     }
 
     private boolean validateMovieLength() {
@@ -730,4 +761,7 @@ public class AddMoviePage {
                                 }}}};}});
             movieTable.setItems(movies);});
     }
+
+    @Subscribe
+    public void onUpdateHomeMoviesEvent(UpdateHomeMoviesEvent event) {}
 }

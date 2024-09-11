@@ -139,7 +139,7 @@ public class PaymentLink {
 
     @FXML
     private void switchToPreviousPage(ActionEvent event) throws IOException {
-        App.switchScreen("PurchaseProductsPage"); // in case he wants to come back
+        App.switchScreen("PurchaseLink"); // in case he wants to come back
     }
 
     @FXML

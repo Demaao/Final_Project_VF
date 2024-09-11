@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class EditScreeningPage {
     @FXML private DatePicker addDateText;
     @FXML private TextField addHoursText;
     @FXML private Button addTimeBtn;
+    @FXML private Button removeTimeBtn;
     @FXML private TableView<Movie> complaintTable;
     @FXML private TableColumn<Movie, String> nameEngColumn;
     @FXML private TableColumn<Movie, String> TypeColumn;
@@ -27,6 +29,11 @@ public class EditScreeningPage {
     @FXML private ComboBox<String> chooseMovieBox;
     @FXML private ComboBox<String> chooseCinemaBox;
     @FXML private ComboBox<String> removeComboBox;
+    @FXML private ComboBox<String> editComboBox;
+    @FXML private TextField editNewHoursText;
+    @FXML private DatePicker editNewDateText;
+    @FXML private Button editTimeBtn;
+
 
     private List<Movie> allMovies;
     private String savedMovieSelection;
@@ -40,24 +47,25 @@ public class EditScreeningPage {
     }
 
     private void setupComboBoxes() {
-        // EventHandler לבחירת סרט, מעדכן גם את רשימת בתי הקולנוע ואת ה-ComboBox להסרת זמנים
+        // EventHandler ×××××¨×ª ×¡×¨×, ××¢××× ×× ××ª ×¨×©×××ª ××ª× ××§××× ××¢ ×××ª ×-ComboBox ×××¡×¨×ª ××× ××
         chooseMovieBox.setOnAction(event -> {
             updateCinemaOptions();
             updateTableBasedOnSelection();
-            updateRemoveComboBox();  // עדכון ה-ComboBox להסרת זמנים בכל בחירת סרט
-            resetDateTimeInputs();  // איפוס התאריך והשעה
+            updateRemoveComboBox();  // ×¢×××× ×-ComboBox ×××¡×¨×ª ××× ×× ××× ××××¨×ª ×¡×¨×
+            resetDateTimeInputs();  // ×××¤××¡ ××ª××¨×× ×××©×¢×
+            resetDateTimeInputs();   // ×××¤××¡ ××ª××¨×× ×××©×¢×
         });
 
-        // EventHandler לבחירת בית קולנוע, מעדכן את הטבלה על פי בחירת בית הקולנוע
+        // EventHandler ×××××¨×ª ×××ª ×§××× ××¢, ××¢××× ××ª ××××× ×¢× ×¤× ××××¨×ª ×××ª ××§××× ××¢
         chooseCinemaBox.setOnAction(event -> {
             updateTableBasedOnCinemaSelection();
+            updateEditComboBox();    // ×¢×××× ComboBox ××¢×¨×××ª ××× ××
         });
     }
 
-
     private void resetDateTimeInputs() {
-        addDateText.setValue(null);  // איפוס שדה התאריך
-        addHoursText.clear();  // ניקוי שדה השעה
+        addDateText.setValue(null);  // ×××¤××¡ ×©×× ××ª××¨××
+        addHoursText.clear();  // × ××§×× ×©×× ××©×¢×
     }
 
     @Subscribe
@@ -72,7 +80,6 @@ public class EditScreeningPage {
         });
     }
 
-
     private void updateCinemaOptions() {
         Movie selectedMovie = getSelectedMovie();
         if (selectedMovie != null && !(selectedMovie instanceof HomeMovie)) {
@@ -83,10 +90,9 @@ public class EditScreeningPage {
         }
     }
 
-
     private void updateTableBasedOnCinemaSelection() {
         updateTable(getSelectedMovie(), chooseCinemaBox.getValue());
-        updateRemoveComboBox();  // עדכון ה-ComboBox להסרת זמנים
+        updateRemoveComboBox();  // ×¢×××× ×-ComboBox ×××¡×¨×ª ××× ××
     }
 
     private void updateTable(Movie movie, String cinemaName) {
@@ -109,7 +115,6 @@ public class EditScreeningPage {
         });
     }
 
-
     private void updateTableBasedOnSelection() {
         Movie selectedMovie = getSelectedMovie();
         String cinemaName = chooseCinemaBox.isVisible() ? chooseCinemaBox.getValue() : null;
@@ -117,64 +122,73 @@ public class EditScreeningPage {
     }
 
 
-
     @FXML
     void addTime(ActionEvent event) {
-        saveSelections(); // שמירה לפני הפעולה
+        saveSelections();  // ×©×××¨×ª ×××××¨××ª ××¤× × ××¤×¢×××
 
-        // קבלת ערך בית הקולנוע מה-ComboBox
+        // ×§×××ª ×¢×¨× ×××ª ××§××× ××¢ ××-ComboBox
         String cinemaName = chooseCinemaBox.getValue();
 
         try {
             Movie selectedMovie = getSelectedMovie();
             if (selectedMovie == null) {
-                showAlert("No movie selected.");
+                showAlert("Please select a movie.");
                 return;
             }
 
-            LocalDateTime dateTime = LocalDateTime.of(addDateText.getValue(), LocalTime.parse(addHoursText.getText()));
+            // × ×¡× ×× ×ª× ××ª ××ª××¨×× ×××©×¢× ×××§××××
+            LocalDateTime dateTime;
+            try {
+                dateTime = LocalDateTime.of(addDateText.getValue(), LocalTime.parse(addHoursText.getText()));
+            } catch (DateTimeParseException e) {
+                showAlert("Invalid date or time format. Please use the correct format.");
+                return;
+            }
 
             Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
 
-            // בדיקה אם ההקרנה כבר קיימת
+            // ××××§× ×× ××§×¨× × ×××¨ ×§××××ª
             boolean screeningExists = selectedMovie.getScreenings().stream()
-                    .anyMatch(screening -> screening.getScreeningTime().equals(dateTime) && (screening.getBranch() == selectedBranch));
+                    .anyMatch(screening -> screening.getScreeningTime().equals(dateTime) && screening.getBranch().equals(selectedBranch));
 
             if (screeningExists) {
-                showAlert("This screening time already exists.");
+                showAlert("This screening time already exists. Choose a different time.");
                 return;
             }
 
-            if (selectedBranch != null || selectedMovie instanceof HomeMovie) {
-                selectedMovie.addScreening(dateTime, selectedBranch);
-
-                if (updateScreeningInDatabase(selectedMovie)) {
-                    updateTable(selectedMovie, cinemaName);
-                    updateRemoveComboBox();
-                } else {
-                    showAlert("Failed to update the database.");
-                }
-            } else {
-                showAlert("Cinema not found or invalid.");
+            if(!(selectedMovie instanceof HomeMovie) && cinemaName == null){
+                showAlert("Please choose a cinema.");
+                return;
             }
+
+            // ××¦××¨×ª ××××××§× × ×ª×× ×× ××××¡×¤×ª ××§×¨× × ×××©×
+            ScreeningData data = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, dateTime);
+            NewMessage addMessage = new NewMessage(data, "addScreening");
+
+            // ×©××××ª ×××××¢× ××©×¨×ª
+            SimpleClient.getClient().sendToServer(addMessage);
+
+            // ×¢×××× ××××©×§ ××××¨ ××©××××
+            selectedMovie.addScreening(dateTime, selectedBranch);
+            updateTable(selectedMovie, cinemaName);
+            updateRemoveComboBox();
+
         } catch (Exception e) {
-            showAlert("Invalid date or time format.");
+            showAlert("An unexpected error occurred. Please check your inputs and try again.");
         } finally {
-            restoreSelections(); // שחזור לאחר הפעולה
+            restoreSelections();  // ×©××××¨ ×××××¨××ª ××××¨ ××¤×¢×××
         }
     }
 
-
-
     private Branch getSelectedBranch(Movie movie, String branchName) {
         if (movie != null && branchName != null) {
-            // חיפוש הסניף ברשימת הסניפים של הסרט הנבחר
+            // ×××¤××© ××¡× ××£ ××¨×©×××ª ××¡× ××¤×× ×©× ××¡×¨× ×× ×××¨
             return movie.getBranches().stream()
                     .filter(branch -> branch.getName().equals(branchName))
                     .findFirst()
                     .orElse(null);
         }
-        return null;  // מחזירים null אם הסרט או שם הסניף לא קיימים
+        return null;  // ×××××¨×× null ×× ××¡×¨× ×× ×©× ××¡× ××£ ×× ×§×××××
     }
 
     private Movie getSelectedMovie() {
@@ -193,18 +207,6 @@ public class EditScreeningPage {
         }
     }
 
-
-    private boolean updateScreeningInDatabase(Movie movie) {
-        try {
-            NewMessage message = new NewMessage("updateScreening", movie);
-            SimpleClient.getClient().sendToServer(message);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     private void showAlert(String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -214,6 +216,7 @@ public class EditScreeningPage {
             alert.showAndWait();
         });
     }
+
     private void requestMoviesFromServer() {
         try {
             NewMessage message = new NewMessage("moviesList");
@@ -226,37 +229,50 @@ public class EditScreeningPage {
 
     @FXML
     void removeTime(ActionEvent event) {
-        saveSelections();  // שמירה לפני הפעולה
-        String cinemaName = chooseCinemaBox.getValue();
+        saveSelections();  // ×©×××¨×ª ×××××¨××ª ×× ××××××ª ××¤× × ×××¦××¢ ××¤×¢×××
+        String cinemaName = chooseCinemaBox.getValue();  // ×©× ××§××× ××¢ ×× ×××¨
+
         try {
-            Movie selectedMovie = getSelectedMovie();
+            Movie selectedMovie = getSelectedMovie();  // ×§×××ª ××¡×¨× ×× ×××¨
             if (selectedMovie == null) {
-                showAlert("No movie selected.");
+                showAlert("No movie selected.");  // ××¦××ª ××ª×¨×× ×× ×× × ×××¨ ×¡×¨×
                 return;
             }
-            String selectedTimeStr = removeComboBox.getValue();
-            LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
-            Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
 
-            ScreeningData data = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, selectedTime); // ID אינו בשימוש
-            NewMessage removeMessage = new NewMessage(data, "removeScreening");
-            SimpleClient.getClient().sendToServer(removeMessage);
+            String selectedTimeStr = removeComboBox.getValue();  // ×§×××ª ××× ×××§×¨× × ×××¡×¨×
+            LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);  // × ××ª×× ×××¨×××ª ×××× ×××××××§× LocalDateTime
+            Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;  // ×§×××ª ××¡× ××£ ×× ×××¨
 
-            // לאחר השליחה, רענן את הטבלה מקומית
+            if(!(selectedMovie instanceof HomeMovie) && cinemaName == null){
+                showAlert("Please choose a cinema.");
+                return;
+            }
+
+            // ××¦××¨×ª ××××××§× × ×ª×× ×× ×××¡×¨×ª ×××§×¨× ×
+            if(selectedMovie instanceof HomeMovie){
+                ScreeningData data = new ScreeningData(selectedMovie.getId(), null, selectedTime);
+                NewMessage removeMessage = new NewMessage(data, "removeScreening");
+                SimpleClient.getClient().sendToServer(removeMessage);  // ×©××××ª ××××¢×ª ××¡×¨× ××©×¨×ª
+            } else {
+                ScreeningData data = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, selectedTime);
+                NewMessage removeMessage = new NewMessage(data, "removeScreening");
+                SimpleClient.getClient().sendToServer(removeMessage);  // ×©××××ª ××××¢×ª ××¡×¨× ××©×¨×ª
+            }
+            // ×¨×¢× ×× ××××× ××××¨ ××©××××
             selectedMovie.getScreenings().removeIf(screening ->
                     screening.getScreeningTime().equals(selectedTime) && (screening.getBranch() == selectedBranch));
-            updateTable(selectedMovie, cinemaName);
+            updateTable(selectedMovie, cinemaName);  // ×¢×××× ××××× ×¢× ×× ×ª×× ×× ××××©××
 
-
-            updateRemoveComboBox();
-            removeComboBox.setValue(null); // איפוס  הבחירה לאחר המחיקה
+            updateRemoveComboBox();  // ×¢×××× ×ª×××ª ×××××¨× ×××¡×¨××ª
+            removeComboBox.setValue(null);  // ×××¤××¡ ×ª×××ª ×××××¨× ××××¨ ×××××§×
 
         } catch (Exception e) {
-            showAlert("Invalid time format or selection.");
+            showAlert("Invalid time format or selection.");  // ××¦××ª ×©×××× ×××§×¨× ×©× ×¤××¨×× ××× ×× ×××§× ×× ××××¨× ×× ×ª×§×× ×
         } finally {
-            restoreSelections();  // שחזור
+            restoreSelections();  // ×©××××¨ ×××××¨××ª ××××¨ ××¤×¢×××
         }
     }
+
 
 
     private void updateRemoveComboBox() {
@@ -279,12 +295,99 @@ public class EditScreeningPage {
     }
 
 
-
-
-
+    private void resetEditFields() {
+        editNewDateText.setValue(null);
+        editNewHoursText.clear();
+        editComboBox.getSelectionModel().clearSelection();
+    }
 
     @FXML
-    void editTime(ActionEvent event) {}
+    void editTime(ActionEvent event) {
+        saveSelections();  // ×©×××¨×ª ×××××¨××ª ××¤× × ××¤×¢×××
+
+        String cinemaName = chooseCinemaBox.getValue();  // ×§×××ª ×¢×¨× ×××ª ××§××× ××¢ ××-ComboBox
+
+        try {
+            Movie selectedMovie = getSelectedMovie();
+            if (selectedMovie == null) {
+                showAlert("Please select a movie to edit its screening time.");
+                return;
+            }
+
+            // × ×¡× ×× ×ª× ××ª ××ª××¨×× ×××©×¢× ××××©×× ×××§××××
+            LocalDateTime newDateTime;
+            try {
+                newDateTime = LocalDateTime.of(editNewDateText.getValue(), LocalTime.parse(editNewHoursText.getText()));
+            } catch (DateTimeParseException e) {
+                showAlert("Invalid new date or time format. Please use the correct format.");
+                return;
+            }
+
+            // ×§×××ª ×××× ×× ×××¨ ××¢×¨×××
+            String selectedTimeStr = editComboBox.getValue();
+            LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
+
+            // ××××§× ×× ××§×¨× × ×¢× ×××× ××××© ×××¨ ×§××××ª
+            boolean screeningExists = selectedMovie.getScreenings().stream()
+                    .anyMatch(screening -> screening.getScreeningTime().equals(newDateTime));
+
+            if (screeningExists) {
+                showAlert("This new screening time already exists. Choose a different time.");
+                return;
+            }
+
+            Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
+
+            // ×¢×××× ××§×¨× × ×¢× ×××× ××××©
+            Screening screeningToUpdate = selectedMovie.getScreenings().stream()
+                    .filter(s -> s.getScreeningTime().equals(selectedTime) && s.getBranch().equals(selectedBranch))
+                    .findFirst().orElse(null);
+
+            if (screeningToUpdate == null) {
+                showAlert("Selected screening time does not exist. Please refresh and try again.");
+                return;
+            }
+
+            // ×¢×××× ×××× ×××× ××××©
+            screeningToUpdate.setScreeningTime(newDateTime);
+
+            // ××¦××¨×ª ××××××§× × ×ª×× ×× ××©××××ª ××¢×××× ××©×¨×ª
+            ScreeningData updateData = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, newDateTime);
+            NewMessage updateMessage = new NewMessage(updateData, "editScreening");
+            SimpleClient.getClient().sendToServer(updateMessage);
+
+            // ×¢×××× ××××× ×××××©×§
+            updateTable(selectedMovie, cinemaName);
+            updateRemoveComboBox();
+            resetEditFields();
+
+            showAlert("Screening time updated successfully.");
+
+        } catch (Exception e) {
+            showAlert("An unexpected error occurred while editing the screening time. Please check your inputs and try again.");
+        } finally {
+            restoreSelections();  // ×©××××¨ ×××××¨××ª ××××¨ ××¤×¢×××
+        }
+    }
+
+
+
+    private void updateEditComboBox() {
+        Movie selectedMovie = getSelectedMovie();
+        String cinemaName = chooseCinemaBox.isVisible() ? chooseCinemaBox.getValue() : null;
+        if (selectedMovie != null) {
+            List<Screening> screenings = new ArrayList<>(selectedMovie.getScreenings());
+            if (cinemaName != null) {
+                screenings = screenings.stream()
+                        .filter(s -> s.getBranch() != null && s.getBranch().getName().equals(cinemaName))
+                        .collect(Collectors.toList());
+            }
+            editComboBox.getItems().clear();
+            editComboBox.getItems().addAll(screenings.stream()
+                    .map(screening -> screening.getScreeningTime().toString())
+                    .collect(Collectors.toList()));
+        }
+    }
 
 
 
@@ -333,4 +436,10 @@ public class EditScreeningPage {
             e.printStackTrace();
         }
     }
+
+    @Subscribe
+    public void onUpdateHomeMoviesEvent(UpdateHomeMoviesEvent event) {}
+
+    @Subscribe
+    public void onUpdateScreeningEvent(UpdateScreeningTimesEvent event) {}
 }

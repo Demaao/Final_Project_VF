@@ -174,7 +174,12 @@ public class MoviesPage {
 
     @Subscribe
     public void onUpdateMoviesEvent(UpdateMoviesEvent event) {
-        Platform.runLater(() -> updateMovies(event.getMovies()));
+        Platform.runLater(() -> {
+            this.filteredCinemaMovies = event.getMovies();
+            this.movies = event.getMovies();
+            filterMovies();
+            //updateMovies(event.getMovies());
+        });
     }
 
     @Subscribe
@@ -188,9 +193,10 @@ public class MoviesPage {
     @Subscribe
     public void onUpdateHomeMoviesEvent(UpdateHomeMoviesEvent event) {
         Platform.runLater(() -> {
-            this.homeMovies = event.getHomeMovies();
             this.filteredHomeMovies = event.getHomeMovies();
-            updateHomeMovies();
+            this.homeMovies = event.getHomeMovies();
+            filterMovies();
+          //  updateHomeMovies();
         });
     }
 
@@ -234,6 +240,8 @@ public class MoviesPage {
 
             homeImageView4.setImage(new Image(new ByteArrayInputStream(homeMovies.get(homeCurrentIndex + 3).getImageData())));
             homeLabel4.setText(homeMovies.get(homeCurrentIndex + 3).getHebtitle());
+
+            populateSearchByNameBox();
         }
     }
 
@@ -260,6 +268,7 @@ public class MoviesPage {
 
     public void updateMovies(List<Movie> movies) {
         int flag = 0;
+        this.movies.clear();
         for (Movie movie : movies){
             for(Branch branch : movie.getBranches()){
                 if(branch.getName().equals("Haifa Cinema") || branch.getName().equals("Tel Aviv Cinema") ||
@@ -273,7 +282,23 @@ public class MoviesPage {
                 flag = 0;
             }
         }
-        updateImages();
+        filteredCinemaMovies = this.movies;
+        cinemaCurrentIndex = 0;
+        filteredCinemaCurrentIndex = 0;
+      //  updateImages();
+        if (movies != null && movies.size() >= 10) {
+            cinemaImageView1.setImage(new Image(new ByteArrayInputStream(movies.get(cinemaCurrentIndex).getImageData())));
+            cinemaLabel1.setText(movies.get(cinemaCurrentIndex).getHebtitle());
+
+            cinemaImageView2.setImage(new Image(new ByteArrayInputStream(movies.get(cinemaCurrentIndex + 1).getImageData())));
+            cinemaLabel2.setText(movies.get(cinemaCurrentIndex + 1).getHebtitle());
+
+            cinemaImageView3.setImage(new Image(new ByteArrayInputStream(movies.get(cinemaCurrentIndex + 2).getImageData())));
+            cinemaLabel3.setText(movies.get(cinemaCurrentIndex + 2).getHebtitle());
+
+            cinemaImageView4.setImage(new Image(new ByteArrayInputStream(movies.get(cinemaCurrentIndex + 3).getImageData())));
+            cinemaLabel4.setText(movies.get(cinemaCurrentIndex + 3).getHebtitle());
+        }
         populateSearchByNameBox(); //to add the movies name to the search box
     }
 
@@ -327,6 +352,8 @@ public class MoviesPage {
 
             soonImageView3.setImage(new Image(new ByteArrayInputStream(soonMovies.get(2).getImageData())));
             soonLabel3.setText(soonMovies.get(2).getHebtitle());
+
+            populateSearchByNameBox();
         }
     }
 
@@ -334,8 +361,17 @@ public class MoviesPage {
     private void populateSearchByNameBox() {
         if (movies != null) {
             searchByNameBox.getItems().clear();// Clear existing items
-            searchByNameBox.getItems().add("All");
             for (Movie movie : movies) {
+                searchByNameBox.getItems().add(movie.getEngtitle());
+            }
+        }
+        if (homeMovies != null) {
+            for (HomeMovie movie : homeMovies) {
+                searchByNameBox.getItems().add(movie.getEngtitle());
+            }
+        }
+        if (soonMovies != null) {
+            for (SoonMovie movie : soonMovies) {
                 searchByNameBox.getItems().add(movie.getEngtitle());
             }
         }
@@ -433,12 +469,30 @@ public class MoviesPage {
                 return movie;
             }
         }
+        for(HomeMovie movie : homeMovies) {
+            if (movie.getEngtitle().equalsIgnoreCase(movieName)) {
+                return movie;
+            }
+        }
+        for(SoonMovie movie : soonMovies) {
+            if (movie.getEngtitle().equalsIgnoreCase(movieName)) {
+                return movie;
+            }
+        }
         return null;
     }
 
     private void openMovieDetailsPage(Movie movie) {
         MovieDetailsPage.setSelectedMovie(movie);  // שמור את הסרט שנבחר
-        App.switchScreen("MovieDetailsPage");  // מעבר לדף
+        MovieDetailsPage.movieDetailsPage = 1;
+        if (movie instanceof HomeMovie) {
+            App.switchScreen("MovieLinkDetailsPage");  // Navigate to HomeMovieDetailsPage
+        }
+        else {
+            //MovieDetailsPage.setSelectedMovie(movie);
+            App.switchScreen("MovieDetailsPage");  // Navigate to MovieDetailsPage
+        }
+        //App.switchScreen("MovieDetailsPage");  // מעבר לדף
     }
 
     @FXML
@@ -484,13 +538,15 @@ public class MoviesPage {
         if (movies != null) {
             filteredCinemaMovies = movies.stream()
                     .filter(movie -> !(movie instanceof HomeMovie))
+                    .filter(movie -> !(movie instanceof SoonMovie))
                     .filter(movie -> selectedGenre == null || selectedGenre.equals("All") ||
                             movie.getGenre().equalsIgnoreCase(selectedGenre))
                     .filter(movie -> selectedCinema == null || selectedCinema.equals("All") ||
                             movie.getBranches().stream().anyMatch(branch ->
                                     branch.getName().equalsIgnoreCase(selectedCinema)))
-                    .filter(movie -> selectedDate == null || movie.getScreenings().stream().anyMatch(screening ->
-                            screening.getScreeningTime().toLocalDate().equals(selectedDate)))
+                    .filter(movie -> selectedDate == null || ((selectedCinema == null || selectedCinema.equals("All")) && movie.getScreenings().stream().anyMatch(screening ->
+                                    screening.getScreeningTime().toLocalDate().equals(selectedDate) ) || movie.getScreenings().stream().anyMatch(screening ->
+                            screening.getScreeningTime().toLocalDate().equals(selectedDate) && screening.getBranch().getName().equalsIgnoreCase(selectedCinema))))
                     .collect(Collectors.toList());
 
             NowInCinema.setText(buildCinemaLabel(selectedDate, selectedCinema, selectedGenre));
@@ -512,6 +568,7 @@ public class MoviesPage {
 
         updateFilteredCinemaMovies();
         updateFilteredHomeMovies();
+        populateSearchByNameBox();
     }
 
     private String buildCinemaLabel(LocalDate date, String cinema, String genre) {
@@ -547,4 +604,7 @@ public class MoviesPage {
         }
         return label.toString();
     }
+
+    @Subscribe
+    public void onUpdateScreeningEvent(UpdateScreeningTimesEvent event) {}
 }
