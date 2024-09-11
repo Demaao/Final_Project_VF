@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class MovieLinkDetailsPage {
 
-    public static Movie selectedMovie;
+ //   public static Movie selectedMovie;
     @FXML
     private Button cancelBtn;
     @FXML
@@ -69,25 +69,25 @@ public class MovieLinkDetailsPage {
     private Button purchaseCardBtn;
 
 
-    public static void setSelectedMovie(Movie movie) {
+    /*public static void setSelectedMovie(Movie movie) {
         selectedMovie = movie;
-    }
+    }*/
 
     @FXML
     public void initialize() {
-        if (selectedMovie != null) {
+        if (MovieDetailsPage.selectedMovie != null) {
             EventBus.getDefault().register(this);
 
-            movieTitleLabel.setText(selectedMovie.getHebtitle());
-            moviePosterImageView.setImage(new Image(new ByteArrayInputStream(selectedMovie.getImageData())));
-            movieDescriptionTextArea.setText(selectedMovie.getDescription());
-            directorLabel.setText("Director : " + selectedMovie.getDirector());
-            actorsLabel.setText("Actors : " + selectedMovie.getMainActors());
-            yearLabel.setText("Year : " + selectedMovie.getYear());
-            genreLabel.setText("Genre : " + selectedMovie.getGenre());
-            lengthLabel.setText("Length : " + selectedMovie.getLength());
-            hebtitle.setText(selectedMovie.getHebtitle());
-            engtitle.setText(selectedMovie.getEngtitle());
+            movieTitleLabel.setText(MovieDetailsPage.selectedMovie.getHebtitle());
+            moviePosterImageView.setImage(new Image(new ByteArrayInputStream(MovieDetailsPage.selectedMovie.getImageData())));
+            movieDescriptionTextArea.setText(MovieDetailsPage.selectedMovie.getDescription());
+            directorLabel.setText("Director : " + MovieDetailsPage.selectedMovie.getDirector());
+            actorsLabel.setText("Actors : " + MovieDetailsPage.selectedMovie.getMainActors());
+            yearLabel.setText("Year : " + MovieDetailsPage.selectedMovie.getYear());
+            genreLabel.setText("Genre : " + MovieDetailsPage.selectedMovie.getGenre());
+            lengthLabel.setText("Length : " + MovieDetailsPage.selectedMovie.getLength());
+            hebtitle.setText(MovieDetailsPage.selectedMovie.getHebtitle());
+            engtitle.setText(MovieDetailsPage.selectedMovie.getEngtitle());
 
             requestScreeningTimesFromServer(); // ××§×©× ××©×¨×ª ××§×× ××ª ××× × ×××§×¨× ×
 
@@ -101,7 +101,7 @@ public class MovieLinkDetailsPage {
                 }
             });
 
-            if (selectedMovie instanceof HomeMovie) {
+            if (MovieDetailsPage.selectedMovie instanceof HomeMovie) {
                 cinemaComboBox.setVisible(false);
                 chooseDatePicker.setVisible(true);
                 timeComboBox.setVisible(true);
@@ -110,10 +110,10 @@ public class MovieLinkDetailsPage {
                 timeComboBox.setLayoutX(430.0);
 
                 //×× ×××¨× × ×¡×¨× ×××ª ×× ×× ×× × ×¢×××¨×× ××¢××× ××ª ××ª××¨×××× ×××©×¢××ª ×× ××¡×¨×× ××××ª ××× ××ª× ×§×× ××¢
-                chooseDatePicker.setOnAction(event -> updateAvailableTimes(selectedMovie.getScreenings()));
+                chooseDatePicker.setOnAction(event -> updateAvailableTimes(MovieDetailsPage.selectedMovie.getScreenings()));
 
             }
-            else if(selectedMovie instanceof SoonMovie) {
+            else if(MovieDetailsPage.selectedMovie instanceof SoonMovie) {
                 cinemaComboBox.setVisible(false);
                 chooseDatePicker.setVisible(false);
                 timeComboBox.setVisible(false);
@@ -139,7 +139,7 @@ public class MovieLinkDetailsPage {
     private void requestScreeningTimesFromServer() {
         try {
             NewMessage message = new NewMessage("screeningTimesRequest");
-            message.setMovie(selectedMovie);
+            message.setMovie(MovieDetailsPage.selectedMovie);
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
             e.printStackTrace();
@@ -159,7 +159,7 @@ public class MovieLinkDetailsPage {
         timeComboBox.getItems().clear();
         chooseDatePicker.setValue(null);
 
-        if (selectedMovie instanceof HomeMovie) {
+        if (MovieDetailsPage.selectedMovie instanceof HomeMovie) {
             updateAvailableDays(screenings);  //  ×× ×××××¨ ××¡×¨× ×××ª×, ××× ×¦××¨× ××¢××× ××ª  ××ª× ××§××× ××¢ × ×¢×××¨ ××¢××× ××ª  ××¢×××× ×××××
         } else {
             // ×§×××ª ×¨×©××× ×©× ××ª× ×§××× ××¢ ××ª×× ×¨×©×××ª ×××§×¨× ××ª
@@ -181,10 +181,10 @@ public class MovieLinkDetailsPage {
         chooseDatePicker.setValue(null); ///////////////////////////////////////////////
 
         if (screenings == null || screenings.isEmpty()) {
-            screenings = selectedMovie.getScreenings();
+            screenings = MovieDetailsPage.selectedMovie.getScreenings();
         }
 
-        if (selectedMovie instanceof HomeMovie) {
+        if (MovieDetailsPage.selectedMovie instanceof HomeMovie) {
             // ×¢×××× ××××× ××× ××© ××§×¨× ××ª ××¡×¨×× ××××ª
             Set<LocalDate> availableDays = screenings.stream()
                     .filter(screening -> screening.getBranch() == null)
@@ -234,10 +234,10 @@ public class MovieLinkDetailsPage {
         LocalDate selectedDay = chooseDatePicker.getValue();
 
         if (screenings == null || screenings.isEmpty()) {
-            screenings = selectedMovie.getScreenings();
+            screenings = MovieDetailsPage.selectedMovie.getScreenings();
         }
 
-        if (selectedMovie instanceof HomeMovie) {
+        if (MovieDetailsPage.selectedMovie instanceof HomeMovie) {
             // Handle HomeMovie screenings
             if (selectedDay != null) {
                 List<LocalTime> availableTimes = screenings.stream()

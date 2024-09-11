@@ -456,8 +456,7 @@ public class App extends Application {
     public void onMovieUpdateEvent(NewMessage event){
         event.getMessage();
         if(Objects.equals(event.getMessage(), "movieNotAvailable") && (MovieDetailsPage.movieDetailsPage == 1)
-        && ((int)event.getObject() == MovieDetailsPage.selectedMovie.getId()
-             || (int)event.getObject() == MovieLinkDetailsPage.selectedMovie.getId())){  ////////////////////////
+        && ((int)event.getObject() == MovieDetailsPage.selectedMovie.getId())){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Sorry, the movie is no longer available.");
             alert.show();
