@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -64,11 +65,36 @@
       </Label>
       <TableView fx:id="complaintTable" layoutX="229.0" layoutY="215.0" prefHeight="344.0" prefWidth="630.0">
          <columns>
-            <TableColumn prefWidth="114.39990234375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint NO." />
-            <TableColumn prefWidth="155.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Complaint Subject" />
-            <TableColumn prefWidth="115.20004272460938" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Customer ID" />
-            <TableColumn prefWidth="134.4000244140625" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Submission Time" />
-            <TableColumn prefWidth="116.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Status" />
+            <TableColumn fx:id="complaintNOColumn" prefWidth="34.0" style="-fx-font-size: 15;" text="NO.">
+               <cellValueFactory>
+                  <PropertyValueFactory property="id" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="subjectColumn" prefWidth="135.0" style="-fx-font-size: 15;" text="Subject">
+               <cellValueFactory>
+                  <PropertyValueFactory property="subject" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="idColumn" prefWidth="96.79998779296875" style="-fx-font-size: 15;" text="Customer ID">
+               <cellValueFactory>
+                  <PropertyValueFactory property="customerID" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="dateColumn" prefWidth="126.5" style="-fx-font-size: 15;" text="Submission Time">
+               <cellValueFactory>
+                  <PropertyValueFactory property="submissionDate" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="statusColumn" prefWidth="65.0" style="-fx-font-size: 15;" text="Status">
+               <cellValueFactory>
+                  <PropertyValueFactory property="status" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="complaintColumn" prefWidth="172.0" style="-fx-font-size: 15;" text="Complaint">
+               <cellValueFactory>
+                  <PropertyValueFactory property="complaintDescription" />
+               </cellValueFactory>
+            </TableColumn>
          </columns>
       </TableView>
       <Label layoutX="229.0" layoutY="172.0" text="Select the complaint that you want to handle" textFill="#f6d9d9">

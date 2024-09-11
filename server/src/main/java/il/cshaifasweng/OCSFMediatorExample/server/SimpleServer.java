@@ -1048,6 +1048,25 @@ public class SimpleServer extends AbstractServer {
 					exception.printStackTrace();
 				}
 			}
+			else if (msgString.equals("answerComplaint")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Complaint complaint = (Complaint) message.getObject();
+					Complaint complaintToAnswer = session.get(Complaint.class, complaint.getId());
+					complaintToAnswer.setResponse(complaint.getResponse());
+					complaintToAnswer.setStatus(true);
+					session.save(complaintToAnswer);
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage = new NewMessage(complaints, "complaints");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage("complaintAnswered");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}
 		}
 		 catch (IOException e) {
 			e.printStackTrace();
