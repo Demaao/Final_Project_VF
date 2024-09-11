@@ -11,6 +11,7 @@ import javafx.scene.control.Alert.AlertType;
 import java.io.IOException;
 import il.cshaifasweng.OCSFMediatorExample.entities.Complaint;  // Import the Complaint class
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class ComplaintPage {
@@ -61,6 +62,7 @@ public class ComplaintPage {
 
     @FXML
     public void initialize() {
+        EventBus.getDefault().register(this);
         subjectComboBox.getItems().addAll("Website",
                 "Movie link", "Screening", "Purchases", "Haifa Branch", "Tel Aviv Branch",
                 "Eilat Branch", "Karmiel Branch", "Jerusalem Branch", "Other");

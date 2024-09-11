@@ -46,27 +46,27 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("screeningTimes")) {
 					List<Screening> screenings = (List<Screening>) message.getObject();
 					EventBus.getDefault().post(new UpdateScreeningTimesEvent(screenings));
-				}
-				else if (message.getMessage().equals("movieRemoved")) {
+				} else if (message.getMessage().equals("movieRemoved")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Movie removed successfully!")));
-				}
-				else if(message.getMessage().equals("movieAdded")) {
+				} else if (message.getMessage().equals("movieAdded")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Movie added successfully!")));
-				}  else if (message.getMessage().equals("screeningAdded")) {
+				} else if (message.getMessage().equals("screeningAdded")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Screening added successfully!")));
-			} else if (message.getMessage().equals("screeningRemoved")) {
+				} else if (message.getMessage().equals("screeningRemoved")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Screening removed successfully!")));
-			} else if (message.getMessage().equals("movieNotAvailable")) {
-					EventBus.getDefault().post(new NewMessage(message.getObject() ,"movieNotAvailable"));
-			} else if (message.getMessage().equals("screeningUpdated")) {
+				} else if (message.getMessage().equals("movieNotAvailable")) {
+					EventBus.getDefault().post(new NewMessage(message.getObject(), "movieNotAvailable"));
+				} else if (message.getMessage().equals("screeningUpdated")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Screening time updated successfully!")));
-			} else if (message.getMessage().equals("screeningUpdateFailed")) {
+				} else if (message.getMessage().equals("screeningUpdateFailed")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Failed to update screening time.")));
-			} else if(message.getMessage().equals("complaintSubmitted")) {
+				} else if (message.getMessage().equals("complaintSubmitted")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Complaint submitted successfully!")));
-			} else 	if (message.getMessage().equals("complaints")) {
+				} else if (message.getMessage().equals("complaints")) {
 					List<Complaint> complaints = (List<Complaint>) message.getObject();
 					EventBus.getDefault().post(new UpdateComplaintsEvent(complaints));
+				} else if (message.getMessage().equals("complaintAnswered")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Complaint answered successfully!")));
 				}
 			});
 		}
