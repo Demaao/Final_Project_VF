@@ -374,6 +374,16 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "PersonalDetailsPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PersonalDetailsPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+
         }
     }
 

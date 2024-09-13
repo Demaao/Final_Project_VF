@@ -168,6 +168,13 @@ public class PersonalAreaPage {
         App.switchScreen("ComplaintsStatusPage");
     }*/
 
+
+    @FXML
+    public void switchToPersonalDetailsPage() throws IOException {
+        App.switchScreen("PersonalDetailsPage");
+    }
+
+
     @FXML
     private void switchToMoviesLinks() throws IOException {
         logOutCustomer();
