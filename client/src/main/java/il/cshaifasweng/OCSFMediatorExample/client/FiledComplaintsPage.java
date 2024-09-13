@@ -31,11 +31,9 @@ public class FiledComplaintsPage {
     public TableColumn complaintColumn;
     private ObservableList<Complaint> complaintObservableList = FXCollections. observableArrayList();
     private List<Complaint> complaints = new ArrayList<>();
-    @FXML
-    private Button ChargebackBtn;
 
     @FXML
-    private TextField IDNumText;
+    private Button ChargebackBtn;
 
     @FXML
     private Button OKBtn;

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="BackBtn" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PersonalDetailsPage">
+<AnchorPane prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PersonalDetailsPage">
     <children>
         <!-- Left-side panel taken from HomePage -->
             <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
@@ -109,7 +109,7 @@
                     </Button>
                 </children>
         </AnchorPane>
-        <Label fx:id="titleLabel" layoutX="278.0" layoutY="38.0" prefHeight="65.0" prefWidth="180.0" style="-fx-text-fill: white; -fx-font-size: 20;" text="Orders history" textFill="#f6d9d9">
+        <Label fx:id="titleLabel" layoutX="245.0" layoutY="44.0" prefHeight="88.0" prefWidth="239.0" style="-fx-text-fill: white; -fx-font-size: 20;" text="Your orders history :" textAlignment="CENTER" textFill="#f6d9d9">
             <font>
                 <Font size="22.0" />
             </font>
@@ -122,6 +122,10 @@
                 <TableColumn fx:id="orderDetailsColumn" prefWidth="236.66668701171875" style="-fx-background-color: #f6d9d9;" text="Order Details" />
             </columns>
         </TableView>
-      <Button fx:id="backBtn" layoutX="210.0" layoutY="26.0" mnemonicParsing="false" onAction="#BackToPersonalArea" style="-fx-background-color: #f6d9d9;" text="&lt;-" />
+        <Button fx:id="OKBtn" layoutX="795.0" layoutY="490.0" mnemonicParsing="false" onAction="#switchToPersonalAreaPage" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="OK">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>
