@@ -4,17 +4,22 @@ import il.cshaifasweng.OCSFMediatorExample.entities.ChangePriceRequest;
 import il.cshaifasweng.OCSFMediatorExample.entities.Cinema;
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditPricesPage {
     @FXML
@@ -82,6 +87,71 @@ public class EditPricesPage {
 
     @FXML
     private Label ticketPriceLabel;
+
+    @FXML
+    private AnchorPane requestAnchor;
+
+    public TableColumn requestNOColumn;
+    public TableColumn productColumn;
+    public TableColumn dateColumn;
+    public TableColumn newPriceColumn;
+    public TableColumn statusColumn;
+    public TableColumn currentPriceColumn;
+
+    @FXML
+    private TableView<ChangePriceRequest> priceUpdateRequestTable;
+
+    public void showRequestAnchor(ActionEvent actionEvent) {
+        requestAnchor.setVisible(true);
+    }
+
+    public void hideRequestAnchor(ActionEvent actionEvent) {
+        requestAnchor.setVisible(false);
+    }
+
+    private void requestRequestsFromServer() {
+        try {
+            NewMessage message = new NewMessage("requestsList");
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private List<ChangePriceRequest> requests = new ArrayList<>();
+    private ObservableList<ChangePriceRequest> requestObservableList = FXCollections.observableArrayList();
+
+    @Subscribe
+    public void onRequestEvent(UpdateRequestEvent event) {
+        Platform.runLater(() -> {
+            requests.clear();
+            ObservableList<ChangePriceRequest> items = priceUpdateRequestTable.getItems();
+            items.clear();
+            requests = event.getRequests();
+            requestObservableList.addAll(requests);
+            dateColumn.setCellFactory(new Callback<TableColumn<ChangePriceRequest, LocalDateTime>, TableCell<ChangePriceRequest, LocalDateTime>>() {
+                @Override
+                public TableCell<ChangePriceRequest, LocalDateTime> call(TableColumn<ChangePriceRequest, LocalDateTime> col) {
+                    return new TableCell<ChangePriceRequest, LocalDateTime>() {
+                        private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+                        @Override
+                        protected void updateItem(LocalDateTime item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty || item == null) {
+                                setText(null);
+                            } else {
+                                setText(item.format(formatter));
+                            }
+                        }
+                    };
+                }
+            });
+            priceUpdateRequestTable.setItems(requestObservableList);
+        });
+    }
+
     @FXML
     private void switchToAddMoviePage() throws IOException {
         App.switchScreen("AddMoviePage");
@@ -274,6 +344,7 @@ public class EditPricesPage {
   public void initialize() {
       EventBus.getDefault().register(this);
       requestCinemaFromServer();
+      requestRequestsFromServer();
       DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
       double ticketValue = cinema.getTicketPrice();
@@ -323,6 +394,5 @@ public class EditPricesPage {
 
         }
     }
-    @Subscribe
-    public void onRequestEvent(UpdateRequestEvent event) {}
+
 }
