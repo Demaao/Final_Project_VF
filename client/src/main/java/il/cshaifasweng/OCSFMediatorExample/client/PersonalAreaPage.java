@@ -28,10 +28,25 @@ public class PersonalAreaPage {
     @FXML
     private Button orderBtn, messagesBtn, MycomplaintBtn, moviesLinksBtn;
 
-    private Customer loggedInCustomer;
+   // private Customer loggedInCustomer; ////////////////////////////////////////////////////////
+
+    public static Customer loggedInCustomer;
 
     public void initialize() {
         EventBus.getDefault().register(this);
+      if(loggedInCustomer != null) {
+        welcomeLabel.setText("Welcome " + loggedInCustomer.getName());
+
+        IDNumText.setVisible(false);
+        enterBtn.setVisible(false);
+
+        // Set the buttons to be visible now that the ID has been validated and customer is logged in
+        orderBtn.setVisible(true);
+        messagesBtn.setVisible(true);
+        MycomplaintBtn.setVisible(true);
+        moviesLinksBtn.setVisible(true);
+        menuMsg.setVisible(true);
+        }
     }
 
     // Send a request to the server to fetch customer information
@@ -46,7 +61,7 @@ public class PersonalAreaPage {
         } else {
             try {
                 int id = Integer.parseInt(idNum);  // Convert ID number to int
-                NewMessage message = new NewMessage("loginCustomer", String.valueOf(id));  // Send the ID to the server
+                NewMessage message = new NewMessage("loginCustomer", id);  // Send the ID to the server
                 SimpleClient.getClient().sendToServer(message);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -71,34 +86,22 @@ public class PersonalAreaPage {
             MycomplaintBtn.setVisible(true);
             moviesLinksBtn.setVisible(true);
             menuMsg.setVisible(true);
-
         });
     }
 
 
-
     // Function to log out the customer
-    private void logOutCustomer() {
+    public static void logOutCustomer() {  ///////////////////////
         if (loggedInCustomer != null) {
             try {
                 NewMessage message = new NewMessage(loggedInCustomer, "logOutCustomer");
                 SimpleClient.getClient().sendToServer(message);
+                loggedInCustomer = null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
-
-    @FXML
-    private void switchToPersonalDetailsPage() throws IOException {
-        App.switchScreen("PersonalDetailsPage");
-
-    }
-
-
-
-
 
     @FXML
     private void switchToHostPage() throws IOException {
@@ -155,10 +158,15 @@ public class PersonalAreaPage {
     }
 
     @FXML
+    public void switchToFiledComplaintsPage() throws IOException {
+        App.switchScreen("FiledComplaintsPage");
+    }
+    /*
+    @FXML
     private void switchToComplaintsStatus() throws IOException {
         logOutCustomer();
         App.switchScreen("ComplaintsStatusPage");
-    }
+    }*/
 
     @FXML
     private void switchToMoviesLinks() throws IOException {

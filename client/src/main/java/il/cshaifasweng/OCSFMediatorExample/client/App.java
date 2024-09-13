@@ -374,15 +374,6 @@ public class App extends Application {
                     }
                 });
                 break;
-            case "PersonalDetailsPage":
-                Platform.runLater(() -> {
-                    try {
-                        setContent("PersonalDetailsPage");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-                break;
         }
     }
 
@@ -410,6 +401,27 @@ public class App extends Application {
                     alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
                     alert.show();
                 } else   if (event.getWarning().getMessage().equals("Screening time updated successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else   if (event.getWarning().getMessage().equals("Complaint submitted successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                }  else   if (event.getWarning().getMessage().equals("Complaint answered successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                }   else   if (event.getWarning().getMessage().equals("Request sent successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if (event.getWarning().getMessage().startsWith("You have")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().startsWith("Time remaining for Complaint NO.")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().equals("Request denied successfully!")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().equals("Request confirmed successfully!")){
                     alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
                     alert.show();
                 }

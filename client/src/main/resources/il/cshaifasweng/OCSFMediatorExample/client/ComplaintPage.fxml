@@ -156,21 +156,11 @@
          <font>
             <Font size="15.0" />
          </font></TextArea>
-      <Button layoutX="640.0" layoutY="574.0" mnemonicParsing="false" onAction="#switchToFiledComplaintsPage" prefHeight="43.0" prefWidth="83.0" style="-fx-text-fill: #f6d9d9; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" text="here" textFill="#f6d9d9" underline="true">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Button>
-      <Label fx:id="selectProductText" layoutX="224.0" layoutY="581.0" text="Filed a complaint? check your complaint's status" textFill="#f6d9d9">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
       <Label layoutX="224.0" layoutY="418.0" prefHeight="30.0" prefWidth="130.0" text="Complaint" textFill="#f6d9d9">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <ComboBox layoutX="393.0" layoutY="363.0" prefHeight="34.0" prefWidth="370.0" promptText="Select Subject" style="-fx-font-size: 15;" />
+      <ComboBox fx:id="subjectComboBox" layoutX="393.0" layoutY="363.0" prefHeight="34.0" prefWidth="370.0" promptText="Select Subject" style="-fx-font-size: 15;" />
     </children>
 </AnchorPane>

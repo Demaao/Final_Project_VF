@@ -54,10 +54,11 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(BranchManager.class); /////////////
 		configuration.addAnnotatedClass(ContentManager.class); /////////////////
 		configuration.addAnnotatedClass(CustomerServiceWorker.class); /////////////
-
+		configuration.addAnnotatedClass(Complaint.class); ///////////////////////////////////
+		configuration.addAnnotatedClass(ChangePriceRequest.class);  //////////////////////
+		configuration.addAnnotatedClass(Cinema.class); ///////////////////////////////////////
 		configuration.addAnnotatedClass(Customer.class); //for testing only
 		configuration.addAnnotatedClass(Purchase.class);  //for testing only
-
 
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
@@ -73,11 +74,13 @@ public class SimpleServer extends AbstractServer {
 			generateHomeMovies(session);
 			generateBranches(session);
 			generateScreenings(session);
-			generateHeadManager(session); /////////////////////
-			generateBranchManager(session); /////////////////////
-			generateContentManager(session); /////////////////////
+			generateHeadManager(session);
+			generateBranchManager(session);
+			generateContentManager(session);
 			generateCustomerServiceWorker(session);
-
+			generateCinema(session);  ///////////////////////////////////
+			generateComplaints(session);
+			generateChangePriceRequest(session); //////////////////////////////////////////////
 			generateCustomers(session);//for testing only
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -85,7 +88,64 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-	private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+	private static void generateCinema(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+		Cinema cinema = new Cinema(100, 90, 1000);
+		Cinema.cinema = cinema;
+		session.save(cinema);
+		session.flush();
+	}
+
+	private static void generateComplaints(Session session) throws Exception {
+		Complaint complaint1 = new Complaint("Dema Omar", 123123123L, "1234567890",
+				"Purchases", "john@example.com", "Overcharged for my last order.", LocalDateTime.of(2024, 9, 11, 20, 30),
+				"Thank you for reaching out,\nyou will be refunded accordingly.", false);
+		Complaint complaint2 = new Complaint("Jane Smith", 987654321L, "0987654321",
+				"Movie link", "jane@example.com", "Unable to access the link.", LocalDateTime.of(2024, 9, 11, 19, 56),
+				"Thank you for reaching out,\nthe link will be activated at the screening's scheduled time.", false);
+		Complaint complaint3 = new Complaint("Alice Johnson", 555666777L, "1122334455",
+				"Other", "alice@example.com", "Loved the new movie selection!", LocalDateTime.of(2024, 9, 9, 11, 32),
+				"Thank you for reaching out,\nnew movies are coming out soon!", true);
+		Complaint complaint4 = new Complaint("Shada Ghanem", 123456789L, "9988776655",
+				"Screening", "bob@example.com", "When will the new movie be released?", LocalDateTime.of(2024, 9, 5, 22, 4),
+                "Thank you for reaching out,\nthe release date for the new movie has not yet been announced.\nPlease stay tuned for future updates.", true);
+
+		session.save(complaint1);
+		session.save(complaint2);
+		session.save(complaint3);
+		session.save(complaint4);
+		session.flush();
+	}
+
+	//This code is for testing only
+	private static void generateCustomers(Session session) {
+		List<Purchase> purchases1 = new ArrayList<>();
+		List<Purchase> purchases2 = new ArrayList<>();
+
+		Customer customer1 = new Customer(123123123,"dema omar", "john.doe@example.com", "0501234567", purchases1,false);
+		Customer customer2 = new Customer(123456789,"shada ghanem", "jane.smith@example.com", "0527654321", purchases2,false);
+
+		session.save(customer1);
+		session.save(customer2);
+		session.flush();
+	}
+
+	private static void generateChangePriceRequest(Session session) throws Exception {
+		Cinema cinema = session.get(Cinema.class, 1);
+		ChangePriceRequest changePriceRequest1 = new ChangePriceRequest(cinema.getCardPrice(), 110, "Card", "Denied", LocalDateTime.of(2024, 9, 5, 22, 4));
+		session.save(changePriceRequest1);
+		session.flush();
+
+		ChangePriceRequest changePriceRequest2 = new ChangePriceRequest(80, 100, "Ticket", "Confirmed", LocalDateTime.of(2024, 9, 1, 22, 30));
+		session.save(changePriceRequest2);
+		session.flush();
+
+		ChangePriceRequest changePriceRequest3 = new ChangePriceRequest(cinema.getLinkTicketPrice(), 80, "Link Ticket", "Received", LocalDateTime.of(2024, 8, 8, 9, 55));
+		session.save(changePriceRequest3);
+		session.flush();
+	}
+
+
+		private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
 		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
@@ -405,7 +465,6 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 22, 30)
 		);
 
-
 		for (LocalDateTime time : screeningTimes) {
 			movie1.addScreening(time, jerusalemCinema);
 			movie1.addScreening(time, telAvivCinema);
@@ -505,22 +564,27 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
-    //This code is for testing only
-	private static void generateCustomers(Session session) {
-		List<Purchase> purchases1 = new ArrayList<>();
-		List<Purchase> purchases2 = new ArrayList<>();
-
-		Customer customer1 = new Customer(123123123,"dema omar", "john.doe@example.com", "0501234567", purchases1,false);
-		Customer customer2 = new Customer(123456789,"shada ghanem", "jane.smith@example.com", "0527654321", purchases2,false);
-
-		session.save(customer1);
-		session.save(customer2);
-		session.flush();
+	// for testing
+	private static List<Customer> getAllCustomers(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
+		query.from(Customer.class);
+		return session.createQuery(query).getResultList();
 	}
 
+	private static List<Movie> getAllMovies(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Movie> query = builder.createQuery(Movie.class);
+		query.from(Movie.class);
+		return session.createQuery(query).getResultList();
+	}
 
-
-
+	private static List<ChangePriceRequest> getAllRequests(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ChangePriceRequest> query = builder.createQuery(ChangePriceRequest.class);
+		query.from(ChangePriceRequest.class);
+		return session.createQuery(query).getResultList();
+	}
 
 	private static byte[] loadImageFromFile(String relativePath) throws IOException {
 		InputStream inputStream = SimpleServer.class.getClassLoader().getResourceAsStream(relativePath);
@@ -530,12 +594,6 @@ public class SimpleServer extends AbstractServer {
 		return inputStream.readAllBytes();
 	}
 
-	private static List<Movie> getAllMovies(Session session) throws Exception {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Movie> query = builder.createQuery(Movie.class);
-		query.from(Movie.class);
-		return session.createQuery(query).getResultList();
-	}
 
 	private static List<SoonMovie> getAllSoonMovies(Session session) throws Exception {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -562,6 +620,13 @@ public class SimpleServer extends AbstractServer {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<HeadManager> query = builder.createQuery(HeadManager.class);
 		query.from(HeadManager.class);
+		return session.createQuery(query).getSingleResult();
+	}
+
+	private static Cinema cinema(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Cinema> query = builder.createQuery(Cinema.class);
+		query.from(Cinema.class);
 		return session.createQuery(query).getSingleResult();
 	}
 
@@ -598,16 +663,12 @@ public class SimpleServer extends AbstractServer {
 		return new ArrayList<>(movie.getScreenings());
 	}
 
-	private static List<Customer> getAllCustomers(Session session) throws Exception {
+	private static List<Complaint> getAllComplaints(Session session) throws Exception { //////////////////////
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
-		query.from(Customer.class);
+		CriteriaQuery<Complaint> query = builder.createQuery(Complaint.class);
+		query.from(Complaint.class);
 		return session.createQuery(query).getResultList();
 	}
-
-
-
-
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -924,8 +985,7 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if (msgString.equals("addScreening")) {
+			} else if (msgString.equals("addScreening")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 
@@ -1024,8 +1084,135 @@ public class SimpleServer extends AbstractServer {
 				} catch (Exception exception) {
 					System.err.println("An error occurred while editing a screening: " + exception.getMessage());
 				}
-			}
-			else if (msgString.equals("loginCustomer")) {
+			} else if (msgString.equals("submitComplaint")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Complaint complaint = (Complaint) message.getObject();
+					session.save(complaint);
+					NewMessage newMessage = new NewMessage("complaintSubmitted");
+					client.sendToClient(newMessage);
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage2 = new NewMessage(complaints, "complaints");
+					sendToAllClients(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("complaintsList")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage = new NewMessage(complaints, "complaints");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("answerComplaint")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Complaint complaint = (Complaint) message.getObject();
+					Complaint complaintToAnswer = session.get(Complaint.class, complaint.getId());
+					complaintToAnswer.setResponse(complaint.getResponse());
+					complaintToAnswer.setStatus(true);
+					session.save(complaintToAnswer);
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage = new NewMessage(complaints, "complaints");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage("complaintAnswered");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("changePriceRequest")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					ChangePriceRequest changePriceRequest = (ChangePriceRequest) message.getObject();
+					session.save(changePriceRequest);
+					List<ChangePriceRequest> requests = getAllRequests(session);
+					NewMessage newMessage = new NewMessage(requests, "requests");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage("requestReceived");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("requestsList")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<ChangePriceRequest> requests = getAllRequests(session);
+					NewMessage newMessage = new NewMessage(requests, "requests");
+					sendToAllClients(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("confirmPriceUpdate")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Cinema cinema = session.get(Cinema.class, 1);
+					ChangePriceRequest changePriceRequest = (ChangePriceRequest) message.getObject();
+					List<ChangePriceRequest> requests = getAllRequests(session);
+					ChangePriceRequest request = session.get(ChangePriceRequest.class, changePriceRequest.getId());
+					request.setStatus("Confirmed");
+					switch (changePriceRequest.getProduct()){
+						case "Ticket":
+							cinema.setTicketPrice(changePriceRequest.getNewPrice());
+							break;
+						case "Link Ticket":
+							cinema.setLinkTicketPrice(changePriceRequest.getNewPrice());
+							break;
+						case "Card":
+							cinema.setCardPrice(changePriceRequest.getNewPrice());
+					}
+					session.save(cinema);
+					session.save(request);
+					NewMessage newMessage = new NewMessage(requests, "requests");
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage(cinema, "cinema");
+					sendToAllClients(newMessage2);
+					NewMessage newMessage3 = new NewMessage("requestConfirmed");
+					client.sendToClient(newMessage3);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+                }
+            } else if (msgString.equals("denyPriceUpdate")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					ChangePriceRequest changePriceRequest = (ChangePriceRequest) message.getObject();
+					List<ChangePriceRequest> requests = getAllRequests(session);
+					ChangePriceRequest request = session.get(ChangePriceRequest.class, changePriceRequest.getId());
+					request.setStatus("Denied");
+					session.save(request);
+					NewMessage newMessage = new NewMessage(requests, "requests");
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage("requestDenied");
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("cinema")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Cinema cinema = session.get(Cinema.class, 1);
+					NewMessage newMessage = new NewMessage(cinema, "cinema");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+				}
+			} 	else if (msgString.equals("loginCustomer")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					int idNumber = message.getId();
@@ -1058,8 +1245,7 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if (msgString.equals("logOutCustomer")) {
+			} else if (msgString.equals("logOutCustomer")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Customer customer = (Customer) message.getObject();
@@ -1071,10 +1257,6 @@ public class SimpleServer extends AbstractServer {
 					exception.printStackTrace();
 				}
 			}
-
-
-
-
 		}
 		 catch (IOException e) {
 			e.printStackTrace();
