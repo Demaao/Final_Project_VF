@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "DTYPE")
 @Table(name = "movies")
 public class Movie implements Serializable {
     @Id
@@ -165,4 +167,6 @@ public class Movie implements Serializable {
     public void removeScreening(Screening screening) {
         screenings.remove(screening);
     }
+
+
 }

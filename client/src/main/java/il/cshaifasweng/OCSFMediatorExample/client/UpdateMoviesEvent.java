@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class UpdateMoviesEvent implements Serializable {
-    private final List<Movie> movies;
+    private  List<Movie> movies;
 
     public UpdateMoviesEvent(List<Movie> movies) {
         this.movies = movies;

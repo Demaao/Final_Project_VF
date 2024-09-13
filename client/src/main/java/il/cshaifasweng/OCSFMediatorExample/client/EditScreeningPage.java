@@ -47,25 +47,25 @@ public class EditScreeningPage {
     }
 
     private void setupComboBoxes() {
-        // EventHandler ×××××¨×ª ×¡×¨×, ××¢××× ×× ××ª ×¨×©×××ª ××ª× ××§××× ××¢ ×××ª ×-ComboBox ×××¡×¨×ª ××× ××
+
         chooseMovieBox.setOnAction(event -> {
             updateCinemaOptions();
             updateTableBasedOnSelection();
-            updateRemoveComboBox();  // ×¢×××× ×-ComboBox ×××¡×¨×ª ××× ×× ××× ××××¨×ª ×¡×¨×
-            resetDateTimeInputs();  // ×××¤××¡ ××ª××¨×× ×××©×¢×
-            resetDateTimeInputs();   // ×××¤××¡ ××ª××¨×× ×××©×¢×
+            updateRemoveComboBox();
+            resetDateTimeInputs();
+            resetDateTimeInputs();
         });
 
-        // EventHandler ×××××¨×ª ×××ª ×§××× ××¢, ××¢××× ××ª ××××× ×¢× ×¤× ××××¨×ª ×××ª ××§××× ××¢
+
         chooseCinemaBox.setOnAction(event -> {
             updateTableBasedOnCinemaSelection();
-            updateEditComboBox();    // ×¢×××× ComboBox ××¢×¨×××ª ××× ××
+            updateEditComboBox();
         });
     }
 
     private void resetDateTimeInputs() {
-        addDateText.setValue(null);  // ×××¤××¡ ×©×× ××ª××¨××
-        addHoursText.clear();  // × ××§×× ×©×× ××©×¢×
+        addDateText.setValue(null);
+        addHoursText.clear();
     }
 
     @Subscribe
@@ -92,7 +92,7 @@ public class EditScreeningPage {
 
     private void updateTableBasedOnCinemaSelection() {
         updateTable(getSelectedMovie(), chooseCinemaBox.getValue());
-        updateRemoveComboBox();  // ×¢×××× ×-ComboBox ×××¡×¨×ª ××× ××
+        updateRemoveComboBox();
     }
 
     private void updateTable(Movie movie, String cinemaName) {
@@ -124,9 +124,9 @@ public class EditScreeningPage {
 
     @FXML
     void addTime(ActionEvent event) {
-        saveSelections();  // ×©×××¨×ª ×××××¨××ª ××¤× × ××¤×¢×××
+        saveSelections();
 
-        // ×§×××ª ×¢×¨× ×××ª ××§××× ××¢ ××-ComboBox
+
         String cinemaName = chooseCinemaBox.getValue();
 
         try {
@@ -136,7 +136,7 @@ public class EditScreeningPage {
                 return;
             }
 
-            // × ×¡× ×× ×ª× ××ª ××ª××¨×× ×××©×¢× ×××§××××
+
             LocalDateTime dateTime;
             try {
                 dateTime = LocalDateTime.of(addDateText.getValue(), LocalTime.parse(addHoursText.getText()));
@@ -147,7 +147,7 @@ public class EditScreeningPage {
 
             Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
 
-            // ××××§× ×× ××§×¨× × ×××¨ ×§××××ª
+
             boolean screeningExists = selectedMovie.getScreenings().stream()
                     .anyMatch(screening -> screening.getScreeningTime().equals(dateTime) && screening.getBranch().equals(selectedBranch));
 
@@ -161,14 +161,14 @@ public class EditScreeningPage {
                 return;
             }
 
-            // ××¦××¨×ª ××××××§× × ×ª×× ×× ××××¡×¤×ª ××§×¨× × ×××©×
+
             ScreeningData data = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, dateTime);
             NewMessage addMessage = new NewMessage(data, "addScreening");
 
-            // ×©××××ª ×××××¢× ××©×¨×ª
+
             SimpleClient.getClient().sendToServer(addMessage);
 
-            // ×¢×××× ××××©×§ ××××¨ ××©××××
+
             selectedMovie.addScreening(dateTime, selectedBranch);
             updateTable(selectedMovie, cinemaName);
             updateRemoveComboBox();
@@ -176,19 +176,19 @@ public class EditScreeningPage {
         } catch (Exception e) {
             showAlert("An unexpected error occurred. Please check your inputs and try again.");
         } finally {
-            restoreSelections();  // ×©××××¨ ×××××¨××ª ××××¨ ××¤×¢×××
+            restoreSelections();
         }
     }
 
     private Branch getSelectedBranch(Movie movie, String branchName) {
         if (movie != null && branchName != null) {
-            // ×××¤××© ××¡× ××£ ××¨×©×××ª ××¡× ××¤×× ×©× ××¡×¨× ×× ×××¨
+
             return movie.getBranches().stream()
                     .filter(branch -> branch.getName().equals(branchName))
                     .findFirst()
                     .orElse(null);
         }
-        return null;  // ×××××¨×× null ×× ××¡×¨× ×× ×©× ××¡× ××£ ×× ×§×××××
+        return null;
     }
 
     private Movie getSelectedMovie() {
@@ -229,47 +229,47 @@ public class EditScreeningPage {
 
     @FXML
     void removeTime(ActionEvent event) {
-        saveSelections();  // ×©×××¨×ª ×××××¨××ª ×× ××××××ª ××¤× × ×××¦××¢ ××¤×¢×××
-        String cinemaName = chooseCinemaBox.getValue();  // ×©× ××§××× ××¢ ×× ×××¨
+        saveSelections();
+        String cinemaName = chooseCinemaBox.getValue();
 
         try {
-            Movie selectedMovie = getSelectedMovie();  // ×§×××ª ××¡×¨× ×× ×××¨
+            Movie selectedMovie = getSelectedMovie();
             if (selectedMovie == null) {
-                showAlert("No movie selected.");  // ××¦××ª ××ª×¨×× ×× ×× × ×××¨ ×¡×¨×
+                showAlert("No movie selected.");
                 return;
             }
 
-            String selectedTimeStr = removeComboBox.getValue();  // ×§×××ª ××× ×××§×¨× × ×××¡×¨×
-            LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);  // × ××ª×× ×××¨×××ª ×××× ×××××××§× LocalDateTime
-            Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;  // ×§×××ª ××¡× ××£ ×× ×××¨
+            String selectedTimeStr = removeComboBox.getValue();
+            LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
+            Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
 
             if(!(selectedMovie instanceof HomeMovie) && cinemaName == null){
                 showAlert("Please choose a cinema.");
                 return;
             }
 
-            // ××¦××¨×ª ××××××§× × ×ª×× ×× ×××¡×¨×ª ×××§×¨× ×
+
             if(selectedMovie instanceof HomeMovie){
                 ScreeningData data = new ScreeningData(selectedMovie.getId(), null, selectedTime);
                 NewMessage removeMessage = new NewMessage(data, "removeScreening");
-                SimpleClient.getClient().sendToServer(removeMessage);  // ×©××××ª ××××¢×ª ××¡×¨× ××©×¨×ª
+                SimpleClient.getClient().sendToServer(removeMessage);
             } else {
                 ScreeningData data = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, selectedTime);
                 NewMessage removeMessage = new NewMessage(data, "removeScreening");
-                SimpleClient.getClient().sendToServer(removeMessage);  // ×©××××ª ××××¢×ª ××¡×¨× ××©×¨×ª
+                SimpleClient.getClient().sendToServer(removeMessage);
             }
-            // ×¨×¢× ×× ××××× ××××¨ ××©××××
+
             selectedMovie.getScreenings().removeIf(screening ->
                     screening.getScreeningTime().equals(selectedTime) && (screening.getBranch() == selectedBranch));
-            updateTable(selectedMovie, cinemaName);  // ×¢×××× ××××× ×¢× ×× ×ª×× ×× ××××©××
+            updateTable(selectedMovie, cinemaName);
 
-            updateRemoveComboBox();  // ×¢×××× ×ª×××ª ×××××¨× ×××¡×¨××ª
-            removeComboBox.setValue(null);  // ×××¤××¡ ×ª×××ª ×××××¨× ××××¨ ×××××§×
+            updateRemoveComboBox();
+            removeComboBox.setValue(null);
 
         } catch (Exception e) {
-            showAlert("Invalid time format or selection.");  // ××¦××ª ×©×××× ×××§×¨× ×©× ×¤××¨×× ××× ×× ×××§× ×× ××××¨× ×× ×ª×§×× ×
+            showAlert("Invalid time format or selection.");
         } finally {
-            restoreSelections();  // ×©××××¨ ×××××¨××ª ××××¨ ××¤×¢×××
+            restoreSelections();
         }
     }
 
@@ -303,9 +303,9 @@ public class EditScreeningPage {
 
     @FXML
     void editTime(ActionEvent event) {
-        saveSelections();  // ×©×××¨×ª ×××××¨××ª ××¤× × ××¤×¢×××
+        saveSelections();
 
-        String cinemaName = chooseCinemaBox.getValue();  // ×§×××ª ×¢×¨× ×××ª ××§××× ××¢ ××-ComboBox
+        String cinemaName = chooseCinemaBox.getValue();
 
         try {
             Movie selectedMovie = getSelectedMovie();
@@ -314,7 +314,7 @@ public class EditScreeningPage {
                 return;
             }
 
-            // × ×¡× ×× ×ª× ××ª ××ª××¨×× ×××©×¢× ××××©×× ×××§××××
+
             LocalDateTime newDateTime;
             try {
                 newDateTime = LocalDateTime.of(editNewDateText.getValue(), LocalTime.parse(editNewHoursText.getText()));
@@ -323,11 +323,11 @@ public class EditScreeningPage {
                 return;
             }
 
-            // ×§×××ª ×××× ×× ×××¨ ××¢×¨×××
+
             String selectedTimeStr = editComboBox.getValue();
             LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
 
-            // ××××§× ×× ××§×¨× × ×¢× ×××× ××××© ×××¨ ×§××××ª
+
             boolean screeningExists = selectedMovie.getScreenings().stream()
                     .anyMatch(screening -> screening.getScreeningTime().equals(newDateTime));
 
@@ -338,7 +338,7 @@ public class EditScreeningPage {
 
             Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
 
-            // ×¢×××× ××§×¨× × ×¢× ×××× ××××©
+
             Screening screeningToUpdate = selectedMovie.getScreenings().stream()
                     .filter(s -> s.getScreeningTime().equals(selectedTime) && s.getBranch().equals(selectedBranch))
                     .findFirst().orElse(null);
@@ -348,15 +348,15 @@ public class EditScreeningPage {
                 return;
             }
 
-            // ×¢×××× ×××× ×××× ××××©
+
             screeningToUpdate.setScreeningTime(newDateTime);
 
-            // ××¦××¨×ª ××××××§× × ×ª×× ×× ××©××××ª ××¢×××× ××©×¨×ª
+
             ScreeningData updateData = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, newDateTime);
             NewMessage updateMessage = new NewMessage(updateData, "editScreening");
             SimpleClient.getClient().sendToServer(updateMessage);
 
-            // ×¢×××× ××××× ×××××©×§
+
             updateTable(selectedMovie, cinemaName);
             updateRemoveComboBox();
             resetEditFields();
@@ -366,7 +366,7 @@ public class EditScreeningPage {
         } catch (Exception e) {
             showAlert("An unexpected error occurred while editing the screening time. Please check your inputs and try again.");
         } finally {
-            restoreSelections();  // ×©××××¨ ×××××¨××ª ××××¨ ××¤×¢×××
+            restoreSelections();
         }
     }
 
