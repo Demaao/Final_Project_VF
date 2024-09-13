@@ -55,6 +55,10 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(ContentManager.class); /////////////////
 		configuration.addAnnotatedClass(CustomerServiceWorker.class); /////////////
 
+		configuration.addAnnotatedClass(Customer.class); //for testing only
+		configuration.addAnnotatedClass(Purchase.class);  //for testing only
+
+
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
@@ -72,7 +76,9 @@ public class SimpleServer extends AbstractServer {
 			generateHeadManager(session); /////////////////////
 			generateBranchManager(session); /////////////////////
 			generateContentManager(session); /////////////////////
-			generateCustomerServiceWorker(session); //////////////
+			generateCustomerServiceWorker(session);
+
+			generateCustomers(session);//for testing only
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -399,6 +405,7 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 22, 30)
 		);
 
+
 		for (LocalDateTime time : screeningTimes) {
 			movie1.addScreening(time, jerusalemCinema);
 			movie1.addScreening(time, telAvivCinema);
@@ -498,6 +505,23 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
+    //This code is for testing only
+	private static void generateCustomers(Session session) {
+		List<Purchase> purchases1 = new ArrayList<>();
+		List<Purchase> purchases2 = new ArrayList<>();
+
+		Customer customer1 = new Customer(123123123,"dema omar", "john.doe@example.com", "0501234567", purchases1,false);
+		Customer customer2 = new Customer(123456789,"shada ghanem", "jane.smith@example.com", "0527654321", purchases2,false);
+
+		session.save(customer1);
+		session.save(customer2);
+		session.flush();
+	}
+
+
+
+
+
 	private static byte[] loadImageFromFile(String relativePath) throws IOException {
 		InputStream inputStream = SimpleServer.class.getClassLoader().getResourceAsStream(relativePath);
 		if (inputStream == null) {
@@ -573,6 +597,17 @@ public class SimpleServer extends AbstractServer {
 		Movie movie = session.get(Movie.class, movieId);
 		return new ArrayList<>(movie.getScreenings());
 	}
+
+	private static List<Customer> getAllCustomers(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
+		query.from(Customer.class);
+		return session.createQuery(query).getResultList();
+	}
+
+
+
+
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -990,6 +1025,56 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred while editing a screening: " + exception.getMessage());
 				}
 			}
+			else if (msgString.equals("loginCustomer")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					int idNumber = message.getId();
+					List<Customer> customers = getAllCustomers(session);
+					NewMessage newMessage;
+					boolean found = false;
+
+					for (Customer customer : customers) {
+						if (idNumber == customer.getId()) {
+							found = true;
+							if (customer.isLoggedIn()) {
+								newMessage = new NewMessage("AlreadyloginCustomer");
+							} else {
+								customer.setLoggedIn(true);
+								newMessage = new NewMessage(customer, "loginCustomer");
+							}
+							client.sendToClient(newMessage);
+							session.getTransaction().commit();
+							break;
+						}
+					}
+
+					if (!found) {
+						newMessage = new NewMessage("loginDeniedCustomer");
+						client.sendToClient(newMessage);
+						session.getTransaction().commit();
+					}
+
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}
+			else if (msgString.equals("logOutCustomer")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Customer customer = (Customer) message.getObject();
+					customer.setLoggedIn(false);  // log out
+					session.saveOrUpdate(customer);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred while logging out.");
+					exception.printStackTrace();
+				}
+			}
+
+
+
+
 		}
 		 catch (IOException e) {
 			e.printStackTrace();

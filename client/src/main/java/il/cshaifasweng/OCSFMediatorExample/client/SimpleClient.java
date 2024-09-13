@@ -63,6 +63,17 @@ public class SimpleClient extends AbstractClient {
 			} else if (message.getMessage().equals("screeningUpdateFailed")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Failed to update screening time.")));
 			}
+				else if (message.getMessage().equals("loginCustomer")) {  // טיפול בהתחברות לקוח
+					App.loginDeniedCounter = 0;
+					Customer customer = (Customer) message.getObject();
+					EventBus.getDefault().post(new UpdateLoginCustomerEvent(customer));
+				} else if (message.getMessage().equals("loginDeniedCustomer")) {  // טיפול במצב של תעודת זהות שגויה
+					App.loginDeniedCounter++;
+					EventBus.getDefault().post(new WarningEvent(new Warning("ID number is incorrect!")));
+				} else if (message.getMessage().equals("AlreadyloginCustomer")) {  // טיפול במצב שהלקוח כבר מחובר
+					App.loginDeniedCounter = 0;
+					EventBus.getDefault().post(new WarningEvent(new Warning("Customer is already logged in!")));
+				}
 
 			});
 		}
