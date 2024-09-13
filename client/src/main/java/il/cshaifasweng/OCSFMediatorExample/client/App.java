@@ -365,6 +365,15 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "PersonalAreaPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PersonalAreaPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
         }
     }
 
@@ -398,6 +407,21 @@ public class App extends Application {
                     alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
                     alert.show();
                 }  else   if (event.getWarning().getMessage().equals("Complaint answered successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                }   else   if (event.getWarning().getMessage().equals("Request sent successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if (event.getWarning().getMessage().startsWith("You have")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().startsWith("Time remaining for Complaint NO.")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().equals("Request denied successfully!")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().equals("Request confirmed successfully!")){
                     alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
                     alert.show();
                 }

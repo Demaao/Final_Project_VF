@@ -1,8 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.entities.Complaint;
-import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
-import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import com.sun.javafx.menu.MenuItemBase;
+import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +17,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class CustomerServiceWorkerPage {
     public TableView<Complaint> complaintTable;
@@ -29,6 +31,9 @@ public class CustomerServiceWorkerPage {
     public TableColumn complaintColumn;
     private ObservableList<Complaint> complaintObservableList = FXCollections. observableArrayList();
     private List<Complaint> complaints = new ArrayList<>();
+
+    @FXML
+    Button handleComplaintBtn;
 
     @FXML
     private Label customerServiceWorkerNameLabel;
@@ -57,9 +62,16 @@ public class CustomerServiceWorkerPage {
 
     public void initialize() {
         EventBus.getDefault().register(this);
+        handleComplaintBtn.setDisable(true);
         customerServiceWorkerNameLabel.setText(LoginPage.employee1.getFullName());
         requestComplaintFromServer();
+        complaintTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+              handleComplaintBtn.setDisable(false);
+            }});
     }
+
+    public static AtomicBoolean alertShown = new AtomicBoolean(false);
 
     @Subscribe
     public void onUpdateComplaintsEvent(UpdateComplaintsEvent event) {
@@ -68,6 +80,7 @@ public class CustomerServiceWorkerPage {
             ObservableList<Complaint> items = complaintTable.getItems();
             items.clear();
             complaints = event.getComplaints();
+            complaintObservableList.clear();
             complaintObservableList.addAll(complaints);
             statusColumn.setCellFactory(new Callback<TableColumn<Complaint, Boolean>, TableCell<Complaint, Boolean>>() {
                 @Override
@@ -99,8 +112,9 @@ public class CustomerServiceWorkerPage {
                                 setText(item.format(formatter));
                             }}};}});
             complaintTable.setItems(complaintObservableList);
+            if(alertShown.compareAndSet(false, true)){
             for(Complaint complaint: complaints) {
-                if (!complaint.getStatus()) { // Assuming getStatus() returns false if not responded
+                if (!complaint.getStatus()) {
                     LocalDateTime submissionTime = complaint.getSubmissionDate();
                     LocalDateTime deadline = submissionTime.plusHours(24);
                     LocalDateTime currentTime = LocalDateTime.now();
@@ -114,13 +128,9 @@ public class CustomerServiceWorkerPage {
                                 complaint.getId(),
                                 hoursLeft,
                                 minutesLeft);
-
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setHeaderText(null);
-                        alert.setTitle("Complaint Response Time");
-                        alert.setContentText(timeLeftMessage);
-                        alert.showAndWait();
-                    }}}});
+                        EventBus.getDefault().post(new WarningEvent(new Warning(timeLeftMessage)));
+                    }}}} });
+    //    alertShown.set(false);
     }
 
     private void requestComplaintFromServer() {
@@ -134,6 +144,7 @@ public class CustomerServiceWorkerPage {
 
     @FXML
     private void requestLogoutFromServer() {
+        alertShown.set(false);
         try {
             NewMessage message = new NewMessage("logOut", LoginPage.employee1);
             SimpleClient.getClient().sendToServer(message);

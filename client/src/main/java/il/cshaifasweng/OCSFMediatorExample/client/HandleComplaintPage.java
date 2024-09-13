@@ -1,5 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import com.sun.javafx.menu.MenuItemBase;
 import il.cshaifasweng.OCSFMediatorExample.entities.Complaint;
 import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
@@ -73,6 +74,9 @@ public class HandleComplaintPage {
     @FXML
     private Button submitAnswerBtn;
 
+    @FXML
+    private Button cancelPurchaseBtn;
+
     public static Complaint selectedComplaint;
 
     public static void setSelectedComplaint(Complaint complaint) {
@@ -103,6 +107,10 @@ public class HandleComplaintPage {
                                 setText("Closed");
                             }}}};}});
         complaintTable.setItems(complaintObservableList);
+        purchaseHistoryTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                cancelPurchaseBtn.setDisable(false);
+            }});
     }
 
     @Subscribe

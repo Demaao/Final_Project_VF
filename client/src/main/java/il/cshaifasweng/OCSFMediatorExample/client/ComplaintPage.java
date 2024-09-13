@@ -185,11 +185,11 @@ public class ComplaintPage {
     public void switchToMoviesPage() throws IOException {
         App.switchScreen("MoviesPage");
     }
-
+/*
     @FXML
     public void switchToFiledComplaintsPage() throws IOException {
         App.switchScreen("FiledComplaintsPage");
-    }
+    } */
 
     @Subscribe
     public void onUpdateComplaintsEvent(UpdateComplaintsEvent event) {}

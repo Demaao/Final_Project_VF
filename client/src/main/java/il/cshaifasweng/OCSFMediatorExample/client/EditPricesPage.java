@@ -1,9 +1,12 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.ChangePriceRequest;
+import il.cshaifasweng.OCSFMediatorExample.entities.Cinema;
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class EditPricesPage {
     @FXML
@@ -135,15 +139,103 @@ public class EditPricesPage {
     }
 
     public void saveCardPrice(ActionEvent actionEvent) {
+        String priceText = newCardPriceText.getText();
+        try {
+            double price = Double.parseDouble(priceText);
+            // Check if the price is non-negative
+            if (price >= 0) {
+                ChangePriceRequest request = new ChangePriceRequest(cinema.getCardPrice(), price, "Card");
+                NewMessage message = new NewMessage(request, "changePriceRequest");
+                SimpleClient.getClient().sendToServer(message);
+                editCardPriceBtn.setVisible(true);
+                newCardPriceText.clear();
+                newCardPriceText.setVisible(false);
+                saveCardPriceBtn.setVisible(false);
+                cancelCardBtn.setVisible(false);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Price");
+                alert.setHeaderText(null);
+                alert.setContentText("Price cannot be negative.");
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid input. Please enter a numerical value.");
+            alert.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void saveLinkTicketPrice(ActionEvent actionEvent) {
+        String priceText = newLinkTicketPriceText.getText();
+        try {
+            double price = Double.parseDouble(priceText);
+            // Check if the price is non-negative
+            if (price >= 0) {
+                ChangePriceRequest request = new ChangePriceRequest(cinema.getLinkTicketPrice(),price, "Link Ticket");
+                NewMessage message = new NewMessage(request, "changePriceRequest");
+                SimpleClient.getClient().sendToServer(message);
+                newLinkTicketPriceText.clear();
+                editLinkTicketPriceBtn.setVisible(true);
+                newLinkTicketPriceText.setVisible(false);
+                saveLinkTicketPriceBtn.setVisible(false);
+                cancelLinkTicketBtn.setVisible(false);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Price");
+                alert.setHeaderText(null);
+                alert.setContentText("Price cannot be negative.");
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid input. Please enter a numerical value.");
+            alert.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void saveTicketPrice(ActionEvent actionEvent) {
+        String priceText = newTicketPriceText.getText();
+        try {
+            double price = Double.parseDouble(priceText);
+            // Check if the price is non-negative
+            if (price >= 0) {
+                ChangePriceRequest request = new ChangePriceRequest(cinema.getTicketPrice(), price, "Ticket");
+                NewMessage message = new NewMessage(request, "changePriceRequest");
+                SimpleClient.getClient().sendToServer(message);
+                newTicketPriceText.clear();
+                editTicketPriceBtn.setVisible(true);
+                newTicketPriceText.setVisible(false);
+                saveTicketPriceBtn.setVisible(false);
+                cancelTicketBtn.setVisible(false);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Price");
+                alert.setHeaderText(null);
+                alert.setContentText("Price cannot be negative.");
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid input. Please enter a numerical value.");
+            alert.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void cancelTicket(ActionEvent actionEvent) {
+        newTicketPriceText.clear();
         editTicketPriceBtn.setVisible(true);
         newTicketPriceText.setVisible(false);
         saveTicketPriceBtn.setVisible(false);
@@ -151,6 +243,7 @@ public class EditPricesPage {
     }
 
     public void cancelLinkTicket(ActionEvent actionEvent) {
+        newLinkTicketPriceText.clear();
         editLinkTicketPriceBtn.setVisible(true);
         newLinkTicketPriceText.setVisible(false);
         saveLinkTicketPriceBtn.setVisible(false);
@@ -158,17 +251,16 @@ public class EditPricesPage {
     }
 
     public void cancelCard(ActionEvent actionEvent) {
+        newCardPriceText.clear();
         editCardPriceBtn.setVisible(true);
         newCardPriceText.setVisible(false);
         saveCardPriceBtn.setVisible(false);
         cancelCardBtn.setVisible(false);
     }
 
-
-
     @FXML
     private void requestLogoutFromServer() {
-        try { ///////////////////////////////////////////////////////////////
+        try {
             NewMessage message = new NewMessage("logOut", LoginPage.employee1);
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
@@ -177,18 +269,60 @@ public class EditPricesPage {
         }
     }
 
-/*
-  public void initialize() {//////////////////////////////////////
-        EventBus.getDefault().register(this);
+    private Cinema cinema = new Cinema();
+
+  public void initialize() {
+      EventBus.getDefault().register(this);
+      requestCinemaFromServer();
+      DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+      double ticketValue = cinema.getTicketPrice();
+      String strValue = decimalFormat.format(ticketValue);
+      ticketPriceLabel.setText(strValue);
+
+      double linkTicketValue = cinema.getLinkTicketPrice();
+      String strValue2 = decimalFormat.format(linkTicketValue);
+      linkTicketPriceLabel.setText(strValue2);
+
+      double cardValue = cinema.getCardPrice();
+      String strValue3 = decimalFormat.format(cardValue);
+      cardPriceLabel.setText(strValue3);
+  }
+
+    @Subscribe
+    public void onCinemaEvent(UpdateCinemaEvent event) {
+        Platform.runLater(() -> {
+      //  System.out.println("got here");
+          //  System.out.println("Im here");
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            Cinema cinema = event.getCinema();
+            this.cinema = cinema;
+            double ticketValue = cinema.getTicketPrice();
+           // System.out.println(ticketValue);
+            String strValue = decimalFormat.format(ticketValue);
+            ticketPriceLabel.setText(strValue);
+
+            double linkTicketValue = cinema.getLinkTicketPrice();
+            String strValue2 = decimalFormat.format(linkTicketValue);
+            linkTicketPriceLabel.setText(strValue2);
+
+            double cardValue = cinema.getCardPrice();
+            String strValue3 = decimalFormat.format(cardValue);
+            cardPriceLabel.setText(strValue3);
+
+        });
+    }
+
+    @FXML
+    private void requestCinemaFromServer() {
+        try {
+            NewMessage message = new NewMessage("cinema");
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
     @Subscribe
-    public void onMessageEvent(MessageEvent event) {
-        Platform.runLater(() -> {
-            LoginPage.employee1 = null;
-            try {
-                switchToHomePage();
-            }
-            catch (IOException e) {}
-        });
-    }*/
+    public void onRequestEvent(UpdateRequestEvent event) {}
 }

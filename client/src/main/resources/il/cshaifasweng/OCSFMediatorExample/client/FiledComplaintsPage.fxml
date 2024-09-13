@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -97,22 +96,12 @@
             </Button>
          </children>
       </AnchorPane>
-      <Label layoutX="220.0" layoutY="59.0" text="See your filed complaint's status" textFill="#f6d9d9">
+      <Label layoutX="206.0" layoutY="45.0" prefHeight="46.0" prefWidth="598.0" text="Here is the list of the complaints you have filed:" textFill="#f6d9d9">
          <font>
-            <Font size="20.0" />
+            <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="220.0" layoutY="117.0" text="Enter your ID number" textFill="#f6d9d9">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="IDNumText" layoutX="425.0" layoutY="115.0" prefHeight="40.0" prefWidth="241.0" promptText="ID Number">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </TextField>
-      <TableView fx:id="complaintTable" layoutX="203.0" layoutY="188.0" prefHeight="274.0" prefWidth="676.0" visible="false">
+      <TableView fx:id="complaintTable" layoutX="203.0" layoutY="110.0" prefHeight="360.0" prefWidth="676.0">
          <columns>
             <TableColumn fx:id="complaintNOColumn" prefWidth="34.0" style="-fx-font-size: 15;" text="NO.">
                <cellValueFactory>
@@ -146,12 +135,7 @@
             </TableColumn>
          </columns>
       </TableView>
-      <Button fx:id="enterBtn" layoutX="687.0" layoutY="115.0" mnemonicParsing="false" onAction="#showComplaintTable" prefHeight="34.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Enter">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="OKBtn" layoutX="687.0" layoutY="492.0" mnemonicParsing="false" onAction="#switchToComplaintPage" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="OK" visible="false">
+      <Button fx:id="OKBtn" layoutX="795.0" layoutY="490.0" mnemonicParsing="false" onAction="#switchToPersonalAreaPage" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="OK">
          <font>
             <Font size="18.0" />
          </font>
