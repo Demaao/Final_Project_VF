@@ -5,12 +5,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.HandleComplaintPage">
    <children>
       <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
@@ -120,7 +120,7 @@
                   <TableColumn fx:id="paymentDetailsColumn" prefWidth="191.20000000000005" text="Payment Details" />
                </columns>
             </TableView>
-            <Button fx:id="chancelPurchaseBtn" layoutX="502.0" layoutY="273.0" mnemonicParsing="false" onAction="#cancelPurchase" prefHeight="40.0" prefWidth="163.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel Purchase">
+            <Button fx:id="chancelPurchaseBtn" disable="true" layoutX="502.0" layoutY="273.0" mnemonicParsing="false" onAction="#cancelPurchase" prefHeight="40.0" prefWidth="163.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Refund Purchase">
                <font>
                   <Font size="18.0" />
                </font>

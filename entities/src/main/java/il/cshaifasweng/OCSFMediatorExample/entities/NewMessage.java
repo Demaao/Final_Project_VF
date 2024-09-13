@@ -14,6 +14,8 @@ public class NewMessage implements Serializable {
     String branchName;
     List<Branch> branches;
     List<LocalDateTime> dateTimes;
+    Customer customer;
+    int id;
 
     public NewMessage(Object object, String message) {
         this.object = object;
@@ -45,6 +47,10 @@ public class NewMessage implements Serializable {
     public NewMessage(String message, Employee employee) {
         this.message = message;
         this.employee = employee;
+    }
+    public NewMessage(String message, int id) {
+        this.message = message;
+        this.id = id;
     }
 
     public Employee getEmployee() {
@@ -79,4 +85,18 @@ public class NewMessage implements Serializable {
 
     public List<Branch> getBranches() {return branches;}
     public List<LocalDateTime> getDateTimes() {return dateTimes;}
+
+    public Customer getCustomer() {
+        return customer;
+    }
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

@@ -2,13 +2,15 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.HomePage">
+<AnchorPane fx:id="myComplaintsBtn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PersonalAreaPage">
     <children>
+        <!-- Left-side panel taken from HomePage -->
         <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
             <children>
                 <ImageView fitHeight="110.0" fitWidth="118.0" layoutX="31.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
@@ -67,7 +69,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="complaintsBtn" layoutX="13.0" layoutY="350.0" mnemonicParsing="false" onAction="#switchToComplaintPage" prefHeight="47.0" prefWidth="152.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="  Complaints">
+                <Button fx:id="MycomplaintsBtn" layoutX="13.0" layoutY="350.0" mnemonicParsing="false" onAction="#switchToComplaintPage" prefHeight="47.0" prefWidth="152.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="  Complaints">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -79,8 +81,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <!-- Personal Area Button -->
-                <Button fx:id="personalAreaBtn" layoutX="-1.0" layoutY="434.0" mnemonicParsing="false" onAction="#switchToPersonalAreaPage" prefHeight="72.0" prefWidth="166.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="My Profile" textAlignment="CENTER">
+                <Button fx:id="personalAreaBtn" layoutX="-1.0" layoutY="434.0" mnemonicParsing="false" onAction="#switchToPersonalArea" prefHeight="72.0" prefWidth="166.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="My Profile" textAlignment="CENTER">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -107,58 +108,77 @@
                 </Button>
             </children>
         </AnchorPane>
-        <Button fx:id="moviesBtn" layoutX="300.0" layoutY="275.0" mnemonicParsing="false" onAction="#switchToMoviesPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #d5a6bd; -fx-text-fill: black; -fx-font-size: 20; -fx-cursor: hand; -fx-background-radius: 10;" text="  Movies" textAlignment="RIGHT">
+
+        <Label fx:id="welcomeLabel" layoutX="209.0" layoutY="38.0" prefHeight="35.0" prefWidth="633.0" text="Please enter your ID number : " textFill="#f6d9d9">
             <font>
                 <Font size="24.0" />
-            </font>
-            <graphic>
-                <ImageView fitHeight="55.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                    <image>
-                        <Image url="@images/movie.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
-        <Button fx:id="cardsBtn" layoutX="573.0" layoutY="275.0" mnemonicParsing="false" onAction="#switchToCardsPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #a64d79; -fx-text-fill: black; -fx-font-size: 20; -fx-cursor: hand; -fx-background-radius: 10;" text="    Cards" textAlignment="RIGHT">
-            <font>
-                <Font size="24.0" />
-            </font>
-            <graphic>
-                <ImageView fitHeight="46.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                    <image>
-                        <Image url="@images/cards.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
-        <Button fx:id="complaintBtn" layoutX="300.0" layoutY="426.0" mnemonicParsing="false" onAction="#switchToComplaintPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #c27ba0; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Complaints" textAlignment="RIGHT">
-            <font>
-                <Font size="24.0" />
-            </font>
-            <graphic>
-                <ImageView fitHeight="62.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                    <image>
-                        <Image url="@images/complaint.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
-        <Button fx:id="bigChargebackBtn" layoutX="573.0" layoutY="426.0" mnemonicParsing="false" onAction="#switchToChargebackPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #ead1dc; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Chargeback" textAlignment="RIGHT">
-            <font>
-                <Font size="24.0" />
-            </font>
-            <graphic>
-                <ImageView fitHeight="47.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                    <image>
-                        <Image url="@images/chargeback.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
-        <Label layoutX="317.0" layoutY="116.0" text="Welcome to &quot;our&quot; Cinema" textFill="#f6d9d9">
-            <font>
-                <Font name="Britannic Bold" size="40.0" />
             </font>
         </Label>
+
+        <TextField fx:id="IDNumText" layoutX="219.0" layoutY="93.0" prefHeight="39.0" prefWidth="220.0" promptText="ID Number">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+
+        <Button fx:id="enterBtn" layoutX="459.0" layoutY="93.0" mnemonicParsing="false" onAction="#showPurchasesTable" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Enter">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Button>
+      <Button fx:id="messagesBtn" layoutX="297.0" layoutY="250.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="213.0" style="-fx-background-color: #d5a6bd; -fx-text-fill: black; -fx-font-size: 20; -fx-cursor: hand; -fx-background-radius: 10;" text=" Messages" textAlignment="RIGHT" visible="false">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="50.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@images/message.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="orderBtn" layoutX="545.0" layoutY="250.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="213.0" style="-fx-background-color: #a64d79; -fx-text-fill: black; -fx-font-size: 20; -fx-cursor: hand; -fx-background-radius: 10;" text="My orders" textAlignment="RIGHT" visible="false">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="60.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@images/orders.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="MycomplaintBtn" layoutX="297.0" layoutY="410.0" mnemonicParsing="false" onAction="#switchToFiledComplaintsPage" prefHeight="100.0" prefWidth="213.0" style="-fx-background-color: #c27ba0; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="My complaints" textAlignment="RIGHT" visible="false">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="57.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@images/Complaints-removebg-preview.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="moviesLinksBtn" layoutX="545.0" layoutY="410.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="213.0" style="-fx-background-color: #ead1dc; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Movies links" textAlignment="RIGHT" visible="false">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="47.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@images/link.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Label fx:id="menuMsg" layoutX="304.0" layoutY="170.0" prefHeight="35.0" prefWidth="448.0" text="Everything you need is just a click away :" textFill="#f6d9d9" visible="false">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+
     </children>
 </AnchorPane>

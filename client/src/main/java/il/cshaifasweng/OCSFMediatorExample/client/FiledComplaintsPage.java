@@ -66,8 +66,10 @@ public class FiledComplaintsPage {
 
     public void initialize() {
         EventBus.getDefault().register(this);
+        requestComplaintFromServer();
     }
 
+    /*
     @FXML
     void showComplaintTable(ActionEvent event) {
         if (IDNumText.getText().length() != 9 || !IDNumText.getText().matches("\\d+")) {
@@ -84,7 +86,7 @@ public class FiledComplaintsPage {
             requestComplaintFromServer();
         }
 
-    }
+    }*/
 
     @Subscribe
     public void onUpdateComplaintsEvent(UpdateComplaintsEvent event) {
@@ -93,7 +95,7 @@ public class FiledComplaintsPage {
             ObservableList<Complaint> items = complaintTable.getItems();
             items.clear();
             for (Complaint complaint : event.getComplaints()) {
-               if(complaint.getCustomerID().equals(Long.parseLong(IDNumText.getText()))) {
+               if(complaint.getCustomerID() == PersonalAreaPage.loggedInCustomer.getId()) {
                    this.complaints.add(complaint);
                }
            }
@@ -143,36 +145,48 @@ public class FiledComplaintsPage {
 
     @FXML
     private void switchToHomePage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToHostPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("HostPage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     private void switchToCardsPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("CardsPage");
     }
 
     @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
+
+    @FXML
     public void switchToMoviesPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("MoviesPage");
     }
 

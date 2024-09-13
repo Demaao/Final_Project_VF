@@ -48,7 +48,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <Button fx:id="handleComplaintBtn" layoutX="680.0" layoutY="572.0" mnemonicParsing="false" onAction="#switchToHandleComplaintPage" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Handle Complaint">
+      <Button fx:id="handleComplaintBtn" disable="true" layoutX="680.0" layoutY="572.0" mnemonicParsing="false" onAction="#switchToHandleComplaintPage" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Handle Complaint">
          <font>
             <Font size="18.0" />
          </font>
