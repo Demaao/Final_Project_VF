@@ -2,7 +2,10 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -94,95 +97,148 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="editTicketPriceBtn" layoutX="533.0" layoutY="201.0" mnemonicParsing="false" onAction="#editTicketPrice" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Edit">
+        <Button fx:id="editTicketPriceBtn" layoutX="531.0" layoutY="170.0" mnemonicParsing="false" onAction="#editTicketPrice" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Edit">
             <font>
                 <Font size="18.0" />
             </font>
         </Button>
-        <Label layoutX="244.0" layoutY="203.0" prefHeight="35.0" prefWidth="186.0" text="Ticket Price:" textFill="#f6d9d9">
+        <Label layoutX="242.0" layoutY="172.0" prefHeight="35.0" prefWidth="186.0" text="Ticket Price:" textFill="#f6d9d9">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-      <Label layoutX="244.0" layoutY="301.0" prefHeight="35.0" prefWidth="180.0" text="Link Ticket Price:" textFill="#f6d9d9">
+      <Label layoutX="242.0" layoutY="270.0" prefHeight="35.0" prefWidth="180.0" text="Link Ticket Price:" textFill="#f6d9d9">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="244.0" layoutY="409.0" prefHeight="35.0" prefWidth="128.0" text="Card Price:" textFill="#f6d9d9">
+      <Label layoutX="242.0" layoutY="378.0" prefHeight="35.0" prefWidth="128.0" text="Card Price:" textFill="#f6d9d9">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="ticketPriceLabel" layoutX="450.0" layoutY="203.0" prefHeight="35.0" prefWidth="83.0" text="100$" textFill="#f6d9d9">
+      <Label fx:id="ticketPriceLabel" layoutX="448.0" layoutY="172.0" prefHeight="35.0" prefWidth="83.0" text="100$" textFill="#f6d9d9">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="linkTicketPriceLabel" layoutX="450.0" layoutY="301.0" prefHeight="35.0" prefWidth="83.0" text="100$" textFill="#f6d9d9">
+      <Label fx:id="linkTicketPriceLabel" layoutX="448.0" layoutY="270.0" prefHeight="35.0" prefWidth="83.0" text="100$" textFill="#f6d9d9">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="cardPriceLabel" layoutX="450.0" layoutY="409.0" prefHeight="35.0" prefWidth="83.0" text="100$" textFill="#f6d9d9">
+      <Label fx:id="cardPriceLabel" layoutX="448.0" layoutY="378.0" prefHeight="35.0" prefWidth="83.0" text="100$" textFill="#f6d9d9">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="editLinkTicketPriceBtn" layoutX="533.0" layoutY="299.0" mnemonicParsing="false" onAction="#editLinkTicketPrice" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Edit">
+      <Button fx:id="editLinkTicketPriceBtn" layoutX="531.0" layoutY="268.0" mnemonicParsing="false" onAction="#editLinkTicketPrice" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Edit">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="editCardPriceBtn" layoutX="533.0" layoutY="407.0" mnemonicParsing="false" onAction="#editCardPrice" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Edit">
+      <Button fx:id="editCardPriceBtn" layoutX="531.0" layoutY="376.0" mnemonicParsing="false" onAction="#editCardPrice" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Edit">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <TextField fx:id="newTicketPriceText" layoutX="533.0" layoutY="201.0" prefHeight="40.0" prefWidth="83.0" promptText="New Price" visible="false">
+      <TextField fx:id="newTicketPriceText" layoutX="531.0" layoutY="170.0" prefHeight="40.0" prefWidth="83.0" promptText="New Price" visible="false">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="newLinkTicketPriceText" layoutX="533.0" layoutY="299.0" prefHeight="40.0" prefWidth="83.0" promptText="New Price" visible="false">
+      <TextField fx:id="newLinkTicketPriceText" layoutX="531.0" layoutY="268.0" prefHeight="40.0" prefWidth="83.0" promptText="New Price" visible="false">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="newCardPriceText" layoutX="533.0" layoutY="407.0" prefHeight="40.0" prefWidth="83.0" promptText="New Price" visible="false">
+      <TextField fx:id="newCardPriceText" layoutX="531.0" layoutY="376.0" prefHeight="40.0" prefWidth="83.0" promptText="New Price" visible="false">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button fx:id="saveLinkTicketPriceBtn" layoutX="649.0" layoutY="299.0" mnemonicParsing="false" onAction="#saveLinkTicketPrice" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm" visible="false">
+      <Button fx:id="saveLinkTicketPriceBtn" layoutX="647.0" layoutY="268.0" mnemonicParsing="false" onAction="#saveLinkTicketPrice" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="saveCardPriceBtn" layoutX="649.0" layoutY="407.0" mnemonicParsing="false" onAction="#saveCardPrice" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm" visible="false">
+      <Button fx:id="saveCardPriceBtn" layoutX="647.0" layoutY="376.0" mnemonicParsing="false" onAction="#saveCardPrice" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="saveTicketPriceBtn" layoutX="649.0" layoutY="201.0" mnemonicParsing="false" onAction="#saveTicketPrice" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm" visible="false">
+      <Button fx:id="saveTicketPriceBtn" layoutX="647.0" layoutY="170.0" mnemonicParsing="false" onAction="#saveTicketPrice" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="cancelTicketBtn" layoutX="772.0" layoutY="201.0" mnemonicParsing="false" onAction="#cancelTicket" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel" visible="false">
+      <Button fx:id="cancelTicketBtn" layoutX="770.0" layoutY="170.0" mnemonicParsing="false" onAction="#cancelTicket" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="cancelLinkTicketBtn" layoutX="772.0" layoutY="297.0" mnemonicParsing="false" onAction="#cancelLinkTicket" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel" visible="false">
+      <Button fx:id="cancelLinkTicketBtn" layoutX="770.0" layoutY="266.0" mnemonicParsing="false" onAction="#cancelLinkTicket" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="cancelCardBtn" layoutX="772.0" layoutY="404.0" mnemonicParsing="false" onAction="#cancelCard" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel" visible="false">
+      <Button fx:id="cancelCardBtn" layoutX="770.0" layoutY="373.0" mnemonicParsing="false" onAction="#cancelCard" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
+      <Button layoutX="641.0" layoutY="484.0" mnemonicParsing="false" onAction="#showRequestAnchor" prefHeight="43.0" prefWidth="83.0" style="-fx-text-fill: #f6d9d9; -fx-background-color: transparent; -fx-cursor: hand; -fx-background-radius: 10;" text="here" textFill="#f6d9d9" underline="true">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Button>
+      <Label layoutX="242.0" layoutY="492.0" text="See your price update request's status " textFill="#f6d9d9">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <AnchorPane fx:id="requestAnchor" layoutX="185.0" layoutY="120.0" prefHeight="406.0" prefWidth="710.0" style="-fx-background-color: black; -fx-border-color: #f6d9d9; -fx-border-width: 3;" visible="false">
+         <children>
+            <Button fx:id="hidePurchases" layoutX="667.0" onAction="#hideRequestAnchor" prefHeight="34.0" prefWidth="36.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="X" textFill="#f6d9d9">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
+            <TableView fx:id="priceUpdateRequestTable" layoutX="22.0" layoutY="47.0" prefHeight="330.0" prefWidth="666.0">
+               <columns>
+                  <TableColumn fx:id="requestNOColumn" prefWidth="32.79998779296875" style="-fx-font-size: 15;" text="NO.">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="productColumn" prefWidth="100.79998779296875" style="-fx-font-size: 15;" text="Product Type">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="product" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="dateColumn" prefWidth="124.00003051757812" style="-fx-font-size: 15;" text="Date">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="date" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="currentPriceColumn" prefWidth="141.5999755859375" style="-fx-font-size: 15;" text="Current Price">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="currentPrice" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="newPriceColumn" prefWidth="172.0" style="-fx-font-size: 15;" text="New Price">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="newPrice" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="statusColumn" prefWidth="93.59995117187498" style="-fx-font-size: 15;" text="Status">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="status" />
+                     </cellValueFactory>
+                  </TableColumn>
+               </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>

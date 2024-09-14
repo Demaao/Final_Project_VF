@@ -1,5 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
+
 @Table(name = "purchases")
 public class Purchase implements Serializable {
 
@@ -21,63 +23,48 @@ public class Purchase implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "purchase_customer")
-    protected Buyer customer;
+    private String productType;
+    private String purchaseDate;
+    private String paymentMethod;
+    private double pricePaid;
 
-    protected double cost;
-    protected long creditCardNum;
-    protected String transactionTime;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 
     public Purchase () {}
 
-    public Purchase (Buyer customer, double cost, String transactionTime, long creditCardNum) {
+    public Purchase(String productType, String purchaseDate, String paymentMethod, double pricePaid, Customer customer) {
+        this.productType = productType;
+        this.purchaseDate = purchaseDate;
+        this.paymentMethod = paymentMethod;
+        this.pricePaid = pricePaid;
         this.customer = customer;
-        this.cost= cost;
-        this.creditCardNum = creditCardNum;
-        this.transactionTime = transactionTime;
-
     }
 
-    public Buyer getCustomer() {
+    // Getters and setters
+    public String getProductType() {
+        return productType;
+    }
+
+    public String getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public double getPricePaid() {
+        return pricePaid;
+    }
+
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Buyer customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public long getCreditCardNum() {
-        return creditCardNum;
-    }
-
-    public void setCreditCardNum(long creditCardNum) {
-        this.creditCardNum = creditCardNum;
-    }
-
-    public String getTransactionTime() {
-        return transactionTime;
-    }
-
-    public void setTransactionTime(String transactionTime) {
-        this.transactionTime = transactionTime;
-    }
-
- }
+}

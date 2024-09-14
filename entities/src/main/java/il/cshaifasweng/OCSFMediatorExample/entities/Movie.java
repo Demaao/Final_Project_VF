@@ -1,7 +1,9 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
-//import org.hibernate.annotations.Fetch;
-//import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,7 +18,6 @@ import org.hibernate.annotations.FetchMode;
 
 
 @Entity
-//TODO : these two lines were added from githbu:
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DTYPE")
 @Table(name = "movies")
@@ -39,7 +40,6 @@ public class Movie implements Serializable {
     private byte[] imageData;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    //TODO: this one line was added from github:
     @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie_branch",
@@ -48,9 +48,9 @@ public class Movie implements Serializable {
     )
     private List<Branch> branches = new ArrayList<>();
 
-//TODO: the line "@Fetch(FetchMode.SUBSELECT)" was added from github, and FetchTyoe was changed from LAZY to EAGER
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-   @Fetch(FetchMode.SUBSELECT)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Screening> screenings = new ArrayList<>();
 
     public Movie() {
@@ -182,4 +182,6 @@ public class Movie implements Serializable {
     public void removeScreening(Screening screening) {
         screenings.remove(screening);
     }
+
+
 }

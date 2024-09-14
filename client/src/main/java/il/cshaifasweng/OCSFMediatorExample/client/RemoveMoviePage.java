@@ -1,16 +1,41 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
+import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RemoveMoviePage {
+    @FXML
+    private TableView<Movie> movieTable;
+
+    @FXML
+    TableColumn screeningTypeColumn;
+
+    @FXML
+    TableColumn screeningColumn;
+
+    @FXML
+    Label selectCinemaLabel;
+
+    @FXML
+    ComboBox<String> chooseCinemaBox;
+
+    @FXML
+    Button removeBtn;
+
+    private ObservableList<Movie> movies = FXCollections.observableArrayList();
 
     @FXML
     private void switchToAddMoviePage() throws IOException {
@@ -47,33 +72,166 @@ public class RemoveMoviePage {
         App.switchScreen("ContentManagerPage");
     }
 
-    public void removeMovie(ActionEvent actionEvent) {
-    }
-
-
     @FXML
     private void requestLogoutFromServer() {
-        try { ///////////////////////////////////////////////////////////////
+        try {
             NewMessage message = new NewMessage("logOut", LoginPage.employee1);
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();}
+    }
 
+  public void initialize() {
+        EventBus.getDefault().register(this);
+        requestMoviesFromServer();
+        screeningTypeColumn.setCellFactory(new Callback<TableColumn<Movie, String>, TableCell<Movie, String>>() {
+          @Override
+          public TableCell<Movie, String> call(TableColumn<Movie, String> col) {
+              return new TableCell<Movie, String>() {
+                  @Override
+                  protected void updateItem(String item, boolean empty) {
+                      super.updateItem(item, empty);
+                      if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                          setText(null);
+                      } else {
+                          Movie movie = (Movie) getTableRow().getItem();
+                          if (movie instanceof HomeMovie) {
+                              setText("Link");
+                          } else {
+                              setText("Cinema");
+                          }}}};}});
+      screeningColumn.setCellFactory(new Callback<TableColumn<Movie, String>, TableCell<Movie, String>>() {
+          @Override
+          public TableCell<Movie, String> call(TableColumn<Movie, String> col) {
+              return new TableCell<Movie, String>() {
+                  @Override
+                  protected void updateItem(String item, boolean empty) {
+                      super.updateItem(item, empty);
+                      if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                          setText(null);
+                      } else {
+                          Movie movie = (Movie) getTableRow().getItem();
+                          if (movie instanceof HomeMovie) {
+                              setText("-");
+                          } else {
+                              List<Branch> branches = movie.getBranches();
+                              Set<String> availableCinemas = branches.stream()
+                                      .map(branch -> branch.getLocation())
+                                      .collect(Collectors.toSet());
+                              setText(availableCinemas.toString());
+                          }}}};}});
+      movieTable.setItems(movies);
+      movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+          if (newSelection != null) {
+              if (newSelection instanceof HomeMovie) {
+                  selectCinemaLabel.setVisible(false);
+                  chooseCinemaBox.setVisible(false);
+                  removeBtn.setDisable(false);
+              } else {
+                  selectCinemaLabel.setVisible(true);
+                  chooseCinemaBox.setVisible(true);
+                  List<Branch> branches = newSelection.getBranches();
+                  Set<String> availableCinemas = branches.stream()
+                          .map(branch -> branch.getName())
+                          .collect(Collectors.toSet());
+                  chooseCinemaBox.getItems().clear();
+                  chooseCinemaBox.getItems().add("All");
+                  chooseCinemaBox.getItems().addAll(availableCinemas);
+                  availableCinemas.clear();
+                  removeBtn.setDisable(true);
+                  chooseCinemaBox.setOnAction(event -> removeBtn.setDisable(false));}}});
+    }
+
+    @Subscribe
+    public void onUpdateMoviesEvent(UpdateMoviesEvent event) {
+        Platform.runLater(() -> {
+            List<Movie> movieList = event.getMovies();
+            movieList.removeIf(movie -> movie instanceof SoonMovie);
+            ObservableList<Movie> items = movieTable.getItems();
+            items.clear();
+            movies.addAll(movieList);
+            screeningTypeColumn.setCellFactory(new Callback<TableColumn<Movie, String>, TableCell<Movie, String>>() {
+                @Override
+                public TableCell<Movie, String> call(TableColumn<Movie, String> col) {
+                    return new TableCell<Movie, String>() {
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                                setText(null);
+                            } else {
+                                Movie movie = (Movie) getTableRow().getItem();
+                                if (movie instanceof HomeMovie) {
+                                    setText("Link");
+                                } else {
+                                    setText("Cinema");
+                                }}}};}});
+            screeningColumn.setCellFactory(new Callback<TableColumn<Movie, String>, TableCell<Movie, String>>() {
+                @Override
+                public TableCell<Movie, String> call(TableColumn<Movie, String> col) {
+                    return new TableCell<Movie, String>() {
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                                setText(null);
+                            } else {
+                                Movie movie = (Movie) getTableRow().getItem();
+                                if (movie instanceof HomeMovie) {
+                                    setText("-");
+                                } else {
+                                    List<Branch> branches = movie.getBranches();
+                                    Set<String> availableCinemasLocation = branches.stream()
+                                            .map(branch -> branch.getLocation())
+                                            .collect(Collectors.toSet());
+                                    setText(availableCinemasLocation.toString());
+                                   Set<String> availableCinemas = branches.stream()
+                                            .map(branch -> branch.getName())
+                                            .collect(Collectors.toSet());
+                                    chooseCinemaBox.getItems().clear();
+                                    chooseCinemaBox.getItems().add("All");
+                                    chooseCinemaBox.getItems().addAll(availableCinemas);
+                                    availableCinemas.clear();
+                                }}}};}});
+            movieTable.setItems(movies);});
+    }
+
+    @FXML
+    public void removeMovie(){
+        Platform.runLater(() -> {
+            Movie movie = movieTable.getSelectionModel().getSelectedItem();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove Movie");
+            alert.setHeaderText(movie.getEngtitle());
+            alert.setContentText("Are you sure you want to remove this movie?");
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType cancelButton = new ButtonType("Cancel");
+            alert.getButtonTypes().setAll(yesButton, cancelButton);
+            alert.showAndWait().ifPresent(response -> {
+                if (response == yesButton) {
+                    NewMessage message;
+                    if (movie instanceof HomeMovie) {
+                        HomeMovie homeMovie = (HomeMovie) movie;
+                        message = new NewMessage(homeMovie,"removeHomeMovie");}
+                    else { message = new NewMessage(movie, "removeCinemaMovie", chooseCinemaBox.getValue());}
+                    try {
+                        SimpleClient.getClient().sendToServer(message);
+                        selectCinemaLabel.setVisible(false);
+                        chooseCinemaBox.setVisible(false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }}});});
+    }
+
+    private void requestMoviesFromServer() {
+        try {
+            NewMessage message = new NewMessage("moviesList");
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
- /*
-  public void initialize() {//////////////////////////////////////
-        EventBus.getDefault().register(this);
-    }
     @Subscribe
-    public void onMessageEvent(MessageEvent event) {
-        Platform.runLater(() -> {
-            LoginPage.employee1 = null;
-            try {
-                switchToHomePage();
-            }
-            catch (IOException e) {}
-        });
-    }*/
+    public void onUpdateScreeningEvent(UpdateScreeningTimesEvent event) {}
 }

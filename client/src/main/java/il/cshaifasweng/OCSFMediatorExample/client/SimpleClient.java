@@ -3,6 +3,7 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
+import java.io.IOException;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class SimpleClient extends AbstractClient {
 					App.loginDeniedCounter++;
 					EventBus.getDefault().post(new WarningEvent(new Warning("User name or Password is incorrect!")));
 				} else if (message.getMessage().equals("Alreadylogin")) {
+					App.loginDeniedCounter = 0;
 					EventBus.getDefault().post(new WarningEvent(new Warning("User is already logged in!")));
 				} else if (message.getMessage().equals("logOut")) {
 					EventBus.getDefault().post(new MessageEvent("Log out"));
@@ -44,15 +46,56 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("screeningTimes")) {
 					List<Screening> screenings = (List<Screening>) message.getObject();
 					EventBus.getDefault().post(new UpdateScreeningTimesEvent(screenings));
+				} else if (message.getMessage().equals("movieRemoved")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Movie removed successfully!")));
+				} else if (message.getMessage().equals("movieAdded")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Movie added successfully!")));
+				} else if (message.getMessage().equals("screeningAdded")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Screening added successfully!")));
+				} else if (message.getMessage().equals("screeningRemoved")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Screening removed successfully!")));
+				} else if (message.getMessage().equals("movieNotAvailable")) {
+					EventBus.getDefault().post(new NewMessage(message.getObject(), "movieNotAvailable"));
+				} else if (message.getMessage().equals("screeningUpdated")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Screening time updated successfully!")));
+				} else if (message.getMessage().equals("screeningUpdateFailed")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Failed to update screening time.")));
+				} else if (message.getMessage().equals("complaintSubmitted")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Complaint submitted successfully!")));
+				} else if (message.getMessage().equals("complaints")) {
+					List<Complaint> complaints = (List<Complaint>) message.getObject();
+					EventBus.getDefault().post(new UpdateComplaintsEvent(complaints));
+				} else if (message.getMessage().equals("complaintAnswered")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Complaint answered successfully!")));
+				} else if(message.getMessage().equals("requestReceived")){
+					EventBus.getDefault().post(new WarningEvent(new Warning("Request sent successfully!")));
+				} else if (message.getMessage().equals("requests")) {
+					List<ChangePriceRequest> requests = (List<ChangePriceRequest>) message.getObject();
+					EventBus.getDefault().post(new UpdateRequestEvent(requests));
+				}  else if (message.getMessage().equals("cinema")) {
+					//System.out.println("got the message");
+					EventBus.getDefault().post(new UpdateCinemaEvent((Cinema)message.getObject()));
+				}else if(message.getMessage().equals("requestDenied")){
+					EventBus.getDefault().post(new WarningEvent(new Warning("Request denied successfully!")));
+				} else if(message.getMessage().equals("requestConfirmed")){
+					EventBus.getDefault().post(new WarningEvent(new Warning("Request confirmed successfully!")));
+				} else if (message.getMessage().equals("loginCustomer")) {  // ×××¤×× ×××ª×××¨××ª ××§××
+					App.loginDeniedCounter = 0;
+					Customer customer = (Customer) message.getObject();
+					EventBus.getDefault().post(new UpdateLoginCustomerEvent(customer));
+				} else if (message.getMessage().equals("loginDeniedCustomer")) {
+					App.loginDeniedCounter++;
+					EventBus.getDefault().post(new WarningEvent(new Warning("ID number is incorrect!")));
+				} else if (message.getMessage().equals("AlreadyloginCustomer")) {
+					App.loginDeniedCounter = 0;
+					EventBus.getDefault().post(new WarningEvent(new Warning("Customer is already logged in!")));
 				} else if (message.getMessage().equals("screeningHalls")) {
 					List<Screening> screenings = (List<Screening>)message.getObject();
 					EventBus.getDefault().post(new UpdateScreeningEvent(screenings));
 				}
-
-			});
+				});
 		}
 	}
-
 
 	// Singleton pattern to get the client instance
 	public static SimpleClient getClient() {

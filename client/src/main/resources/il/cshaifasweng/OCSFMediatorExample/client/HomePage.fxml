@@ -21,7 +21,7 @@
                         <Font size="20.0" />
                     </font>
                 </Label>
-                <Button fx:id="loginBtn" layoutX="21.0" layoutY="450.0" mnemonicParsing="false" onAction="#switchToLoginPage" prefHeight="47.0" prefWidth="99.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="     Login">
+                <Button fx:id="loginBtn" layoutX="27.0" layoutY="492.0" mnemonicParsing="false" onAction="#switchToLoginPage" prefHeight="47.0" prefWidth="99.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="     Login">
                     <graphic>
                         <ImageView fitHeight="28.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                             <image>
@@ -79,7 +79,21 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="ChargebackBtn" layoutX="16.0" layoutY="400.0" mnemonicParsing="false" onAction="#switchToChargebackPage" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="  Chargeback">
+                <!-- Personal Area Button -->
+                <Button fx:id="personalAreaBtn" layoutX="-1.0" layoutY="434.0" mnemonicParsing="false" onAction="#switchToPersonalAreaPage" prefHeight="72.0" prefWidth="166.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="My Profile" textAlignment="CENTER">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="58.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                            <image>
+                                <Image url="@images/personalArea.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="ChargebackBtn" layoutX="17.0" layoutY="398.0" mnemonicParsing="false" onAction="#switchToChargebackPage" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="  Chargeback">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -129,7 +143,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="chargebackBtn" layoutX="573.0" layoutY="426.0" mnemonicParsing="false" onAction="#switchToChargebackPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #ead1dc; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Chargeback" textAlignment="RIGHT">
+        <Button fx:id="bigChargebackBtn" layoutX="573.0" layoutY="426.0" mnemonicParsing="false" onAction="#switchToChargebackPage" prefHeight="100.0" prefWidth="202.0" style="-fx-background-color: #ead1dc; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Chargeback" textAlignment="RIGHT">
             <font>
                 <Font size="24.0" />
             </font>
@@ -141,10 +155,10 @@
                 </ImageView>
             </graphic>
         </Button>
-      <Label layoutX="317.0" layoutY="116.0" text="Welcome to &quot;our&quot; Cinema" textFill="#f6d9d9">
-         <font>
-            <Font name="Britannic Bold" size="40.0" />
-         </font>
-      </Label>
+        <Label layoutX="317.0" layoutY="116.0" text="Welcome to &quot;our&quot; Cinema" textFill="#f6d9d9">
+            <font>
+                <Font name="Britannic Bold" size="40.0" />
+            </font>
+        </Label>
     </children>
 </AnchorPane>

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
@@ -9,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.DatePicker?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.MovieDetailsPage">
     <children>
 
@@ -127,7 +127,7 @@
                 <Font size="21.0" />
             </font>
         </Label>
-        <Label layoutX="222.0" layoutY="426.0" prefHeight="35.0" prefWidth="127.0" text="Book Now" textFill="#42ef3f">
+        <Label fx:id="bookNowLabel" layoutX="222.0" layoutY="426.0" prefHeight="35.0" prefWidth="127.0" text="Book Now" textFill="#42ef3f">
             <font>
                 <Font name="System Bold" size="22.0" />
             </font>

@@ -1,19 +1,9 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
-import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Menu;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class HomePage {
 
@@ -40,6 +30,18 @@ public class HomePage {
 
     @FXML // fx:id="signUpBtn"
     private Button signUpBtn; // Value injected by FXMLLoader
+
+    @FXML
+    private Button bigChargebackBtn;
+    @FXML
+    private Button personalAreaBtn;
+
+
+    /*
+    @FXML
+    public void initialize() {
+        bigChargebackBtn.setText("Purchases\n& Refunds"); ////////////////////////////////////////////
+    }*/
 
     @FXML
     private void switchToHostPage() throws IOException {
@@ -76,6 +78,10 @@ public class HomePage {
         App.switchScreen("CardsPage");
     }
 
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
     /*
 
     @FXML // fx:id="soonInCinemaList"

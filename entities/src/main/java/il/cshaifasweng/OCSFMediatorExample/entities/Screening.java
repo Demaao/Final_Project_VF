@@ -112,6 +112,13 @@ public class Screening implements Serializable {
         this.branch = branch;
     }
 
+    public String myToString() {
+        if(this.movie instanceof HomeMovie)
+            return this.screeningTime.toLocalDate().toString() + "      " + this.screeningTime.toLocalTime();
+        else
+            return this.screeningTime.toLocalDate().toString() + "      " + this.screeningTime.toLocalTime() + "        " + this.branch.getName();
+    }
+
     public void setTakenSeatAt(int i) {
         if (i<hall.getSeatsNum()) {
             seatsArray[i]=true;

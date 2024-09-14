@@ -18,4 +18,5 @@ public class UpdateScreeningTimesEvent {
     public void setScreenings(List<Screening> screenings) {
         this.screenings = screenings;
     }
+
 }

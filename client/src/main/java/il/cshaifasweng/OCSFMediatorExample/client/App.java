@@ -1,6 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -18,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -183,10 +185,28 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "PurchaseLink":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PurchaseLink");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
             case "PaymentPage":
                 Platform.runLater(() -> {
                     try {
                         setContent("PaymentPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "PaymentLink":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PaymentLink");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -336,6 +356,34 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "MovieLinkDetailsPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("MovieLinkDetailsPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "PersonalAreaPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PersonalAreaPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "PersonalDetailsPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PersonalDetailsPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+
             case "ChooseSeating":
                 Platform.runLater(() -> {
                     try {
@@ -359,6 +407,43 @@ public class App extends Application {
                     alert.setHeaderText("Logged Out");
                     alert.show();
                 }
+                else   if (event.getWarning().getMessage().equals("Movie removed successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else   if (event.getWarning().getMessage().equals("Movie added successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                }  else   if (event.getWarning().getMessage().equals("Screening removed successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else   if (event.getWarning().getMessage().equals("Screening added successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else   if (event.getWarning().getMessage().equals("Screening time updated successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else   if (event.getWarning().getMessage().equals("Complaint submitted successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                }  else   if (event.getWarning().getMessage().equals("Complaint answered successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                }   else   if (event.getWarning().getMessage().equals("Request sent successfully!")) {
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if (event.getWarning().getMessage().startsWith("You have")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().startsWith("Time remaining for Complaint NO.")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().equals("Request denied successfully!")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                } else if(event.getWarning().getMessage().equals("Request confirmed successfully!")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
+                }
                 else if (loginDeniedCounter >= 5) {
                     Stage dialogStage = new Stage();
                     dialogStage.initStyle(StageStyle.UNDECORATED); // No window decorations
@@ -374,6 +459,19 @@ public class App extends Application {
                     dialogStage.setScene(scene);
                     dialogStage.centerOnScreen(); // Center dialog on screen
                     dialogStage.show();
+
+                    final int[] countdown = {10};
+
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event1 -> {
+                        countdown[0]--;
+                        label.setText("Too many incorrect login attempts!\nTry again in " + countdown[0] + " seconds");
+
+                        if (countdown[0] <= 0) {
+                            dialogStage.close();
+                        }
+                    }));
+                    timeline.setCycleCount(10); // Repeat the KeyFrame 10 times (once per second)
+                    timeline.play();
 
                     // Automatically close the dialog after 30 seconds
                     PauseTransition delay = new PauseTransition(Duration.seconds(10));
@@ -397,6 +495,23 @@ public class App extends Application {
                 } catch (IOException e) {
                 }
             });
+        }
+    }
+
+    @Subscribe
+    public void onMovieUpdateEvent(NewMessage event){
+        event.getMessage();
+        if(Objects.equals(event.getMessage(), "movieNotAvailable") && (MovieDetailsPage.movieDetailsPage == 1)
+        && ((int)event.getObject() == MovieDetailsPage.selectedMovie.getId())){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Sorry, the movie is no longer available.");
+            alert.show();
+            try {
+                MovieDetailsPage.movieDetailsPage = 0;
+                switchScreen("MoviesPage");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

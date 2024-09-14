@@ -31,8 +31,6 @@ public class Branch implements Serializable {
     @JoinColumn(name = "branch_manager_id")  // This side owns the relationship
     private BranchManager branchManager;
 
-
-    //TODO: lines from 36-45 was added on 14/9 - maybe it was before i have no clue
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Screening> screenings;
 

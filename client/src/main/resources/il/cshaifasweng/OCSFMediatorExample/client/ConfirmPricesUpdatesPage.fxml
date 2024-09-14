@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -102,12 +103,36 @@
         </Label>
         <TableView fx:id="priceUpdateRequestTable" layoutX="211.0" layoutY="148.0" prefHeight="358.0" prefWidth="666.0">
             <columns>
-                <TableColumn prefWidth="104.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Request NO." />
-                <TableColumn prefWidth="106.39996337890625" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Product Type" />
-                <TableColumn prefWidth="90.40005493164062" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Date" />
-                <TableColumn prefWidth="111.20001220703125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Current Price" />
-                <TableColumn prefWidth="108.800048828125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="New Price" />
-                <TableColumn prefWidth="152.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Request status" />
+                <TableColumn fx:id="requestNOColumn" prefWidth="32.79998779296875" style="-fx-font-size: 15;" text="NO.">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="productColumn" prefWidth="100.79998779296875" style="-fx-font-size: 15;" text="Product Type">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="product" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="dateColumn" prefWidth="124.00003051757812" style="-fx-font-size: 15;" text="Date">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="date" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="currentPriceColumn" prefWidth="141.5999755859375" style="-fx-font-size: 15;" text="Current Price">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="currentPrice" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="newPriceColumn" prefWidth="172.0" style="-fx-font-size: 15;" text="New Price">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="newPrice" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="statusColumn" prefWidth="93.59995117187498" style="-fx-font-size: 15;" text="Status">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="status" />
+                    </cellValueFactory>
+                </TableColumn>
             </columns>
         </TableView>
       <Label layoutX="211.0" layoutY="102.0" prefHeight="35.0" prefWidth="468.0" text="Select the request you want to respond to" textFill="#f6d9d9">
@@ -115,12 +140,12 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="confirmBtn" layoutX="766.0" layoutY="524.0" mnemonicParsing="false" onAction="#confirmPriceUpdate" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm">
+      <Button fx:id="confirmBtn" disable="true" layoutX="766.0" layoutY="524.0" mnemonicParsing="false" onAction="#confirmPriceUpdate" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="denyBtn" layoutX="632.0" layoutY="524.0" mnemonicParsing="false" onAction="#denyPriceUpdate" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Deny">
+      <Button fx:id="denyBtn" disable="true" layoutX="632.0" layoutY="524.0" mnemonicParsing="false" onAction="#denyPriceUpdate" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Deny">
          <font>
             <Font size="18.0" />
          </font>

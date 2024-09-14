@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -53,10 +54,14 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(BranchManager.class); /////////////
 		configuration.addAnnotatedClass(ContentManager.class); /////////////////
 		configuration.addAnnotatedClass(CustomerServiceWorker.class); /////////////
+		configuration.addAnnotatedClass(Complaint.class); ///////////////////////////////////
+		configuration.addAnnotatedClass(ChangePriceRequest.class);  //////////////////////
+		configuration.addAnnotatedClass(Cinema.class); ///////////////////////////////////////
+		configuration.addAnnotatedClass(Customer.class); //for testing only
+		configuration.addAnnotatedClass(Purchase.class);  //for testing only
 		configuration.addAnnotatedClass(Hall.class);
 		configuration.addAnnotatedClass(MovieTicket.class);
 		configuration.addAnnotatedClass(Buyer.class);
-		configuration.addAnnotatedClass(Purchase.class);
 
 
 
@@ -75,17 +80,78 @@ public class SimpleServer extends AbstractServer {
 			generateBranches(session);
 			generateHalls(session); //TODO: switch with screenings
 			generateScreenings(session);
-			generateHeadManager(session); /////////////////////
-			generateBranchManager(session); /////////////////////
-			generateContentManager(session); /////////////////////
-			generateCustomerServiceWorker(session); //////////////
+			generateHeadManager(session);
+			generateBranchManager(session);
+			generateContentManager(session);
+			generateCustomerServiceWorker(session);
+			generateCinema(session);  ///////////////////////////////////
+			generateComplaints(session);
+			generateChangePriceRequest(session); //////////////////////////////////////////////
+			generateCustomers(session);//for testing only
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+	private static void generateCinema(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+		Cinema cinema = new Cinema(100, 90, 1000);
+		Cinema.cinema = cinema;
+		session.save(cinema);
+		session.flush();
+	}
+
+	private static void generateComplaints(Session session) throws Exception {
+		Complaint complaint1 = new Complaint("Dema Omar", 123123123L, "1234567890",
+				"Purchases", "john@example.com", "Overcharged for my last order.", LocalDateTime.of(2024, 9, 11, 20, 30),
+				"Thank you for reaching out,\nyou will be refunded accordingly.", false);
+		Complaint complaint2 = new Complaint("Jane Smith", 987654321L, "0987654321",
+				"Movie link", "jane@example.com", "Unable to access the link.", LocalDateTime.of(2024, 9, 11, 19, 56),
+				"Thank you for reaching out,\nthe link will be activated at the screening's scheduled time.", false);
+		Complaint complaint3 = new Complaint("Alice Johnson", 555666777L, "1122334455",
+				"Other", "alice@example.com", "Loved the new movie selection!", LocalDateTime.of(2024, 9, 9, 11, 32),
+				"Thank you for reaching out,\nnew movies are coming out soon!", true);
+		Complaint complaint4 = new Complaint("Shada Ghanem", 123456789L, "9988776655",
+				"Screening", "bob@example.com", "When will the new movie be released?", LocalDateTime.of(2024, 9, 5, 22, 4),
+                "Thank you for reaching out,\nthe release date for the new movie has not yet been announced.\nPlease stay tuned for future updates.", true);
+
+		session.save(complaint1);
+		session.save(complaint2);
+		session.save(complaint3);
+		session.save(complaint4);
+		session.flush();
+	}
+
+	//This code is for testing only
+	private static void generateCustomers(Session session) {
+		List<Purchase> purchases1 = new ArrayList<>();
+		List<Purchase> purchases2 = new ArrayList<>();
+
+		Customer customer1 = new Customer(123123123,"dema omar", "john.doe@example.com", "0501234567", purchases1,false);
+		Customer customer2 = new Customer(123456789,"shada ghanem", "jane.smith@example.com", "0527654321", purchases2,false);
+
+		session.save(customer1);
+		session.save(customer2);
+		session.flush();
+	}
+
+	private static void generateChangePriceRequest(Session session) throws Exception {
+		Cinema cinema = session.get(Cinema.class, 1);
+		ChangePriceRequest changePriceRequest1 = new ChangePriceRequest(cinema.getCardPrice(), 110, "Card", "Denied", LocalDateTime.of(2024, 9, 5, 22, 4));
+		session.save(changePriceRequest1);
+		session.flush();
+
+		ChangePriceRequest changePriceRequest2 = new ChangePriceRequest(80, 100, "Ticket", "Confirmed", LocalDateTime.of(2024, 9, 1, 22, 30));
+		session.save(changePriceRequest2);
+		session.flush();
+
+		ChangePriceRequest changePriceRequest3 = new ChangePriceRequest(cinema.getLinkTicketPrice(), 80, "Link Ticket", "Received", LocalDateTime.of(2024, 8, 8, 9, 55));
+		session.save(changePriceRequest3);
+		session.flush();
+	}
+
+
+		private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
 		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
@@ -163,6 +229,17 @@ public class SimpleServer extends AbstractServer {
 
 
 	private static void generateMovies(Session session) throws Exception {
+		byte[][] images = new byte[10][];
+		for (int i = 1; i <= 10; i++) {
+			images[i - 1] = loadImageFromFile(String.format("images/%d.jpg", i));
+		}
+		/*
+		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
+		Branch haifaCinema = session.get(Branch.class, 1);
+		Branch telAvivCinema = session.get(Branch.class, 2);
+		Branch eilatCinema = session.get(Branch.class, 3);
+		Branch karmielCinema = session.get(Branch.class, 4);
+		Branch jerusalemCinema = session.get(Branch.class, 5);
 		byte[] image1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
 		byte[] image2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
 		byte[] image3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
@@ -175,6 +252,25 @@ public class SimpleServer extends AbstractServer {
 		byte[] image10 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\10.jpg");
 
 
+
+		List<Branch> CinemaBranches1 = new ArrayList<>();  // יצירת רשימת בתי קולנוע עבור הסרט הראשון
+		CinemaBranches1.add(haifaCinema);
+		CinemaBranches1.add(telAvivCinema);
+		CinemaBranches1.add(eilatCinema);
+
+		List<Branch> CinemaBranches1 = new ArrayList<>();
+		CinemaBranches1.add(haifaCinema);
+		CinemaBranches1.add(telAvivCinema);
+		CinemaBranches1.add(eilatCinema);
+
+		List<Branch> CinemaBranches2 = new ArrayList<>();
+		CinemaBranches2.add(karmielCinema);
+		CinemaBranches2.add(jerusalemCinema);
+
+		List<Branch> CinemaBranches2 = new ArrayList<>();  // יצירת רשימת בתי קולנוע עבור הסרט הראשון
+		CinemaBranches2.add(karmielCinema);
+		CinemaBranches2.add(jerusalemCinema);
+		*/
 
 		Movie num1 = new Movie(1, "A quiet place", "מקום שקט 2", "Michael Sarnoski", 2020, image1,"Drama","Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path."
 
@@ -256,20 +352,27 @@ public class SimpleServer extends AbstractServer {
 		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
 		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
 
-		SoonMovie soonMovie1 = new SoonMovie(1, "Blink Twice","צאי מזה" ,"Sep 5,2024", Soonimage1);
+		SoonMovie soonMovie1 = new SoonMovie(1, "Blink Twice","צאי מזה" ,"Zoë Kravitz", 2024, SoonImage1, "Mystery" ,"When tech billionaire Slater King meets cocktail waitress Frida at his fundraising gala, he invites her to join him and his friends on a dream vacation on his private island. As strange things start to happen, Frida questions her reality.",
+				"Naomi Ackie, Channing Tatum, Alia Shawkat", "1h42m");
 		session.save(soonMovie1);
 		session.flush();
 
-		SoonMovie soonMovie2 = new SoonMovie(2, "African Giants","ענקים אפריקאים", "Sep 10,2024", Soonimage2);
+		SoonMovie soonMovie2 = new SoonMovie(2, "African Giants","ענקים אפריקאים", "Omar S. Kamara", 2024, SoonImage2, "Drama", "Over a weekend visit in Los Angeles, two first-generation Sierra Leonean American brothers navigate the changing dynamics of brotherhood after a surprise announcement.",
+						"Tanyell Waivers, Kathleen Kenny, Jerry Hernandez", "1h42m");
 		session.save(soonMovie2);
 		session.flush();
 
-		SoonMovie soonMovie3 = new SoonMovie(3, "The Killer's Game","המשחק הרוצח" ,"Sep 15,2024", Soonimage3);
+		SoonMovie soonMovie3 = new SoonMovie(3, "The Killer's Game","המשחק הרוצח" , "J.J. Perry", 2024, SoonImage3, "Action", "A veteran assassin is diagnosed with a life-threatening illness and authorizes a kill on himself. After ordering the kill, an army of former colleagues pounce and a new piece of information comes to light. Insanity ensues.",
+				"Sofia Boutella, Lucy Cork, Dave Bautista", "1h44m");
 		session.save(soonMovie3);
 		session.flush();
 	}
 
 	private static void generateHomeMovies(Session session) throws Exception {
+		byte[][] homeImages = new byte[6][];  // מערך לאחסון התמונות של סרטי הבית
+		for (int i = 1; i <= 6; i++) {       //טוענים את התמונות ושומרים אותם במערך
+			homeImages[i - 1] = loadImageFromFile(String.format("forHome_images/%d.jpg", i));
+		}
 		byte[] image1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\1.jpg");
 		byte[] image2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\2.jpg");
 		byte[] image3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\3.jpg");
@@ -322,23 +425,23 @@ public class SimpleServer extends AbstractServer {
 
 		Branch haifaCinema = new Branch(1,"Haifa Cinema","Haifa");
 
-		haifaCinema.addMovie(movie1, movie2, movie6, movie7, movie8);
+		haifaCinema.addMovie(movie2, movie4, movie6, movie8, movie10);
 		session.save(haifaCinema);
 
 		Branch telAvivCinema = new Branch(2,"Tel Aviv Cinema","Tel Aviv");
-		telAvivCinema.addMovie(movie1, movie2, movie6, movie7, movie8);
+		telAvivCinema.addMovie(movie1, movie3, movie5, movie7, movie9);
 		session.save(telAvivCinema);
 
 		Branch eilatCinema = new Branch(3,"Eilat Cinema","Eilat");
-		eilatCinema.addMovie(movie1, movie2, movie6, movie7, movie8);
+		eilatCinema.addMovie(movie1, movie2, movie5, movie6, movie9, movie10);
 		session.save(eilatCinema);
 
 		Branch karmielCinema = new Branch(4,"Karmiel Cinema","Karmiel");
-		karmielCinema.addMovie(movie3, movie4, movie5, movie9, movie10);
+		karmielCinema.addMovie(movie3, movie4, movie6, movie8, movie9, movie10);
 		session.save(karmielCinema);
 
 		Branch jerusalemCinema = new Branch(5,"Jerusalem Cinema","Jerusalem");
-		jerusalemCinema.addMovie(movie3, movie4, movie5, movie9, movie10);
+		jerusalemCinema.addMovie(movie1, movie2, movie3, movie7, movie8, movie9, movie10);
 		session.save(jerusalemCinema);
 
 		session.flush();
@@ -410,14 +513,13 @@ public class SimpleServer extends AbstractServer {
 
 	private static void generateScreenings(Session session) throws Exception {
 
-		// ××¢× ××ª ××ª× ××§××× ××¢ ×××¡× ×× ×ª×× ××
+
 		Branch haifaCinema = session.get(Branch.class, 1);
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
 		Branch karmielCinema = session.get(Branch.class, 4);
 		Branch jerusalemCinema = session.get(Branch.class, 5);
 
-		// ××¢× ××ª ××¡×¨××× ×××¡× ×× ×ª×× ××
 		Movie movie1 = session.get(Movie.class, 1);
 		Movie movie2 = session.get(Movie.class, 2);
 		Movie movie3 = session.get(Movie.class, 3);
@@ -429,7 +531,6 @@ public class SimpleServer extends AbstractServer {
 		Movie movie9 = session.get(Movie.class, 9);
 		Movie movie10 = session.get(Movie.class, 10);
 
-		//  ×¨×©××× ×©× ××× × ××§×¨× ×
 		List<LocalDateTime> screeningTimes = Arrays.asList(
 				LocalDateTime.of(2024, 9, 24, 18, 30),
 				LocalDateTime.of(2024, 9, 24, 20, 30),
@@ -483,44 +584,50 @@ public class SimpleServer extends AbstractServer {
 		Hall hall25_ = session.get(Hall.class,25);
 		Hall hall26_ = session.get(Hall.class,26);
 
-		for (LocalDateTime time : screeningTimes) {    // ××××× ××××¡×¤×ª ×× ××× × ×××§×¨× × ××¡×¨×××
-			movie1.addScreening(time, haifaCinema, hall1_);
-			movie1.addScreening(time, telAvivCinema, hall6_);
-			movie1.addScreening(time, eilatCinema, hall12_);
+
+		for (LocalDateTime time : screeningTimes) {
+			movie1.addScreening(time, jerusalemCinema, hall1_);
+			movie1.addScreening(time, telAvivCinema,hall6_);
+			movie1.addScreening(time, eilatCinema,hall12_);
 
 			movie2.addScreening(time, haifaCinema, hall2_);
-			movie2.addScreening(time, telAvivCinema, hall7_);
+			movie2.addScreening(time, jerusalemCinema, hall7_);
 			movie2.addScreening(time, eilatCinema, hall13_);
 
 			movie3.addScreening(time, karmielCinema,hall17_);
 			movie3.addScreening(time, jerusalemCinema,hall22_);
+			movie3.addScreening(time, telAvivCinema,hall15_);
+
 
 			movie4.addScreening(time, karmielCinema,hall18_);
-			movie4.addScreening(time, jerusalemCinema,hall23_);
+			movie4.addScreening(time, haifaCinema,hall23_);
 
-			movie5.addScreening(time, karmielCinema,hall19_);
-			movie5.addScreening(time, jerusalemCinema,hall24_);
+			movie5.addScreening(time, telAvivCinema,hall19_);
+			movie5.addScreening(time, eilatCinema,hall24_);
 
 			movie6.addScreening(time, haifaCinema, hall3_);
-			movie6.addScreening(time, telAvivCinema, hall8_);
+			movie6.addScreening(time, karmielCinema, hall8_);
 			movie6.addScreening(time, eilatCinema, hall14_);
 
-			movie7.addScreening(time, haifaCinema, hall4_);
+			movie7.addScreening(time, jerusalemCinema, hall4_);
 			movie7.addScreening(time, telAvivCinema, hall9_);
-			movie7.addScreening(time, eilatCinema, hall15_);
 
 			movie8.addScreening(time, haifaCinema, hall5_);
-			movie8.addScreening(time, telAvivCinema, hall10_);
-			movie8.addScreening(time, eilatCinema, hall16_);
+			movie8.addScreening(time, karmielCinema, hall10_);
+			movie8.addScreening(time, jerusalemCinema, hall16_);
 
-			movie9.addScreening(time, karmielCinema,hall20_);
-			movie9.addScreening(time, jerusalemCinema,hall25_);
+			movie9.addScreening(time, telAvivCinema,hall20_);
+			movie9.addScreening(time, eilatCinema,hall25_);
+		//	movie9.addScreening(time, karmielCinema);
+			//movie9.addScreening(time, jerusalemCinema);
 
 			movie10.addScreening(time, karmielCinema,hall21_);
 			movie10.addScreening(time, jerusalemCinema,hall26_);
+		//	movie10.addScreening(time, haifaCinema);
+		//	movie10.addScreening(time, eilatCinema);
 
 		}
-		// ××¦××¨×ª ×¨×©××× ×©× ×× ××¡×¨××× ××× ××¢×××¨ ×¢× ×××× ×××©×××¨ ×××ª×
+
 		List<Movie> movies = Arrays.asList(movie1, movie2, movie3, movie4, movie5, movie6, movie7, movie8, movie9, movie10);
 		for (Movie movie : movies) {
 			session.save(movie);
@@ -528,13 +635,12 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 
 
-		// ××¢× ××ª ××¡×¨××× ×©× ××××ª  ×××¡× ×× ×ª×× ××
-		Movie movie11 = session.get(Movie.class, 11);
-		Movie movie12 = session.get(Movie.class, 12);
-		Movie movie13 = session.get(Movie.class, 13);
 		Movie movie14 = session.get(Movie.class, 14);
 		Movie movie15 = session.get(Movie.class, 15);
 		Movie movie16 = session.get(Movie.class, 16);
+		Movie movie17 = session.get(Movie.class, 17);
+		Movie movie18 = session.get(Movie.class, 18);
+		Movie movie19 = session.get(Movie.class, 19);
 
 
 		List<LocalDateTime> HomeScreeningTimes = Arrays.asList(
@@ -560,32 +666,33 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 19, 00),
 				LocalDateTime.of(2024, 9, 30, 23, 00)
 		);
-		for (LocalDateTime time : HomeScreeningTimes) {    // ××××× ××××¡×¤×ª ×× ××× × ×××§×¨× × ××¡×¨×××
-//			movie11.addScreening(time,null, null);
-//			movie12.addScreening(time,null, null);
-//			movie13.addScreening(time,null, null);
-//			movie14.addScreening(time,null, null);
-//			movie15.addScreening(time,null, null);
-//			movie16.addScreening(time,null, null);
+		for (LocalDateTime time : HomeScreeningTimes) {
+			movie14.addScreening(time, null);
+			movie15.addScreening(time, null);
+			movie16.addScreening(time, null);
+			movie17.addScreening(time, null);
+			movie18.addScreening(time, null);
+			movie19.addScreening(time, null);
 		}
 
-		session.save(movie11);
-		session.save(movie12);
-		session.save(movie13);
-		session.save(movie14);
+			session.save(movie14);
 		session.save(movie15);
 		session.save(movie16);
+		session.save(movie17);
+		session.save(movie18);
+		session.save(movie19);
 
 
 		//Hibernate.initialize(movie2.getScreenings());
 		session.flush();
 	}
 
-	private static byte[] loadImageFromFile(String filePath) throws IOException {
-		File file = new File(filePath);
-		try (InputStream inputStream = new FileInputStream(file)) {
-			return inputStream.readAllBytes();
-		}
+	// for testing
+	private static List<Customer> getAllCustomers(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
+		query.from(Customer.class);
+		return session.createQuery(query).getResultList();
 	}
 
 	private static List<Movie> getAllMovies(Session session) throws Exception {
@@ -594,6 +701,22 @@ public class SimpleServer extends AbstractServer {
 		query.from(Movie.class);
 		return session.createQuery(query).getResultList();
 	}
+
+	private static List<ChangePriceRequest> getAllRequests(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ChangePriceRequest> query = builder.createQuery(ChangePriceRequest.class);
+		query.from(ChangePriceRequest.class);
+		return session.createQuery(query).getResultList();
+	}
+
+	private static byte[] loadImageFromFile(String relativePath) throws IOException {
+		InputStream inputStream = SimpleServer.class.getClassLoader().getResourceAsStream(relativePath);
+		if (inputStream == null) {
+			throw new FileNotFoundException("File not found: " + relativePath);
+		}
+		return inputStream.readAllBytes();
+	}
+
 
 	private static List<SoonMovie> getAllSoonMovies(Session session) throws Exception {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -609,10 +732,24 @@ public class SimpleServer extends AbstractServer {
 		return session.createQuery(query).getResultList();
 	}
 
+	private static List<Branch> getAllBranches(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Branch> query = builder.createQuery(Branch.class);
+		query.from(Branch.class);
+		return session.createQuery(query).getResultList();
+	}
+
 	private static HeadManager getHeadManager(Session session) throws Exception { //////////////////////
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<HeadManager> query = builder.createQuery(HeadManager.class);
 		query.from(HeadManager.class);
+		return session.createQuery(query).getSingleResult();
+	}
+
+	private static Cinema cinema(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Cinema> query = builder.createQuery(Cinema.class);
+		query.from(Cinema.class);
 		return session.createQuery(query).getSingleResult();
 	}
 
@@ -647,6 +784,13 @@ public class SimpleServer extends AbstractServer {
 	private static List<Screening> getScreeningsForMovie(Session session, int movieId) {
 		Movie movie = session.get(Movie.class, movieId);
 		return new ArrayList<>(movie.getScreenings());
+	}
+
+	private static List<Complaint> getAllComplaints(Session session) throws Exception { //////////////////////
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Complaint> query = builder.createQuery(Complaint.class);
+		query.from(Complaint.class);
+		return session.createQuery(query).getResultList();
 	}
 
 	@Override
@@ -691,8 +835,7 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if(msgString.equals("login")){  ////////////////////////////////////////
+			} else if (msgString.equals("login")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					String userNameString = message.getUserName();
@@ -702,21 +845,19 @@ public class SimpleServer extends AbstractServer {
 					int flag = 0;
 					for (Employee employee : employees) {
 						flag = 0;
-						if(userNameString.equals(employee.getUsername()) && passwordString.equals(employee.getPassword())){
-							if(employee.isOnline()){
+						if (userNameString.equals(employee.getUsername()) && passwordString.equals(employee.getPassword())) {
+							if (employee.isOnline()) {
 								newMessage = new NewMessage("Alreadylogin");
-							}
-							else{
+							} else {
 								employee.setIsOnline(true);
 								newMessage = new NewMessage(employee, "login");
 							}
 							client.sendToClient(newMessage);
 							session.getTransaction().commit();
 							break;
-						}
-						else flag = 1;
+						} else flag = 1;
 					}
-					if(flag == 1) {
+					if (flag == 1) {
 						newMessage = new NewMessage("loginDenied");
 						client.sendToClient(newMessage);
 						session.getTransaction().commit();
@@ -726,14 +867,13 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if (msgString.equals("logOut")) {  //////////////////////////////////////////////
+			} else if (msgString.equals("logOut")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					List<Employee> employees = getAllEmployees(session);
 					Employee employee = message.getEmployee();
-					for(Employee emp : employees){
-						if(emp.getId() == employee.getId()){
+					for (Employee emp : employees) {
+						if (emp.getId() == employee.getId()) {
 							emp.setIsOnline(false);
 						}
 					}
@@ -744,10 +884,9 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			}
-			else if (msgString.equals("screeningTimesRequest")) {
-				System.out.println("screeningTimesRequest 1");
-				try (Session session = sessionFactory.openSession()) {
+			} else if (msgString.equals("screeningTimesRequest")) {
+                System.out.println("screeningTimesRequest 1");
+                try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Movie requestedMovie = message.getMovie();
 					List<Screening> screenings = session.createQuery(
@@ -759,6 +898,487 @@ public class SimpleServer extends AbstractServer {
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("removeHomeMovie")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					HomeMovie movie = (HomeMovie) message.getObject();
+					HomeMovie movieToDelete = session.get(HomeMovie.class, movie.getId());
+					session.remove(movieToDelete);
+					List<Movie> movies = getAllMovies(session);
+					List<HomeMovie> homeMovies = getAllHomeMovies(session);
+					NewMessage newMessage = new NewMessage(homeMovies, "homeMovies");
+					sendToAllClients(newMessage);
+					NewMessage newMessage3 = new NewMessage(movies, "movies");
+					client.sendToClient(newMessage3);
+					NewMessage newMessage2 = new NewMessage("movieRemoved");
+					client.sendToClient(newMessage2);
+					NewMessage newMessage4 = new NewMessage(movie.getId(), "movieNotAvailable");
+					sendToAllClients(newMessage4);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("removeCinemaMovie")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Movie movie = (Movie) message.getObject();
+					Movie movieToDelete = session.get(Movie.class, movie.getId());
+					String branch = message.getBranchName();
+					if(branch.equals("All") || movieToDelete.getBranches().size() == 1){
+						session.remove(movieToDelete);
+						NewMessage newMessage4 = new NewMessage(movie.getId(), "movieNotAvailable");
+						sendToAllClients(newMessage4);
+						NewMessage newMessage2 = new NewMessage("movieRemoved");
+						client.sendToClient(newMessage2);
+					}
+					else {
+						Movie movieToDeleteBranch = session.get(Movie.class, movie.getId());
+						List<Branch> branches = getAllBranches(session);
+						List<Screening> screenings = getScreeningsForMovie(session, movie.getId());
+						for (Screening screening : screenings) {
+							if (screening.getBranch().getName().equals(branch)) {
+								movieToDeleteBranch.getScreenings().remove(screening);
+								session.remove(screening);
+							}
+						}
+						for(Branch x : branches) {
+							if (x.getName().equals(branch)) {
+								x.getMovies().remove(movie);
+								movieToDeleteBranch.getBranches().remove(x);
+							}
+						}
+						if(movieToDeleteBranch != null) {
+							List<Screening> screeningsForMovie = getScreeningsForMovie(session, movie.getId());
+							NewMessage newMessage3 = new NewMessage(screeningsForMovie, "screeningTimes");
+							sendToAllClients(newMessage3);
+						}
+						NewMessage newMessage2 = new NewMessage("movieRemoved");
+						client.sendToClient(newMessage2);
+					}
+					List<Movie> movies = getAllMovies(session);
+					NewMessage newMessage = new NewMessage(movies, "movies");
+					sendToAllClients(newMessage);
+
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("addCinemaMovie")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים לצפייה מהבית
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Movie movie = (Movie) message.getObject();
+					List<Branch> branches = getAllBranches(session);
+					List<Branch> movieBranches = message.getBranches();
+					List<Branch> newBranches = new ArrayList<>();
+					List<Screening> screenings = new ArrayList<>();
+					List<LocalDateTime> times = message.getDateTimes();
+					int i;
+					for(Branch x : branches){
+						i = 0;
+						for(Branch y : movieBranches) {
+							if(x.getName().equals(y.getName())){
+								if (!newBranches.contains(x))
+									newBranches.add(x);
+								if(!x.getMovies().contains(movie))
+									x.addMovie(movie);
+								session.save(x);
+								Screening screening = new Screening(times.get(i), movie, x);
+								screenings.add(screening);
+								movie.addScreening(times.get(i), x);
+							}
+							i++;
+						}
+					}
+					/*for(Branch y : movieBranches) {
+						String hql = "from Branch where name = :branchName";
+						Query<Branch> query = session.createQuery(hql, Branch.class);
+						query.setParameter("branchName", y.getName());
+						Branch branch = query.getSingleResult();
+						branch.getMovies().add(movie);
+						session.save(branch);
+						newBranches.add(branch);
+						Screening screening = new Screening(times.get(i), movie, branch);
+						screenings.add(screening);
+						i++;
+					}*/
+					movie.setBranches(newBranches);
+					//movie.setScreenings(screenings);
+					session.save(movie);
+					session.flush();
+					NewMessage newMessage = new NewMessage("movieAdded");  // שליחת רשימת הסרטים לבית ללקוח עם המחרוזת "homeMovies"
+					client.sendToClient(newMessage);
+					List<Movie> movies = getAllMovies(session);
+					NewMessage newMessage1 = new NewMessage(movies, "movies");
+					sendToAllClients(newMessage1);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("addHomeMovie")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים לצפייה מהבית
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					HomeMovie homeMovie = (HomeMovie) message.getObject();
+					session.save(homeMovie);
+					NewMessage newMessage = new NewMessage("movieAdded");  // שליחת רשימת הסרטים לבית ללקוח עם המחרוזת "homeMovies"
+					client.sendToClient(newMessage);
+					List<Movie> movies = getAllMovies(session);
+					NewMessage newMessage1 = new NewMessage(movies, "movies");
+					client.sendToClient(newMessage1);
+					//sendToAllClients(newMessage1);
+					List<HomeMovie> homeMovies = getAllHomeMovies(session);
+					NewMessage newMessage2 = new NewMessage(homeMovies, "homeMovies");
+					sendToAllClients(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("removeScreening")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+
+					// קבלת הנתונים מההודעה
+					ScreeningData data = (ScreeningData) message.getObject();
+					Movie movie = session.get(Movie.class, data.getMovieId());
+
+					if(movie instanceof HomeMovie){
+						HomeMovie homeMovie = session.get(HomeMovie.class, movie.getId());
+						LocalDateTime screeningTime = data.getScreeningTime();
+
+						// חיפוש ההקרנה להסרה
+						Screening screeningToRemove = movie.getScreenings().stream()
+								.filter(screening -> screening.getScreeningTime().equals(screeningTime))
+								.findFirst()
+								.orElse(null);
+
+						if (screeningToRemove != null) {
+							movie.getScreenings().remove(screeningToRemove); // הסרת ההקרנה מהסרט
+							session.remove(screeningToRemove); // הסרה מהמסד
+						} else {
+							System.err.println("Screening not found.");
+						}
+						session.save(movie); ///////////////////////
+					} else {
+					Branch branch = session.get(Branch.class, data.getBranchId());
+					LocalDateTime screeningTime = data.getScreeningTime();
+
+					if (movie == null || branch == null) {
+						System.err.println("Movie or branch not found.");
+						return;
+					}
+
+					// חיפוש ההקרנה להסרה
+					Screening screeningToRemove = movie.getScreenings().stream()
+							.filter(screening -> screening.getScreeningTime().equals(screeningTime) && screening.getBranch().equals(branch))
+							.findFirst()
+							.orElse(null);
+
+					if (screeningToRemove != null) {
+						movie.getScreenings().remove(screeningToRemove); // הסרת ההקרנה מהסרט
+						branch.getScreenings().remove(screeningToRemove); // הסרת ההקרנה מהסניף
+						session.remove(screeningToRemove); // הסרה מהמסד
+					} else {
+						System.err.println("Screening not found.");
+					}
+					session.save(movie); ///////////////////////
+					}
+
+					// שליחת עדכון לכל הלקוחות
+					List<Movie> movies = getAllMovies(session);
+					NewMessage newMessage = new NewMessage(movies, "movies");
+					sendToAllClients(newMessage);
+
+					List<HomeMovie> homeMovies = getAllHomeMovies(session);
+					NewMessage homeMoviesMessage = new NewMessage(homeMovies, "homeMovies");
+					sendToAllClients(homeMoviesMessage);
+
+					NewMessage newMessage2 = new NewMessage("screeningRemoved");
+					client.sendToClient(newMessage2);
+
+					List<Screening> screenings = getScreeningsForMovie(session, movie.getId());
+					NewMessage newMessage3 = new NewMessage(screenings, "screeningTimes");
+					sendToAllClients(newMessage3);
+
+					session.getTransaction().commit();
+
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("addScreening")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+
+					// Extract screening data from the message
+					ScreeningData data = (ScreeningData) message.getObject();
+					Movie movie = session.get(Movie.class, data.getMovieId());
+					Branch branch = data.getBranchId() != null ? session.get(Branch.class, data.getBranchId()) : null;
+					LocalDateTime screeningTime = data.getScreeningTime();
+
+					// Check if the screening already exists
+					boolean screeningExists = movie.getScreenings().stream()
+							.anyMatch(screening -> screening.getScreeningTime().equals(screeningTime) && (branch == null || screening.getBranch().equals(branch)));
+
+					if (!screeningExists) {
+						// Create and add the new screening
+						Screening newScreening = new Screening();
+						newScreening.setMovie(movie);
+						newScreening.setScreeningTime(screeningTime);
+						newScreening.setBranch(branch);
+						session.persist(newScreening);
+						movie.getScreenings().add(newScreening);
+						if (branch != null) {
+							branch.getScreenings().add(newScreening);
+						}
+						session.getTransaction().commit();
+
+						// Load updated movie list and send to all clients
+						List<Movie> movies = getAllMovies(session);
+						NewMessage updateMessage = new NewMessage(movies, "movies");
+						sendToAllClients(updateMessage);  // שליחת העדכון לכל הלקוחות
+
+						List<HomeMovie> homeMovies = getAllHomeMovies(session);
+						NewMessage homeMoviesMessage = new NewMessage(homeMovies, "homeMovies");
+						sendToAllClients(homeMoviesMessage);
+
+						// Send success message to the client who initiated the request
+						NewMessage newMessage = new NewMessage("screeningAdded");
+						client.sendToClient(newMessage);
+
+						List<Screening> screenings = getScreeningsForMovie(session, movie.getId());
+						NewMessage newMessage3 = new NewMessage(screenings, "screeningTimes");
+						sendToAllClients(newMessage3);
+					} else {
+						session.getTransaction().rollback();
+						NewMessage newMessage = new NewMessage("Screening already exists");
+						client.sendToClient(newMessage);
+					}
+				} catch (Exception exception) {
+					System.err.println("An error occurred while adding a screening: " + exception.getMessage());
+				}
+			} else if (msgString.equals("editScreening")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+
+					// Extract screening data from the message
+					ScreeningData data = (ScreeningData) message.getObject();
+					Movie movie = session.get(Movie.class, data.getMovieId());
+					Branch branch = data.getBranchId() != null ? session.get(Branch.class, data.getBranchId()) : null;
+					LocalDateTime newScreeningTime = data.getScreeningTime();
+
+					// Attempt to find the existing screening to update
+					Screening screeningToUpdate = movie.getScreenings().stream()
+							.filter(screening -> screening.getBranch().equals(branch))
+							.filter(screening -> !screening.getScreeningTime().equals(newScreeningTime)) // Ensure we're not comparing with the new time
+							.findFirst().orElse(null);
+
+					if (screeningToUpdate != null) {
+						// Update the screening time
+						screeningToUpdate.setScreeningTime(newScreeningTime);
+						session.update(screeningToUpdate);
+
+						// Commit transaction
+						session.getTransaction().commit();
+
+						// Load updated movie list and send to all clients
+						List<Movie> movies = getAllMovies(session);
+						NewMessage updateMessage = new NewMessage(movies, "movies");
+						sendToAllClients(updateMessage);
+
+						List<HomeMovie> homeMovies = getAllHomeMovies(session);
+						NewMessage homeMoviesMessage = new NewMessage(homeMovies, "homeMovies");
+						sendToAllClients(homeMoviesMessage);
+
+						// Send success message to the client who initiated the request
+						NewMessage successMessage = new NewMessage("Screening updated");
+						client.sendToClient(successMessage);
+
+						List<Screening> screenings = getScreeningsForMovie(session, movie.getId());
+						NewMessage screeningTimesMessage = new NewMessage(screenings, "screeningTimes");
+						sendToAllClients(screeningTimesMessage);
+					} else {
+						session.getTransaction().rollback();
+						NewMessage errorMessage = new NewMessage("Screening not found");
+						client.sendToClient(errorMessage);
+					}
+				} catch (Exception exception) {
+					System.err.println("An error occurred while editing a screening: " + exception.getMessage());
+				}
+			} else if (msgString.equals("submitComplaint")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Complaint complaint = (Complaint) message.getObject();
+					session.save(complaint);
+					NewMessage newMessage = new NewMessage("complaintSubmitted");
+					client.sendToClient(newMessage);
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage2 = new NewMessage(complaints, "complaints");
+					sendToAllClients(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("complaintsList")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage = new NewMessage(complaints, "complaints");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("answerComplaint")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Complaint complaint = (Complaint) message.getObject();
+					Complaint complaintToAnswer = session.get(Complaint.class, complaint.getId());
+					complaintToAnswer.setResponse(complaint.getResponse());
+					complaintToAnswer.setStatus(true);
+					session.save(complaintToAnswer);
+					List<Complaint> complaints = getAllComplaints(session);
+					NewMessage newMessage = new NewMessage(complaints, "complaints");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage("complaintAnswered");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("changePriceRequest")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					ChangePriceRequest changePriceRequest = (ChangePriceRequest) message.getObject();
+					session.save(changePriceRequest);
+					List<ChangePriceRequest> requests = getAllRequests(session);
+					NewMessage newMessage = new NewMessage(requests, "requests");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage("requestReceived");  // שליחת רשימת הסרטים ללקוח עם המחרוזת "movies"
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("requestsList")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<ChangePriceRequest> requests = getAllRequests(session);
+					NewMessage newMessage = new NewMessage(requests, "requests");
+					sendToAllClients(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("confirmPriceUpdate")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Cinema cinema = session.get(Cinema.class, 1);
+					ChangePriceRequest changePriceRequest = (ChangePriceRequest) message.getObject();
+					List<ChangePriceRequest> requests = getAllRequests(session);
+					ChangePriceRequest request = session.get(ChangePriceRequest.class, changePriceRequest.getId());
+					request.setStatus("Confirmed");
+					switch (changePriceRequest.getProduct()){
+						case "Ticket":
+							cinema.setTicketPrice(changePriceRequest.getNewPrice());
+							break;
+						case "Link Ticket":
+							cinema.setLinkTicketPrice(changePriceRequest.getNewPrice());
+							break;
+						case "Card":
+							cinema.setCardPrice(changePriceRequest.getNewPrice());
+					}
+					session.save(cinema);
+					session.save(request);
+					NewMessage newMessage = new NewMessage(requests, "requests");
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage(cinema, "cinema");
+					sendToAllClients(newMessage2);
+					NewMessage newMessage3 = new NewMessage("requestConfirmed");
+					client.sendToClient(newMessage3);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+                }
+            } else if (msgString.equals("denyPriceUpdate")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					ChangePriceRequest changePriceRequest = (ChangePriceRequest) message.getObject();
+					List<ChangePriceRequest> requests = getAllRequests(session);
+					ChangePriceRequest request = session.get(ChangePriceRequest.class, changePriceRequest.getId());
+					request.setStatus("Denied");
+					session.save(request);
+					NewMessage newMessage = new NewMessage(requests, "requests");
+					sendToAllClients(newMessage);
+					NewMessage newMessage2 = new NewMessage("requestDenied");
+					client.sendToClient(newMessage2);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("cinema")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Cinema cinema = session.get(Cinema.class, 1);
+					NewMessage newMessage = new NewMessage(cinema, "cinema");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+				}
+			} 	else if (msgString.equals("loginCustomer")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					int idNumber = message.getId();
+					List<Customer> customers = getAllCustomers(session);
+					NewMessage newMessage;
+					boolean found = false;
+
+					for (Customer customer : customers) {
+						if (idNumber == customer.getId()) {
+							found = true;
+							if (customer.isLoggedIn()) {
+								newMessage = new NewMessage("AlreadyloginCustomer");
+							} else {
+								customer.setLoggedIn(true);
+								newMessage = new NewMessage(customer, "loginCustomer");
+							}
+							client.sendToClient(newMessage);
+							session.getTransaction().commit();
+							break;
+						}
+					}
+
+					if (!found) {
+						newMessage = new NewMessage("loginDeniedCustomer");
+						client.sendToClient(newMessage);
+						session.getTransaction().commit();
+					}
+
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("logOutCustomer")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Customer customer = (Customer) message.getObject();
+					customer.setLoggedIn(false);  // log out
+					session.saveOrUpdate(customer);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred while logging out.");
 					exception.printStackTrace();
 				}
 			}

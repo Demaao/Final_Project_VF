@@ -1,15 +1,22 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.ChangePriceRequest;
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import il.cshaifasweng.OCSFMediatorExample.entities.Warning;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HeadManagerPage {
 
@@ -73,7 +80,8 @@ public class HeadManagerPage {
 
     @FXML
     private void requestLogoutFromServer() {
-        try { ///////////////////////////////////////////////////////////////
+        counter = 0;///////////////////////////////////////////////////
+        try {
             NewMessage message = new NewMessage("logOut", LoginPage.employee1);
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
@@ -81,23 +89,38 @@ public class HeadManagerPage {
 
         }
     }
+
     public void initialize() {
         headManagerNameLabel.setText(LoginPage.employee1.getFullName());
+        EventBus.getDefault().register(this);
+        requestRequestsFromServer();
     }
 
-  /*
-   public void initialize() {//////////////////////////////////////
-        EventBus.getDefault().register(this);
+    private void requestRequestsFromServer() {
+        try {
+            NewMessage message = new NewMessage("requestsList");
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+    private List<ChangePriceRequest> requests = new ArrayList<>();
+    public static int counter = 0;
 
     @Subscribe
-    public void onMessageEvent(MessageEvent event) {
+    public void onRequestEvent(UpdateRequestEvent event) {
         Platform.runLater(() -> {
-            LoginPage.employee1 = null;
-            try {
-                switchToHomePage();
+            requests.clear();
+            requests = event.getRequests();
+            int x = 0;
+            for(ChangePriceRequest request: requests) {
+                if (request.getStatus().equals("Received")) { // Assuming getStatus() returns false if not responded
+                    x++;
+                }
             }
-            catch (IOException e) {}
-        });
-    }*/
+            if (x > counter && x > 0) {
+                EventBus.getDefault().post(new WarningEvent(new Warning("You have " + x + " unanswered change price requests")));
+                counter = x;
+            }
+        });}
 }
