@@ -410,13 +410,13 @@ public class AddMoviePage {
         int movieYear =  Integer.parseInt(year.getText());
 
         if(screeningType.equals("In The Cinema")) {
-            Movie movie = new Movie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, movieGenre, descriptionText, mainActors, length);
+            Movie movie = new Movie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, movieGenre, descriptionText, mainActors, length,0);//TODO: add cost
             NewMessage msg = new NewMessage(movie, "addCinemaMovie", movieBranches, movieCinemaDateTimes);
             SimpleClient.getClient().sendToServer(msg);
         } else if(screeningType.equals("Link")) {
-            HomeMovie homeMovie = new HomeMovie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, link, movieGenre, descriptionText, mainActors, length);
+            HomeMovie homeMovie = new HomeMovie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, link, movieGenre, descriptionText, mainActors, length,0);//TODO: add cost
             for(Screening x: movieLinkScreenings){
-               homeMovie.addScreening(x.getScreeningTime(), x.getBranch());
+               homeMovie.addScreening(x.getScreeningTime(), x.getBranch(),null);
             }
             NewMessage msg = new NewMessage(homeMovie, "addHomeMovie");
             SimpleClient.getClient().sendToServer(msg);
@@ -479,7 +479,7 @@ public class AddMoviePage {
             if (screeningTypeSpinner.getValue().equals("In The Cinema")) {
                 Branch branch = new Branch();
                 branch.setName(cinema);
-                Screening screening = new Screening(dateTime1, null, branch);
+                Screening screening = new Screening(dateTime1, null, branch, null);
                 movieBranches.add(branch);
                 movieCinemaDateTimes.add(dateTime1);
                 movieCinemaScreenings.add(screening);
@@ -511,7 +511,7 @@ public class AddMoviePage {
                 // Connect the table to the data list
                 screeningTimeTableCinema.setItems(screeningsForTableCinema);
             } else if (screeningTypeSpinner.getValue().equals("Link")) {
-                Screening screening = new Screening(dateTime1, null, null);
+                Screening screening = new Screening(dateTime1, null, null, null);
                 movieLinkScreenings.add(screening);
                 screeningsForTableLink.add(screening);
 

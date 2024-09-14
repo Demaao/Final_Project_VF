@@ -26,7 +26,6 @@ public class MovieDetailsPage {
     @FXML
     private Button cancelBtn;
     private List<Screening> selectedScreening;
-    private static Movie selectedMovie;
 
     @FXML
     private Label movieTitleLabel;
@@ -399,7 +398,7 @@ public class MovieDetailsPage {
         else {
         App.switchScreen("PurchaseProductsPage");}}
 */
-}
+    }
 
     @FXML
     private void switchToChooseSeating() throws IOException, InterruptedException {

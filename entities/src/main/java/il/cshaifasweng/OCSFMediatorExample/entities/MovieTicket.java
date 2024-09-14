@@ -22,16 +22,18 @@ public class MovieTicket extends Purchase {
     private String seat;
     private boolean refunded;
     private int seatNum;
+    private long creditCardNum;
 
+//private Customer customer;
     public MovieTicket() {}
 
-    public MovieTicket(Screening screening, Buyer user, String seatID, int seatNum, double cost, long cardNum, String transactionTime) {
+    public MovieTicket(Screening screening, Customer user, String seatID, int seatNum, double cost, long cardNum, String transactionTime) {
         this.screening = screening;
         this.customer = user;
         this.seat = seatID;
         this.customer.addPurchase(this);
-        this.cost = cost;
-        this.transactionTime = transactionTime;
+        this.pricePaid = cost;
+        this.purchaseDate = transactionTime;
         this.creditCardNum = cardNum;
         this.seatNum = seatNum;
 //        this.purchaseType = "Cinema Ticket";
@@ -45,10 +47,10 @@ public class MovieTicket extends Purchase {
     public void setScreening(Screening screening) {
         this.screening = screening;
     }
-    public Buyer getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
-    public void setCustomer(Buyer customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
     public String getSeat() {

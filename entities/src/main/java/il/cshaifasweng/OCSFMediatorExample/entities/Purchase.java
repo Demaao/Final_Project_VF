@@ -24,13 +24,13 @@ public class Purchase implements Serializable {
     private int id;
 
     private String productType;
-    private String purchaseDate;
+    protected String purchaseDate;
     private String paymentMethod;
-    private double pricePaid;
+    protected double pricePaid;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    protected Customer customer;
 
 
     public Purchase () {}

@@ -272,70 +272,70 @@ public class SimpleServer extends AbstractServer {
 		CinemaBranches2.add(jerusalemCinema);
 		*/
 
-		Movie num1 = new Movie(1, "A quiet place", "מקום שקט 2", "Michael Sarnoski", 2020, image1,"Drama","Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path."
+		Movie num1 = new Movie(1, "A quiet place", "מקום שקט 2", "Michael Sarnoski", 2020, images[0],"Drama","Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path."
 
 				,"Emily Blunt,John Krasinski,Cillian Murphy","1h 37m", 40);
 
 		session.save(num1);
 		session.flush();
 
-		Movie num2 = new Movie(2, "Barbie", "ברבי", "Greta Gerwig", 2023, image2,"Comedy","Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans."
+		Movie num2 = new Movie(2, "Barbie", "ברבי", "Greta Gerwig", 2023, images[1],"Comedy","Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans."
 
 				,"Margot Robbie,Issa Rae,Ryan Gosling","1h 54m", 60);
 
 		session.save(num2);
 		session.flush();
 
-		Movie num3 = new Movie(3, "Fast X", "מהיר ועצבני 10", "Louis Leterrier", 2023,image3,"Action","Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes."
+		Movie num3 = new Movie(3, "Fast X", "מהיר ועצבני 10", "Louis Leterrier", 2023,images[2],"Action","Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes."
 
 				,"Vin Diesel,Michelle Rodriguez,Jason Statham","2h 21m", 50);
 
 		session.save(num3);
 		session.flush();
 
-		Movie num4 = new Movie(4, "Inside out", "הקול בראש 2", "Kelsey Mann", 2024, image4,"Adventure","A sequel that features Riley entering puberty and experiencing brand new, more complex emotions as a result. As Riley tries to adapt to her teenage years, her old emotions try to adapt to the possibility of being replaced."
+		Movie num4 = new Movie(4, "Inside out", "הקול בראש 2", "Kelsey Mann", 2024, images[3],"Adventure","A sequel that features Riley entering puberty and experiencing brand new, more complex emotions as a result. As Riley tries to adapt to her teenage years, her old emotions try to adapt to the possibility of being replaced."
 
 				,"Amy Poehler,Maya Hawke,Kensington Tallman","1h 36m", 55);
 
 		session.save(num4);
 		session.flush();
 
-		Movie num5 = new Movie(5, "It Ends With Us", "איתנו זה נגמר", "Justin Baldoni", 2024, image5,"Drama","When a woman's first love suddenly reenters her life, her relationship with a charming, but abusive neurosurgeon is upended and she realizes she must learn to rely on her own strength to make an impossible choice for her future."
+		Movie num5 = new Movie(5, "It Ends With Us", "איתנו זה נגמר", "Justin Baldoni", 2024, images[4],"Drama","When a woman's first love suddenly reenters her life, her relationship with a charming, but abusive neurosurgeon is upended and she realizes she must learn to rely on her own strength to make an impossible choice for her future."
 
 				,"Blake Lively,Justin Baldoni,Jenny Slate","2h 10m", 35);
 
 		session.save(num5);
 		session.flush();
 
-		Movie num6 = new Movie(6, "Joker", "ג'וקר", "Todd Philips", 2019, image6,"Drama","Arthur Fleck, a party clown and a failed stand-up comedian, leads an impoverished life with his ailing mother. However, when society shuns him and brands him as a freak, he decides to embrace the life of crime and chaos in Gotham City."
+		Movie num6 = new Movie(6, "Joker", "ג'וקר", "Todd Philips", 2019, images[5],"Drama","Arthur Fleck, a party clown and a failed stand-up comedian, leads an impoverished life with his ailing mother. However, when society shuns him and brands him as a freak, he decides to embrace the life of crime and chaos in Gotham City."
 
 				,"Joaquin Phoenix,Robert De Niro,Zazie Beetz","2h 2m", 60);
 
 		session.save(num6);
 		session.flush();
 
-		Movie num7 = new Movie(7, "Oppenheimer", "אופנהיימר", "Christopher Nolan", 2023, image7,"Documentary","The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb."
+		Movie num7 = new Movie(7, "Oppenheimer", "אופנהיימר", "Christopher Nolan", 2023, images[6],"Documentary","The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb."
 
 				,"Cillian Murphy Emily BluntRobert Downey","3h 10m", 55);
 
 		session.save(num7);
 		session.flush();
 
-		Movie num8 = new Movie(8, "The creator", "היוצר", "Gareth Edward", 2023, image8,"Action","Against the backdrop of a war between humans and robots with artificial intelligence, a former soldier finds the secret weapon, a robot in the form of a young child."
+		Movie num8 = new Movie(8, "The creator", "היוצר", "Gareth Edward", 2023, images[7],"Action","Against the backdrop of a war between humans and robots with artificial intelligence, a former soldier finds the secret weapon, a robot in the form of a young child."
 
 				,"John Washington,Madeleine Voyles,Gemma Chan","2h 13m", 40);
 
 		session.save(num8);
 		session.flush();
 
-		Movie num9 = new Movie(9, "Daughters", "הבנות", "Angela Patton", 2024, image9,"Documentary","Four young girls prepare for a special Daddy Daughter Dance with their incarcerated fathers, as part of a unique fatherhood program in a Washington"
+		Movie num9 = new Movie(9, "Daughters", "הבנות", "Angela Patton", 2024, images[8],"Documentary","Four young girls prepare for a special Daddy Daughter Dance with their incarcerated fathers, as part of a unique fatherhood program in a Washington"
 
 				,"Veronica Ngo,Ian Verdun,Sturgill Simpson","1h 48m", 35);
 
 		session.save(num9);
 		session.flush();
 
-		Movie num10 = new Movie(10, "In the Rearview", "מבט לאחור", "Maciek Hamela", 2023, image10,"Documentary","A small van traverses war-torn roads, picking up Ukrainians as they abandon their homes at the front. Shuttling them across the battered landscape into exile, the van becomes a fragile refuge, a zone for its passengers' confidences."
+		Movie num10 = new Movie(10, "In the Rearview", "מבט לאחור", "Maciek Hamela", 2023, images[9],"Documentary","A small van traverses war-torn roads, picking up Ukrainians as they abandon their homes at the front. Shuttling them across the battered landscape into exile, the van becomes a fragile refuge, a zone for its passengers' confidences."
 
 				,"Maciek Hamela,Frances Conroy,Hannah Gross","1h 24m", 40);
 
@@ -348,22 +348,22 @@ public class SimpleServer extends AbstractServer {
 //		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
 //		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
 //		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
-		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
-		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
-		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
+		byte[] SoonImage1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
+		byte[] SoonImage2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
+		byte[] SoonImage3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
 
 		SoonMovie soonMovie1 = new SoonMovie(1, "Blink Twice","צאי מזה" ,"Zoë Kravitz", 2024, SoonImage1, "Mystery" ,"When tech billionaire Slater King meets cocktail waitress Frida at his fundraising gala, he invites her to join him and his friends on a dream vacation on his private island. As strange things start to happen, Frida questions her reality.",
-				"Naomi Ackie, Channing Tatum, Alia Shawkat", "1h42m");
+				"Naomi Ackie, Channing Tatum, Alia Shawkat", "1h42m", 50);
 		session.save(soonMovie1);
 		session.flush();
 
 		SoonMovie soonMovie2 = new SoonMovie(2, "African Giants","ענקים אפריקאים", "Omar S. Kamara", 2024, SoonImage2, "Drama", "Over a weekend visit in Los Angeles, two first-generation Sierra Leonean American brothers navigate the changing dynamics of brotherhood after a surprise announcement.",
-						"Tanyell Waivers, Kathleen Kenny, Jerry Hernandez", "1h42m");
+						"Tanyell Waivers, Kathleen Kenny, Jerry Hernandez", "1h42m", 55);
 		session.save(soonMovie2);
 		session.flush();
 
 		SoonMovie soonMovie3 = new SoonMovie(3, "The Killer's Game","המשחק הרוצח" , "J.J. Perry", 2024, SoonImage3, "Action", "A veteran assassin is diagnosed with a life-threatening illness and authorizes a kill on himself. After ordering the kill, an army of former colleagues pounce and a new piece of information comes to light. Insanity ensues.",
-				"Sofia Boutella, Lucy Cork, Dave Bautista", "1h44m");
+				"Sofia Boutella, Lucy Cork, Dave Bautista", "1h44m", 60);
 		session.save(soonMovie3);
 		session.flush();
 	}
@@ -667,12 +667,12 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 23, 00)
 		);
 		for (LocalDateTime time : HomeScreeningTimes) {
-			movie14.addScreening(time, null);
-			movie15.addScreening(time, null);
-			movie16.addScreening(time, null);
-			movie17.addScreening(time, null);
-			movie18.addScreening(time, null);
-			movie19.addScreening(time, null);
+			movie14.addScreening(time, null,null);
+			movie15.addScreening(time, null,null);
+			movie16.addScreening(time, null,null);
+			movie17.addScreening(time, null,null);
+			movie18.addScreening(time, null,null);
+			movie19.addScreening(time, null,null);
 		}
 
 			session.save(movie14);
@@ -967,7 +967,7 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			} else if (msgString.equals("addCinemaMovie")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים לצפייה מהבית
+			} else if (msgString.equals("addCinemaMovie")) {  // בדיקה אם ההודעה היא בקשת רשימת סרטים לצפייה כדי שהמנהלת תוסיף סרט
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Movie movie = (Movie) message.getObject();
@@ -986,9 +986,9 @@ public class SimpleServer extends AbstractServer {
 								if(!x.getMovies().contains(movie))
 									x.addMovie(movie);
 								session.save(x);
-								Screening screening = new Screening(times.get(i), movie, x);
+								Screening screening = new Screening(times.get(i), movie, x, null);
 								screenings.add(screening);
-								movie.addScreening(times.get(i), x);
+								movie.addScreening(times.get(i), x, null);
 							}
 							i++;
 						}
