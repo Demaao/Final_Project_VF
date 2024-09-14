@@ -11,8 +11,8 @@ public class HomeMovie extends Movie implements Serializable {
 
     public HomeMovie() {}
 
-    public HomeMovie(int id, String engTitle, String hebTitle, String director, int year, byte[] imageData, String link, String genre, String description, String mainActors, String length) {
-        super(id, engTitle, hebTitle, director, year, imageData, genre, description, mainActors, length);
+    public HomeMovie(int id, String engTitle, String hebTitle, String director, int year, byte[] imageData, String link, String genre, String description, String mainActors, String length, double cost) {
+        super(id, engTitle, hebTitle, director, year, imageData, genre, description, mainActors, length, cost);
         this.link = link;
     }
 

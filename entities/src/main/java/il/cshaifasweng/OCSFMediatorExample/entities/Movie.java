@@ -1,12 +1,24 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
+//import org.hibernate.annotations.Fetch;
+//import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: added from github on 14.9
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+
+
 @Entity
+//TODO : these two lines were added from githbu:
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "DTYPE")
 @Table(name = "movies")
 public class Movie implements Serializable {
     @Id
@@ -20,12 +32,15 @@ public class Movie implements Serializable {
     private String description;
     private String mainActors;
     private String length;
+    private double cost;
 
     @Lob
     @Column(columnDefinition="BLOB")  // הגדרה של עמודת BLOB במסד הנתונים
     private byte[] imageData;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
+    //TODO: this one line was added from github:
+    @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "movie_branch",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -33,14 +48,15 @@ public class Movie implements Serializable {
     )
     private List<Branch> branches = new ArrayList<>();
 
-
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//TODO: the line "@Fetch(FetchMode.SUBSELECT)" was added from github, and FetchTyoe was changed from LAZY to EAGER
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+   @Fetch(FetchMode.SUBSELECT)
     private List<Screening> screenings = new ArrayList<>();
 
     public Movie() {
     }
 
-    public Movie(int id, String Engtitle, String Hebtitle, String director, int RlsYear, byte[] imageData, String genre, String description, String mainActors, String length) {
+    public Movie(int id, String Engtitle, String Hebtitle, String director, int RlsYear, byte[] imageData, String genre, String description, String mainActors, String length, double cost) {
         this.id = id;
         this.Engtitle = Engtitle;
         this.Hebtitle = Hebtitle;
@@ -51,9 +67,16 @@ public class Movie implements Serializable {
         this.description = description;
         this.mainActors = mainActors;
         this.length = length;
+        this.cost=cost;
     }
 
-    // Getters and setters
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
 
     public int getId() {
         return id;
@@ -151,8 +174,8 @@ public class Movie implements Serializable {
         this.screenings = screenings;
     }
 
-    public void addScreening(LocalDateTime screeningTime, Branch branch) {
-        Screening screening = new Screening(screeningTime, this, branch);
+    public void addScreening(LocalDateTime screeningTime, Branch branch, Hall hall) {
+        Screening screening = new Screening(screeningTime, this, branch, hall);
         screenings.add(screening);
     }
 

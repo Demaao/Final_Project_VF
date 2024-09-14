@@ -336,6 +336,15 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "ChooseSeating":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("ChooseSeating");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
         }
     }
 

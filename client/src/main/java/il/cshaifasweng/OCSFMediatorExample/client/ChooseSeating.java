@@ -1,32 +1,30 @@
-///**
-// * Sample Skeleton for 'SeatChoosing.fxml' Controller Class
-// */
-//
-//package il.cshaifasweng.OCSFMediatorExample.client;
-//
-//import de.jensd.fx.glyphs.materialicons.MaterialIconView;
+/**
+ * Sample Skeleton for 'SeatChoosing.fxml' Controller Class
+ */
+
+package il.cshaifasweng.OCSFMediatorExample.client;
+
+import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 //import il.cshaifasweng.OCSFMediatorExample.entities.BookingRequest;
-//import il.cshaifasweng.OCSFMediatorExample.entities.Hall;
-////import il.cshaifasweng.OCSFMediatorExample.entities.Message;
-//import il.cshaifasweng.OCSFMediatorExample.entities.Screening;
-//import javafx.scene.Node;
-//
-//import java.io.IOException;
-//import java.net.URL;
-//import java.util.ResourceBundle;
-//import javafx.event.ActionEvent;
-//import javafx.fxml.FXML;
-//import javafx.scene.control.Button;
-//import javafx.scene.control.Label;
-//import javafx.scene.image.Image;
-//import javafx.scene.image.ImageView;
-//import javafx.scene.input.MouseEvent;
-//import javafx.scene.layout.GridPane;
-////import il.cshaifasweng.OCSFMediatorExample.entities.TavSagoal;
-//import javafx.scene.layout.AnchorPane;
-//
-//
-//public class SeatChoosingController {
+import il.cshaifasweng.OCSFMediatorExample.entities.Hall;
+//import il.cshaifasweng.OCSFMediatorExample.entities.Message;
+import il.cshaifasweng.OCSFMediatorExample.entities.Screening;
+import javafx.scene.Node;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+//import il.cshaifasweng.OCSFMediatorExample.entities.TavSagoal;
+import javafx.scene.layout.AnchorPane;
+
+
+public class ChooseSeating {
 //    private static int requestedNum;//A static variable that tracks the number of seats requested by the user
 //    private Hall hall;//An instance hall class, representing the specific hall where the screening is taking place.
 //    private static Screening screening;//A static variable representing the screening event, including details about the movie, time, and seat availability.
@@ -42,7 +40,7 @@
 //    }
 //
 //    public static void setRequestedNum(int requestedNum) {
-//        SeatChoosingController.requestedNum = requestedNum;
+//        ChooseSeating.requestedNum = requestedNum;
 //    }
 //
 //    @FXML
@@ -224,124 +222,85 @@
 //    @FXML // fx:id="rowF"
 //    private Label rowF; // Value injected by FXMLLoader
 //
-//    @FXML // fx:id="c1"
-//    private Label c1; // Value injected by FXMLLoader
 //
-//    @FXML // fx:id="c2"
-//    private Label c2; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="c3"
-//    private Label c3; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="c4"
-//    private Label c4; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="c5"
-//    private Label c5; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="c6"
-//    private Label c6; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="c7"
-//    private Label c7; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="luba"
-//    private Label luba; // Value injected by FXMLLoader
 //
 //    @FXML
 //    private Label confLabel;
 //
-//    @FXML
-//    private ImageView poster;
 //
-//    //back to screening page in case "back button was pressed
-//    @FXML
-//    void backToPrevScene(ActionEvent event) {
-////        ChooseScreeningController.setMovie(screening.getMovie());
-////        try {
-////            App.setRoot("chooseScreening");
-////        } catch (IOException e) {
-////            // TODO Auto-generated catch block
-////            e.printStackTrace();
-////        }
-//    }
+//
 //
 //    @FXML
-//    void bookSeat() {
+//    private void bookSeat() {
 //        int counter2 = 0;
 //        int[] temp = new int[counter];
 //        String[] temp2 = new String[counter];
 //        int seatNum = 0;
 //        chosenSeats = "";
-//        if ((hall.getCols()/2)*2 == (hall.getCols())) {
-//            for (int k = 0 ; k < hall.getRows() ; k ++) {
-//                //rowsGrid.getChildren().get(k).setVisible(true);
-//                int i = 3 - hall.getCols()/2, j = 3 + hall.getCols()/2;
-//                for (; i <= j && seatNum < hall.getSeatsNum() ; i ++) {
-//                    if (i != 3) {
-//                        if (gridSeats.getChildren().get(i + k*7).getStyle()
-//                                .equals("-fx-fill:#ff0000; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
-//                            chosenSeats += Character.toString((char) 65 + k);
-//                            if (i<3) {
-//                                chosenSeats += Integer.toString(i - (3 - (hall.getCols())/2) + 1) + " ";
-//                            }
-//                            if (i>3) {
-//                                chosenSeats += Integer.toString(i - (3 - (hall.getCols())/2)) + " ";
-//                            }
-//                            if(confLabel.isVisible()) {
-//                                screening.setTakenSeatAt(seatNum);
-//                                temp[counter2]=seatNum;
-//                                temp2[counter2] = "" + Character.toString((char) 65 + k);
-//                                if (i<3) {
-//                                    temp2[counter2]+= Integer.toString(i - (3 - (hall.getCols())/2) + 1);
-//                                }
-//                                if (i>3) {
-//                                    temp2[counter2]+= Integer.toString(i - (3 - (hall.getCols())/2));
-//                                }
-//                                counter2++;
-//                            }
-//                        }
-//                        seatNum++;
-//                    }
-//                }
+//
+//        int cols = hall.getCols();
+//        int rows = hall.getRows();
+//        int seatsNum = hall.getSeatsNum();
+//
+//        boolean isEvenCols = (cols % 2 == 0);
+//        int left, right;
+//
+//        for (int k = 0; k < rows; k++) {
+//            if (isEvenCols) {
+//                left = 3 - cols / 2;
+//                right = 3 + cols / 2;
+//            } else {
+//                left = 3 - (cols - 1) / 2;
+//                right = 3 + (cols - 1) / 2;
 //            }
-//        } else {
-//            for (int k = 0 ; k < hall.getRows() ; k ++) {
-//                int i = 3 - (hall.getCols()-1)/2, j = 3 + (hall.getCols()-1)/2;
-//                for (; i <= j && seatNum < hall.getSeatsNum() ; i ++) {
-//                    if (gridSeats.getChildren().get(i + k*7).getStyle()
-//                            .equals("-fx-fill:#ff0000; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
-//                        chosenSeats+= Character.toString((char) 65 + k);
-//                        chosenSeats += Integer.toString(i + 1 - (3 - (hall.getCols()-1)/2)) + " ";
-//                        if(confLabel.isVisible()) {
-//                            screening.setTakenSeatAt(seatNum);
-//                            temp[counter2]=seatNum;
-//                            temp2[counter2] = "" + Character.toString((char) 65 + k);
-//                            temp2[counter2] += Integer.toString(i + 1 - (3 - (hall.getCols()-1)/2));
-//                            counter2++;
-//                        }
+//
+//            for (int i = left; i <= right && seatNum < seatsNum; i++) {
+//                if (i != 3) { // Skip the middle column
+//                    if (isSeatSelected(i, k)) {
+//                        processSelectedSeat(i, k, seatNum, counter2, temp, temp2);
+//                        counter2++;
 //                    }
 //                    seatNum++;
 //                }
 //            }
 //        }
-//        if(confLabel.isVisible() && confLabel.getText()!="You must choose a seat to continue.") {
-//            BookingRequest request = new BookingRequest(temp, temp2 , screening, counter, screening.getMovie().getTicketCost());
-////            try {//TODO
-////                SimpleClient.getClient().sendToServer(new Message("#SaveSeats", request));
-////            } catch (IOException e) {
-////                // TODO Auto-generated catch block
-////                e.printStackTrace();
-////            }
-//        }else if (counter!=0){
+//
+//        updateConfirmationLabel(counter);
+//    }
+//
+//    private boolean isSeatSelected(int i, int k) {
+//        return gridSeats.getChildren().get(i + k * 7).getStyle()
+//                .equals("-fx-fill:#ff0000; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
+//    }
+//
+//    private void processSelectedSeat(int i, int k, int seatNum, int counter2, int[] temp, String[] temp2) {
+//        chosenSeats += getSeatLabel(i, k);
+//        if (confLabel.isVisible()) {
+//            screening.setTakenSeatAt(seatNum);
+//            temp[counter2] = seatNum;
+//            temp2[counter2] = getSeatLabel(i, k).trim();
+//        }
+//    }
+//
+//    private String getSeatLabel(int i, int k) {
+//        String seatLabel = Character.toString((char) (65 + k)); // Convert row index to letter
+//        int cols = hall.getCols();
+//        if (i < 3) {
+//            seatLabel += Integer.toString(i - (3 - cols / 2) + 1);
+//        } else if (i > 3) {
+//            seatLabel += Integer.toString(i - (3 - cols / 2));
+//        }
+//        return seatLabel + " ";
+//    }
+//
+//    private void updateConfirmationLabel(int counter) {
+//        if (counter != 0) {
 //            confLabel.setText("You have selected the following seats: " + chosenSeats +
-//                    "\nTotal Cost: " + Double.toString(screening.getMovie().getTicketCost()*counter) +" NIS"
-//                    +"\nPlease click 'Book Seats' again to confirm and continue your purchase");
-//            confLabel.setVisible(true);
+//                    "Please click 'Book Seats' again to confirm and continue your purchase");
 //        } else {
 //            confLabel.setText("You must choose a seat to continue.");
-//            confLabel.setVisible(true);
 //        }
+//        confLabel.setVisible(true);
 //    }
 //
 //
@@ -358,14 +317,14 @@
 //        } else if (((Node) event.getSource()).getStyle()
 //                .equals("-fx-fill:#ff0000; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
 //            ((Node) event.getSource()).setStyle(
-//                    "-fx-fill:#792f2f; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
+//                    "-fx-fill:#dc48d5; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
 //            counter--;
 //            chosenNum.setText("Number of chosen seats: " + Integer.toString(counter));
 //            warning.setVisible(false);
 //        } else if (((Node) event.getSource()).getStyle()
 //                .equals("-fx-fill:#792f2f; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
 //            ((Node) event.getSource()).setStyle(
-//                    "-fx-fill:#ff0000; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
+//                    "-fx-fill:#6e2c71; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
 //            counter++;
 //            chosenNum.setText("Number of chosen seats: " + Integer.toString(counter));
 //            warning.setVisible(false);
@@ -373,10 +332,10 @@
 //    }
 //
 //    @FXML // This method is called by the FXMLLoader when initialization is complete
-//    void initialize() {
-////        if (ChooseScreeningController.getRestrictions().isEffective()) {//TODO
-////            seatChoosingScene.setDisable(true);
-////        }
+//    public void initialize() {
+//        System.out.println("yo tf");//TODO
+//
+//
 //        assert gridSeats != null : "fx:id=\"gridSeats\" was not injected: check your FXML file 'SeatChoosing.fxml'.";
 //        assert s1 != null : "fx:id=\"s1\" was not injected: check your FXML file 'SeatChoosing.fxml'.";
 //        assert s2 != null : "fx:id=\"s2\" was not injected: check your FXML file 'SeatChoosing.fxml'.";
@@ -428,153 +387,54 @@
 //        assert warning != null : "fx:id=\"warning\" was not injected: check your FXML file 'SeatChoosing.fxml'.";
 //        assert rowsGrid != null : "fx:id=\"rowsGrid\" was not injected: check your FXML file 'SeatChoosing.fxml'.";
 //        assert colsGrids != null : "fx:id=\"colsGrid\" was not injected: check your FXML file 'SeatChoosing.fxml'.";
+//        if(screening==null)System.out.println("Screening is null");
+//        else
 //        counter = 0;
 //        hall = screening.getHall();
-//       //TODO Image image = new Image(screening.getMovie().getImage().getImgURL());
-//        // TODO poster.setImage(image);
-//        poster.setPreserveRatio(false);
+//
 //        movieInfo.setText("Movie: " + screening.getMovie().getEngtitle() + " - " + screening.getMovie().getHebtitle()
-//                + "\nDate: " + screening.getScreeningDate()
-//                + "\nTime: " + screening.getScreeningTime()
-//                + "\nCost per ticket: " + screening.getMovie().getTicketCost());
+//                + "\nDate: " + screening.getScreeningTime().toLocalDate()
+//                + "\nTime: " + screening.getScreeningTime().toLocalTime()
+//                + "\nCost per ticket: " + screening.getMovie().getCost());
 //        chosenNum.setText("Number of chosen seats: " + Integer.toString(counter));
 //        availableSeatsLabel.setText("Available seats: " + Integer.toString(screening.getAvailableSeats()));
-////   TODO     if (ChooseScreeningController.getRestrictions().isEffective()) {
-////            AutomaticBooking();
-////            bookSeat.setDisable(false);
-////            bookSeat();
-////            bookSeat();
-////        } else {
-////            drawSeats();
-////            drawSeats();
-////        }
+//
 //    }
 //
 //    private void drawSeats() {
 //        int seatNum = 0;
-//        if ((hall.getCols()/2)*2 == (hall.getCols())) {
-//            for (int k = 0 ; k < hall.getRows() ; k ++) {
-//                rowsGrid.getChildren().get(k).setVisible(true);
-//                int i = 3 - hall.getCols()/2, j = 3 + hall.getCols()/2;
-//                for (; i <= j && seatNum < hall.getSeatsNum() ; i ++) {
-//                    if (i != 3) {
-//                        if (!screening.getSeatStatus(seatNum)) {
-//                            gridSeats.getChildren().get(i + k*7).setStyle(
-//                                    "-fx-fill:#792f2f; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                        } else {
-//                            gridSeats.getChildren().get(i + k*7).setStyle(
-//                                    "-fx-fill:#e7d1d1; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                        }
-//                        seatNum++;
-//                    }
-//                }
-//            }
-//            int k = 1;
-//            int i = 3 - hall.getCols()/2;
-//            int j = 3 + hall.getCols()/2;
-//            for (; i <= j ; i ++) {
-//                if (i != 3) {
-//                    Label text = new Label("hi");
-//                    text.setText(Integer.toString(k));
-//                    colsGrids.add(text, i, 0);
-//                    k++;
-//                }
-//            }
-//        } else {
-//            for (int k = 0 ; k < hall.getRows() ; k ++) {
-//                rowsGrid.getChildren().get(k).setVisible(true);
-//                int i = 3 - (hall.getCols()-1)/2, j = 3 + (hall.getCols()-1)/2;
-//                for (; i <= j && seatNum < hall.getSeatsNum() ; i ++) {
-//                    if (!screening.getSeatStatus(seatNum)) {
-//                        gridSeats.getChildren().get(i + k*7).setStyle(
-//                                "-fx-fill:#792f2f; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                    } else {
-//                        gridSeats.getChildren().get(i + k*7).setStyle(
-//                                "-fx-fill:#e7d1d1; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                    }
+//        boolean isEvenCols = hall.getCols() % 2 == 0;
+//
+//        int mid = 3;
+//        int leftBound = mid - (isEvenCols ? hall.getCols() / 2 : (hall.getCols() - 1) / 2);
+//        int rightBound = mid + (isEvenCols ? hall.getCols() / 2 : (hall.getCols() - 1) / 2);
+//
+//        // Draw rows and seats
+//        for (int row = 0; row < hall.getRows(); row++) {
+//            rowsGrid.getChildren().get(row).setVisible(true);
+//            for (int col = leftBound; col <= rightBound && seatNum < hall.getSeatsNum(); col++) {
+//                if (col != mid) {  // Skip middle if needed
+//                    String seatStyle = screening.getSeatStatus(seatNum)
+//                            ? "-fx-fill:#e7d1d1; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;"
+//                            : "-fx-fill:#dc48d5; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;";
+//                    gridSeats.getChildren().get(col + row * 7).setStyle(seatStyle);
 //                    seatNum++;
 //                }
 //            }
-//            int k = 1;
-//            int i = 3 - hall.getCols()/2;
-//            int j = 3 + hall.getCols()/2;
-//            for (; i <= j ; i ++) {
-//                Label text = new Label("hi");
-//                text.setText(Integer.toString(k));
-//                colsGrids.add(text, i, 0);
-//                k++;
+//        }
+//
+//        // Add column labels
+//        addColumnLabels(leftBound, rightBound, mid);
+//    }
+//
+//    private void addColumnLabels(int leftBound, int rightBound, int mid) {
+//        int labelCounter = 1;
+//        for (int col = leftBound; col <= rightBound; col++) {
+//            if (col != mid) {  // Skip middle
+//                Label label = new Label(Integer.toString(labelCounter++));
+//                colsGrids.add(label, col, 0);
 //            }
 //        }
 //    }
-//
-//    private void AutomaticBooking() {
-//        counter = 0;
-//        int seatNum = 0;
-//        if ((hall.getCols()/2)*2 == (hall.getCols())) {
-//            for (int k = 0 ; k < hall.getRows() ; k ++) {
-//                rowsGrid.getChildren().get(k).setVisible(true);
-//                int i = 3 - hall.getCols()/2, j = 3 + hall.getCols()/2;
-//                for (; i <= j && seatNum < hall.getSeatsNum() ; i ++) {
-//                    if (i != 3) {
-//                        if (!screening.getSeatStatus(seatNum)) {
-//                            if (counter < requestedNum) {
-//                                gridSeats.getChildren().get(i + k*7).setStyle(
-//                                        "-fx-fill:#ff0000; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                                counter++;
-//                            }else {
-//                                gridSeats.getChildren().get(i + k*7).setStyle(
-//                                        "-fx-fill:#792f2f; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                            }
-//                        } else {
-//                            gridSeats.getChildren().get(i + k*7).setStyle(
-//                                    "-fx-fill:#e7d1d1; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                        }
-//                        seatNum++;
-//                    }
-//                }
-//            }
-//            int k = 1;
-//            int i = 3 - hall.getCols()/2;
-//            int j = 3 + hall.getCols()/2;
-//            for (; i <= j ; i ++) {
-//                if (i != 3) {
-//                    Label text = new Label("hi");
-//                    text.setText(Integer.toString(k));
-//                    colsGrids.add(text, i, 0);
-//                    k++;
-//                }
-//            }
-//        } else {
-//            for (int k = 0 ; k < hall.getRows() ; k ++) {
-//                rowsGrid.getChildren().get(k).setVisible(true);
-//                int i = 3 - (hall.getCols()-1)/2, j = 3 + (hall.getCols()-1)/2;
-//                for (; i <= j && seatNum < hall.getSeatsNum() ; i ++) {
-//                    if (!screening.getSeatStatus(seatNum)) {
-//                        if (counter < requestedNum) {
-//                            gridSeats.getChildren().get(i + k*7).setStyle(
-//                                    "-fx-fill:#ff0000; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                            counter++;
-//                        }else {
-//                            gridSeats.getChildren().get(i + k*7).setStyle(
-//                                    "-fx-fill:#792f2f; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                        }
-//                    } else {
-//                        gridSeats.getChildren().get(i + k*7).setStyle(
-//                                "-fx-fill:#e7d1d1; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
-//                    }
-//                    seatNum++;
-//                }
-//            }
-//            int k = 1;
-//            int i = 3 - hall.getCols()/2;
-//            int j = 3 + hall.getCols()/2;
-//            for (; i <= j ; i ++) {
-//                Label text = new Label("hi");
-//                text.setText(Integer.toString(k));
-//                colsGrids.add(text, i, 0);
-//                k++;
-//            }
-//        }
-//    }
-//
-//}
+
+}

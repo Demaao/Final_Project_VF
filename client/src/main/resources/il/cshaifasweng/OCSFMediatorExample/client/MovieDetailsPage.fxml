@@ -134,9 +134,10 @@
         </Label>
 
 
-        <ComboBox fx:id="cinemaComboBox" layoutX="229.0" layoutY="480.0" prefWidth="150.0"  promptText="Select Cinema" visible="false" />
+        <ComboBox fx:id="cinemaComboBox" layoutX="229.0" layoutY="480.0" prefWidth="150.0" promptText="Select Cinema" visible="false" />
         <DatePicker fx:id="chooseDatePicker" layoutX="403.0" layoutY="480.0" prefWidth="150.0" promptText="Select Day" />
         <ComboBox fx:id="timeComboBox" layoutX="575.0" layoutY="480.0" prefWidth="150.0" promptText="Select Time" />
+      <Button fx:id="SBttn" layoutX="687.0" layoutY="562.0" mnemonicParsing="false" onAction="#switchToChooseSeating" text="Click here to choose your seats" />
 
     </children>
 </AnchorPane>

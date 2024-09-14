@@ -53,6 +53,12 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(BranchManager.class); /////////////
 		configuration.addAnnotatedClass(ContentManager.class); /////////////////
 		configuration.addAnnotatedClass(CustomerServiceWorker.class); /////////////
+		configuration.addAnnotatedClass(Hall.class);
+		configuration.addAnnotatedClass(MovieTicket.class);
+		configuration.addAnnotatedClass(Buyer.class);
+		configuration.addAnnotatedClass(Purchase.class);
+
+
 
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
@@ -67,6 +73,7 @@ public class SimpleServer extends AbstractServer {
 			generateSoonMovies(session);
 			generateHomeMovies(session);
 			generateBranches(session);
+			generateHalls(session); //TODO: switch with screenings
 			generateScreenings(session);
 			generateHeadManager(session); /////////////////////
 			generateBranchManager(session); /////////////////////
@@ -156,25 +163,6 @@ public class SimpleServer extends AbstractServer {
 
 
 	private static void generateMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
-		byte[] image2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
-		byte[] image3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
-		byte[] image4 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\4.jpg");
-		byte[] image5 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\5.jpg");
-		byte[] image6 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\6.jpg");
-		byte[] image7 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\7.jpg");
-		byte[] image8 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\8.jpg");
-		byte[] image9 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\9.jpg");
-		byte[] image10 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\images\\10.jpg");
-
-
-		/*
-		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
-		Branch haifaCinema = session.get(Branch.class, 1);
-		Branch telAvivCinema = session.get(Branch.class, 2);
-		Branch eilatCinema = session.get(Branch.class, 3);
-		Branch karmielCinema = session.get(Branch.class, 4);
-		Branch jerusalemCinema = session.get(Branch.class, 5);
 		byte[] image1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\1.jpg");
 		byte[] image2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\2.jpg");
 		byte[] image3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\3.jpg");
@@ -183,93 +171,77 @@ public class SimpleServer extends AbstractServer {
 		byte[] image6 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\6.jpg");
 		byte[] image7 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\7.jpg");
 		byte[] image8 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\8.jpg");
+		byte[] image9 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\9.jpg");
+		byte[] image10 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\images\\10.jpg");
 
 
-		List<Branch> CinemaBranches1 = new ArrayList<>();  // יצירת רשימת בתי קולנוע עבור הסרט הראשון
-		CinemaBranches1.add(haifaCinema);
-		CinemaBranches1.add(telAvivCinema);
-		CinemaBranches1.add(eilatCinema);
-
-		List<Branch> CinemaBranches1 = new ArrayList<>();
-		CinemaBranches1.add(haifaCinema);
-		CinemaBranches1.add(telAvivCinema);
-		CinemaBranches1.add(eilatCinema);
-
-		List<Branch> CinemaBranches2 = new ArrayList<>();
-		CinemaBranches2.add(karmielCinema);
-		CinemaBranches2.add(jerusalemCinema);
-
-		List<Branch> CinemaBranches2 = new ArrayList<>();  // יצירת רשימת בתי קולנוע עבור הסרט הראשון
-		CinemaBranches2.add(karmielCinema);
-		CinemaBranches2.add(jerusalemCinema);
-		*/
 
 		Movie num1 = new Movie(1, "A quiet place", "מקום שקט 2", "Michael Sarnoski", 2020, image1,"Drama","Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path."
 
-				,"Emily Blunt,John Krasinski,Cillian Murphy","1h 37m");
+				,"Emily Blunt,John Krasinski,Cillian Murphy","1h 37m", 40);
 
 		session.save(num1);
 		session.flush();
 
 		Movie num2 = new Movie(2, "Barbie", "ברבי", "Greta Gerwig", 2023, image2,"Comedy","Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans."
 
-				,"Margot Robbie,Issa Rae,Ryan Gosling","1h 54m");
+				,"Margot Robbie,Issa Rae,Ryan Gosling","1h 54m", 60);
 
 		session.save(num2);
 		session.flush();
 
 		Movie num3 = new Movie(3, "Fast X", "מהיר ועצבני 10", "Louis Leterrier", 2023,image3,"Action","Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes."
 
-				,"Vin Diesel,Michelle Rodriguez,Jason Statham","2h 21m");
+				,"Vin Diesel,Michelle Rodriguez,Jason Statham","2h 21m", 50);
 
 		session.save(num3);
 		session.flush();
 
 		Movie num4 = new Movie(4, "Inside out", "הקול בראש 2", "Kelsey Mann", 2024, image4,"Adventure","A sequel that features Riley entering puberty and experiencing brand new, more complex emotions as a result. As Riley tries to adapt to her teenage years, her old emotions try to adapt to the possibility of being replaced."
 
-				,"Amy Poehler,Maya Hawke,Kensington Tallman","1h 36m");
+				,"Amy Poehler,Maya Hawke,Kensington Tallman","1h 36m", 55);
 
 		session.save(num4);
 		session.flush();
 
 		Movie num5 = new Movie(5, "It Ends With Us", "איתנו זה נגמר", "Justin Baldoni", 2024, image5,"Drama","When a woman's first love suddenly reenters her life, her relationship with a charming, but abusive neurosurgeon is upended and she realizes she must learn to rely on her own strength to make an impossible choice for her future."
 
-				,"Blake Lively,Justin Baldoni,Jenny Slate","2h 10m");
+				,"Blake Lively,Justin Baldoni,Jenny Slate","2h 10m", 35);
 
 		session.save(num5);
 		session.flush();
 
 		Movie num6 = new Movie(6, "Joker", "ג'וקר", "Todd Philips", 2019, image6,"Drama","Arthur Fleck, a party clown and a failed stand-up comedian, leads an impoverished life with his ailing mother. However, when society shuns him and brands him as a freak, he decides to embrace the life of crime and chaos in Gotham City."
 
-				,"Joaquin Phoenix,Robert De Niro,Zazie Beetz","2h 2m");
+				,"Joaquin Phoenix,Robert De Niro,Zazie Beetz","2h 2m", 60);
 
 		session.save(num6);
 		session.flush();
 
 		Movie num7 = new Movie(7, "Oppenheimer", "אופנהיימר", "Christopher Nolan", 2023, image7,"Documentary","The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb."
 
-				,"Cillian Murphy Emily BluntRobert Downey","3h 10m");
+				,"Cillian Murphy Emily BluntRobert Downey","3h 10m", 55);
 
 		session.save(num7);
 		session.flush();
 
 		Movie num8 = new Movie(8, "The creator", "היוצר", "Gareth Edward", 2023, image8,"Action","Against the backdrop of a war between humans and robots with artificial intelligence, a former soldier finds the secret weapon, a robot in the form of a young child."
 
-				,"John Washington,Madeleine Voyles,Gemma Chan","2h 13m");
+				,"John Washington,Madeleine Voyles,Gemma Chan","2h 13m", 40);
 
 		session.save(num8);
 		session.flush();
 
 		Movie num9 = new Movie(9, "Daughters", "הבנות", "Angela Patton", 2024, image9,"Documentary","Four young girls prepare for a special Daddy Daughter Dance with their incarcerated fathers, as part of a unique fatherhood program in a Washington"
 
-				,"Veronica Ngo,Ian Verdun,Sturgill Simpson","1h 48m");
+				,"Veronica Ngo,Ian Verdun,Sturgill Simpson","1h 48m", 35);
 
 		session.save(num9);
 		session.flush();
 
 		Movie num10 = new Movie(10, "In the Rearview", "מבט לאחור", "Maciek Hamela", 2023, image10,"Documentary","A small van traverses war-torn roads, picking up Ukrainians as they abandon their homes at the front. Shuttling them across the battered landscape into exile, the van becomes a fragile refuge, a zone for its passengers' confidences."
 
-				,"Maciek Hamela,Frances Conroy,Hannah Gross","1h 24m");
+				,"Maciek Hamela,Frances Conroy,Hannah Gross","1h 24m", 40);
 
 		session.save(num10);
 		session.flush();
@@ -277,9 +249,9 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateSoonMovies(Session session) throws Exception {
-		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
-		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
-		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
+//		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
+//		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
+//		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
 		byte[] Soonimage1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\1.jpg");
 		byte[] Soonimage2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\2.jpg");
 		byte[] Soonimage3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\SoonImages\\3.jpg");
@@ -298,40 +270,40 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateHomeMovies(Session session) throws Exception {
-		byte[] image1 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\1.jpg");
-		byte[] image2 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\2.jpg");
-		byte[] image3 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\3.jpg");
-		byte[] image4 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\4.jpg");
-		byte[] image5 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\5.jpg");
-		byte[] image6 = loadImageFromFile("C:\\Users\\USER\\IdeaProjects\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\6.jpg");
+		byte[] image1 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\1.jpg");
+		byte[] image2 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\2.jpg");
+		byte[] image3 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\3.jpg");
+		byte[] image4 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\4.jpg");
+		byte[] image5 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\5.jpg");
+		byte[] image6 = loadImageFromFile("C:\\Users\\Shatha\\Final_Project_V2\\server\\src\\main\\resources\\forHome_images\\6.jpg");
 
 		HomeMovie homeMovie1 = new HomeMovie(1, "Despicable Me 4", "גנוב על החיים", "Chris Renaud", 2024, image1, "https://Despicable_Me_4_Movie_link.com","Adventure","Gru, Lucy, Margo, Edith, and Agnes welcome a new member to the family, Gru Jr., who is intent on tormenting his dad. Gru faces a new nemesis in Maxime Le Mal and his girlfriend Valentina, and the family is forced to go on the run."
-				,"Steve Carell,Kristen Wiig,Pierre Coffin","1h 34m");
+				,"Steve Carell,Kristen Wiig,Pierre Coffin","1h 34m", 35);
 		session.save(homeMovie1);
 		session.flush();
 
 		HomeMovie homeMovie2 = new HomeMovie(2, "Bad Boys", "בחורים רעים", "Adil El Arbi", 2024, image2, "https://Bad_Boys_Movie_link.com","Comedy","When their late police captain gets linked to drug cartels, wisecracking Miami cops Mike Lowrey and Marcus Burnett embark on a dangerous mission to clear his name."
-				,"Will Smith,Martin Lawrence,Vanessa Hudgens","1h 55m");
+				,"Will Smith,Martin Lawrence,Vanessa Hudgens","1h 55m", 50);
 		session.save(homeMovie2);
 		session.flush();
 
 		HomeMovie homeMovie3 = new HomeMovie(3, "Wire Room", "מלכוד בחדר", "Matt Eskandari", 2022, image3, "https://Wire_Room_Movie_link.com","Action","While on wire room duty, a federal agent listens in as the target is attacked in his home by a hit squad. Without burning the wire, he must protect the investigation and the target's life from the confines of a room fifty miles away."
-				,"Kevin Dillon,Bruce Willis,Oliver Trevena","1h 36m");
+				,"Kevin Dillon,Bruce Willis,Oliver Trevena","1h 36m", 40);
 		session.save(homeMovie3);
 		session.flush();
 
 		HomeMovie homeMovie4 = new HomeMovie(4, "Mission Impossible", "משימה לא אפשרית", "Christopher McQuarrie", 2023, image4, "https://Mission_Impossible_Movie_link.com","Comedy","Ethan Hunt and his IMF team must track down a dangerous weapon before it falls into the wrong hands."
-				,"Tom Cruise,Hayley Atwell,Ving Rhames","2h 43m");
+				,"Tom Cruise,Hayley Atwell,Ving Rhames","2h 43m", 35);
 		session.save(homeMovie4);
 		session.flush();
 
 		HomeMovie homeMovie5 = new HomeMovie(5, "Deadpool Wolverine", "דדפול & וולברין ", "Shawn Levy", 2024, image5, "https://Deadpool_Wolverine_Movie_link.com","Adventure","Deadpool is offered a place in the Marvel Cinematic Universe by the Time Variance Authority, but instead recruits a variant of Wolverine to save his universe from extinction"
-				,"Ryan Reynolds,Hugh Jackman,Emma Corrin","2h 8m");
+				,"Ryan Reynolds,Hugh Jackman,Emma Corrin","2h 8m", 40);
 		session.save(homeMovie5);
 		session.flush();
 
 		HomeMovie homeMovie6 = new HomeMovie(6, "his Time Next Year", "מזל שנפגשנו", "Nick Moore", 2024, image6, "https://This_Time_Next_Year_Movie_link.com","Comedy","Minnie and Quinn are born on the same day, one minute apart. Their lives may begin together, but their worlds couldn't be more different. Years later they find themselves together again. Maybe it's time to take a chance on love."
-				,"Sophie Cookson,Lucien Laviscount,Golda Rosheuvel","1h 56m");
+				,"Sophie Cookson,Lucien Laviscount,Golda Rosheuvel","1h 56m", 40);
 		session.save(homeMovie6);
 		session.flush();
 
@@ -371,6 +343,70 @@ public class SimpleServer extends AbstractServer {
 
 		session.flush();
 	}
+
+	private static void generateHalls(Session session) throws Exception {
+		Branch haifaCinema = session.get(Branch.class, 1);
+		Branch telAvivCinema = session.get(Branch.class, 2);
+		Branch eilatCinema = session.get(Branch.class, 3);
+		Branch karmielCinema = session.get(Branch.class, 4);
+		Branch jerusalemCinema = session.get(Branch.class, 5);
+		Hall hall1 = new Hall(4, 5, 18, "1",haifaCinema);
+		session.save(hall1);
+		Hall hall2 = new Hall(5, 5, 25, "2",haifaCinema);
+		session.save(hall2);
+		Hall hall3 = new Hall(6, 6, 36, "3",haifaCinema);
+		session.save(hall3);
+		Hall hall4 = new Hall(5, 6, 28, "4",haifaCinema);
+		session.save(hall4);
+		Hall hall5 = new Hall(3, 6, 18, "5",haifaCinema);
+		session.save(hall5);
+		Hall hall6 = new Hall(6, 5, 30, "6",telAvivCinema);
+		session.save(hall6);
+		Hall hall7 = new Hall(5, 5, 23, "7",telAvivCinema);
+		session.save(hall7);
+		Hall hall8 = new Hall(5, 4, 20, "8",telAvivCinema);
+		session.save(hall8);
+		Hall hall9 = new Hall(4, 5, 18, "9",telAvivCinema);
+		session.save(hall9);
+		Hall hall10 = new Hall(5, 5, 23, "10",telAvivCinema);
+		session.save(hall10);
+		Hall hall11 = new Hall(4, 4, 16, "11",jerusalemCinema);
+		session.save(hall11);
+		Hall hall12 = new Hall(4, 5, 18, "12",eilatCinema);
+		session.save(hall12);
+		Hall hall13 = new Hall(5, 5, 25, "13",eilatCinema);
+		session.save(hall13);
+		Hall hall14 = new Hall(6, 6, 36, "14",eilatCinema);
+		session.save(hall14);
+		Hall hall15 = new Hall(5, 6, 28, "15",eilatCinema);
+		session.save(hall15);
+		Hall hall16 = new Hall(5, 6, 28, "16",eilatCinema);
+		session.save(hall16);
+		Hall hall17 = new Hall(6, 5, 30, "17",karmielCinema);
+		session.save(hall17);
+		Hall hall18 = new Hall(5, 5, 23, "18",karmielCinema);
+		session.save(hall18);
+		Hall hall19 = new Hall(5, 4, 20, "19",karmielCinema);
+		session.save(hall19);
+		Hall hall20 = new Hall(4, 5, 18, "20",karmielCinema);
+		session.save(hall20);
+		Hall hall21 = new Hall(5, 5, 23, "21",karmielCinema);
+		session.save(hall21);
+		Hall hall22 = new Hall(4, 5, 18, "22",jerusalemCinema);
+		session.save(hall22);
+		Hall hall23 = new Hall(5, 5, 25, "23",jerusalemCinema);
+		session.save(hall23);
+		Hall hall24 = new Hall(6, 6, 36, "24",jerusalemCinema);
+		session.save(hall24);
+		Hall hall25 = new Hall(5, 6, 28, "25",jerusalemCinema);
+		session.save(hall25);
+		Hall hall26 = new Hall(3, 6, 18, "26",jerusalemCinema);
+		session.save(hall26);
+
+		session.flush();
+
+	}
+
 
 	private static void generateScreenings(Session session) throws Exception {
 
@@ -418,41 +454,70 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 22, 30)
 		);
 
+
+		Hall hall1_ = session.get(Hall.class,1);
+
+		Hall hall2_ = session.get(Hall.class,2);
+		Hall hall3_ = session.get(Hall.class,3);
+		Hall hall4_ = session.get(Hall.class,4);
+		Hall hall5_ = session.get(Hall.class,5);
+		Hall hall6_ = session.get(Hall.class,6);
+		Hall hall7_ =session.get(Hall.class,7);
+		Hall hall8_ =session.get(Hall.class,8);
+		Hall hall9_ = session.get(Hall.class,9);
+		Hall hall10_ = session.get(Hall.class,10);
+		Hall hall11_ = session.get(Hall.class,11);
+		Hall hall12_ =session.get(Hall.class,12);
+		Hall hall13_ =session.get(Hall.class,13);
+		Hall hall14_ = session.get(Hall.class,14);
+		Hall hall15_ = session.get(Hall.class,15);
+		Hall hall16_ = session.get(Hall.class,16);
+		Hall hall17_ = session.get(Hall.class,17);
+		Hall hall18_ = session.get(Hall.class,18);
+		Hall hall19_ = session.get(Hall.class,19);
+		Hall hall20_ =session.get(Hall.class,20);
+		Hall hall21_ = session.get(Hall.class,21);
+		Hall hall22_ =session.get(Hall.class,22);
+		Hall hall23_ =session.get(Hall.class,23);
+		Hall hall24_ =session.get(Hall.class,24);
+		Hall hall25_ = session.get(Hall.class,25);
+		Hall hall26_ = session.get(Hall.class,26);
+
 		for (LocalDateTime time : screeningTimes) {    // ××××× ××××¡×¤×ª ×× ××× × ×××§×¨× × ××¡×¨×××
-			movie1.addScreening(time, haifaCinema);
-			movie1.addScreening(time, telAvivCinema);
-			movie1.addScreening(time, eilatCinema);
+			movie1.addScreening(time, haifaCinema, hall1_);
+			movie1.addScreening(time, telAvivCinema, hall6_);
+			movie1.addScreening(time, eilatCinema, hall12_);
 
-			movie2.addScreening(time, haifaCinema);
-			movie2.addScreening(time, telAvivCinema);
-			movie2.addScreening(time, eilatCinema);
+			movie2.addScreening(time, haifaCinema, hall2_);
+			movie2.addScreening(time, telAvivCinema, hall7_);
+			movie2.addScreening(time, eilatCinema, hall13_);
 
-			movie3.addScreening(time, karmielCinema);
-			movie3.addScreening(time, jerusalemCinema);
+			movie3.addScreening(time, karmielCinema,hall17_);
+			movie3.addScreening(time, jerusalemCinema,hall22_);
 
-			movie4.addScreening(time, karmielCinema);
-			movie4.addScreening(time, jerusalemCinema);
+			movie4.addScreening(time, karmielCinema,hall18_);
+			movie4.addScreening(time, jerusalemCinema,hall23_);
 
-			movie5.addScreening(time, karmielCinema);
-			movie5.addScreening(time, jerusalemCinema);
+			movie5.addScreening(time, karmielCinema,hall19_);
+			movie5.addScreening(time, jerusalemCinema,hall24_);
 
-			movie6.addScreening(time, haifaCinema);
-			movie6.addScreening(time, telAvivCinema);
-			movie6.addScreening(time, eilatCinema);
+			movie6.addScreening(time, haifaCinema, hall3_);
+			movie6.addScreening(time, telAvivCinema, hall8_);
+			movie6.addScreening(time, eilatCinema, hall14_);
 
-			movie7.addScreening(time, haifaCinema);
-			movie7.addScreening(time, telAvivCinema);
-			movie7.addScreening(time, eilatCinema);
+			movie7.addScreening(time, haifaCinema, hall4_);
+			movie7.addScreening(time, telAvivCinema, hall9_);
+			movie7.addScreening(time, eilatCinema, hall15_);
 
-			movie8.addScreening(time, haifaCinema);
-			movie8.addScreening(time, telAvivCinema);
-			movie8.addScreening(time, eilatCinema);
+			movie8.addScreening(time, haifaCinema, hall5_);
+			movie8.addScreening(time, telAvivCinema, hall10_);
+			movie8.addScreening(time, eilatCinema, hall16_);
 
-			movie9.addScreening(time, karmielCinema);
-			movie9.addScreening(time, jerusalemCinema);
+			movie9.addScreening(time, karmielCinema,hall20_);
+			movie9.addScreening(time, jerusalemCinema,hall25_);
 
-			movie10.addScreening(time, karmielCinema);
-			movie10.addScreening(time, jerusalemCinema);
+			movie10.addScreening(time, karmielCinema,hall21_);
+			movie10.addScreening(time, jerusalemCinema,hall26_);
 
 		}
 		// ××¦××¨×ª ×¨×©××× ×©× ×× ××¡×¨××× ××× ××¢×××¨ ×¢× ×××× ×××©×××¨ ×××ª×
@@ -496,12 +561,12 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 23, 00)
 		);
 		for (LocalDateTime time : HomeScreeningTimes) {    // ××××× ××××¡×¤×ª ×× ××× × ×××§×¨× × ××¡×¨×××
-			movie11.addScreening(time,null);
-			movie12.addScreening(time,null);
-			movie13.addScreening(time,null);
-			movie14.addScreening(time,null);
-			movie15.addScreening(time,null);
-			movie16.addScreening(time,null);
+//			movie11.addScreening(time,null, null);
+//			movie12.addScreening(time,null, null);
+//			movie13.addScreening(time,null, null);
+//			movie14.addScreening(time,null, null);
+//			movie15.addScreening(time,null, null);
+//			movie16.addScreening(time,null, null);
 		}
 
 		session.save(movie11);
@@ -511,6 +576,8 @@ public class SimpleServer extends AbstractServer {
 		session.save(movie15);
 		session.save(movie16);
 
+
+		//Hibernate.initialize(movie2.getScreenings());
 		session.flush();
 	}
 
@@ -584,6 +651,7 @@ public class SimpleServer extends AbstractServer {
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+		System.out.println("handleMessageFromClient 1");
 		NewMessage message = (NewMessage) msg;
 		String msgString = message.getMessage();
 		try {
@@ -678,6 +746,7 @@ public class SimpleServer extends AbstractServer {
 				}
 			}
 			else if (msgString.equals("screeningTimesRequest")) {
+				System.out.println("screeningTimesRequest 1");
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Movie requestedMovie = message.getMovie();
@@ -686,6 +755,26 @@ public class SimpleServer extends AbstractServer {
 							.setParameter("movieId", requestedMovie.getId())
 							.getResultList();
 					NewMessage newMessage = new NewMessage(screenings, "screeningTimes");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}
+
+
+			else if(msgString.equals("screeningHallsRequest")){
+				System.out.println("screeningHallsRequest 1");
+				try (Session session = sessionFactory.openSession()) {
+					System.out.println("screeningHallsRequest 2");
+					session.beginTransaction();
+					Movie requestedMovie = message.getMovie();
+					List<Screening> screenings = session.createQuery(
+									"from Screening where movie.id = :movieId", Screening.class)
+							.setParameter("movieId", requestedMovie.getId())
+							.getResultList();
+					NewMessage newMessage = new NewMessage(screenings, "screeningHalls");
 					client.sendToClient(newMessage);
 					session.getTransaction().commit();
 				} catch (Exception exception) {

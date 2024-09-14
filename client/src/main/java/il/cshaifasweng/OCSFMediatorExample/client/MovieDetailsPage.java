@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 public class MovieDetailsPage {
 
+    private List<Screening> selectedScreening;
     private static Movie selectedMovie;
 
     @FXML
@@ -63,12 +65,16 @@ public class MovieDetailsPage {
     @FXML
     private ComboBox<String> timeComboBox;
 
+    @FXML
+    private Button SBtn;
+
     public static void setSelectedMovie(Movie movie) {
         selectedMovie = movie;
     }
 
     @FXML
     public void initialize() {
+        System.out.println("this shit is being invoked");//TODO
         if (selectedMovie != null) {
             EventBus.getDefault().register(this);
 
@@ -105,7 +111,7 @@ public class MovieDetailsPage {
 
                 //אם בחרנו סרט בית אז אנחנו עוברים לעדכן את התאריכים והשעות כי לסרטי הבית אין בתי קלנוע
                 chooseDatePicker.setOnAction(event -> updateAvailableTimes(selectedMovie.getScreenings()));
-
+                System.out.println("screenings size1: " +  selectedMovie.getScreenings().size());
 
             } else {
                 cinemaComboBox.setVisible(true);
@@ -139,6 +145,13 @@ public class MovieDetailsPage {
         updateUIWithScreeningTimes(screenings);
     }
 
+    @Subscribe
+    public void onUpdateScreeningEvent(UpdateScreeningEvent event) {
+        System.out.println("onUpdateScreeningEvent screenings size: " +  event.getScreenings().size());
+        selectedScreening = event.getScreenings();
+
+    }
+
     private void updateUIWithScreeningTimes(List<Screening> screenings) {
         cinemaComboBox.getItems().clear();
 
@@ -155,6 +168,56 @@ public class MovieDetailsPage {
             cinemaComboBox.getItems().addAll(availableCinemas);
 
             cinemaComboBox.setOnAction(event -> updateAvailableDays(screenings));
+
+        }
+    }
+
+    void setCelltoField() {
+        System.out.println("my sister 1  me1");
+        LocalDate localDate = chooseDatePicker.getValue();
+        System.out.println("localDate: " + localDate);
+        String time = timeComboBox.getValue();
+        LocalTime time1 = LocalTime.parse(time);
+        System.out.println("time1: " + time1);
+        LocalDateTime screeningTime = localDate.atTime(time1.minusHours(3));
+        System.out.println("screeningTime: " + screeningTime);
+        requestScreeningFromServer();
+//        try {
+//            wait(10000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+        System.out.println("selectedMovie " + selectedMovie.getEngtitle());
+        System.out.println("my sister 1  me6");
+//        System.out.println("onUpdateScreeningEvent screenings size: " +  selectedScreening.size());
+//        selectedScreening.forEach(e -> {if(e.getScreeningTime().equals(screeningTime) && e.getBranch().getName().equals(cinemaComboBox.getValue())){
+//            System.out.println("selected screening branch: " + e.getBranch().getName() + " screening time: " + e.getScreeningTime() + " hall: " + e.getHall());
+//            ChooseSeating.setScreening(e);
+//        }});
+        System.out.println("screenings size: " +  selectedMovie.getScreenings().size());
+        selectedMovie.getScreenings().forEach(e -> {if(e.getScreeningTime().equals(timeComboBox.getValue()) && e.getBranch().getName().equals(cinemaComboBox.getValue())){
+            System.out.println("selected screening branch: " + e.getBranch().getName() + " screening time: " + e.getScreeningTime() + " hall: " + e.getHall().getId());
+           // ChooseSeating.setScreening(e);
+        }
+        else {System.out.println("lolol");}
+        });
+
+
+        System.out.println("my sister 1  me7");
+    }
+
+
+    private void requestScreeningFromServer() {
+        System.out.println("requestHallFromServer1 ");
+        try {
+            System.out.println("requestHallFromServer 2");
+            NewMessage message = new NewMessage("screeningHallsRequest");
+            message.setMovie(selectedMovie);
+            System.out.println("requestHallFromServer 3");
+            SimpleClient.getClient().sendToServer(message);
+            System.out.println("requestHallFromServer 4");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -285,4 +348,15 @@ public class MovieDetailsPage {
     private void switchToCardsPage() throws IOException {
         App.switchScreen("CardsPage");
     }
+
+    @FXML
+    private void switchToChooseSeating() throws IOException, InterruptedException {
+        System.out.println("my sister 1  me");
+        setCelltoField();
+        System.out.println("my sister 2  me");
+        App.switchScreen("ChooseSeating");
+    }
+
+
+
 }

@@ -44,6 +44,9 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("screeningTimes")) {
 					List<Screening> screenings = (List<Screening>) message.getObject();
 					EventBus.getDefault().post(new UpdateScreeningTimesEvent(screenings));
+				} else if (message.getMessage().equals("screeningHalls")) {
+					List<Screening> screenings = (List<Screening>)message.getObject();
+					EventBus.getDefault().post(new UpdateScreeningEvent(screenings));
 				}
 
 			});
