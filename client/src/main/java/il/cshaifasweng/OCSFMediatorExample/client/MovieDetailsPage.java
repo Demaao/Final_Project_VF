@@ -1,25 +1,31 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import net.bytebuddy.asm.Advice;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
 public class MovieDetailsPage {
+
+//    //new
+//   static  private int selectedMovieId;
+//   static  private String selectedBranchName;
+//   static  private LocalDate selectedDate;
+//   static private LocalTime selectedTime;
+
+
+
 
     public static Movie selectedMovie;
     @FXML
@@ -65,6 +71,7 @@ public class MovieDetailsPage {
 
     @FXML
     private Label bookNowLabel;
+
     @FXML
     private Button purchaseCardBtn;
 
@@ -73,10 +80,17 @@ public class MovieDetailsPage {
         selectedMovie = movie;
     }
 
+
+//    public static void setSelectedBranch(Branch branch) {
+//        selectedBranchName = branch.getName();
+//    }
+
     @FXML
     public void initialize() {
         if (selectedMovie != null) {
             EventBus.getDefault().register(this);
+
+//            onMovieSelected(selectedMovie);
 
             movieTitleLabel.setText(selectedMovie.getHebtitle());
             moviePosterImageView.setImage(new Image(new ByteArrayInputStream(selectedMovie.getImageData())));
@@ -89,7 +103,7 @@ public class MovieDetailsPage {
             hebtitle.setText(selectedMovie.getHebtitle());
             engtitle.setText(selectedMovie.getEngtitle());
 
-            requestScreeningTimesFromServer(); // ××§×©× ××©×¨×ª ××§×× ××ª ××× × ×××§×¨× ×
+            requestScreeningTimesFromServer();
 
             chooseDatePicker.setDayCellFactory(picker -> new DateCell() {
                 @Override
@@ -109,10 +123,10 @@ public class MovieDetailsPage {
                 chooseDatePicker.setLayoutX(230.0);
                 timeComboBox.setLayoutX(430.0);
 
-                //×× ×××¨× × ×¡×¨× ×××ª ×× ×× ×× × ×¢×××¨×× ××¢××× ××ª ××ª××¨×××× ×××©×¢××ª ×× ××¡×¨×× ××××ª ××× ××ª× ×§×× ××¢
                 chooseDatePicker.setOnAction(event -> updateAvailableTimes(selectedMovie.getScreenings()));
 
             }
+
             else if(selectedMovie instanceof SoonMovie) {
                 cinemaComboBox.setVisible(false);
                 chooseDatePicker.setVisible(false);
@@ -120,6 +134,7 @@ public class MovieDetailsPage {
                 bookNowLabel.setVisible(false);
                 lengthLabel.setVisible(false);
             }
+
             else {
                 cinemaComboBox.setVisible(true);
                 chooseDatePicker.setVisible(true);
@@ -129,12 +144,55 @@ public class MovieDetailsPage {
                 chooseDatePicker.setLayoutX(430.0);
                 timeComboBox.setLayoutX(630.0);
 
-                //×× ×××¨× × ×¡×¨× ×©×××¦× ××××ª ×§×× ××¢ ×× ×× ×× × ×¢×××¨×× ××¢××× ××××§×¡ ××××× ×¡× ××¤×× ××× × ××¦××××××ª×× ××¢××× ×× ××ª ××ª×××¨××× ×××©×¢××ª
+
                 cinemaComboBox.setOnAction(event -> updateAvailableDays(null));
                 chooseDatePicker.setOnAction(event -> updateAvailableTimes(null));
             }
         }
     }
+
+//
+//    public void onMovieSelected(Movie movie) {
+//        selectedMovieId = movie.getId();
+//        System.out.println("Movie selected: ID = " + selectedMovieId);
+//        checkAndFetchHall();
+//    }
+//
+//
+//    public void onBranchSelected(Branch branchName) {
+//        selectedBranchName = branchName.getName();
+//        System.out.println("Branch selected: ID = " + selectedBranchName);
+//        checkAndFetchHall();
+//    }
+//
+//    public void onDateSelected(LocalDate date) {
+//        selectedDate = date;
+//        System.out.println("Date selected: " + selectedDate);
+//        checkAndFetchHall();
+//    }
+//
+//    public void onTimeSelected(LocalTime time) {
+//        selectedTime = time;
+//        System.out.println("Time selected: " + selectedTime);
+//        checkAndFetchHall();
+//    }
+
+//
+//    private void checkAndFetchHall() {
+//        if (selectedMovie instanceof HomeMovie) {
+//            // לסרטי בית לא נדרש אולם, אין צורך בבקשת אולם
+//            System.out.println("Home movie selected, no need for hall.");
+//            return;
+//        }
+//
+//        if (selectedMovieId != 0 && selectedBranchName != null && selectedDate != null && selectedTime != null) {
+//            requestHallsFromServer(); // לסרטי קולנוע נבצע את בקשת האולם
+//        }
+//    }
+
+
+
+
 
     private void requestScreeningTimesFromServer() {
         try {
@@ -150,8 +208,8 @@ public class MovieDetailsPage {
     public void onUpdateScreeningTimes(UpdateScreeningTimesEvent event) {
         List<Screening> screenings = event.getScreenings();
         updateUIWithScreeningTimes(screenings);
-        updateAvailableDays(screenings); // ×¨×¢× ×× ××××× ××××× ××
-        updateAvailableTimes(screenings); // ×¨×¢× ×× ××©×¢××ª ××××× ××ª
+        updateAvailableDays(screenings);
+        updateAvailableTimes(screenings);
     }
 
     private void updateUIWithScreeningTimes(List<Screening> screenings) {
@@ -160,15 +218,14 @@ public class MovieDetailsPage {
         chooseDatePicker.setValue(null);
 
         if (selectedMovie instanceof HomeMovie) {
-            updateAvailableDays(screenings);  //  ×× ×××××¨ ××¡×¨× ×××ª×, ××× ×¦××¨× ××¢××× ××ª  ××ª× ××§××× ××¢ × ×¢×××¨ ××¢××× ××ª  ××¢×××× ×××××
+            updateAvailableDays(screenings);
         } else {
-            // ×§×××ª ×¨×©××× ×©× ××ª× ×§××× ××¢ ××ª×× ×¨×©×××ª ×××§×¨× ××ª
+
             Set<String> availableCinemas = screenings.stream()
-                    .filter(screening -> screening.getBranch() != null)  // ××××× ×©-Branch ××× × null
+                    .filter(screening -> screening.getBranch() != null)
                     .map(screening -> screening.getBranch().getName())
                     .collect(Collectors.toSet());
 
-            // ×××¡×¤×ª ××ª× ××§××× ××¢ ×-ComboBox
             cinemaComboBox.getItems().addAll(availableCinemas);
 
             cinemaComboBox.setOnAction(event -> updateAvailableDays(screenings));
@@ -185,7 +242,7 @@ public class MovieDetailsPage {
         }
 
         if (selectedMovie instanceof HomeMovie) {
-            // ×¢×××× ××××× ××× ××© ××§×¨× ××ª ××¡×¨×× ××××ª
+
             Set<LocalDate> availableDays = screenings.stream()
                     .filter(screening -> screening.getBranch() == null)
                     .map(screening -> screening.getScreeningTime().toLocalDate())
@@ -204,6 +261,9 @@ public class MovieDetailsPage {
         } else {
             String selectedCinema = cinemaComboBox.getValue();
             if (selectedCinema != null) {
+
+
+
                 Set<LocalDate> availableDays = screenings.stream()
                         .filter(screening -> screening.getBranch() != null)
                         .filter(screening -> screening.getBranch().getName().equals(selectedCinema))
@@ -222,7 +282,6 @@ public class MovieDetailsPage {
             }
         }
 
-        // ×¢××××× ××× × ×××§×¨× × ×¢× ×¤× ×××× ×©× ×××¨
         List<Screening> finalScreenings = screenings;
         chooseDatePicker.setOnAction(event -> updateAvailableTimes(finalScreenings));
     }
@@ -268,6 +327,42 @@ public class MovieDetailsPage {
         }
     }
 
+//
+//    private void requestHallsFromServer() {
+//        if (selectedMovie instanceof HomeMovie) {
+//            System.out.println("Home movie selected, skipping hall request.");
+//            return;
+//        }
+//
+//        if (selectedMovieId != 0 && selectedDate != null && selectedTime != null && selectedBranchName != null) {
+//            try {
+//                NewMessage message = new NewMessage("findAppropriateHall");
+//                message.setSelectedMovieId(selectedMovieId);
+//                message.setSelectedBranchName(selectedBranchName);
+//                message.setSelectedDate(selectedDate);
+//                message.setSelectedTime(selectedTime);
+//                System.out.println("Sending hall request to server: MovieID=" + selectedMovieId + ", BranchID=" + selectedBranchName + ", Date=" + selectedDate + ", Time=" + selectedTime);
+//                SimpleClient.getClient().sendToServer(message);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+
+
+//    @Subscribe
+//    public void onHallFound(HallFoundEvent event) {
+//        Hall hall = event.getHall();
+//        System.out.println("Received hall from server: HallID=" + hall.getId());
+//        updateUIWithHallDetails(hall);
+//    }
+
+
+    private void updateUIWithHallDetails(Hall hall) {
+        System.out.println("Hall ID: " + hall.getId());
+    }
+
     static int movieDetailsPage;
 
     @FXML
@@ -311,7 +406,11 @@ public class MovieDetailsPage {
         movieDetailsPage = 0;
         App.switchScreen("CardsPage");
     }
-
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        movieDetailsPage = 0;
+        App.switchScreen("PersonalAreaPage");
+    }
     @FXML
     private void switchToPurchaseProductsPage() throws IOException {
 

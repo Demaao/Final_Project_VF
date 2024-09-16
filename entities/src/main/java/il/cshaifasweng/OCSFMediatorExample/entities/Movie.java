@@ -45,8 +45,7 @@ public class Movie implements Serializable {
     @Fetch(FetchMode.SUBSELECT)
     private List<Screening> screenings = new ArrayList<>();
 
-    public Movie() {
-    }
+    public Movie() {}
 
     public Movie(int id, String Engtitle, String Hebtitle, String director, int RlsYear, byte[] imageData, String genre, String description, String mainActors, String length) {
         this.id = id;
@@ -159,10 +158,11 @@ public class Movie implements Serializable {
         this.screenings = screenings;
     }
 
-    public void addScreening(LocalDateTime screeningTime, Branch branch) {
-        Screening screening = new Screening(screeningTime, this, branch);
-        screenings.add(screening);
+    public void addScreening(LocalDateTime screeningTime, Branch branch, Hall hall) {
+        Screening screening = new Screening(screeningTime, this, branch, hall);
+        this.screenings.add(screening);
     }
+
 
     public void removeScreening(Screening screening) {
         screenings.remove(screening);

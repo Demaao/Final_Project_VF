@@ -185,6 +185,10 @@ public class ComplaintPage {
     public void switchToMoviesPage() throws IOException {
         App.switchScreen("MoviesPage");
     }
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
 /*
     @FXML
     public void switchToFiledComplaintsPage() throws IOException {

@@ -14,8 +14,9 @@ public class Customer implements Serializable {
     private String email;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Purchase> purchaseHistory;
+
 
 
     private boolean isLoggedIn ;
