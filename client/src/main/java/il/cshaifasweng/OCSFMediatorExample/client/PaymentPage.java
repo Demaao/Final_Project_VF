@@ -1,14 +1,24 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.Card;
+import il.cshaifasweng.OCSFMediatorExample.entities.Customer;
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import il.cshaifasweng.OCSFMediatorExample.entities.Purchase;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -36,8 +46,20 @@ public class PaymentPage {
     @FXML
     private Label totalPriceLabel;
 
+    private  double totalPrice;
+
     @FXML
-    void payForProduct(ActionEvent event) {
+    private void initialize() {
+        if(CardsPage.cards.isEmpty())
+            totalPriceLabel.setText(null);
+        else {
+            totalPrice = CardsPage.cards.size() * CardsPage.cards.getFirst().getPricePaid();
+            totalPriceLabel.setText(totalPrice + "$");
+        }
+    }
+
+    @FXML
+    void payForProduct(ActionEvent event) throws IOException {
         List<String> errorMessages = new ArrayList<>();
 
         // Reset field styles before validation
@@ -88,12 +110,50 @@ public class PaymentPage {
             return; // Stop processing if validation fails
         }
 
-        // If everything is valid, proceed with the payment
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                    "Payment completed successfully!");
-            alert.show();
-        });
+        List<Purchase> purchases = new ArrayList<>(CardsPage.cards);
+
+        Customer customer = new Customer(Integer.parseInt(IDNumText.getText()),fullNameText.getText(), emailText.getText(),
+                phoneText.getText(), purchases, false);
+
+        LocalDateTime time = LocalDateTime.now();
+        for(Card card : CardsPage.cards){
+            card.setPurchaseDate(time);
+            card.setCustomer(customer);
+        }
+
+        Purchase purchase = new Purchase("Card", time, "Credit Card",
+                totalPrice,customer,null, null, CardsPage.cards.size());
+
+        purchases.add(purchase);
+
+        NewMessage msg = new NewMessage(purchases, "purchaseCards");
+        SimpleClient.getClient().sendToServer(msg);
+
+        // Formatting the date
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String date = time.toLocalDate().format(dateFormatter);
+
+        // Formatting the time
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String time2 = time.toLocalTime().format(timeFormatter);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Purchase Receipt");
+        alert.setHeaderText("Purchase completed successfully!");
+        alert.setContentText("Date: " + date + ",   "+  "Time: " + time2 +
+                "\nProduct Type: Card\nAmount: " +CardsPage.cards.size()+"\nTotal Price: " +totalPrice + "\n\nNote: You can see your purchase details in the personal area.");
+        alert.showAndWait();
+
+        fullNameText.clear();
+        IDNumText.clear();
+        phoneText.clear();
+        emailText.clear();
+        creditCardTxt.clear();
+        totalPriceLabel.setText(null);
+
+        CardsPage.cards.clear();
+
+        switchToCardsPage();
     }
 
     private void resetFieldStyles() {
@@ -136,36 +196,58 @@ public class PaymentPage {
 
     @FXML
     private void switchToCardsPage() throws IOException {
+        CardsPage.cards.clear();
         App.switchScreen("CardsPage");
     }
 
     @FXML
     private void switchToHostPage() throws IOException {
+        CardsPage.cards.clear();
         App.switchScreen("HostPage");
     }
 
     @FXML
     private void switchToHomePage() throws IOException {
+        CardsPage.cards.clear();
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
+        CardsPage.cards.clear();
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
+        CardsPage.cards.clear();
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
+        CardsPage.cards.clear();
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     public void switchToMoviesPage() throws IOException {
+        CardsPage.cards.clear();
         App.switchScreen("MoviesPage");
     }
+
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        CardsPage.cards.clear();
+        App.switchScreen("PersonalAreaPage");
+    }
+
+    @FXML
+    private void switchPurchaseProductsPage() throws IOException {
+        App.switchScreen("PurchaseProductsPage");
+    }
+
+    @Subscribe
+    public void onCardEvent(UpdateCardsEvent event) {}
+
 }

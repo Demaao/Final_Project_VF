@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.CheckTicketsInCardPage">
     <children>
         <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
@@ -24,11 +25,23 @@
                         <Font size="20.0" />
                     </font>
                 </Label>
-                <Button fx:id="loginBtn" layoutX="21.0" layoutY="450.0" mnemonicParsing="false" onAction="#switchToLoginPage" prefHeight="47.0" prefWidth="99.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="     Login">
+                <Button fx:id="loginBtn" layoutX="27.0" layoutY="492.0" mnemonicParsing="false" onAction="#switchToLoginPage" prefHeight="47.0" prefWidth="99.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="     Login">
                     <graphic>
                         <ImageView fitHeight="28.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                             <image>
                                 <Image url="@images/login.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="personalAreaBtn" layoutX="-1.0" layoutY="434.0" mnemonicParsing="false" onAction="#switchToPersonalAreaPage" prefHeight="72.0" prefWidth="166.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="My Profile" textAlignment="CENTER">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="58.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                            <image>
+                                <Image url="@images/personalArea.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -82,7 +95,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="ChargebackBtn" layoutX="16.0" layoutY="400.0" mnemonicParsing="false" onAction="#switchToChargebackPage" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="  Chargeback">
+                <Button fx:id="ChargebackBtn" layoutX="17.0" layoutY="398.0" mnemonicParsing="false" onAction="#switchToChargebackPage" prefHeight="47.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="  Chargeback">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -107,9 +120,9 @@
             </font>
         </Label>
         <TextField fx:id="cardNumText" layoutX="442.0" layoutY="116.0" prefHeight="34.0" prefWidth="210.0" promptText="Card Number">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
+            <font>
+                <Font size="15.0" />
+            </font></TextField>
         <Button fx:id="showCardsBtn" layoutX="672.0" layoutY="113.0" mnemonicParsing="false" onAction="#showCardsTable" prefHeight="34.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Enter">
             <font>
                 <Font size="18.0" />
@@ -117,10 +130,26 @@
         </Button>
         <TableView fx:id="CardsTable" layoutX="220.0" layoutY="178.0" prefHeight="79.0" prefWidth="614.0" visible="false">
             <columns>
-                <TableColumn prefWidth="139.99993896484375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Card NO." />
-                <TableColumn prefWidth="137.59991455078125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Tickets Type" />
-                <TableColumn prefWidth="212.80007934570312" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Purchase Time" />
-                <TableColumn prefWidth="122.39999999999998" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Tickets Amount" />
+                <TableColumn fx:id="cardNOColumn" prefWidth="139.99993896484375" style="-fx-font-size: 15;" text="Card NO.">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="ticketTypeColumn" prefWidth="137.59991455078125" style="-fx-font-size: 15;" text="Tickets Type">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="cardType" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="dateColumn" prefWidth="212.80007934570312" style="-fx-font-size: 15;" text="Purchase Time">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="purchaseDate" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="ticketsAmountColumn" prefWidth="122.39999999999998" style="-fx-font-size: 15;" text="Tickets Amount">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="tickets" />
+                    </cellValueFactory>
+                </TableColumn>
             </columns>
         </TableView>
         <Button fx:id="okBtn" layoutX="672.0" layoutY="278.0" mnemonicParsing="false" onAction="#switchToCardsPage" prefHeight="34.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="OK" visible="false">
@@ -144,17 +173,9 @@
             </font>
         </Label>
         <TextField fx:id="IDNumText" layoutX="442.0" layoutY="116.0" prefHeight="34.0" prefWidth="210.0" promptText="ID Number" visible="false">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
-        <TableView fx:id="allCardsTable" layoutX="220.0" layoutY="178.0" prefHeight="236.0" prefWidth="614.0" visible="false">
-            <columns>
-                <TableColumn prefWidth="143.99993896484375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Card NO." />
-                <TableColumn prefWidth="160.00009155273438" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Tickets Type" />
-                <TableColumn prefWidth="146.4000244140625" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Purchase Time" />
-                <TableColumn prefWidth="164.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Tickets Amount" />
-            </columns>
-        </TableView>
+            <font>
+                <Font size="15.0" />
+            </font></TextField>
         <Button fx:id="enterBtn" layoutX="672.0" layoutY="113.0" mnemonicParsing="false" onAction="#showAllCardsTable" prefHeight="34.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Enter" visible="false">
             <font>
                 <Font size="18.0" />

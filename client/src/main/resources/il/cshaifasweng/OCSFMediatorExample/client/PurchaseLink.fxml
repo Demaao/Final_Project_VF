@@ -105,12 +105,13 @@
                 <Font size="18.0" />
             </font>
         </Button>
-        <TableView layoutX="229.0" layoutY="83.0" prefHeight="250.0" prefWidth="612.0">
+        <TableView fx:id="purchaseTable" layoutX="229.0" layoutY="83.0" prefHeight="250.0" prefWidth="612.0">
             <columns>
-                <TableColumn prefWidth="123.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Product NO." />
-                <TableColumn prefWidth="132.800048828125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Type" />
-                <TableColumn prefWidth="248.79995727539062" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Details" />
-                <TableColumn minWidth="0.0" prefWidth="108.7999267578125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Price" />
+                <TableColumn fx:id="productNoColumn" prefWidth="95.199951171875" style="-fx-font-size: 15;" text="Product NO." />
+                <TableColumn fx:id="typeColumn" prefWidth="84.79998779296875" style="-fx-font-size: 15;" text="Type" />
+            <TableColumn fx:id="movieColumn" prefWidth="161.60000610351562" style="-fx-font-size: 15;" text="Movie Title" />
+                <TableColumn fx:id="detailsColumn" prefWidth="170.40008544921875" style="-fx-font-size: 15;" text="Details" />
+                <TableColumn fx:id="priceColumn" minWidth="0.0" prefWidth="100.7999267578125" style="-fx-font-size: 15;" text="Price" />
             </columns>
         </TableView>
         <Label layoutX="229.0" layoutY="372.0" text="Total Price:" textFill="#f6d9d9">
@@ -118,7 +119,7 @@
                 <Font name="System Bold" size="20.0" />
             </font>
         </Label>
-        <Label layoutX="350.0" layoutY="372.0" text="100$" textFill="#f6d9d9">
+        <Label fx:id="totalPriceLabel" layoutX="350.0" layoutY="372.0" prefHeight="30.0" prefWidth="130.0" text="100$" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
             </font>

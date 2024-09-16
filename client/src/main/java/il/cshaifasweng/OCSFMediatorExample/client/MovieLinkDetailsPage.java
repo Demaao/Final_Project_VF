@@ -12,7 +12,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 
 public class MovieLinkDetailsPage {
 
- //   public static Movie selectedMovie;
+    //   public static Movie selectedMovie;
     @FXML
     private Button cancelBtn;
     @FXML
@@ -268,11 +270,11 @@ public class MovieLinkDetailsPage {
         }
     }
 
-   // static int movieDetailsPage;
+    // static int movieDetailsPage;
 
     @FXML
     private void switchToHomePage() throws IOException {
-       MovieDetailsPage.movieDetailsPage = 0;
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HomePage");
     }
 
@@ -312,9 +314,36 @@ public class MovieLinkDetailsPage {
         App.switchScreen("CardsPage");
     }
 
+    public static HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase();
+
     @FXML
     private void switchToPurchaseProductsPage() throws IOException {
-        App.switchScreen("PurchaseLink");
+        Platform.runLater(() -> {
+            LocalDate date = chooseDatePicker.getValue();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime time = LocalTime.parse(timeComboBox.getValue(), formatter);
+            LocalDateTime dateTime = LocalDateTime.of(date, time);
+            Screening screening = new Screening(dateTime, MovieDetailsPage.selectedMovie, null);
+            // Split the movie length into hours and minutes
+            String[] parts = MovieDetailsPage.selectedMovie.getLength().split(" ");
+            int hours = Integer.parseInt(parts[0].replace("h", ""));
+            int minutes = Integer.parseInt(parts[1].replace("m", ""));
+            // Add hours and minutes to the start time
+            LocalTime endTime = time.plusHours(hours).plusMinutes(minutes);
+            System.out.println(time);
+            System.out.println(endTime);
+            homeMoviePurchase = new HomeMoviePurchase("Link Ticket", null, null, 100, null, null,
+                    (HomeMovie) MovieDetailsPage.selectedMovie, time, endTime, screening);
+            ((HomeMovie) MovieDetailsPage.selectedMovie).addHomeMoviePurchase(homeMoviePurchase);
+            App.switchScreen("PurchaseLink");  });
     }
 
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+       MovieDetailsPage.movieDetailsPage = 0;
+        App.switchScreen("PersonalAreaPage");
+    }
+
+    @Subscribe
+    public void onRequestEvent(UpdateRequestEvent event) {}
 }

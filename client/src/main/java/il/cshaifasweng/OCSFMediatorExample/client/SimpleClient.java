@@ -89,6 +89,17 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("AlreadyloginCustomer")) {
 					App.loginDeniedCounter = 0;
 					EventBus.getDefault().post(new WarningEvent(new Warning("Customer is already logged in!")));
+				}  else if (message.getMessage().equals("cardsList")) {
+					List<Card> cards = (List<Card>) message.getObject();
+					EventBus.getDefault().post(new UpdateCardsEvent(cards));
+				} else if (message.getMessage().equals("purchaseSuccessful")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Payment completed successfully!")));
+				} else if (message.getMessage().equals("notificationsList")) {
+					List<Notification> notifications = (List<Notification>) message.getObject();
+					EventBus.getDefault().post(new UpdatePersonalMessageEvent(notifications));
+				} else if (message.getMessage().equals("purchasesResponse")) {
+					List<Purchase> purchases = (List<Purchase>) message.getObject();
+					EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
 				}
 				});
 		}

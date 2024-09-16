@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table
+@Table (name = "customers")
 public class Customer implements Serializable {
     @Id
     private int id;
@@ -14,8 +14,11 @@ public class Customer implements Serializable {
     private String email;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Purchase> purchaseHistory;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Notification> notifications;
 
 
     private boolean isLoggedIn ;
@@ -75,5 +78,13 @@ public class Customer implements Serializable {
 
     public void setLoggedIn(boolean loggedIn) {
         this.isLoggedIn = loggedIn;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 }

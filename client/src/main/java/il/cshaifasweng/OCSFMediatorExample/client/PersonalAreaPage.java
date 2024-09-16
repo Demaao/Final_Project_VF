@@ -28,8 +28,6 @@ public class PersonalAreaPage {
     @FXML
     private Button orderBtn, messagesBtn, MycomplaintBtn, moviesLinksBtn;
 
-   // private Customer loggedInCustomer; ////////////////////////////////////////////////////////
-
     public static Customer loggedInCustomer;
 
     public void initialize() {
@@ -49,7 +47,6 @@ public class PersonalAreaPage {
         }
     }
 
-    // Send a request to the server to fetch customer information
     @FXML
     private void showPurchasesTable(ActionEvent event) {
         String idNum = IDNumText.getText();
@@ -65,8 +62,7 @@ public class PersonalAreaPage {
                 SimpleClient.getClient().sendToServer(message);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        }
+            }}
     }
 
     // Event handler for when the customer login event is triggered
@@ -76,11 +72,9 @@ public class PersonalAreaPage {
             loggedInCustomer = event.getCustomer();
             welcomeLabel.setText("Welcome " + loggedInCustomer.getName());
 
-
             IDNumText.setVisible(false);
             enterBtn.setVisible(false);
 
-            // Set the buttons to be visible now that the ID has been validated and customer is logged in
             orderBtn.setVisible(true);
             messagesBtn.setVisible(true);
             MycomplaintBtn.setVisible(true);
@@ -89,9 +83,8 @@ public class PersonalAreaPage {
         });
     }
 
-
     // Function to log out the customer
-    public static void logOutCustomer() {  ///////////////////////
+    public static void logOutCustomer() {
         if (loggedInCustomer != null) {
             try {
                 NewMessage message = new NewMessage(loggedInCustomer, "logOutCustomer");
@@ -100,6 +93,25 @@ public class PersonalAreaPage {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    @FXML
+    public void switchToPersonalDetailsPage() throws IOException {
+        if (loggedInCustomer != null) {
+            int customerId = loggedInCustomer.getId();
+            NewMessage message = new NewMessage("fetchPurchases", customerId);
+            try {
+                SimpleClient.getClient().sendToServer(message);
+                App.switchScreen("PersonalDetailsPage");
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to connect to server.");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "No customer is logged in.");
+            alert.showAndWait();
         }
     }
 
@@ -146,40 +158,19 @@ public class PersonalAreaPage {
     }
 
     @FXML
-    private void switchToMyOrders() throws IOException {
-        logOutCustomer();
-        App.switchScreen("MyOrdersPage");
-    }
-
-    @FXML
     private void switchToMessages() throws IOException {
-        logOutCustomer();
-        App.switchScreen("MessagesPage");
+        App.switchScreen("PersonalMessagesPage");
     }
 
     @FXML
     public void switchToFiledComplaintsPage() throws IOException {
         App.switchScreen("FiledComplaintsPage");
     }
-    /*
-    @FXML
-    private void switchToComplaintsStatus() throws IOException {
-        logOutCustomer();
-        App.switchScreen("ComplaintsStatusPage");
-    }*/
-
-
-    @FXML
-    public void switchToPersonalDetailsPage() throws IOException {
-        App.switchScreen("PersonalDetailsPage");
-    }
-
 
     @FXML
     private void switchToMoviesLinks() throws IOException {
         logOutCustomer();
         App.switchScreen("MoviesLinksPage");
-
     }
 
     @FXML

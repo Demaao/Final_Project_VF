@@ -21,6 +21,15 @@ public class Screening implements Serializable {
     @JoinColumn(name = "branch_id", nullable = true) // branch יכול להיות null במקרה של סרטי בית
     private Branch branch;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    //@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hall_id", nullable = true) // hall ×××× ×××××ª null ×× ×××§×¨× × ××× × ××ª×§××××ª ××××× ××¡×××
+    private Hall hall;
+
+    @OneToOne
+    @JoinColumn(name = "homeMoviePurchase_id")  // This side owns the relationship
+    private HomeMoviePurchase homeMoviePurchase;
+
 
     public Screening() {}
 
@@ -30,6 +39,13 @@ public class Screening implements Serializable {
         this.branch = branch;
     }
 
+    public Screening(LocalDateTime screeningTime, Movie movie, Branch branch, Hall hall) {
+        this.screeningTime = screeningTime;
+        this.movie = movie;
+        this.branch = branch;
+        this.hall = hall;
+    }
+
     // Getters and setters
     public int getId() {
         return id;
@@ -37,6 +53,14 @@ public class Screening implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Hall getHall() {
+        return hall;
+    }
+
+    public void setHall(Hall hall) {
+        this.hall = hall;
     }
 
     public LocalDateTime getScreeningTime() {
@@ -65,8 +89,8 @@ public class Screening implements Serializable {
 
     public String myToString() {
         if(this.movie instanceof HomeMovie)
-            return this.screeningTime.toLocalDate().toString() + "      " + this.screeningTime.toLocalTime();
+            return this.screeningTime.toLocalDate().toString() + "    " + this.screeningTime.toLocalTime();
         else
-            return this.screeningTime.toLocalDate().toString() + "      " + this.screeningTime.toLocalTime() + "        " + this.branch.getName();
+            return this.screeningTime.toLocalDate().toString() + "    " + this.screeningTime.toLocalTime() + "        " + this.branch.getName();
     }
 }

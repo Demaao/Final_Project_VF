@@ -2,9 +2,10 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table (name = "purchases")
 public class Purchase implements Serializable {
 
     @Id
@@ -12,9 +13,13 @@ public class Purchase implements Serializable {
     private int id;
 
     private String productType;
-    private String purchaseDate;
+    private LocalDateTime purchaseDate;
     private String paymentMethod;
+    private String purchaseDescription;
+    private String branchName;
     private double pricePaid;
+    private int quantity;
+
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -23,12 +28,28 @@ public class Purchase implements Serializable {
 
     public Purchase() {}
 
-    public Purchase(String productType, String purchaseDate, String paymentMethod, double pricePaid, Customer customer) {
+    //for cinema movies purchases
+    public Purchase(String productType, LocalDateTime purchaseDate, String paymentMethod, double pricePaid, Customer customer,String branchName, String purchaseDescription, int quantity) {
         this.productType = productType;
         this.purchaseDate = purchaseDate;
         this.paymentMethod = paymentMethod;
         this.pricePaid = pricePaid;
         this.customer = customer;
+        this.branchName = branchName;
+        this.purchaseDescription = purchaseDescription;
+        this.quantity = quantity;
+    }
+
+    //for home movies purchases
+    public Purchase(String productType, LocalDateTime purchaseDate, String paymentMethod, double pricePaid, Customer customer, String purchaseDescription) {
+        this.productType = productType;
+        this.purchaseDate = purchaseDate;
+        this.paymentMethod = paymentMethod;
+        this.pricePaid = pricePaid;
+        this.customer = customer;
+        this.purchaseDescription = purchaseDescription;
+        this.quantity = 1;
+
     }
 
     // Getters and setters
@@ -36,7 +57,7 @@ public class Purchase implements Serializable {
         return productType;
     }
 
-    public String getPurchaseDate() {
+    public LocalDateTime getPurchaseDate() {
         return purchaseDate;
     }
 
@@ -54,5 +75,21 @@ public class Purchase implements Serializable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
+
+    public String getPurchaseDescription() {return purchaseDescription;}
+    public void setPurchaseDescription(String purchaseDescription) {}
+
+    public String getBranchName() {return branchName;}
+    public void setBranchName(String branchName) {this.branchName = branchName;}
+
+    public int getQuantity() {return quantity;}
+    public void setQuantity(int quantity) {this.quantity = quantity;}
+
+    public void setPurchaseDate(LocalDateTime purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 }
