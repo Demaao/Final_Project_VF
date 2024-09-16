@@ -13,4 +13,6 @@ public class UpdatePurchasesEvent {
     public List<Purchase> getPurchases() {
         return purchases;
     }
+
 }
+

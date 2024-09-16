@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table (name = "purchases")
 public class Purchase implements Serializable {
 
     @Id
@@ -79,26 +79,22 @@ public class Purchase implements Serializable {
         this.customer = customer;
     }
 
-//    public int getId() {return id;}
-//    public void setId(int id) {this.id = id;}
 
-    public String getPurchaseDescription() {
-        return purchaseDescription;
-    }
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
 
-    public void setPurchaseDescription(String purchaseDescription) {
-    }
+    public String getPurchaseDescription() {return purchaseDescription;}
+    public void setPurchaseDescription(String purchaseDescription) {}
 
-    public String getBranchName() {
-        return branchName;
-    }
+    public String getBranchName() {return branchName;}
+    public void setBranchName(String branchName) {this.branchName = branchName;}
 
-    public void setBranchName(String branchName) {
-        this.branchName = branchName;
-    }
+    public int getQuantity() {return quantity;}
+    public void setQuantity(int quantity) {this.quantity = quantity;}
 
-    public int getQuantity() {
-        return quantity;
+    public void setPurchaseDate(LocalDateTime purchaseDate) {
+        this.purchaseDate = purchaseDate;
+
     }
 }
 

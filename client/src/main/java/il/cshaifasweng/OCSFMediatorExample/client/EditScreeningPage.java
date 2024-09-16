@@ -168,8 +168,8 @@ public class EditScreeningPage {
 
             SimpleClient.getClient().sendToServer(addMessage);
 
+            selectedMovie.addScreening(dateTime, selectedBranch, null); //////////////////////////////////////
 
-            selectedMovie.addScreening(dateTime, selectedBranch,null);
             updateTable(selectedMovie, cinemaName);
             updateRemoveComboBox();
 

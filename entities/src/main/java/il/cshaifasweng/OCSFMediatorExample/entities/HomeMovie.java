@@ -1,12 +1,21 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class HomeMovie extends Movie implements Serializable {
     private String link;
+
+    @OneToMany(mappedBy = "homeMovie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<HomeMoviePurchase> homeMoviePurchases = new ArrayList<>();
 
     public HomeMovie() {}
 
@@ -21,5 +30,10 @@ public class HomeMovie extends Movie implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public void addHomeMoviePurchase(HomeMoviePurchase homeMoviePurchase) {
+        homeMoviePurchases.add(homeMoviePurchase);
+        homeMoviePurchase.setHomeMovie(this); // Ensure the relationship is properly bidirectional
     }
 }

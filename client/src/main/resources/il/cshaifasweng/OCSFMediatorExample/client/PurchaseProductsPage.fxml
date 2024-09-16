@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -105,12 +106,22 @@
                 <Font size="18.0" />
             </font>
         </Button>
-        <TableView layoutX="229.0" layoutY="83.0" prefHeight="250.0" prefWidth="612.0">
+        <TableView fx:id="purchaseCardsTable" layoutX="229.0" layoutY="83.0" prefHeight="250.0" prefWidth="612.0">
             <columns>
-                <TableColumn prefWidth="123.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Product NO." />
-                <TableColumn prefWidth="132.800048828125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Type" />
-                <TableColumn prefWidth="248.79995727539062" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Details" />
-                <TableColumn minWidth="0.0" prefWidth="108.7999267578125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Price" />
+                <TableColumn fx:id="NOColumn" prefWidth="94.39996337890625" style="-fx-font-size: 15;" text="Product NO.">
+                </TableColumn>
+                <TableColumn fx:id="TypeColumn" prefWidth="98.4000244140625" style="-fx-font-size: 15;" text="Type">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="productType" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="detailsColumn" prefWidth="313.6000671386719" style="-fx-font-size: 15;" text="Details">
+                </TableColumn>
+                <TableColumn fx:id="priceColumn" prefWidth="108.7999267578125" style="-fx-font-size: 15;" text="Price">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="pricePaid" />
+                    </cellValueFactory>
+                </TableColumn>
             </columns>
         </TableView>
         <Label layoutX="229.0" layoutY="372.0" text="Total Price:" textFill="#f6d9d9">
@@ -118,10 +129,15 @@
                 <Font name="System Bold" size="20.0" />
             </font>
         </Label>
-        <Label layoutX="350.0" layoutY="372.0" text="100$" textFill="#f6d9d9">
+        <Label fx:id="totalPriceLabel" layoutX="350.0" layoutY="372.0" prefHeight="30.0" prefWidth="162.0" text="100$" textFill="#f6d9d9">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
+      <Label layoutX="229.0" layoutY="43.0" prefHeight="30.0" prefWidth="389.0" text="Purchase Details" textFill="#f6d9d9">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

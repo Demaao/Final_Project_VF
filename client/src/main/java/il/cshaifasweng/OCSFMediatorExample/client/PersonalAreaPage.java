@@ -63,8 +63,7 @@ public class PersonalAreaPage {
                 SimpleClient.getClient().sendToServer(message);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        }
+            }}
     }
 
     @Subscribe
@@ -93,6 +92,25 @@ public class PersonalAreaPage {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    @FXML
+    public void switchToPersonalDetailsPage() throws IOException {
+        if (loggedInCustomer != null) {
+            int customerId = loggedInCustomer.getId();
+            NewMessage message = new NewMessage("fetchPurchases", customerId);
+            try {
+                SimpleClient.getClient().sendToServer(message);
+                App.switchScreen("PersonalDetailsPage");
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to connect to server.");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "No customer is logged in.");
+            alert.showAndWait();
         }
     }
 
@@ -158,8 +176,7 @@ public class PersonalAreaPage {
 
     @FXML
     private void switchToMessages() throws IOException {
-        logOutCustomer();
-        App.switchScreen("MessagesPage");
+        App.switchScreen("PersonalMessagesPage");
     }
 
     @FXML

@@ -130,7 +130,4 @@ public class Hall implements Serializable {
         this.screenings = screenings;
     }
 
-
-
-
 }

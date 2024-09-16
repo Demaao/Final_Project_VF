@@ -22,9 +22,13 @@ public class Screening implements Serializable {
     private Branch branch;
 
     @ManyToOne(fetch = FetchType.LAZY)
-   //@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hall_id", nullable = true) // hall יכול להיות null אם ההקרנה אינה מתקיימת באולם מסוים
+    //@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hall_id", nullable = true) // hall ×××× ×××××ª null ×× ×××§×¨× × ××× × ××ª×§××××ª ××××× ××¡×××
     private Hall hall;
+
+    @OneToOne
+    @JoinColumn(name = "homeMoviePurchase_id")  // This side owns the relationship
+    private HomeMoviePurchase homeMoviePurchase;
 
 
     public Screening() {}
@@ -33,6 +37,13 @@ public class Screening implements Serializable {
         this.screeningTime = screeningTime;
         this.movie = movie;
        this.branch = branch;
+    }
+
+    public Screening(LocalDateTime screeningTime, Movie movie, Branch branch, Hall hall) {
+        this.screeningTime = screeningTime;
+        this.movie = movie;
+        this.branch = branch;
+        this.hall = hall;
     }
 
     public Screening(LocalDateTime screeningTime, Movie movie, Branch branch, Hall hall) {
@@ -86,8 +97,8 @@ public class Screening implements Serializable {
 
     public String myToString() {
         if(this.movie instanceof HomeMovie)
-            return this.screeningTime.toLocalDate().toString() + "      " + this.screeningTime.toLocalTime();
+            return this.screeningTime.toLocalDate().toString() + "    " + this.screeningTime.toLocalTime();
         else
-            return this.screeningTime.toLocalDate().toString() + "      " + this.screeningTime.toLocalTime() + "        " + this.branch.getName();
+            return this.screeningTime.toLocalDate().toString() + "    " + this.screeningTime.toLocalTime() + "        " + this.branch.getName();
     }
 }

@@ -411,12 +411,12 @@ public class AddMoviePage {
 
         if(screeningType.equals("In The Cinema")) {
             Movie movie = new Movie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, movieGenre, descriptionText, mainActors, length);
-            NewMessage msg = new NewMessage(movie, "addCinemaMovie", movieBranches, movieCinemaDateTimes);
+            NewMessage msg = new NewMessage(movie, "addCinemaMovie", movieBranches, movieCinemaDateTimes); ////////////////////////add halls
             SimpleClient.getClient().sendToServer(msg);
         } else if(screeningType.equals("Link")) {
             HomeMovie homeMovie = new HomeMovie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, link, movieGenre, descriptionText, mainActors, length);
             for(Screening x: movieLinkScreenings){
-               homeMovie.addScreening(x.getScreeningTime(), x.getBranch(),null);
+               homeMovie.addScreening(x.getScreeningTime(), x.getBranch(), null); /////////////////////////////////////////
             }
             NewMessage msg = new NewMessage(homeMovie, "addHomeMovie");
             SimpleClient.getClient().sendToServer(msg);
