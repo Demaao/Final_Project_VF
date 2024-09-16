@@ -122,7 +122,7 @@ public class PaymentPage {
         }
 
         Purchase purchase = new Purchase("Card", time, "Credit Card",
-                totalPrice,customer,null, null, CardsPage.cards.size());
+                totalPrice,customer,null,  CardsPage.cards.size(), null);
 
         purchases.add(purchase);
 
@@ -142,7 +142,7 @@ public class PaymentPage {
         alert.setHeaderText("Purchase completed successfully!");
         alert.setContentText("Date: " + date + ",   "+  "Time: " + time2 +
                 "\nProduct Type: Card\nAmount: " +CardsPage.cards.size()+"\nTotal Price: " +totalPrice + "\n\nNote: You can see your purchase details in the personal area.");
-        alert.showAndWait();
+        alert.show();
 
         fullNameText.clear();
         IDNumText.clear();

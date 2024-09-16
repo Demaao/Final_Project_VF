@@ -108,11 +108,6 @@ public class CardsPage {
     private double cardValue;
 
     @FXML
-    private void  switchToPersonalAreaPage() throws IOException {
-        App.switchScreen("PersonalAreaPage");
-    }
-
-    @FXML
     private void switchToChargebackPage() throws IOException {
         cards.clear();
         App.switchScreen("ChargebackPage");
@@ -132,7 +127,7 @@ public class CardsPage {
             cardValue = cardValue*1.5;
         for (int i = 0; i < cardsQuantityChooser.getValue(); i++) {
             Card card = new Card("Card", null, "Credit Card", cardValue,
-                    null, null,null, 1,20, ticketTypeChooser.getValue());
+                    null, null,1, null,20, ticketTypeChooser.getValue());
             cards.add(card);
         }
         App.switchScreen("PurchaseProductsPage");

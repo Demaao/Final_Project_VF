@@ -86,45 +86,14 @@ public class SimpleServer extends AbstractServer {
 			generateComplaints(session);
 			generateChangePriceRequest(session); //////////////////////////////////////////////
 			generateHomeMoviePurchases(session);
-			generateCards(session);
 			generateHalls(session);
 			generateCustomersAndPurchases(session);
+			generateCards(session);
 			generateNotifications(session);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private static void generateCards(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
-		Customer customer1 = session.get(Customer.class, 123123123);
-		Customer customer2 = session.get(Customer.class, 123456789);
-		Card card1 = new Card("Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card"
-		, 1000, customer1, null, null, 1, 15, "Regular");
-		session.save(card1);
-		Card card2 = new Card("Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card"
-				, 1500, customer2, null,null, 1,4, "VIP");
-		session.save(card2);
-		session.flush();
-	}
-
-
-	private static void generateNotifications(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
-		Customer customer1 = session.get(Customer.class, 123123123);
-		Customer customer2 = session.get(Customer.class, 123456789);
-		Notification noti1 = new Notification("New Movie" ,"Watch Barbie today in Haifa Cinema!\nFor more details check the movies page",
-				LocalDateTime.of(2024, 9, 24, 11, 11),"Unread",customer1);
-		session.save(noti1);
-		Notification noti2 = new Notification("New Movie" ,"Watch The Joker today in Haifa Cinema!\nFor more details check the movies page",
-				LocalDateTime.of(2024, 9, 24, 11, 11),"Unread",customer2);
-		session.save(noti2);
-		session.flush();
-	}
-
-	private static void generateHomeMoviePurchases(Session session) {
-		HomeMovie homeMovie = new HomeMovie();
-		session.save(homeMovie);
-		session.flush();
 	}
 
 	private static void generateCinema(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
@@ -178,6 +147,37 @@ public class SimpleServer extends AbstractServer {
 		session.save(customer2);
 		session.flush();
 
+	}
+
+	private static void generateCards(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+		Customer customer1 = session.get(Customer.class, 123123123);
+		Customer customer2 = session.get(Customer.class, 123456789);
+		Card card1 = new Card("Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card"
+				, 1000, customer1, null, 1, null, 15, "Regular");
+		session.save(card1);
+		Card card2 = new Card("Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card"
+				, 1500, customer2, null,1, null,4, "VIP");
+		session.save(card2);
+		session.flush();
+	}
+
+
+	private static void generateNotifications(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+		Customer customer1 = session.get(Customer.class, 123123123);
+		Customer customer2 = session.get(Customer.class, 123456789);
+		Notification noti1 = new Notification("New Movie" ,"Watch Barbie today in Haifa Cinema!\nFor more details check the movies page",
+				LocalDateTime.of(2024, 9, 24, 11, 11),"Unread",customer1);
+		session.save(noti1);
+		Notification noti2 = new Notification("New Movie" ,"Watch The Joker today in Haifa Cinema!\nFor more details check the movies page",
+				LocalDateTime.of(2024, 9, 24, 11, 11),"Unread",customer2);
+		session.save(noti2);
+		session.flush();
+	}
+
+	private static void generateHomeMoviePurchases(Session session) {
+		HomeMovie homeMovie = new HomeMovie();
+		session.save(homeMovie);
+		session.flush();
 	}
 
 
@@ -450,76 +450,6 @@ public class SimpleServer extends AbstractServer {
 
 
 	private static void generateHalls(Session session) throws Exception {
-
-		Branch haifaCinema = session.get(Branch.class, 1);
-		Branch telAvivCinema = session.get(Branch.class, 2);
-		Branch eilatCinema = session.get(Branch.class, 3);
-		Branch karmielCinema = session.get(Branch.class, 4);
-		Branch jerusalemCinema = session.get(Branch.class, 5);
-		Hall hall1 = new Hall(1,4, 5, 18, "1",jerusalemCinema);
-		session.save(hall1);
-		Hall hall2 = new Hall(2,5, 5, 25, "2",haifaCinema);
-		session.save(hall2);
-		Hall hall3 = new Hall(3,6, 6, 36, "3",haifaCinema);
-		session.save(hall3);
-		Hall hall4 = new Hall(4,5, 6, 28, "4",jerusalemCinema);
-		session.save(hall4);
-		Hall hall5 = new Hall(5,3, 6, 18, "5",haifaCinema);
-		session.save(hall5);
-		Hall hall6 = new Hall(6,6, 5, 30, "6",telAvivCinema);
-		session.save(hall6);
-		Hall hall7 = new Hall(7,5, 5, 23, "7",jerusalemCinema);
-		session.save(hall7);
-		Hall hall8 = new Hall(8,5, 4, 20, "8",karmielCinema);
-		session.save(hall8);
-		Hall hall9 = new Hall(9,4, 5, 18, "9",telAvivCinema);
-		session.save(hall9);
-		Hall hall10 = new Hall(10,5, 5, 23, "10",karmielCinema);
-		session.save(hall10);
-		Hall hall11 = new Hall(11,4, 4, 16, "11",karmielCinema);
-		session.save(hall11);
-		Hall hall12 = new Hall(12,4, 5, 18, "12",eilatCinema);
-		session.save(hall12);
-		Hall hall13 = new Hall(13,5, 5, 25, "13",eilatCinema);
-		session.save(hall13);
-		Hall hall14 = new Hall(14,6, 6, 36, "14",eilatCinema);
-		session.save(hall14);
-		Hall hall15 = new Hall(15,5, 6, 28, "15",telAvivCinema);
-		session.save(hall15);
-		Hall hall16 = new Hall(16,5, 6, 28, "16",jerusalemCinema);
-		session.save(hall16);
-		Hall hall17 = new Hall(17,6, 5, 30, "17",karmielCinema);
-		session.save(hall17);
-		Hall hall18 = new Hall(18,5, 5, 23, "18",karmielCinema);
-		session.save(hall18);
-		Hall hall19 = new Hall(19,5, 4, 20, "19",telAvivCinema);
-		session.save(hall19);
-		Hall hall20 = new Hall(20,4, 5, 18, "20",telAvivCinema);
-		session.save(hall20);
-		Hall hall21 = new Hall(21,5, 5, 23, "21",karmielCinema);
-		session.save(hall21);
-		Hall hall22 = new Hall(22,4, 5, 18, "22",jerusalemCinema);
-		session.save(hall22);
-		Hall hall23 = new Hall(23,5, 5, 25, "23",haifaCinema);
-		session.save(hall23);
-		Hall hall24 = new Hall(24,6, 6, 36, "24",eilatCinema);
-		session.save(hall24);
-		Hall hall25 = new Hall(25,5, 6, 28, "25",eilatCinema);
-		session.save(hall25);
-		Hall hall26 = new Hall(26,3, 6, 18, "26",jerusalemCinema);
-		session.save(hall26);
-		Hall hall27 = new Hall(27,3, 6, 18, "27",jerusalemCinema);
-		session.save(hall27);
-		Hall hall28 = new Hall(28,3, 6, 18, "28",haifaCinema);
-		session.save(hall28);
-		Hall hall29 = new Hall(29,3, 6, 18, "29",eilatCinema);
-		session.save(hall29);
-
-		session.flush();
-	}
-
-
-	private static void generateScreenings(Session session) throws Exception {
 
 		Branch haifaCinema = session.get(Branch.class, 1);
 		Branch telAvivCinema = session.get(Branch.class, 2);

@@ -23,8 +23,8 @@ public class Card extends Purchase implements Serializable {
     public Card() {}
 
     public Card(String productType, LocalDateTime purchaseDate, String paymentMethod, double pricePaid, Customer customer,
-                String branch,String purchaseDescription, int quantity, int tickets, String cardType) {
-        super(productType, purchaseDate, paymentMethod, pricePaid, customer, branch, purchaseDescription, quantity);
+                String branch, int quantity, String purchaseDescription, int tickets, String cardType) {
+        super(productType, purchaseDate, paymentMethod, pricePaid, customer, branch, quantity, purchaseDescription);
         this.tickets = tickets;
         this.cardType = cardType;
     }

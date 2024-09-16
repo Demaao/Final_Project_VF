@@ -46,13 +46,6 @@ public class Screening implements Serializable {
         this.hall = hall;
     }
 
-    public Screening(LocalDateTime screeningTime, Movie movie, Branch branch, Hall hall) {
-        this.screeningTime = screeningTime;
-        this.movie = movie;
-        this.branch = branch;
-        this.hall = hall;
-    }
-
     // Getters and setters
     public int getId() {
         return id;
