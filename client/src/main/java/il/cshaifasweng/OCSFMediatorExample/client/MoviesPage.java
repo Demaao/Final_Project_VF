@@ -529,6 +529,10 @@ public class MoviesPage {
     private void switchToCardsPage() throws IOException {
         App.switchScreen("CardsPage");
     }
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
 
     private void filterMovies() {
         LocalDate selectedDate = searchByDatePicker.getValue();

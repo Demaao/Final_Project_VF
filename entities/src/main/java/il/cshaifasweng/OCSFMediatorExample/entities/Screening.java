@@ -21,13 +21,25 @@ public class Screening implements Serializable {
     @JoinColumn(name = "branch_id", nullable = true) // branch יכול להיות null במקרה של סרטי בית
     private Branch branch;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+   //@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hall_id", nullable = true) // hall יכול להיות null אם ההקרנה אינה מתקיימת באולם מסוים
+    private Hall hall;
+
 
     public Screening() {}
 
     public Screening(LocalDateTime screeningTime, Movie movie, Branch branch) {
         this.screeningTime = screeningTime;
         this.movie = movie;
+       this.branch = branch;
+    }
+
+    public Screening(LocalDateTime screeningTime, Movie movie, Branch branch, Hall hall) {
+        this.screeningTime = screeningTime;
+        this.movie = movie;
         this.branch = branch;
+        this.hall = hall;
     }
 
     // Getters and setters
@@ -37,6 +49,15 @@ public class Screening implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    public Hall getHall() {
+        return hall;
+    }
+
+    public void setHall(Hall hall) {
+        this.hall = hall;
     }
 
     public LocalDateTime getScreeningTime() {

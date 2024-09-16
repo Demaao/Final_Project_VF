@@ -1,10 +1,12 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList;
 
 
 @Entity
@@ -17,21 +19,22 @@ public class Branch implements Serializable {
     private String name;
     private String location;
 
-    //private List<Report> reportsList;
-    private int numberOfHalls;
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Hall> halls = new ArrayList<>();
+
 
     @ManyToMany(mappedBy = "branches", fetch = FetchType.EAGER)
-
     private List<Movie> movies;
 
     @ManyToOne
     private HeadManager headManager;
 
     @OneToOne
-    @JoinColumn(name = "branch_manager_id")  // This side owns the relationship
+    @JoinColumn(name = "branch_manager_id")
     private BranchManager branchManager;
 
-    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+  @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)  //checked
     private List<Screening> screenings;
 
     public List<Screening> getScreenings() {
@@ -44,13 +47,13 @@ public class Branch implements Serializable {
 
     public Branch() {}
 
-    public Branch(int id, String haifaCinema, String location){//, BranchManager branchManager, HeadManager headManager) {
+    public Branch(int id, String CinemaName, String location){//, BranchManager branchManager, HeadManager headManager) {
         this.id = id;
-        this.name = haifaCinema;
+        this.name = CinemaName;
         this.location = location;
         this.movies = new ArrayList<>(); /////////////////////////
-       // this.branchManager = branchManager; //////////////////////
-       // setHeadManager(headManager); ////////////////////////////////
+        // this.branchManager = branchManager; //////////////////////
+        // setHeadManager(headManager); ////////////////////////////////
         // this.branchManager = branchManager; //////////////////////
         // setHeadManager(headManager); ////////////////////////////////
     }
@@ -104,5 +107,10 @@ public class Branch implements Serializable {
             movies.add(movie);
             movie.getBranches().add(this);
         }
+    }
+
+    public void addHall(Hall hall) {
+        halls.add(hall);
+        hall.setBranch(this);
     }
 }

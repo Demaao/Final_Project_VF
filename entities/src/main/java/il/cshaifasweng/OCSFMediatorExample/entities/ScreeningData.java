@@ -7,11 +7,21 @@ public class ScreeningData implements Serializable {
     private int movieId;  // מזהה של הסרט
     private Integer branchId; // מזהה של בית הקולנוע, עשוי להיות null אם זו הקרנת בית
     private LocalDateTime screeningTime;  // הזמן של ההקרנה
+    private Integer hallId;
+
 
     // יוצר חדש ללא מזהה ההקרנה, כיוון שהוא אינו נדרש למחיקה
     public ScreeningData(int movieId, Integer branchId, LocalDateTime screeningTime) {
         this.movieId = movieId;
         this.branchId = branchId;
+        this.screeningTime = screeningTime;
+    }
+
+
+    public ScreeningData(int movieId, Integer branchId, Integer hallId, LocalDateTime screeningTime) {
+        this.movieId = movieId;
+        this.branchId = branchId;
+        this.hallId = hallId;
         this.screeningTime = screeningTime;
     }
 

@@ -416,7 +416,7 @@ public class AddMoviePage {
         } else if(screeningType.equals("Link")) {
             HomeMovie homeMovie = new HomeMovie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, link, movieGenre, descriptionText, mainActors, length);
             for(Screening x: movieLinkScreenings){
-               homeMovie.addScreening(x.getScreeningTime(), x.getBranch());
+               homeMovie.addScreening(x.getScreeningTime(), x.getBranch(),null);
             }
             NewMessage msg = new NewMessage(homeMovie, "addHomeMovie");
             SimpleClient.getClient().sendToServer(msg);

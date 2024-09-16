@@ -131,6 +131,9 @@ public class CheckTicketsInCardPage {
     public void switchToMoviesPage() throws IOException {
         App.switchScreen("MoviesPage");
     }
-
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
 }
 

@@ -107,6 +107,10 @@ public class CardsPage {
     private void switchToPurchaseProductsPage() throws IOException{
         App.switchScreen("PurchaseProductsPage");
     }
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
 
 }
 
