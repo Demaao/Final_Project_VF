@@ -105,11 +105,6 @@ public class CardsPage {
     private double cardValue;
 
     @FXML
-    private void  switchToPersonalAreaPage() throws IOException {
-        App.switchScreen("PersonalAreaPage");
-    }
-
-    @FXML
     private void switchToChargebackPage() throws IOException {
         cards.clear();
         App.switchScreen("ChargebackPage");

@@ -132,11 +132,6 @@ public class CheckTicketsInCardPage {
     }
 
     @FXML
-    private void  switchToPersonalAreaPage() throws IOException {
-        App.switchScreen("PersonalAreaPage");
-    }
-
-    @FXML
     void showCardsTable(ActionEvent event) {
         if(cardNumText.getText().isEmpty() || !cardNumText.getText().matches("\\d+")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
