@@ -97,7 +97,7 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-	private static void generateCards(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+	private static void generateCards(Session session) throws Exception {  /////////////////////////////////////////////////////////
 		Customer customer1 = session.get(Customer.class, 123123123);
 		Customer customer2 = session.get(Customer.class, 123456789);
 		Card card1 = new Card("Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card"

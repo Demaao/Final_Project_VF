@@ -46,4 +46,5 @@ public class Card extends Purchase implements Serializable {
     public void setCardType(String cardType) {
         this.cardType = cardType;
     }
+
 }
