@@ -122,7 +122,7 @@ public class PaymentPage {
         }
 
         Purchase purchase = new Purchase("Card", time, "Credit Card",
-                totalPrice,customer,null, null, CardsPage.cards.size());
+                totalPrice,customer,null,  CardsPage.cards.size(), null);
 
         purchases.add(purchase);
 
