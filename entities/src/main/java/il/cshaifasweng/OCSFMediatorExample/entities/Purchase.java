@@ -26,18 +26,20 @@ public class Purchase implements Serializable {
     private Customer customer;
 
 
-    public Purchase() {}
+    public Purchase() {
+    }
 
     //for cinema movies purchases
-    public Purchase(String productType, LocalDateTime purchaseDate, String paymentMethod, double pricePaid, Customer customer,String branchName, String purchaseDescription, int quantity) {
+    public Purchase(String productType, LocalDateTime purchaseDate, String paymentMethod, double pricePaid, Customer customer, String branchName, int Quantity, String purchaseDescription) {
         this.productType = productType;
         this.purchaseDate = purchaseDate;
         this.paymentMethod = paymentMethod;
         this.pricePaid = pricePaid;
         this.customer = customer;
         this.branchName = branchName;
+        this.quantity = Quantity;
         this.purchaseDescription = purchaseDescription;
-        this.quantity = quantity;
+
     }
 
     //for home movies purchases
@@ -77,6 +79,7 @@ public class Purchase implements Serializable {
         this.customer = customer;
     }
 
+
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
 
@@ -91,5 +94,8 @@ public class Purchase implements Serializable {
 
     public void setPurchaseDate(LocalDateTime purchaseDate) {
         this.purchaseDate = purchaseDate;
+
     }
 }
+
+

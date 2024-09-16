@@ -76,4 +76,8 @@ public class ChargebackPolicyPage {
     private void switchToCardsPage() throws IOException {
         App.switchScreen("CardsPage");
     }
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
 }

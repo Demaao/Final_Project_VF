@@ -137,6 +137,10 @@ public class CardsPage {
         }
         App.switchScreen("PurchaseProductsPage");
     }
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
 
     @FXML
     private void requestCinemaFromServer() {

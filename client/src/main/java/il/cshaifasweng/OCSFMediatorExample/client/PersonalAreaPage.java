@@ -2,6 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.Customer;
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import il.cshaifasweng.OCSFMediatorExample.entities.Purchase;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.util.List;
 
 public class PersonalAreaPage {
 
@@ -23,7 +25,7 @@ public class PersonalAreaPage {
     private Label welcomeLabel;
 
     @FXML
-    private Label  menuMsg;
+    private Label menuMsg;
 
     @FXML
     private Button orderBtn, messagesBtn, MycomplaintBtn, moviesLinksBtn;
@@ -32,18 +34,17 @@ public class PersonalAreaPage {
 
     public void initialize() {
         EventBus.getDefault().register(this);
-      if(loggedInCustomer != null) {
-        welcomeLabel.setText("Welcome " + loggedInCustomer.getName());
+        if (loggedInCustomer != null) {
+            welcomeLabel.setText("Welcome " + loggedInCustomer.getName());
+            IDNumText.setVisible(false);
+            enterBtn.setVisible(false);
 
-        IDNumText.setVisible(false);
-        enterBtn.setVisible(false);
-
-        // Set the buttons to be visible now that the ID has been validated and customer is logged in
-        orderBtn.setVisible(true);
-        messagesBtn.setVisible(true);
-        MycomplaintBtn.setVisible(true);
-        moviesLinksBtn.setVisible(true);
-        menuMsg.setVisible(true);
+            // Set the buttons to be visible now that the ID has been validated and customer is logged in
+            orderBtn.setVisible(true);
+            messagesBtn.setVisible(true);
+            MycomplaintBtn.setVisible(true);
+            moviesLinksBtn.setVisible(true);
+            menuMsg.setVisible(true);
         }
     }
 
@@ -57,15 +58,14 @@ public class PersonalAreaPage {
             });
         } else {
             try {
-                int id = Integer.parseInt(idNum);  // Convert ID number to int
-                NewMessage message = new NewMessage("loginCustomer", id);  // Send the ID to the server
+                int id = Integer.parseInt(idNum);
+                NewMessage message = new NewMessage("loginCustomer", id);
                 SimpleClient.getClient().sendToServer(message);
             } catch (IOException e) {
                 e.printStackTrace();
             }}
     }
 
-    // Event handler for when the customer login event is triggered
     @Subscribe
     public void handleCustomerLogin(UpdateLoginCustomerEvent event) {
         Platform.runLater(() -> {
@@ -83,7 +83,6 @@ public class PersonalAreaPage {
         });
     }
 
-    // Function to log out the customer
     public static void logOutCustomer() {
         if (loggedInCustomer != null) {
             try {
@@ -96,6 +95,24 @@ public class PersonalAreaPage {
         }
     }
 
+
+    @FXML
+    public void switchToPersonalDetailsPage() throws IOException {
+        if (loggedInCustomer != null) {
+            int customerId = loggedInCustomer.getId();
+            NewMessage message = new NewMessage("fetchPurchases", customerId);
+            try {
+                SimpleClient.getClient().sendToServer(message);
+                App.switchScreen("PersonalDetailsPage");
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to connect to server.");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "No customer is logged in.");
+            alert.showAndWait();
+        }
+    }
 
     @FXML
     public void switchToPersonalDetailsPage() throws IOException {

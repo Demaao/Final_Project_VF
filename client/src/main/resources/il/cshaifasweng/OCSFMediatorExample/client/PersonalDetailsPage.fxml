@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -114,14 +115,23 @@
                 <Font size="22.0" />
             </font>
         </Label>
-        <TableView fx:id="purchasesTable" layoutX="218.0" layoutY="140.0" prefHeight="334.0" prefWidth="630.0" visible="true">
+        <TableView fx:id="purchasesTable" layoutX="218.0" layoutY="140.0" prefHeight="334.0" prefWidth="668.0" visible="true">
             <columns>
-                <TableColumn fx:id="orderNumberColumn" prefWidth="94.66670227050781" style="-fx-background-color: #f6d9d9;" text="Order Number" />
-                <TableColumn fx:id="orderPriceColumn" prefWidth="115.99993896484375" style="-fx-background-color: #f6d9d9;" text="Order Price" />
-                <TableColumn fx:id="orderDateColumn" prefWidth="182.66665649414062" style="-fx-background-color: #f6d9d9;" text="Order Date" />
-                <TableColumn fx:id="orderDetailsColumn" prefWidth="236.66668701171875" style="-fx-background-color: #f6d9d9;" text="Order Details" />
+                <TableColumn fx:id="orderDateColumn" prefWidth="114.66667175292969"   text="Order Date" />
+                <TableColumn fx:id="orderPriceColumn" prefWidth="108.66665649414062"  text="Order Price" />
+                <TableColumn fx:id="paymentMethodColumn" prefWidth="122.0"  text="Payment Method" />
+                <TableColumn fx:id="orderDetailsColumn" prefWidth="320.66668701171875"  text="Order Details">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="orderDetails" />
+                    </cellValueFactory>
+                    <style>
+                        -fx-alignment: CENTER-RIGHT;
+                    </style>
+                </TableColumn>
             </columns>
         </TableView>
+
+
         <Button fx:id="OKBtn" layoutX="795.0" layoutY="490.0" mnemonicParsing="false" onAction="#switchToPersonalAreaPage" prefHeight="40.0" prefWidth="83.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="OK">
             <font>
                 <Font size="18.0" />

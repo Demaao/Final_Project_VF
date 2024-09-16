@@ -21,6 +21,7 @@ public class Customer implements Serializable {
     private List<Notification> notifications;
 
 
+
     private boolean isLoggedIn ;
 
     public Customer() {}

@@ -36,7 +36,14 @@ public class Screening implements Serializable {
     public Screening(LocalDateTime screeningTime, Movie movie, Branch branch) {
         this.screeningTime = screeningTime;
         this.movie = movie;
+       this.branch = branch;
+    }
+
+    public Screening(LocalDateTime screeningTime, Movie movie, Branch branch, Hall hall) {
+        this.screeningTime = screeningTime;
+        this.movie = movie;
         this.branch = branch;
+        this.hall = hall;
     }
 
     public Screening(LocalDateTime screeningTime, Movie movie, Branch branch, Hall hall) {
@@ -54,6 +61,7 @@ public class Screening implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
 
     public Hall getHall() {
         return hall;

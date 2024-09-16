@@ -3,7 +3,6 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
-import java.io.IOException;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
 import java.util.List;
@@ -101,7 +100,14 @@ public class SimpleClient extends AbstractClient {
 					List<Purchase> purchases = (List<Purchase>) message.getObject();
 					EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
 				}
-				});
+				else if (message.getMessage().equals("purchasesResponse")) {
+                List<Purchase> purchases = (List<Purchase>) message.getObject();
+                EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
+				}
+
+
+
+			});
 		}
 	}
 

@@ -1,8 +1,8 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
+
 import il.cshaifasweng.OCSFMediatorExample.client.CardsPage;
 import il.cshaifasweng.OCSFMediatorExample.entities.Branch;
-
-
+import il.cshaifasweng.OCSFMediatorExample.entities.Branch;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
@@ -11,19 +11,16 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class SimpleServer extends AbstractServer {
 	private static final SessionFactory sessionFactory = getSessionFactory();
@@ -50,6 +47,7 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(SoonMovie.class);
 		configuration.addAnnotatedClass(HomeMovie.class);
 		configuration.addAnnotatedClass(Branch.class);
+		configuration.addAnnotatedClass(Hall.class);
 		configuration.addAnnotatedClass(Screening.class);
 		configuration.addAnnotatedClass(HeadManager.class); //////////////////
 		configuration.addAnnotatedClass(BranchManager.class); /////////////
@@ -78,6 +76,7 @@ public class SimpleServer extends AbstractServer {
 			generateSoonMovies(session);
 			generateHomeMovies(session);
 			generateBranches(session);
+			generateHalls(session);
 			generateScreenings(session);
 			generateHeadManager(session);
 			generateBranchManager(session);
@@ -147,7 +146,7 @@ public class SimpleServer extends AbstractServer {
 				"Thank you for reaching out,\nnew movies are coming out soon!", true);
 		Complaint complaint4 = new Complaint("Shada Ghanem", 123456789L, "9988776655",
 				"Screening", "bob@example.com", "When will the new movie be released?", LocalDateTime.of(2024, 9, 5, 22, 4),
-                "Thank you for reaching out,\nthe release date for the new movie has not yet been announced.\nPlease stay tuned for future updates.", true);
+				"Thank you for reaching out,\nthe release date for the new movie has not yet been announced.\nPlease stay tuned for future updates.", true);
 
 		session.save(complaint1);
 		session.save(complaint2);
@@ -156,7 +155,6 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
-	//This code is for testing only
 	private static void generateCustomersAndPurchases(Session session) {
 
 		List<Purchase> purchases1 = new ArrayList<>();
@@ -166,8 +164,8 @@ public class SimpleServer extends AbstractServer {
 		Customer customer2 = new Customer(123456789, "Shada gh", "shada.gha@example.com", "0527654321", purchases2, false);
 
 		//Create purchases and add them to customers
-		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema","Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.", 2);
-		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema","A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.", 1);
+		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie:Wire Room.Viewing is limited to the screening time you selected.");
 
 		//Adding purchases to the list
@@ -181,6 +179,7 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 
 	}
+
 
 	private static void generateChangePriceRequest(Session session) throws Exception {
 		Cinema cinema = session.get(Cinema.class, 1);
@@ -198,7 +197,7 @@ public class SimpleServer extends AbstractServer {
 	}
 
 
-		private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+	private static void generateHeadManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
 		Branch haifaCinema = session.get(Branch.class, 1);  // שליפת בתי הקולנוע מהמסד הנתונים לפי ה-ID שלהם
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
@@ -280,6 +279,7 @@ public class SimpleServer extends AbstractServer {
 		for (int i = 1; i <= 10; i++) {
 			images[i - 1] = loadImageFromFile(String.format("images/%d.jpg", i));
 		}
+
 
 		Movie num1 = new Movie(1, "A quiet place", "מקום שקט 2", "Michael Sarnoski", 2020, images[0],"Drama","Following the events at home, the Abbott family now face the terrors of the outside world. Forced to venture into the unknown, they realize the creatures that hunt by sound are not the only threats lurking beyond the sand path."
 
@@ -364,7 +364,7 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 
 		SoonMovie soonMovie2 = new SoonMovie(2, "African Giants","ענקים אפריקאים", "Omar S. Kamara", 2024, SoonImage2, "Drama", "Over a weekend visit in Los Angeles, two first-generation Sierra Leonean American brothers navigate the changing dynamics of brotherhood after a surprise announcement.",
-						"Tanyell Waivers, Kathleen Kenny, Jerry Hernandez", "1h42m");
+				"Tanyell Waivers, Kathleen Kenny, Jerry Hernandez", "1h42m");
 		session.save(soonMovie2);
 		session.flush();
 
@@ -412,6 +412,7 @@ public class SimpleServer extends AbstractServer {
 
 	}
 	private static void generateBranches(Session session) throws Exception {
+
 		Movie movie1 = session.get(Movie.class, 1);
 		Movie movie2 = session.get(Movie.class, 2);
 		Movie movie3 = session.get(Movie.class, 3);
@@ -449,6 +450,76 @@ public class SimpleServer extends AbstractServer {
 
 
 	private static void generateHalls(Session session) throws Exception {
+
+		Branch haifaCinema = session.get(Branch.class, 1);
+		Branch telAvivCinema = session.get(Branch.class, 2);
+		Branch eilatCinema = session.get(Branch.class, 3);
+		Branch karmielCinema = session.get(Branch.class, 4);
+		Branch jerusalemCinema = session.get(Branch.class, 5);
+		Hall hall1 = new Hall(1,4, 5, 18, "1",jerusalemCinema);
+		session.save(hall1);
+		Hall hall2 = new Hall(2,5, 5, 25, "2",haifaCinema);
+		session.save(hall2);
+		Hall hall3 = new Hall(3,6, 6, 36, "3",haifaCinema);
+		session.save(hall3);
+		Hall hall4 = new Hall(4,5, 6, 28, "4",jerusalemCinema);
+		session.save(hall4);
+		Hall hall5 = new Hall(5,3, 6, 18, "5",haifaCinema);
+		session.save(hall5);
+		Hall hall6 = new Hall(6,6, 5, 30, "6",telAvivCinema);
+		session.save(hall6);
+		Hall hall7 = new Hall(7,5, 5, 23, "7",jerusalemCinema);
+		session.save(hall7);
+		Hall hall8 = new Hall(8,5, 4, 20, "8",karmielCinema);
+		session.save(hall8);
+		Hall hall9 = new Hall(9,4, 5, 18, "9",telAvivCinema);
+		session.save(hall9);
+		Hall hall10 = new Hall(10,5, 5, 23, "10",karmielCinema);
+		session.save(hall10);
+		Hall hall11 = new Hall(11,4, 4, 16, "11",karmielCinema);
+		session.save(hall11);
+		Hall hall12 = new Hall(12,4, 5, 18, "12",eilatCinema);
+		session.save(hall12);
+		Hall hall13 = new Hall(13,5, 5, 25, "13",eilatCinema);
+		session.save(hall13);
+		Hall hall14 = new Hall(14,6, 6, 36, "14",eilatCinema);
+		session.save(hall14);
+		Hall hall15 = new Hall(15,5, 6, 28, "15",telAvivCinema);
+		session.save(hall15);
+		Hall hall16 = new Hall(16,5, 6, 28, "16",jerusalemCinema);
+		session.save(hall16);
+		Hall hall17 = new Hall(17,6, 5, 30, "17",karmielCinema);
+		session.save(hall17);
+		Hall hall18 = new Hall(18,5, 5, 23, "18",karmielCinema);
+		session.save(hall18);
+		Hall hall19 = new Hall(19,5, 4, 20, "19",telAvivCinema);
+		session.save(hall19);
+		Hall hall20 = new Hall(20,4, 5, 18, "20",telAvivCinema);
+		session.save(hall20);
+		Hall hall21 = new Hall(21,5, 5, 23, "21",karmielCinema);
+		session.save(hall21);
+		Hall hall22 = new Hall(22,4, 5, 18, "22",jerusalemCinema);
+		session.save(hall22);
+		Hall hall23 = new Hall(23,5, 5, 25, "23",haifaCinema);
+		session.save(hall23);
+		Hall hall24 = new Hall(24,6, 6, 36, "24",eilatCinema);
+		session.save(hall24);
+		Hall hall25 = new Hall(25,5, 6, 28, "25",eilatCinema);
+		session.save(hall25);
+		Hall hall26 = new Hall(26,3, 6, 18, "26",jerusalemCinema);
+		session.save(hall26);
+		Hall hall27 = new Hall(27,3, 6, 18, "27",jerusalemCinema);
+		session.save(hall27);
+		Hall hall28 = new Hall(28,3, 6, 18, "28",haifaCinema);
+		session.save(hall28);
+		Hall hall29 = new Hall(29,3, 6, 18, "29",eilatCinema);
+		session.save(hall29);
+
+		session.flush();
+	}
+
+
+	private static void generateScreenings(Session session) throws Exception {
 
 		Branch haifaCinema = session.get(Branch.class, 1);
 		Branch telAvivCinema = session.get(Branch.class, 2);
@@ -639,7 +710,6 @@ public class SimpleServer extends AbstractServer {
 		}
 		session.flush();
 
-
 		Movie movie14 = session.get(Movie.class, 14);
 		Movie movie15 = session.get(Movie.class, 15);
 		Movie movie16 = session.get(Movie.class, 16);
@@ -672,12 +742,12 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 30, 23, 00)
 		);
 		for (LocalDateTime time : HomeScreeningTimes) {
-			movie14.addScreening(time, null, null);
-			movie15.addScreening(time, null, null);
-			movie16.addScreening(time, null, null);
-			movie17.addScreening(time, null, null);
-			movie18.addScreening(time, null, null);
-			movie19.addScreening(time, null, null);
+			movie14.addScreening(time, null,null);
+			movie15.addScreening(time, null,null);
+			movie16.addScreening(time, null,null);
+			movie17.addScreening(time, null,null);
+			movie18.addScreening(time, null,null);
+			movie19.addScreening(time, null,null);
 		}
 
 		session.save(movie14);
@@ -711,6 +781,7 @@ public class SimpleServer extends AbstractServer {
 		query.from(Customer.class);
 		return session.createQuery(query).getResultList();
 	}
+
 
 	private static List<Movie> getAllMovies(Session session) throws Exception {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -816,6 +887,8 @@ public class SimpleServer extends AbstractServer {
 		query.from(Complaint.class);
 		return session.createQuery(query).getResultList();
 	}
+
+
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -1109,7 +1182,7 @@ public class SimpleServer extends AbstractServer {
 						session.save(movie); ///////////////////////
 					}
 
-					// שליחת עדכון לכל הלקוחות
+
 					List<Movie> movies = getAllMovies(session);
 					NewMessage newMessage = new NewMessage(movies, "movies");
 					sendToAllClients(newMessage);
@@ -1475,10 +1548,29 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
 				}
 			}
-		}
-		 catch (IOException e) {
+
+			else if (msgString.equals("fetchPurchases")) {
+				int customerId = message.getId();
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Customer customer = session.get(Customer.class, customerId);
+					if (customer != null) {
+						List<Purchase> purchases = customer.getPurchaseHistory();
+						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
+						client.sendToClient(responseMessage);
+					} else {
+						NewMessage responseMessage = new NewMessage("No customer found with ID: " + customerId, "error");
+						client.sendToClient(responseMessage);
+					}
+					session.getTransaction().commit();
+				} catch (Exception e) {
+					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+	}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 }
-
