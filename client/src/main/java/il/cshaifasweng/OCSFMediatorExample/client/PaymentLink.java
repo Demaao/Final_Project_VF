@@ -184,4 +184,10 @@ public class PaymentLink {
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("MoviesPage");
     }
+
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
+        App.switchScreen("PersonalAreaPage");
+    }
 }

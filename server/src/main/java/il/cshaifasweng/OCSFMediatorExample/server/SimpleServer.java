@@ -175,9 +175,9 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateHomeMoviePurchases(Session session) {
-		HomeMovie homeMovie = new HomeMovie();
-		session.save(homeMovie);
-		session.flush();
+	//	HomeMovie homeMovie = new HomeMovie();
+	//	session.save(homeMovie);
+	//	session.flush();
 	}
 
 
@@ -688,6 +688,13 @@ public class SimpleServer extends AbstractServer {
 		session.save(movie19);
 
 		session.flush();
+	}
+
+	private static List<Purchase> getAllPurchases(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Purchase> query = builder.createQuery(Purchase.class);
+		query.from(Purchase.class);
+		return session.createQuery(query).getResultList();
 	}
 
 	private static List<Card> getAllCards(Session session) throws Exception {
@@ -1435,10 +1442,18 @@ public class SimpleServer extends AbstractServer {
 					Customer savedCustomer = session.get(Customer.class, customer.getId());
 					if (savedCustomer == null) {
 						session.save(customer);
+						//List<Purchase> purchases = customer.getPurchaseHistory();
+						List<Purchase> purchases = getAllPurchases(session);
+						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
+						sendToAllClients(responseMessage);  ////////////////////////////////////////////////////////
 					} else {
 						for (Purchase purchase : purchaseCards) {
 							savedCustomer.addPurchase(purchase);
 							session.save(purchase);
+							//List<Purchase> purchases = customer.getPurchaseHistory();
+							List<Purchase> purchases = getAllPurchases(session);
+							NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
+							sendToAllClients(responseMessage);  ////////////////////////////////////////////////////////
 						}
 					}
 					NewMessage newMessage1 = new NewMessage("purchaseSuccessful");
@@ -1461,10 +1476,13 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 				}
 			} else if (msgString.equals("fetchPurchases")) {
-				int customerId = message.getId();
+				//int customerId = message.getId();
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
-					Customer customer = session.get(Customer.class, customerId);
+					List<Purchase> purchases = getAllPurchases(session);
+					NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
+					client.sendToClient(responseMessage);
+				/*	Customer customer = session.get(Customer.class, customerId);
 					if (customer != null) {
 						List<Purchase> purchases = customer.getPurchaseHistory();
 						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
@@ -1473,29 +1491,10 @@ public class SimpleServer extends AbstractServer {
 						NewMessage responseMessage = new NewMessage("No customer found with ID: " + customerId, "error");
 						client.sendToClient(responseMessage);
 					}
+				 */
 					session.getTransaction().commit();
 				} catch (Exception e) {
 					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
-				}
-			}
-
-			else if (msgString.equals("fetchPurchases")) {
-				int customerId = message.getId();
-				try (Session session = sessionFactory.openSession()) {
-					session.beginTransaction();
-					Customer customer = session.get(Customer.class, customerId);
-					if (customer != null) {
-						List<Purchase> purchases = customer.getPurchaseHistory();
-						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
-						client.sendToClient(responseMessage);
-					} else {
-						NewMessage responseMessage = new NewMessage("No customer found with ID: " + customerId, "error");
-						client.sendToClient(responseMessage);
-					}
-					session.getTransaction().commit();
-				} catch (Exception e) {
-					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
-					e.printStackTrace();
 				}
 			}
 	}

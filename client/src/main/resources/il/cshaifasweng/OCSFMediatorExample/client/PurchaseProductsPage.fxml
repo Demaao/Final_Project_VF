@@ -24,7 +24,7 @@
                         <Font size="20.0" />
                     </font>
                 </Label>
-                <Button fx:id="loginBtn" layoutX="21.0" layoutY="450.0" mnemonicParsing="false" onAction="#switchToLoginPage" prefHeight="47.0" prefWidth="99.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="     Login">
+                <Button fx:id="loginBtn" layoutX="27.0" layoutY="492.0" mnemonicParsing="false" onAction="#switchToLoginPage" prefHeight="47.0" prefWidth="99.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="     Login">
                     <graphic>
                         <ImageView fitHeight="28.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                             <image>
@@ -94,6 +94,18 @@
                         </ImageView>
                     </graphic>
                 </Button>
+            <Button fx:id="personalAreaBtn" layoutX="-1.0" layoutY="434.0" mnemonicParsing="false" onAction="#switchToPersonalAreaPage" prefHeight="72.0" prefWidth="166.0" style="-fx-text-fill: black; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15; -fx-background-radius: 10;" text="My Profile" textAlignment="CENTER">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="58.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@images/personalArea.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             </children>
         </AnchorPane>
         <Button fx:id="nextBtn" layoutX="718.0" layoutY="421.0" mnemonicParsing="false" onAction="#switchToPaymentPage" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Next">

@@ -209,6 +209,12 @@ public class PurchaseLink {
         App.switchScreen("ChargebackPage");
     }
 
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
+        App.switchScreen("PersonalAreaPage");
+    }
+
     @Subscribe
     public void onRequestEvent(UpdateRequestEvent event) {}
 }

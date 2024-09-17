@@ -98,6 +98,8 @@ public class PersonalAreaPage {
 
     @FXML
     public void switchToPersonalDetailsPage() throws IOException {
+        App.switchScreen("PersonalDetailsPage");
+        /*
         if (loggedInCustomer != null) {
             int customerId = loggedInCustomer.getId();
             NewMessage message = new NewMessage("fetchPurchases", customerId);
@@ -111,7 +113,7 @@ public class PersonalAreaPage {
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING, "No customer is logged in.");
             alert.showAndWait();
-        }
+        } */
     }
 
     @FXML

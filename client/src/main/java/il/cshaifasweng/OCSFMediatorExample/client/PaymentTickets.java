@@ -200,5 +200,10 @@ public class PaymentTickets {
         App.switchScreen("MoviesPage");
     }
 
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        App.switchScreen("PersonalAreaPage");
+    }
+
 }
 
