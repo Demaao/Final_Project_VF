@@ -167,4 +167,10 @@ public class FiledComplaintsPage {
         PersonalAreaPage.logOutCustomer();
         App.switchScreen("MoviesPage");
     }
+
+    @FXML
+    private void switchToPersonalArea() throws IOException {
+        PersonalAreaPage.logOutCustomer();
+        App.switchScreen("PersonalAreaPage");
+    }
 }

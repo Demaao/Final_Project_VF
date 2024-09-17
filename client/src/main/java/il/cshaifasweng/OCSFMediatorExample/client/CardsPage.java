@@ -19,9 +19,6 @@ public class CardsPage {
     private ObservableList<String> ticketType = FXCollections.observableArrayList("Regular", "VIP");
 
     @FXML
-    private Menu cardsMenue;
-
-    @FXML
     private Spinner<Integer> cardsQuantityChooser;
 
     @FXML
