@@ -21,7 +21,7 @@ public class Notification implements Serializable {
 
     public Notification() {}
 
-    public Notification(String message, String subject, LocalDateTime time, String status, Customer customer) {
+    public Notification(String subject, String message, LocalDateTime time, String status, Customer customer) {
         this.message = message;
         this.subject = subject;
         this.time = time;

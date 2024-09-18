@@ -1,7 +1,5 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 
-import il.cshaifasweng.OCSFMediatorExample.client.CardsPage;
-import il.cshaifasweng.OCSFMediatorExample.entities.Branch;
 import il.cshaifasweng.OCSFMediatorExample.entities.Branch;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
@@ -15,6 +13,7 @@ import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -49,17 +48,17 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Branch.class);
 		configuration.addAnnotatedClass(Hall.class);
 		configuration.addAnnotatedClass(Screening.class);
-		configuration.addAnnotatedClass(HeadManager.class); //////////////////
-		configuration.addAnnotatedClass(BranchManager.class); /////////////
-		configuration.addAnnotatedClass(ContentManager.class); /////////////////
-		configuration.addAnnotatedClass(CustomerServiceWorker.class); /////////////
-		configuration.addAnnotatedClass(Complaint.class); ///////////////////////////////////
-		configuration.addAnnotatedClass(ChangePriceRequest.class);  //////////////////////
-		configuration.addAnnotatedClass(Cinema.class); ///////////////////////////////////////
-		configuration.addAnnotatedClass(Customer.class); //for testing only
-		configuration.addAnnotatedClass(Purchase.class);  //for testing only
+		configuration.addAnnotatedClass(HeadManager.class);
+		configuration.addAnnotatedClass(BranchManager.class);
+		configuration.addAnnotatedClass(ContentManager.class);
+		configuration.addAnnotatedClass(CustomerServiceWorker.class);
+		configuration.addAnnotatedClass(Complaint.class);
+		configuration.addAnnotatedClass(ChangePriceRequest.class);
+		configuration.addAnnotatedClass(Cinema.class);
+		configuration.addAnnotatedClass(Customer.class);
+		configuration.addAnnotatedClass(Purchase.class);
 		configuration.addAnnotatedClass(HomeMoviePurchase.class);
-		configuration.addAnnotatedClass(Card.class);/////////////////////////////////
+		configuration.addAnnotatedClass(Card.class);
 		configuration.addAnnotatedClass(Notification.class);
 		configuration.addAnnotatedClass(Hall.class);
 
@@ -82,9 +81,9 @@ public class SimpleServer extends AbstractServer {
 			generateBranchManager(session);
 			generateContentManager(session);
 			generateCustomerServiceWorker(session);
-			generateCinema(session);  ///////////////////////////////////
+			generateCinema(session);
 			generateComplaints(session);
-			generateChangePriceRequest(session); //////////////////////////////////////////////
+			generateChangePriceRequest(session);
 			generateHomeMoviePurchases(session);
 			generateHalls(session);
 			generateCustomersAndPurchases(session);
@@ -96,7 +95,7 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-	private static void generateCinema(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+	private static void generateCinema(Session session) throws Exception {
 		Cinema cinema = new Cinema(100, 90, 1000);
 		Cinema.cinema = cinema;
 		session.save(cinema);
@@ -125,7 +124,6 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateCustomersAndPurchases(Session session) {
-
 		List<Purchase> purchases1 = new ArrayList<>();
 		List<Purchase> purchases2 = new ArrayList<>();
 
@@ -136,11 +134,15 @@ public class SimpleServer extends AbstractServer {
 		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
 		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie:Wire Room.Viewing is limited to the screening time you selected.");
+		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase5 = new Purchase("Movie Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 
 		//Adding purchases to the list
 		customer1.getPurchaseHistory().add(purchase1);
 		customer1.getPurchaseHistory().add(purchase2);
 		customer2.getPurchaseHistory().add(purchase3);
+		customer1.getPurchaseHistory().add(purchase4);
+		customer2.getPurchaseHistory().add(purchase5);
 
 		//Saving customers
 		session.save(customer1);
@@ -153,22 +155,25 @@ public class SimpleServer extends AbstractServer {
 		Customer customer1 = session.get(Customer.class, 123123123);
 		Customer customer2 = session.get(Customer.class, 123456789);
 		Card card1 = new Card("Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card"
-				, 1000, customer1, null, 1, null, 15, "Regular");
+				, 1000, customer1, null, 1, "A cinema card containing 20 tickets.", 15, "Regular");
 		session.save(card1);
+		Card card3 = new Card("Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card"
+				, 1000, customer1, null, 1, "A cinema card containing 20 tickets.", 13, "Regular");
+		session.save(card3);
 		Card card2 = new Card("Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card"
-				, 1500, customer2, null,1, null,4, "VIP");
+				, 1500, customer2, null,1, "A cinema card containing 20 tickets.",4, "VIP");
 		session.save(card2);
 		session.flush();
 	}
 
 
-	private static void generateNotifications(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
+	private static void generateNotifications(Session session) throws Exception {
 		Customer customer1 = session.get(Customer.class, 123123123);
 		Customer customer2 = session.get(Customer.class, 123456789);
-		Notification noti1 = new Notification("New Movie" ,"Watch Barbie today in Haifa Cinema!\nFor more details check the movies page",
+		Notification noti1 = new Notification("New Movie" ,"Watch \"Barbie\" today in the Cinema!\nFor more details check the movies page",
 				LocalDateTime.of(2024, 9, 24, 11, 11),"Unread",customer1);
 		session.save(noti1);
-		Notification noti2 = new Notification("New Movie" ,"Watch The Joker today in Haifa Cinema!\nFor more details check the movies page",
+		Notification noti2 = new Notification("New Movie" ,"Watch \"The Joker\" today in the Cinema!\nFor more details check the movies page",
 				LocalDateTime.of(2024, 9, 24, 11, 11),"Unread",customer2);
 		session.save(noti2);
 		session.flush();
@@ -179,7 +184,6 @@ public class SimpleServer extends AbstractServer {
 	//	session.save(homeMovie);
 	//	session.flush();
 	}
-
 
 	private static void generateChangePriceRequest(Session session) throws Exception {
 		Cinema cinema = session.get(Cinema.class, 1);
@@ -1414,8 +1418,10 @@ public class SimpleServer extends AbstractServer {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Customer customer = (Customer) message.getObject();
-					customer.setLoggedIn(false);  // log out
-					session.saveOrUpdate(customer);
+					Customer customerToLogOut = session.get(Customer.class, customer.getId());
+					customerToLogOut.setLoggedIn(false);  // log out
+					//session.saveOrUpdate(customer);
+					session.save(customerToLogOut);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred while logging out.");
@@ -1469,13 +1475,60 @@ public class SimpleServer extends AbstractServer {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					List<Notification> notifications = getAllNotifications(session);
-					NewMessage newMessage = new NewMessage(notifications, "notificationsList");
+						List<Customer> customers = getAllCustomers(session);
+						List<Movie> movies = getAllMovies(session);
+						movies.removeIf(movie -> movie instanceof HomeMovie);
+						movies.removeIf(movie -> movie instanceof SoonMovie);
+					for (Movie movie : movies) {
+						boolean hasScreeningToday = false;
+						List<Screening> screenings = movie.getScreenings();
+						// Check if this movie has a screening today
+						for (Screening screening : screenings) {
+							if (screening.getScreeningTime().toLocalDate().equals(LocalDate.now())) {
+								hasScreeningToday = true;
+								break; // Exit this loop as we only need to know if one matches
+							}}
+						// If the movie has a screening today, notify each customer who has a card purchase
+						if (hasScreeningToday) {
+							for (Customer customer : customers) {
+								List<Purchase> purchases = customer.getPurchaseHistory();
+								for (Purchase purchase : purchases) {
+									if (purchase instanceof Card) {
+										Notification cardNotification = new Notification(
+												"New Movie", "Watch \"" + movie.getEngtitle() + "\" today in the Cinema!\nFor more details check the movies page.",
+												LocalDateTime.now(), "Unread", customer);
+										int flag = 0;
+										for(Notification notification : notifications) {
+											if(notification.getCustomer().equals(customer) && notification.getMessage().equals(cardNotification.getMessage()) && notification.getTime().toLocalDate().equals(cardNotification.getTime().toLocalDate())) {
+												flag = 1;
+												break;}}
+										if(flag == 0)
+											session.save(cardNotification);
+										break; // Exit the purchase loop for this customer because a notification is sent
+									}}}}}
+					List<Notification> finalNotifications = getAllNotifications(session);
+					NewMessage newMessage = new NewMessage(finalNotifications, "notificationsList");
 					client.sendToClient(newMessage);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 				}
-			} else if (msgString.equals("fetchPurchases")) {
+			} else if (msgString.equals("readNotification")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Notification notification = (Notification) message.getObject();
+					Notification notification1 = session.get(Notification.class, notification.getId());
+					notification1.setStatus("read");
+					session.save(notification1);
+					List<Notification> notifications = getAllNotifications(session);
+					NewMessage message1 = new NewMessage(notifications, "notificationsList");
+					client.sendToClient(message1);
+					session.getTransaction().commit();
+				} catch (Exception e) {
+					System.err.println("An error occurred during reading notification.");
+                }
+            }
+		else if (msgString.equals("fetchPurchases")) {
 				//int customerId = message.getId();
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
@@ -1496,8 +1549,68 @@ public class SimpleServer extends AbstractServer {
 				} catch (Exception e) {
 					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
 				}
+			} else if (msgString.equals("returnProduct")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Purchase> purchases = getAllPurchases(session);
+					Purchase purchase = (Purchase) message.getObject();
+					Purchase purchaseToReturn = session.get(Purchase.class, purchase.getId());
+					Customer customer = session.get(Customer.class, purchase.getCustomer().getId());
+					Purchase masterPurchase = null;
+					List<Purchase> otherPurchases = new ArrayList<>();
+					for(Purchase purchase1 : purchases) {
+						if (purchase1.getPurchaseDate().equals(purchase.getPurchaseDate())
+								&& purchase1.getCustomer().getId() == purchase.getCustomer().getId()) {
+							if(!(purchase1 instanceof Card) && !(purchase1 instanceof HomeMoviePurchase)) { // || purchase1 instanceof MovieTicket) {
+								masterPurchase = purchase1;
+							} else {
+								otherPurchases.add(purchase1);
+							}
+						}
+					} if(masterPurchase.getQuantity()==1){
+						customer.getPurchaseHistory().remove(masterPurchase);
+						session.save(customer);
+						session.remove(masterPurchase);
+					} else if(purchase instanceof Card){
+						Purchase purchase2 = session.get(Purchase.class, masterPurchase.getId());
+						purchase2.setQuantity(purchase2.getQuantity()-1);
+						if(purchase2.getQuantity()==1)
+							purchase2.setPurchaseDescription("A cinema cards was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+						else
+							purchase2.setPurchaseDescription(purchase2.getQuantity() + " cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
+						purchase2.setPricePaid(purchase.getPricePaid()*purchase.getQuantity());
+						session.save(purchase2);
+					}/* else  if(purchase instanceof MovieTicket){  ////////////////////////////////////////////////
+						masterPurchase.setQuantity(masterPurchase.getQuantity()-1);
+						StringBuilder result = new StringBuilder(masterPurchase.getQuantity()+ " tickets were ordered for movie:" + otherPurchases.getFirst().getMovie().getEngTitle() + ". at the " otherPurchases.getFirst.getBranch() + "" );
+						for (Purchase item : otherPurchases) {
+							if (result.length() > 0) {
+								result.append(", "); // Add a separator (e.g., a comma and space) between items
+							}
+							result.append(item);
+						}
+						String finalString = result.toString();
+						masterPurchase.setPurchaseDescription("");
+						session.save(masterPurchase);
+					}*/
+					customer.getPurchaseHistory().remove(purchaseToReturn);
+					session.save(customer);
+					session.remove(purchaseToReturn);
+					NewMessage newMessage = new NewMessage("purchaseReturned");
+					client.sendToClient(newMessage);
+
+					List<Purchase> finalPurchases = getAllPurchases(session);
+					NewMessage newMessage2 = new NewMessage(finalPurchases,"purchasesResponse");
+					sendToAllClients(newMessage2);
+					List<Card> cards = getAllCards(session);
+					NewMessage newMessage3 = new NewMessage(cards,"cardsList");
+					sendToAllClients(newMessage3);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+				}
 			}
-	}
+		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}

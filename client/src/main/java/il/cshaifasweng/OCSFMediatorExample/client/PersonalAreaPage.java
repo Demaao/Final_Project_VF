@@ -1,17 +1,21 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import il.cshaifasweng.OCSFMediatorExample.entities.Customer;
-import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
-import il.cshaifasweng.OCSFMediatorExample.entities.Purchase;
+import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PersonalAreaPage {
 
@@ -48,6 +52,39 @@ public class PersonalAreaPage {
         }
     }
 
+    private void requestNotificationsFromServer() {
+        try {
+            NewMessage message = new NewMessage("notifications");
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static AtomicBoolean alertShown = new AtomicBoolean(false);
+
+    @Subscribe
+    public void onPersonalMessageEvent(UpdatePersonalMessageEvent event) {
+        Platform.runLater(() -> {
+            if(PersonalAreaPage.loggedInCustomer != null) {
+                int counter = 0;
+                List<Notification> notifications = event.getNotifications();
+                for (Notification notification : notifications) {
+                    if (notification.getCustomer().getId() == PersonalAreaPage.loggedInCustomer.getId()
+                            && notification.getStatus().equals("Unread")) {
+                            counter++;
+                        }}
+                if(alertShown.compareAndSet(false, true)){
+                if (counter > 0) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Notifications");
+                    alert.setHeaderText(null);
+                    alert.setContentText("You have " + counter + " unread notifications");
+                    alert.showAndWait();
+                }}
+            }});
+    }
+
     @FXML
     private void showPurchasesTable(ActionEvent event) {
         String idNum = IDNumText.getText();
@@ -80,11 +117,13 @@ public class PersonalAreaPage {
             MycomplaintBtn.setVisible(true);
             moviesLinksBtn.setVisible(true);
             menuMsg.setVisible(true);
+            requestNotificationsFromServer();
         });
     }
 
     public static void logOutCustomer() {
         if (loggedInCustomer != null) {
+            alertShown.set(false);
             try {
                 NewMessage message = new NewMessage(loggedInCustomer, "logOutCustomer");
                 SimpleClient.getClient().sendToServer(message);

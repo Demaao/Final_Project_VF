@@ -99,14 +99,12 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("purchasesResponse")) {
 					List<Purchase> purchases = (List<Purchase>) message.getObject();
 					EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
-				}
-				else if (message.getMessage().equals("purchasesResponse")) {
+				} else if (message.getMessage().equals("purchasesResponse")) {
                 List<Purchase> purchases = (List<Purchase>) message.getObject();
                 EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
+				} else if (message.getMessage().equals("purchaseReturned")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("Purchase refunded successfully!")));
 				}
-
-
-
 			});
 		}
 	}
