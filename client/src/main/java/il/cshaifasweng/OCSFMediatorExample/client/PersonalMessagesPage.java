@@ -83,6 +83,26 @@ public class PersonalMessagesPage {
     public void initialize() {
         EventBus.getDefault().register(this);
         requestNotificationsFromServer();
+        messageTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                displayMessageDetails(newValue);
+            }
+        });
+    }
+
+    private void displayMessageDetails(Notification notification) {
+        String message = "Message NO. " + notification.getId() + "\n\nSubject: " + notification.getSubject()
+                + "\n\nReceived at: " + notification.getTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                + "\n\nMessage: " + notification.getMessage();
+        messageLabel.setText(message);
+        // If there are other UI components in messageAnchor for showing details, update them here as well
+        messageAnchor.setVisible(true);
+        try {
+            NewMessage msg = new NewMessage(notification, "readNotification");
+            SimpleClient.getClient().sendToServer(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void requestNotificationsFromServer() {
@@ -103,31 +123,33 @@ public class PersonalMessagesPage {
     @Subscribe
     public void onPersonalMessageEvent(UpdatePersonalMessageEvent event) {
         Platform.runLater(() -> {
-            notifications.clear();
-            ObservableList<Notification> items = messageTable.getItems();
-            items.clear();
-            List<Notification> allNotifications = event.getNotifications();
-            for (Notification notification : allNotifications) {
-                if(notification.getCustomer().getId() == PersonalAreaPage.loggedInCustomer.getId()){
-                    notifications.add(notification);
+            if(PersonalAreaPage.loggedInCustomer != null) {
+                notifications.clear();
+                ObservableList<Notification> items = messageTable.getItems();
+                items.clear();
+                List<Notification> allNotifications = event.getNotifications();
+                for (Notification notification : allNotifications) {
+                    if (notification.getCustomer().getId() == PersonalAreaPage.loggedInCustomer.getId()) {
+                        notifications.add(notification);
+                    }
                 }
-            }
-            dateColumn1.setCellFactory(new Callback<TableColumn<Notification, LocalDateTime>, TableCell<Notification, LocalDateTime>>() {
-                @Override
-                public TableCell<Notification, LocalDateTime> call(TableColumn<Notification, LocalDateTime> col) {
-                    return new TableCell<Notification, LocalDateTime>() {
-                        private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                        @Override
-                        protected void updateItem(LocalDateTime item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty || item == null) {
-                                setText(null);
-                            } else {
-                                setText(item.format(formatter));
-                            }}};}});
-            notificationObservableList.addAll(notifications);
-            messageTable.setItems(notificationObservableList);
-        });
+                dateColumn1.setCellFactory(new Callback<TableColumn<Notification, LocalDateTime>, TableCell<Notification, LocalDateTime>>() {
+                    @Override
+                    public TableCell<Notification, LocalDateTime> call(TableColumn<Notification, LocalDateTime> col) {
+                        return new TableCell<Notification, LocalDateTime>() {
+                            private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+                            @Override
+                            protected void updateItem(LocalDateTime item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty || item == null) {
+                                    setText(null);
+                                } else {
+                                    setText(item.format(formatter));
+                                }}};}});
+                notificationObservableList.addAll(notifications);
+                messageTable.setItems(notificationObservableList);
+            }});
     }
 
     @FXML

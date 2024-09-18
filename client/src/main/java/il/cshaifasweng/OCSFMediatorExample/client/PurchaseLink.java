@@ -89,8 +89,8 @@ public class PurchaseLink {
                 DecimalFormat decimalFormat = new DecimalFormat("#.##");
                 String strValue = decimalFormat.format(linkTicketValue);
                 totalPriceLabel.setText(strValue + "$");
-            }
-        });
+                MovieLinkDetailsPage.homeMoviePurchase.setPricePaid(linkTicketValue);
+            }});
     }
 /*
     @Subscribe

@@ -69,6 +69,10 @@ public class Purchase implements Serializable {
         return pricePaid;
     }
 
+    public void setPricePaid(double pricePaid) {
+        this.pricePaid = pricePaid;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -81,7 +85,9 @@ public class Purchase implements Serializable {
     public void setId(int id) {this.id = id;}
 
     public String getPurchaseDescription() {return purchaseDescription;}
-    public void setPurchaseDescription(String purchaseDescription) {}
+    public void setPurchaseDescription(String purchaseDescription) {
+        this.purchaseDescription = purchaseDescription;
+    }
 
     public String getBranchName() {return branchName;}
     public void setBranchName(String branchName) {this.branchName = branchName;}

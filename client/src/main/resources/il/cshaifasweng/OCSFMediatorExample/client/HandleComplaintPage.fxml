@@ -112,15 +112,39 @@
             </Label>
             <TableView fx:id="purchaseHistoryTable" layoutX="43.0" layoutY="56.0" prefHeight="205.0" prefWidth="623.0">
                <columns>
-                  <TableColumn fx:id="productNOColumn" prefWidth="76.0" text="Product NO." />
-                  <TableColumn fx:id="typeColumn" prefWidth="65.5999755859375" text="Type" />
-                  <TableColumn fx:id="dateColumn" prefWidth="105.60006713867188" text="Purchase Date" />
-                  <TableColumn fx:id="priceColumn" prefWidth="75.0" text="Price" />
-                  <TableColumn fx:id="methodColumn" prefWidth="107.20001220703125" text="Payment Method" />
-                  <TableColumn fx:id="paymentDetailsColumn" prefWidth="191.20000000000005" text="Payment Details" />
+                  <TableColumn fx:id="productNOColumn" prefWidth="76.0" text="Product NO.">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="typeColumn" prefWidth="65.5999755859375" text="Type">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="productType" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="dateColumn" prefWidth="105.60006713867188" text="Purchase Date">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="purchaseDate" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="priceColumn" prefWidth="75.0" text="Price">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="pricePaid" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="methodColumn" prefWidth="107.20001220703125" text="Payment Method">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="paymentMethod" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="paymentDetailsColumn" prefWidth="191.20000000000005" text="Details">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="purchaseDescription" />
+                     </cellValueFactory>
+                  </TableColumn>
                </columns>
             </TableView>
-            <Button fx:id="chancelPurchaseBtn" disable="true" layoutX="502.0" layoutY="273.0" mnemonicParsing="false" onAction="#cancelPurchase" prefHeight="40.0" prefWidth="163.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Refund Purchase">
+            <Button fx:id="cancelPurchaseBtn" disable="true" layoutX="502.0" layoutY="273.0" mnemonicParsing="false" onAction="#cancelPurchase" prefHeight="40.0" prefWidth="163.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Refund Purchase">
                <font>
                   <Font size="18.0" />
                </font>
