@@ -32,7 +32,7 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
 
     public HomeMoviePurchase() {}
 
-    public HomeMoviePurchase(String productType, LocalDateTime purchaseDate, String paymentMethod, double pricePaid,
+    public HomeMoviePurchase(String productType, LocalDateTime  purchaseDate, String paymentMethod, double pricePaid,
                              Customer customer, String purchaseDescription, HomeMovie homeMovie, LocalTime availabilityStartTime, LocalTime availabilityEndTime
     , Screening screening) {
         super(productType, purchaseDate, paymentMethod, pricePaid, customer, purchaseDescription);

@@ -52,10 +52,10 @@ public class PaymentPage {
     private void initialize() {
         if(CardsPage.cards.isEmpty())
             totalPriceLabel.setText(null);
-        else {
-            totalPrice = CardsPage.cards.size() * CardsPage.cards.getFirst().getPricePaid();
-            totalPriceLabel.setText(totalPrice + "$");
-        }
+//        else {
+//            totalPrice = CardsPage.cards.size() * CardsPage.cards.getFirst().getPricePaid();
+//            totalPriceLabel.setText(totalPrice + "$");
+//        }
     }
 
     @FXML

@@ -161,5 +161,3 @@ public class CardsPage {
     @Subscribe
     public void onCardEvent(UpdateCardsEvent event){}
 }
-
-

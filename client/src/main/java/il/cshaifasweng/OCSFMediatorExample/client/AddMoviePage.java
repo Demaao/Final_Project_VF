@@ -299,7 +299,7 @@ public class AddMoviePage {
         String movieGenre = genre.getText();
         String descriptionText = description.getText();
 
-     //   String image = imagePath.getText();  //////////////////////////////////////////
+        //   String image = imagePath.getText();  //////////////////////////////////////////
         String length = movieLength.getText();
 
         String link = linkText.getText();
@@ -405,7 +405,7 @@ public class AddMoviePage {
 
         resetFieldStyles();
 
-       // byte[] image1 = loadImageFromFile(imageData);
+        // byte[] image1 = loadImageFromFile(imageData);
 
         int movieYear =  Integer.parseInt(year.getText());
 
@@ -416,7 +416,7 @@ public class AddMoviePage {
         } else if(screeningType.equals("Link")) {
             HomeMovie homeMovie = new HomeMovie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, link, movieGenre, descriptionText, mainActors, length);
             for(Screening x: movieLinkScreenings){
-               homeMovie.addScreening(x.getScreeningTime(), x.getBranch(), null); /////////////////////////////////////////
+                homeMovie.addScreening(x.getScreeningTime(), x.getBranch(), null); /////////////////////////////////////////
             }
             NewMessage msg = new NewMessage(homeMovie, "addHomeMovie");
             SimpleClient.getClient().sendToServer(msg);
@@ -427,7 +427,7 @@ public class AddMoviePage {
         actors.clear();
         genre.clear();
         description.clear();
-      //  imagePath.clear();
+        //  imagePath.clear();
         imageData = null;
         linkText.clear();
         year.clear();
@@ -552,7 +552,7 @@ public class AddMoviePage {
             actors.getStyleClass().remove("error");
             genre.getStyleClass().remove("error");
             description.getStyleClass().remove("error");
-           // imagePath.getStyleClass().remove("error");
+            // imagePath.getStyleClass().remove("error");
             importImageBtn.getStyleClass().remove("error");
             linkText.getStyleClass().remove("error");
             year.getStyleClass().remove("error");
