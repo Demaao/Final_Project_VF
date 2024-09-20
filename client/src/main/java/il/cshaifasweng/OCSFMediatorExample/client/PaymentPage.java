@@ -53,7 +53,7 @@ public class PaymentPage {
         if(CardsPage.cards.isEmpty())
             totalPriceLabel.setText(null);
         else {
-            totalPrice = CardsPage.cards.size() * CardsPage.cards.getFirst().getPricePaid();
+            totalPrice = CardsPage.cards.size() * CardsPage.cards.get(0).getPricePaid();
             totalPriceLabel.setText(totalPrice + "$");
         }
     }
