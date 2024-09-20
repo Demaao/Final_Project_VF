@@ -75,7 +75,8 @@ public class PurchaseLink {
         Platform.runLater(() -> {
             Cinema cinema = event.getCinema();
             this.cinema = cinema;
-            if(setLinkPrice == 0) {
+            if(setLinkPrice == 0 && MovieDetailsPage.movieDetailsPage == 1) {
+                System.out.println("im changing the price");
                 this.linkTicketValue = cinema.getLinkTicketPrice();
                 MovieLinkDetailsPage.homeMoviePurchase.setPricePaid(linkTicketValue);
                 setLinkPrice = 1;
@@ -135,6 +136,7 @@ public class PurchaseLink {
 
     @FXML
     public void switchToMoviesPage() throws IOException {
+        setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("MoviesPage");
     }
@@ -147,6 +149,7 @@ public class PurchaseLink {
 
     @FXML
     private void switchToCardsPage() throws IOException {
+        setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("CardsPage");
     }
@@ -162,36 +165,42 @@ public class PurchaseLink {
 
     @FXML
     private void switchToHostPage() throws IOException {
+        setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HostPage");
     }
 
     @FXML
     private void switchToHomePage() throws IOException {
+        setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
+        setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
+        setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
+        setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     private void  switchToPersonalAreaPage() throws IOException {
+        setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("PersonalAreaPage");
     }

@@ -152,7 +152,15 @@ public class ChargebackPage {
         else {
             double refundPercentage = 0;
             if(selectedItem instanceof HomeMoviePurchase){
-               LocalDateTime screeningTime = ((HomeMoviePurchase) selectedItem).getScreening().getScreeningTime();
+                LocalDateTime screeningTime; // = ((HomeMoviePurchase) selectedItem).getScreening().getScreeningTime();
+                if(((HomeMoviePurchase) selectedItem).getScreening() == null){
+                    String time = ((HomeMoviePurchase) selectedItem).getPurchaseDescription();
+                    String dateTimeString = time.split("\nScreening: ")[1];
+                    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    screeningTime = LocalDateTime.parse(dateTimeString, formatter1);
+                }
+                else
+                    screeningTime = ((HomeMoviePurchase) selectedItem).getScreening().getScreeningTime();
                 LocalDateTime currentTime = LocalDateTime.now();
                 Duration duration = Duration.between(currentTime, screeningTime);
                 // Get the difference in hours

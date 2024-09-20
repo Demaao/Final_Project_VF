@@ -1601,12 +1601,16 @@ public class SimpleServer extends AbstractServer {
 							}
 						}
 					}	if(purchase instanceof HomeMoviePurchase){
-						Screening screening = session.get(Screening.class, ((HomeMoviePurchase) purchase).getScreening().getId());
-						screening.getHomeMoviePurchases().remove((HomeMoviePurchase) purchaseToReturn);
-						session.update(screening);
-						HomeMovie homeMovie = session.get(HomeMovie.class, ((HomeMoviePurchase) purchaseToReturn).getHomeMovie().getId());
-						homeMovie.removeHomeMoviePurchase((HomeMoviePurchase) purchaseToReturn);
-						session.update(homeMovie);
+						if( ((HomeMoviePurchase) purchase).getScreening() != null) {
+							Screening screening = session.get(Screening.class, ((HomeMoviePurchase) purchase).getScreening().getId());
+							screening.getHomeMoviePurchases().remove((HomeMoviePurchase) purchaseToReturn);
+							session.update(screening);
+						}
+						if(((HomeMoviePurchase) purchaseToReturn).getHomeMovie() != null) {
+							HomeMovie homeMovie = session.get(HomeMovie.class, ((HomeMoviePurchase) purchaseToReturn).getHomeMovie().getId());
+							homeMovie.removeHomeMoviePurchase((HomeMoviePurchase) purchaseToReturn);
+							session.update(homeMovie);
+						}
 						session.update(purchaseToReturn);
 					}
 					if(masterPurchase.getQuantity()==1){
