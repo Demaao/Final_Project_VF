@@ -37,6 +37,7 @@ public class PersonalAreaPage {
     public static Customer loggedInCustomer;
 
     public void initialize() {
+        inPersonalAreaFlag = 1;
         EventBus.getDefault().register(this);
         if (loggedInCustomer != null) {
             welcomeLabel.setText("Welcome " + loggedInCustomer.getName());
@@ -62,27 +63,46 @@ public class PersonalAreaPage {
     }
 
     public static AtomicBoolean alertShown = new AtomicBoolean(false);
+    public static int counter = 0;
+    public static int inPersonalAreaFlag = 1;
 
     @Subscribe
     public void onPersonalMessageEvent(UpdatePersonalMessageEvent event) {
         Platform.runLater(() -> {
-            if(PersonalAreaPage.loggedInCustomer != null) {
-                int counter = 0;
+            if(PersonalAreaPage.loggedInCustomer != null && inPersonalAreaFlag == 1) {
+                int x = 0;
                 List<Notification> notifications = event.getNotifications();
                 for (Notification notification : notifications) {
                     if (notification.getCustomer().getId() == PersonalAreaPage.loggedInCustomer.getId()
                             && notification.getStatus().equals("Unread")) {
-                            counter++;
+                            x++;
                         }}
-                if(alertShown.compareAndSet(false, true)){
-                if (counter > 0) {
+                if(x > counter && alertShown.compareAndSet(false, true)){
+                if (x > 0) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Notifications");
                     alert.setHeaderText(null);
-                    alert.setContentText("You have " + counter + " unread notifications");
+                    alert.setContentText("You have " + x + " unread notifications");
                     alert.showAndWait();
+                    counter = x;
                 }}
             }});
+    }
+
+    @Subscribe
+    public void onMovieEvent(UpdateMoviesEvent event) {
+        Platform.runLater(() -> {
+            requestNotificationsFromServer();
+            alertShown.set(false);
+           });
+    }
+
+    @Subscribe
+    public void onPurchaseEvent(UpdatePurchasesEvent event) {
+        Platform.runLater(() -> {
+            requestNotificationsFromServer();
+            alertShown.set(false);
+        });
     }
 
     @FXML
@@ -106,24 +126,28 @@ public class PersonalAreaPage {
     @Subscribe
     public void handleCustomerLogin(UpdateLoginCustomerEvent event) {
         Platform.runLater(() -> {
-            loggedInCustomer = event.getCustomer();
-            welcomeLabel.setText("Welcome " + loggedInCustomer.getName());
+            if(inPersonalAreaFlag == 1) {
+                loggedInCustomer = event.getCustomer();
+                welcomeLabel.setText("Welcome " + loggedInCustomer.getName());
 
-            IDNumText.setVisible(false);
-            enterBtn.setVisible(false);
+                IDNumText.setVisible(false);
+                enterBtn.setVisible(false);
 
-            orderBtn.setVisible(true);
-            messagesBtn.setVisible(true);
-            MycomplaintBtn.setVisible(true);
-            moviesLinksBtn.setVisible(true);
-            menuMsg.setVisible(true);
-            requestNotificationsFromServer();
+                orderBtn.setVisible(true);
+                messagesBtn.setVisible(true);
+                MycomplaintBtn.setVisible(true);
+                moviesLinksBtn.setVisible(true);
+                menuMsg.setVisible(true);
+                requestNotificationsFromServer();
+            }
         });
     }
 
     public static void logOutCustomer() {
         if (loggedInCustomer != null) {
             alertShown.set(false);
+            counter = 0;
+            inPersonalAreaFlag = 2;
             try {
                 NewMessage message = new NewMessage(loggedInCustomer, "logOutCustomer");
                 SimpleClient.getClient().sendToServer(message);
@@ -188,6 +212,7 @@ public class PersonalAreaPage {
     @FXML
     private void switchToChargebackPage() throws IOException {
         logOutCustomer();
+        inPersonalAreaFlag = 0;
         App.switchScreen("ChargebackPage");
     }
 

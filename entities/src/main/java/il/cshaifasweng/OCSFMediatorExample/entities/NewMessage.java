@@ -21,8 +21,6 @@ public class NewMessage implements Serializable {
 
 
 
-
-
     public NewMessage(Object object, String message) {
         this.object = object;
         this.message = message;
@@ -55,6 +53,12 @@ public class NewMessage implements Serializable {
         this.employee = employee;
     }
     public NewMessage(String message, int id) {
+        this.message = message;
+        this.id = id;
+    }
+
+    public NewMessage(Object object, String message, int id) {
+        this.object = object;
         this.message = message;
         this.id = id;
     }
@@ -99,6 +103,8 @@ public class NewMessage implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
+
 
 
 

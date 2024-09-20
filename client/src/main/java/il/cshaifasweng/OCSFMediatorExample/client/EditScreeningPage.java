@@ -53,7 +53,7 @@ public class EditScreeningPage {
             updateTableBasedOnSelection();
             updateRemoveComboBox();
             resetDateTimeInputs();
-            resetDateTimeInputs();
+            updateEditComboBox();
         });
 
 
@@ -121,13 +121,9 @@ public class EditScreeningPage {
         updateTable(selectedMovie, cinemaName);
     }
 
-
     @FXML
     void addTime(ActionEvent event) {
         saveSelections();
-
-
-        String cinemaName = chooseCinemaBox.getValue();
 
         try {
             Movie selectedMovie = getSelectedMovie();
@@ -135,7 +131,6 @@ public class EditScreeningPage {
                 showAlert("Please select a movie.");
                 return;
             }
-
 
             LocalDateTime dateTime;
             try {
@@ -145,32 +140,57 @@ public class EditScreeningPage {
                 return;
             }
 
-            Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
+            // אם מדובר בסרט בית, ניצור הקרנה ללא צורך בסניף או אולם
+            if (selectedMovie instanceof HomeMovie) {
+                // בדיקה אם כבר קיימת הקרנה באותו זמן
+                boolean screeningExists = selectedMovie.getScreenings().stream()
+                        .anyMatch(screening -> screening.getScreeningTime().equals(dateTime));
 
+                if (screeningExists) {
+                    showAlert("This screening time already exists. Please choose a different time.");
+                    return;
+                }
 
-            boolean screeningExists = selectedMovie.getScreenings().stream()
-                    .anyMatch(screening -> screening.getScreeningTime().equals(dateTime) && screening.getBranch().equals(selectedBranch));
+                // יצירת הקרנה חדשה והוספתה לסרט
+                ScreeningData data = new ScreeningData(selectedMovie.getId(), null, dateTime); // אין צורך באולם או בסניף
+                NewMessage addMessage = new NewMessage(data, "addScreening");
+                SimpleClient.getClient().sendToServer(addMessage);
 
-            if (screeningExists) {
-                showAlert("This screening time already exists. Choose a different time.");
-                return;
+                selectedMovie.addScreening(dateTime, null, null); // עבור סרט בית, אין צורך בסניף או אולם
+
+            } else {
+                // הטיפול הקיים בסרטי קולנוע
+                String cinemaName = chooseCinemaBox.getValue();
+                Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
+                if (selectedBranch == null) {
+                    showAlert("Please select a cinema branch.");
+                    return;
+                }
+
+                Hall selectedHall = findExistingHall(selectedMovie, selectedBranch);
+                if (selectedHall == null) {
+                    showAlert("No hall found for the selected movie in this branch.");
+                    return;
+                }
+
+                boolean isConflict = selectedMovie.getScreenings().stream()
+                        .anyMatch(screening -> screening.getBranch().equals(selectedBranch)
+                                && screening.getHall().equals(selectedHall)
+                                && areTimesOverlapping(screening.getScreeningTime(), dateTime));
+
+                if (isConflict) {
+                    showAlert("This screening time conflicts with another screening. Please choose a different time.");
+                    return;
+                }
+
+                ScreeningData data = new ScreeningData(selectedMovie.getId(), selectedBranch.getId(), selectedHall.getId(), dateTime);
+                NewMessage addMessage = new NewMessage(data, "addScreening");
+                SimpleClient.getClient().sendToServer(addMessage);
+
+                selectedMovie.addScreening(dateTime, selectedBranch, selectedHall);
             }
 
-            if(!(selectedMovie instanceof HomeMovie) && cinemaName == null){
-                showAlert("Please choose a cinema.");
-                return;
-            }
-
-
-            ScreeningData data = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, dateTime);
-            NewMessage addMessage = new NewMessage(data, "addScreening");
-
-
-            SimpleClient.getClient().sendToServer(addMessage);
-
-            selectedMovie.addScreening(dateTime, selectedBranch, null); //////////////////////////////////////
-
-            updateTable(selectedMovie, cinemaName);
+            updateTable(selectedMovie, chooseCinemaBox.getValue());
             updateRemoveComboBox();
 
         } catch (Exception e) {
@@ -179,6 +199,17 @@ public class EditScreeningPage {
             restoreSelections();
         }
     }
+
+
+    private Hall findExistingHall(Movie movie, Branch branch) {
+        return movie.getScreenings().stream()
+                .filter(screening -> screening.getBranch().equals(branch))
+                .map(Screening::getHall) // Get the hall of each screening
+                .findFirst() // Assuming all screenings for the same movie in the same branch are in the same hall
+                .orElse(null);
+    }
+
+
 
     private Branch getSelectedBranch(Movie movie, String branchName) {
         if (movie != null && branchName != null) {
@@ -266,6 +297,7 @@ public class EditScreeningPage {
             updateRemoveComboBox();
             removeComboBox.setValue(null);
 
+
         } catch (Exception e) {
             showAlert("Invalid time format or selection.");
         } finally {
@@ -301,11 +333,10 @@ public class EditScreeningPage {
         editComboBox.getSelectionModel().clearSelection();
     }
 
+
     @FXML
     void editTime(ActionEvent event) {
         saveSelections();
-
-        String cinemaName = chooseCinemaBox.getValue();
 
         try {
             Movie selectedMovie = getSelectedMovie();
@@ -313,7 +344,6 @@ public class EditScreeningPage {
                 showAlert("Please select a movie to edit its screening time.");
                 return;
             }
-
 
             LocalDateTime newDateTime;
             try {
@@ -323,41 +353,58 @@ public class EditScreeningPage {
                 return;
             }
 
+            if (selectedMovie instanceof HomeMovie) {
+                // הטיפול בסרטי הבית: אין צורך בבדיקת סניפים ואולמות
+                String selectedTimeStr = editComboBox.getValue();
+                LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
 
-            String selectedTimeStr = editComboBox.getValue();
-            LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
+                Screening screeningToUpdate = selectedMovie.getScreenings().stream()
+                        .filter(s -> s.getScreeningTime().equals(selectedTime))
+                        .findFirst().orElse(null);
 
+                if (screeningToUpdate == null) {
+                    showAlert("Selected screening time does not exist. Please refresh and try again.");
+                    return;
+                }
 
-            boolean screeningExists = selectedMovie.getScreenings().stream()
-                    .anyMatch(screening -> screening.getScreeningTime().equals(newDateTime));
+                screeningToUpdate.setScreeningTime(newDateTime);
+                ScreeningData updateData = new ScreeningData(selectedMovie.getId(), null, newDateTime); // אין צורך בסניף או אולם
+                NewMessage updateMessage = new NewMessage(updateData, "editScreening");
+                SimpleClient.getClient().sendToServer(updateMessage);
 
-            if (screeningExists) {
-                showAlert("This new screening time already exists. Choose a different time.");
-                return;
+            } else {
+                // הטיפול הקיים בסרטי קולנוע
+                String cinemaName = chooseCinemaBox.getValue();
+                Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
+
+                String selectedTimeStr = editComboBox.getValue();
+                LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
+
+                boolean screeningExists = selectedMovie.getScreenings().stream()
+                        .filter(screening -> screening.getBranch().equals(selectedBranch) && !screening.getScreeningTime().equals(selectedTime))
+                        .anyMatch(screening -> areTimesOverlapping(screening.getScreeningTime(), newDateTime));
+
+                if (screeningExists) {
+                    showAlert("This new screening time conflicts with another existing screening. Choose a different time.");
+                    return;
+                }
+
+                Screening screeningToUpdate = selectedMovie.getScreenings().stream()
+                        .filter(s -> s.getScreeningTime().equals(selectedTime) && s.getBranch().equals(selectedBranch))
+                        .findFirst().orElse(null);
+
+                if (screeningToUpdate == null) {
+                    showAlert("Selected screening time does not exist. Please refresh and try again.");
+                    return;
+                }
+
+                screeningToUpdate.setScreeningTime(newDateTime);
+                ScreeningData updateData = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, newDateTime);
+                NewMessage updateMessage = new NewMessage(updateData, "editScreening");
+                SimpleClient.getClient().sendToServer(updateMessage);
             }
 
-            Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
-
-
-            Screening screeningToUpdate = selectedMovie.getScreenings().stream()
-                    .filter(s -> s.getScreeningTime().equals(selectedTime) && s.getBranch().equals(selectedBranch))
-                    .findFirst().orElse(null);
-
-            if (screeningToUpdate == null) {
-                showAlert("Selected screening time does not exist. Please refresh and try again.");
-                return;
-            }
-
-
-            screeningToUpdate.setScreeningTime(newDateTime);
-
-
-            ScreeningData updateData = new ScreeningData(selectedMovie.getId(), selectedBranch != null ? selectedBranch.getId() : null, newDateTime);
-            NewMessage updateMessage = new NewMessage(updateData, "editScreening");
-            SimpleClient.getClient().sendToServer(updateMessage);
-
-
-            updateTable(selectedMovie, cinemaName);
+            updateTable(selectedMovie, chooseCinemaBox.getValue());
             updateRemoveComboBox();
             resetEditFields();
 
@@ -368,6 +415,12 @@ public class EditScreeningPage {
         } finally {
             restoreSelections();
         }
+    }
+
+    // Helper method to check if two times overlap
+    private boolean areTimesOverlapping(LocalDateTime existingTime, LocalDateTime newTime) {
+        LocalDateTime endTime = existingTime.plusMinutes(150); // 2.5 hours in minutes
+        return !newTime.plusMinutes(150).isBefore(existingTime) && !newTime.isAfter(endTime);
     }
 
 
@@ -390,7 +443,15 @@ public class EditScreeningPage {
     }
 
 
-
+    @FXML
+    private void requestLogoutFromServer() {
+        try {
+            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void switchToAddMoviePage() throws IOException {
@@ -425,16 +486,6 @@ public class EditScreeningPage {
     @FXML
     private void switchToContentManagerPage() throws IOException {
         App.switchScreen("ContentManagerPage");
-    }
-
-    @FXML
-    private void requestLogoutFromServer() {
-        try {
-            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
-            SimpleClient.getClient().sendToServer(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Subscribe

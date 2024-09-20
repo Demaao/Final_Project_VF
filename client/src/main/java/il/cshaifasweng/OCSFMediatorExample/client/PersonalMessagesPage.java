@@ -100,6 +100,7 @@ public class PersonalMessagesPage {
         try {
             NewMessage msg = new NewMessage(notification, "readNotification");
             SimpleClient.getClient().sendToServer(msg);
+            PersonalAreaPage.counter--;
         } catch (IOException e) {
             e.printStackTrace();
         }

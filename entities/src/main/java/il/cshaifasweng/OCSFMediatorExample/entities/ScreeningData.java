@@ -50,4 +50,11 @@ public class ScreeningData implements Serializable {
     public void setScreeningTime(LocalDateTime screeningTime) {
         this.screeningTime = screeningTime;
     }
+
+    public void setHallId(Integer hallId) {
+        this.hallId = hallId;
+    }
+    public Integer getHallId() {
+        return hallId;
+    }
 }

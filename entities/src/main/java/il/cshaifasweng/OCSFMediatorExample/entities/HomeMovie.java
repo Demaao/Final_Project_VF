@@ -36,4 +36,8 @@ public class HomeMovie extends Movie implements Serializable {
         homeMoviePurchases.add(homeMoviePurchase);
         homeMoviePurchase.setHomeMovie(this); // Ensure the relationship is properly bidirectional
     }
+
+    public void removeHomeMoviePurchase(HomeMoviePurchase homeMoviePurchase) {
+        homeMoviePurchases.remove(homeMoviePurchase);
+    }
 }

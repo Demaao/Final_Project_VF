@@ -67,17 +67,25 @@ public class ChargebackPage {
     private List<Purchase> allPurchases = new ArrayList<>();
 
     public void initialize() {
+        PersonalAreaPage.inPersonalAreaFlag = 0;
         EventBus.getDefault().register(this);
-        requestPurchasesFromServer();
+       // requestPurchasesFromServer();
         purchasesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 returnProductBtn.setDisable(false);
             }});
     }
 
+    private int x = 0;
+
     @FXML
     void showPurchasesTable(ActionEvent event) {
+        x++;
         Platform.runLater(() -> {
+        if(x > 1 && PersonalAreaPage.loggedInCustomer != null){
+                purchasesTable.getItems().clear();
+                PersonalAreaPage.logOutCustomer();
+        }
         returnProductBtn.setDisable(true);
         if(IDNumText.getText().isEmpty() || IDNumText.getText().length() != 9 || !IDNumText.getText().matches("\\d+")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -85,61 +93,30 @@ public class ChargebackPage {
             alert.setHeaderText(null);
             alert.setContentText("Please enter a valid ID number");
             alert.show();
-            return;
         } else {
-            purchaseList.clear(); // Clear existing items
-            ObservableList<Purchase> items = purchasesTable.getItems();
-            items.clear();
-            purchases.clear();
-            if (!IDNumText.getText().isEmpty()) {
-                for(Purchase purchase : allPurchases) {
-                    if(purchase.getCustomer().getId() == Integer.parseInt(IDNumText.getText())){
-                        if (purchase instanceof Card || purchase instanceof HomeMoviePurchase) { // || purchase instanceof MovieTicket){
-                            purchases.add(purchase);
-                        }}
-                }
-                dateColumn.setCellFactory(new Callback<TableColumn<Complaint, LocalDateTime>, TableCell<Complaint, LocalDateTime>>() {
-                    @Override
-                    public TableCell<Complaint, LocalDateTime> call(TableColumn<Complaint, LocalDateTime> col) {
-                        return new TableCell<Complaint, LocalDateTime>() {
-                            private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-                            @Override
-                            protected void updateItem(LocalDateTime item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (empty || item == null) {
-                                    setText(null);
-                                } else {
-                                    setText(item.format(formatter));
-                                }}};}});
-                purchaseList.addAll(purchases);
-                purchasesTable.setItems(purchaseList);
-            }}
-            if (purchasesTable.getItems().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("No matching customer found!");
-                alert.showAndWait();
-            } else {
-                purchasesTable.setVisible(true);
-                selectProductText.setVisible(true);
-                returnProductBtn.setVisible(true);
+            try {
+                int id = Integer.parseInt(IDNumText.getText());
+                NewMessage message = new NewMessage("loginCustomer", id);
+                SimpleClient.getClient().sendToServer(message);
+                PersonalAreaPage.inPersonalAreaFlag = 0;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }});
     }
 
     @Subscribe
     public void handleUpdatePurchasesEvent(UpdatePurchasesEvent event) {
         Platform.runLater(() -> {
+            if (PersonalAreaPage.loggedInCustomer != null && PersonalAreaPage.inPersonalAreaFlag == 0) {
             purchaseList.clear(); // Clear existing items
             ObservableList<Purchase> items = purchasesTable.getItems();
             items.clear();
             purchases.clear();
             allPurchases = event.getPurchases();
             if(!IDNumText.getText().isEmpty()){
-                allPurchases.removeIf(purchase -> purchase.getCustomer().getId() != Integer.parseInt(IDNumText.getText()));
                 for(Purchase purchase : allPurchases) {
-                    if(purchase instanceof Card || purchase instanceof HomeMoviePurchase) { // || purchase instanceof MovieTicket){
+                    if(purchase.getCustomer().getId() == Integer.parseInt(IDNumText.getText()) && (purchase instanceof Card || purchase instanceof HomeMoviePurchase)) { // || purchase instanceof MovieTicket){
                         purchases.add(purchase);
                     }
                 } dateColumn.setCellFactory(new Callback<TableColumn<Complaint, LocalDateTime>, TableCell<Complaint, LocalDateTime>>() {
@@ -158,7 +135,10 @@ public class ChargebackPage {
                                 }}};}});
                 purchaseList.addAll(purchases);
                 purchasesTable.setItems(purchaseList);
-            }});
+                purchasesTable.setVisible(true);
+                selectProductText.setVisible(true);
+                returnProductBtn.setVisible(true);
+            }}});
     }
 
     public void returnProduct(ActionEvent actionEvent) {
@@ -205,10 +185,8 @@ public class ChargebackPage {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Refund");
             if (refundPercentage > 0) {
-                alert.setContentText("you are eligible for a " + refundPercentage + "% refund.\nThe refund will be processed to the original payment method used for the purchase.\nAre you sure you want to return this product?");
-            } else {
-                alert.setContentText("No refund is available.");
-            }
+                alert.setContentText("you are eligible for a " + refundPercentage + "% refund.\nAre you sure you want to return this product?");
+                // The refund will be processed to the original payment method used for the purchase.
             ButtonType yesButton = new ButtonType("Yes");
             ButtonType cancelButton = new ButtonType("No");
             alert.getButtonTypes().setAll(yesButton, cancelButton);
@@ -219,7 +197,13 @@ public class ChargebackPage {
                         SimpleClient.getClient().sendToServer(msg);
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }}});}
+                    }}});
+            } else {
+                alert.setContentText("No refund is available.");
+                alert.setHeaderText(null);
+                alert.setAlertType(Alert.AlertType.INFORMATION);
+                alert.show();
+            }}
     }
 
     @FXML
@@ -229,51 +213,72 @@ public class ChargebackPage {
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
     @FXML
     private void switchToChargebackPolicyPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("ChargebackPolicyPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     private void switchToHostPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("HostPage");
     }
 
     @FXML
     private void switchToHomePage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToCardsPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("CardsPage");
     }
 
     @FXML
     public void switchToMoviesPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("MoviesPage");
     }
     @FXML
     private void  switchToPersonalAreaPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("PersonalAreaPage");
+    }
+
+    @Subscribe
+    private void onCardsEvent(UpdateCardsEvent event){}
+
+    @Subscribe
+    public void onLoginCustomerEvent(UpdateLoginCustomerEvent event){
+        Platform.runLater(() -> {
+            if(PersonalAreaPage.inPersonalAreaFlag == 0){
+            PersonalAreaPage.loggedInCustomer = event.getCustomer();
+            requestPurchasesFromServer();
+        }
+    });
     }
 }

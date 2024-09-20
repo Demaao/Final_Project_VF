@@ -9,11 +9,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -60,7 +63,6 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(HomeMoviePurchase.class);
 		configuration.addAnnotatedClass(Card.class);
 		configuration.addAnnotatedClass(Notification.class);
-		configuration.addAnnotatedClass(Hall.class);
 
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
@@ -84,9 +86,9 @@ public class SimpleServer extends AbstractServer {
 			generateCinema(session);
 			generateComplaints(session);
 			generateChangePriceRequest(session);
-			generateHomeMoviePurchases(session);
 			generateHalls(session);
 			generateCustomersAndPurchases(session);
+			generateHomeMoviePurchases(session);
 			generateCards(session);
 			generateNotifications(session);
 			session.getTransaction().commit();
@@ -180,9 +182,16 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateHomeMoviePurchases(Session session) {
-	//	HomeMovie homeMovie = new HomeMovie();
-	//	session.save(homeMovie);
-	//	session.flush();
+		Customer customer = session.get(Customer.class, 123456789);
+		HomeMovie homeMovie = session.get(HomeMovie.class, 16);
+		Screening screening = session.get(Screening.class, 652);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
+		homeMoviePurchase.setScreening(screening);
+		screening.getHomeMoviePurchases().add(homeMoviePurchase);
+		session.saveOrUpdate(screening);
+		session.save(homeMoviePurchase);
+		session.flush();
 	}
 
 	private static void generateChangePriceRequest(Session session) throws Exception {
@@ -541,11 +550,11 @@ public class SimpleServer extends AbstractServer {
 		Movie movie10 = session.get(Movie.class, 10);
 
 		List<LocalDateTime> screeningTimes = Arrays.asList(
-				LocalDateTime.of(2024, 9, 24, 18, 30),
-				LocalDateTime.of(2024, 9, 24, 20, 30),
-				LocalDateTime.of(2024, 9, 24, 22, 00),
-				LocalDateTime.of(2024, 9, 25, 18, 30),
-				LocalDateTime.of(2024, 9, 25, 20, 30),
+				LocalDateTime.of(2024, 9, 24, 17, 00),
+				LocalDateTime.of(2024, 9, 24, 20, 00),
+				LocalDateTime.of(2024, 9, 24, 23, 00),
+				LocalDateTime.of(2024, 9, 25, 16, 30),
+				LocalDateTime.of(2024, 9, 25, 19, 30),
 				LocalDateTime.of(2024, 9, 25, 23, 00),
 				LocalDateTime.of(2024, 9, 26, 17, 00),
 				LocalDateTime.of(2024, 9, 26, 20, 00),
@@ -553,15 +562,15 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 27, 17, 00),
 				LocalDateTime.of(2024, 9, 27, 20, 00),
 				LocalDateTime.of(2024, 9, 27, 23, 00),
-				LocalDateTime.of(2024, 9, 28, 18, 00),
-				LocalDateTime.of(2024, 9, 28, 20, 00),
-				LocalDateTime.of(2024, 9, 28, 23, 00),
-				LocalDateTime.of(2024, 9, 29, 18, 00),
-				LocalDateTime.of(2024, 9, 29, 22, 00),
+				LocalDateTime.of(2024, 9, 28, 17, 00),
+				LocalDateTime.of(2024, 9, 28, 20, 30),
+				LocalDateTime.of(2024, 9, 28, 23, 30),
+				LocalDateTime.of(2024, 9, 29, 17, 00),
+				LocalDateTime.of(2024, 9, 29, 20, 30),
 				LocalDateTime.of(2024, 9, 29, 23, 30),
 				LocalDateTime.of(2024, 9, 30, 17, 00),
-				LocalDateTime.of(2024, 9, 30, 19, 00),
-				LocalDateTime.of(2024, 9, 30, 22, 30)
+				LocalDateTime.of(2024, 9, 30, 20, 00),
+				LocalDateTime.of(2024, 9, 30, 23, 00)
 		);
 
 		Hall hall1_ = session.get(Hall.class,1);
@@ -1153,11 +1162,14 @@ public class SimpleServer extends AbstractServer {
 					ScreeningData data = (ScreeningData) message.getObject();
 					Movie movie = session.get(Movie.class, data.getMovieId());
 					Branch branch = data.getBranchId() != null ? session.get(Branch.class, data.getBranchId()) : null;
+					Hall hall = data.getHallId() != null ? session.get(Hall.class, data.getHallId()) : null;
 					LocalDateTime screeningTime = data.getScreeningTime();
 
 					// Check if the screening already exists
 					boolean screeningExists = movie.getScreenings().stream()
-							.anyMatch(screening -> screening.getScreeningTime().equals(screeningTime) && (branch == null || screening.getBranch().equals(branch)));
+							.anyMatch(screening -> screening.getScreeningTime().equals(screeningTime)
+									&& screening.getBranch().equals(branch)
+									&& screening.getHall().equals(hall));
 
 					if (!screeningExists) {
 						// Create and add the new screening
@@ -1165,17 +1177,24 @@ public class SimpleServer extends AbstractServer {
 						newScreening.setMovie(movie);
 						newScreening.setScreeningTime(screeningTime);
 						newScreening.setBranch(branch);
+						newScreening.setHall(hall);
+
 						session.persist(newScreening);
 						movie.getScreenings().add(newScreening);
+
 						if (branch != null) {
 							branch.getScreenings().add(newScreening);
 						}
+						if (hall != null) {
+							hall.getScreenings().add(newScreening);
+						}
+
 						session.getTransaction().commit();
 
 						// Load updated movie list and send to all clients
 						List<Movie> movies = getAllMovies(session);
 						NewMessage updateMessage = new NewMessage(movies, "movies");
-						sendToAllClients(updateMessage);  // שליחת העדכון לכל הלקוחות
+						sendToAllClients(updateMessage);
 
 						List<HomeMovie> homeMovies = getAllHomeMovies(session);
 						NewMessage homeMoviesMessage = new NewMessage(homeMovies, "homeMovies");
@@ -1421,7 +1440,7 @@ public class SimpleServer extends AbstractServer {
 					Customer customerToLogOut = session.get(Customer.class, customer.getId());
 					customerToLogOut.setLoggedIn(false);  // log out
 					//session.saveOrUpdate(customer);
-					session.save(customerToLogOut);
+					session.saveOrUpdate(customerToLogOut);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred while logging out.");
@@ -1567,20 +1586,30 @@ public class SimpleServer extends AbstractServer {
 								otherPurchases.add(purchase1);
 							}
 						}
-					} if(masterPurchase.getQuantity()==1){
-						customer.getPurchaseHistory().remove(masterPurchase);
+					}	if(purchase instanceof HomeMoviePurchase){
+						Screening screening = session.get(Screening.class, ((HomeMoviePurchase) purchase).getScreening().getId());
+						screening.getHomeMoviePurchases().remove((HomeMoviePurchase) purchaseToReturn);
+						session.update(screening);
+						HomeMovie homeMovie = session.get(HomeMovie.class, ((HomeMoviePurchase) purchaseToReturn).getHomeMovie().getId());
+						homeMovie.removeHomeMoviePurchase((HomeMoviePurchase) purchaseToReturn);
+						session.update(homeMovie);
+						session.update(purchaseToReturn);
+					}
+					if(masterPurchase.getQuantity()==1){
+						Purchase purchase3 = session.get(Purchase.class, masterPurchase.getId());
+						customer.getPurchaseHistory().remove(purchase3);
 						session.save(customer);
-						session.remove(masterPurchase);
-					} else if(purchase instanceof Card){
+						session.remove(purchase3);
+					} else if(purchase instanceof Card) {
 						Purchase purchase2 = session.get(Purchase.class, masterPurchase.getId());
-						purchase2.setQuantity(purchase2.getQuantity()-1);
-						if(purchase2.getQuantity()==1)
+						purchase2.setQuantity(purchase2.getQuantity() - 1);
+						if (purchase2.getQuantity() == 1)
 							purchase2.setPurchaseDescription("A cinema cards was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 						else
 							purchase2.setPurchaseDescription(purchase2.getQuantity() + " cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
-						purchase2.setPricePaid(purchase.getPricePaid()*purchase.getQuantity());
+						purchase2.setPricePaid(purchase.getPricePaid() * purchase.getQuantity());
 						session.save(purchase2);
-					}/* else  if(purchase instanceof MovieTicket){  ////////////////////////////////////////////////
+				/*	}/* else  if(purchase instanceof MovieTicket){  ////////////////////////////////////////////////
 						masterPurchase.setQuantity(masterPurchase.getQuantity()-1);
 						StringBuilder result = new StringBuilder(masterPurchase.getQuantity()+ " tickets were ordered for movie:" + otherPurchases.getFirst().getMovie().getEngTitle() + ". at the " otherPurchases.getFirst.getBranch() + "" );
 						for (Purchase item : otherPurchases) {
@@ -1593,12 +1622,12 @@ public class SimpleServer extends AbstractServer {
 						masterPurchase.setPurchaseDescription("");
 						session.save(masterPurchase);
 					}*/
+					}
 					customer.getPurchaseHistory().remove(purchaseToReturn);
 					session.save(customer);
 					session.remove(purchaseToReturn);
 					NewMessage newMessage = new NewMessage("purchaseReturned");
 					client.sendToClient(newMessage);
-
 					List<Purchase> finalPurchases = getAllPurchases(session);
 					NewMessage newMessage2 = new NewMessage(finalPurchases,"purchasesResponse");
 					sendToAllClients(newMessage2);
@@ -1606,7 +1635,7 @@ public class SimpleServer extends AbstractServer {
 					NewMessage newMessage3 = new NewMessage(cards,"cardsList");
 					sendToAllClients(newMessage3);
 					session.getTransaction().commit();
-				} catch (Exception exception) {
+				}catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 				}
 			}

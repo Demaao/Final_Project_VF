@@ -113,4 +113,11 @@ public class Branch implements Serializable {
         halls.add(hall);
         hall.setBranch(this);
     }
+
+    public List<Hall> getHalls() {
+        return halls;
+    }
+    public void setHalls(List<Hall> halls) {
+        this.halls = halls;
+    }
 }
