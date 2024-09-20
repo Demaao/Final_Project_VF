@@ -339,7 +339,7 @@ public class MovieLinkDetailsPage {
                 int minutes = Integer.parseInt(parts[1].replace("m", ""));
                 // Add hours and minutes to the start time
                 LocalTime endTime = time.plusHours(hours).plusMinutes(minutes);
-                homeMoviePurchase = new HomeMoviePurchase("Link Ticket", null, "Credit Card", 100, null, "Movie link for " + MovieDetailsPage.selectedMovie.getEngtitle() + "." + "\nScreening: " + screening.getScreeningTime().format(formatter1),
+                homeMoviePurchase = new HomeMoviePurchase("Movie Link", null, "Credit Card", 100, null, "Movie link for " + MovieDetailsPage.selectedMovie.getEngtitle() + "." + "\nScreening: " + screening.getScreeningTime().format(formatter1),
                         (HomeMovie) MovieDetailsPage.selectedMovie, time, endTime, screening);
                 homeMoviePurchase.setScreening(screening);
                 ((HomeMovie) MovieDetailsPage.selectedMovie).addHomeMoviePurchase(homeMoviePurchase);

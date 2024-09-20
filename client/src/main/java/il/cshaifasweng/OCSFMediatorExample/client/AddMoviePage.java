@@ -335,7 +335,7 @@ public class AddMoviePage {
         }
         if (descriptionText.isEmpty()) {
             highlightFieldError(description);
-            errorMessages.add("Please enter a movie genre.");
+            errorMessages.add("Please enter the movie description.");
         }
         if (imageData == null) {
             highlightFieldError(importImageBtn);
@@ -573,37 +573,35 @@ public class AddMoviePage {
 
     private boolean validateMovieLength() {
         String length = movieLength.getText().trim();
-        // X is one or more digits, Y is 0 to 59 if present
-        String regex = "^(\\d+h)?\\s*(\\d+m)?$";
+        // The regex enforces the format "Xh Ym" where X is one or more digits and Y is 0 to 59
+        String regex = "^\\d+h \\d+m$"; // Both parts must be present, enforce single space
+
         if (!Pattern.matches(regex, length)) {
             return false;
         }
-        // Split the input into parts
+
+        // Split the input into parts and parse
         String[] parts = length.split(" ");
         int hours = 0;
         int minutes = 0;
-        for (String part : parts) {
-            if (part.endsWith("h")) {
-                try {
-                    hours = Integer.parseInt(part.substring(0, part.length() - 1));
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-            } else if (part.endsWith("m")) {
-                try {
-                    minutes = Integer.parseInt(part.substring(0, part.length() - 1));
-                    if (minutes < 0 || minutes >= 60) {
-                        return false; // Invalid minutes range
-                    }
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-            } else {
-                return false; // Invalid format
+
+        try {
+            if (parts[0].endsWith("h")) {
+                hours = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1));
             }
+
+            if (parts[1].endsWith("m")) {
+                minutes = Integer.parseInt(parts[1].substring(0, parts[1].length() - 1));
+                if (minutes < 0 || minutes >= 60) {
+                    return false; // Invalid minutes range
+                }
+            }
+        } catch (NumberFormatException e) {
+            return false;
         }
-        // Ensure at least one component is present
-        return hours > 0 || minutes > 0;
+
+        // Return true if both parts are valid
+        return true;
     }
 
     private boolean validateReleaseYear() {

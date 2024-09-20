@@ -171,82 +171,6 @@ public class PaymentLink {
         MovieDetailsPage.movieDetailsPage = 0;
     }
 
-
-    /* @FXML
-     void payForProduct(ActionEvent event) {
-         List<String> errorMessages = new ArrayList<>();
-
-         // Reset field styles before validation
-         resetFieldStyles();
-
-         // Validate each field and track errors
-         if (fullNameText.getText().isEmpty() || !validateFullName()) {
-             highlightFieldError(fullNameText);
-             errorMessages.add("Invalid full name. Please use only letters and spaces.");
-         }
-
-         if (IDNumText.getText().isEmpty() || !validateIDNumber()) {
-             highlightFieldError(IDNumText);
-             errorMessages.add("Invalid ID number. Please enter a 9-digit number.");
-         }
-
-         if (phoneText.getText().isEmpty() || !validatePhoneNumber()) {
-             highlightFieldError(phoneText);
-             errorMessages.add("Invalid phone number. Please enter a 10-digit number.");
-         }
-
-         if (emailText.getText().isEmpty() || !validateEmail()) {
-             highlightFieldError(emailText);
-             errorMessages.add("Invalid email format.");
-         }
-
-         if (creditCardTxt.getText().isEmpty() || !validateCreditCard()) {
-             highlightFieldError(creditCardTxt);
-             errorMessages.add("Invalid credit card number. Please enter a 16-digit number.");
-         }
-
-         // If there are validation errors, stop processing
-         if (!errorMessages.isEmpty()) {
-             String alertMessage = String.join("\n", errorMessages);
-             Platform.runLater(() -> {
-                 Alert alert = new Alert(Alert.AlertType.WARNING);
-              alert.setTitle("Validation Errors");
-                 alert.setHeaderText(null);
-                 alert.setContentText(alertMessage);
-                 alert.show();
-             });
-             return; // Stop processing if validation fails
-         }
-
-         // Gather data from input fields
-         int customerId = Integer.parseInt(IDNumText.getText());
-         String fullName = fullNameText.getText();
-         String email = emailText.getText();
-         String phone = phoneText.getText();
-         String creditCard = creditCardTxt.getText();
-
-         // Create a Customer object to send to the server
-         Customer customer = new Customer(customerId, fullName, email, phone, new ArrayList<>(), true);
-
-         // Send purchase and customer data to the server
-         NewMessage message = new NewMessage("processPayment");
-         message.setCustomer(customer);  // Set the customer data in the message
-         message.setObject(MovieLinkDetailsPage.homeMoviePurchase);  // Send the purchase details
-
-         try {
-             SimpleClient.getClient().sendToServer(message);  // Send to the server
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-
-         // Notify the user of successful payment
-         Platform.runLater(() -> {
-             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Payment completed successfully!");
-             alert.show();
-         });
-
-         MovieDetailsPage.movieDetailsPage = 0;
-     }  */
     private void resetFieldStyles() {
         fullNameText.getStyleClass().remove("error");
         IDNumText.getStyleClass().remove("error");
@@ -292,48 +216,56 @@ public class PaymentLink {
 
     @FXML
     private void switchToCardsPage() throws IOException {
+        PurchaseLink.setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("CardsPage");
     }
 
     @FXML
     private void switchToHostPage() throws IOException {
+        PurchaseLink.setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HostPage");
     }
 
     @FXML
     private void switchToHomePage() throws IOException {
+        PurchaseLink.setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
+        PurchaseLink.setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
+        PurchaseLink.setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
+        PurchaseLink.setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     public void switchToMoviesPage() throws IOException {
+        PurchaseLink.setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("MoviesPage");
     }
 
     @FXML
     private void  switchToPersonalAreaPage() throws IOException {
+        PurchaseLink.setLinkPrice = 0;
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("PersonalAreaPage");
     }

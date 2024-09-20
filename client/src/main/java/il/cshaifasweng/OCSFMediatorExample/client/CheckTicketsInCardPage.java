@@ -79,6 +79,7 @@ public class CheckTicketsInCardPage {
     private Label forgotCardNumLabel;
 
     public void initialize() {
+        PersonalAreaPage.inPersonalAreaFlag = 3;
         EventBus.getDefault().register(this);
         requestCardsFromServer();
     }
@@ -128,6 +129,11 @@ public class CheckTicketsInCardPage {
                                 setText(item.format(formatter));
                             }}};}});
             CardsTable.setItems(cardObservableList);
+            if(PersonalAreaPage.inPersonalAreaFlag == 3 && x > 0){
+                CardsTable.setPrefHeight(236);
+                CardsTable.setVisible(true);
+                okBtn2.setVisible(true);
+            }
         });
     }
 
@@ -180,8 +186,15 @@ public class CheckTicketsInCardPage {
         }
     }
 
+    private int x = 0;
+
     @FXML
     void showAllCardsTable(ActionEvent event) {
+        x++;
+        if(x > 1 && PersonalAreaPage.loggedInCustomer != null){
+            CardsTable.getItems().clear();
+            PersonalAreaPage.logOutCustomer();
+        }
         if(IDNumText.getText().isEmpty() || IDNumText.getText().length() != 9 || !IDNumText.getText().matches("\\d+")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -190,6 +203,15 @@ public class CheckTicketsInCardPage {
             alert.showAndWait();
             return;
         }  else {
+                try {
+                    int id = Integer.parseInt(IDNumText.getText());
+                    NewMessage message = new NewMessage("loginCustomer", id);
+                    SimpleClient.getClient().sendToServer(message);
+                    PersonalAreaPage.inPersonalAreaFlag = 3;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                /*
             cards.clear();
             CardsTable.getItems().clear();
             for (Card card : allCards) {
@@ -221,8 +243,18 @@ public class CheckTicketsInCardPage {
         } else {
             CardsTable.setPrefHeight(236);
             CardsTable.setVisible(true);
-            okBtn2.setVisible(true);
+            okBtn2.setVisible(true);*/
         }
+    }
+
+    @Subscribe
+    public void onLoginCustomerEvent(UpdateLoginCustomerEvent event){
+        Platform.runLater(() -> {
+            if(PersonalAreaPage.inPersonalAreaFlag == 3){
+                PersonalAreaPage.loggedInCustomer = event.getCustomer();
+                requestCardsFromServer();
+            }
+        });
     }
 
     @FXML
@@ -242,41 +274,49 @@ public class CheckTicketsInCardPage {
 
     @FXML
     private void switchToCardsPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("CardsPage");
     }
 
 
     @FXML
     private void switchToHostPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("HostPage");
     }
 
     @FXML
     private void switchToHomePage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("HomePage");
     }
 
     @FXML
     private void switchToComplaintPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("ComplaintPage");
     }
 
     @FXML
     private void switchToLoginPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("LoginPage");
     }
 
     @FXML
     private void switchToChargebackPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("ChargebackPage");
     }
 
     @FXML
     public void switchToMoviesPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("MoviesPage");
     }
     @FXML
     private void  switchToPersonalAreaPage() throws IOException {
+        PersonalAreaPage.logOutCustomer();
         App.switchScreen("PersonalAreaPage");
     }
 }
