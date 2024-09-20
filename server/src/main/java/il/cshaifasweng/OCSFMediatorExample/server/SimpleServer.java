@@ -1,5 +1,8 @@
+
 package il.cshaifasweng.OCSFMediatorExample.server;
 
+
+import il.cshaifasweng.OCSFMediatorExample.entities.Branch;
 import il.cshaifasweng.OCSFMediatorExample.entities.Branch;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
@@ -13,7 +16,6 @@ import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -48,19 +50,18 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Branch.class);
 		configuration.addAnnotatedClass(Hall.class);
 		configuration.addAnnotatedClass(Screening.class);
-		configuration.addAnnotatedClass(HeadManager.class);
-		configuration.addAnnotatedClass(BranchManager.class);
-		configuration.addAnnotatedClass(ContentManager.class);
-		configuration.addAnnotatedClass(CustomerServiceWorker.class);
-		configuration.addAnnotatedClass(Complaint.class);
-		configuration.addAnnotatedClass(ChangePriceRequest.class);
-		configuration.addAnnotatedClass(Cinema.class);
-		configuration.addAnnotatedClass(Customer.class);
-		configuration.addAnnotatedClass(Purchase.class);
+		configuration.addAnnotatedClass(HeadManager.class); //////////////////
+		configuration.addAnnotatedClass(BranchManager.class); /////////////
+		configuration.addAnnotatedClass(ContentManager.class); /////////////////
+		configuration.addAnnotatedClass(CustomerServiceWorker.class); /////////////
+		configuration.addAnnotatedClass(Complaint.class); ///////////////////////////////////
+		configuration.addAnnotatedClass(ChangePriceRequest.class);  //////////////////////
+		configuration.addAnnotatedClass(Cinema.class); ///////////////////////////////////////
+		configuration.addAnnotatedClass(Customer.class); //for testing only
+		configuration.addAnnotatedClass(Purchase.class);  //for testing only
 		configuration.addAnnotatedClass(HomeMoviePurchase.class);
-		configuration.addAnnotatedClass(Card.class);
+		configuration.addAnnotatedClass(Card.class);/////////////////////////////////
 		configuration.addAnnotatedClass(Notification.class);
-		configuration.addAnnotatedClass(Hall.class);
 
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
@@ -81,11 +82,10 @@ public class SimpleServer extends AbstractServer {
 			generateBranchManager(session);
 			generateContentManager(session);
 			generateCustomerServiceWorker(session);
-			generateCinema(session);
+			generateCinema(session);  ///////////////////////////////////
 			generateComplaints(session);
-			generateChangePriceRequest(session);
-			generateHomeMoviePurchases(session);
-			generateHalls(session);
+			generateChangePriceRequest(session); //////////////////////////////////////////////
+//        generateHomeMoviePurchases(session);
 			generateCustomersAndPurchases(session);
 			generateCards(session);
 			generateNotifications(session);
@@ -95,7 +95,7 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-	private static void generateCinema(Session session) throws Exception {
+	private static void generateCinema(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
 		Cinema cinema = new Cinema(100, 90, 1000);
 		Cinema.cinema = cinema;
 		session.save(cinema);
@@ -124,6 +124,7 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateCustomersAndPurchases(Session session) {
+
 		List<Purchase> purchases1 = new ArrayList<>();
 		List<Purchase> purchases2 = new ArrayList<>();
 
@@ -134,15 +135,11 @@ public class SimpleServer extends AbstractServer {
 		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
 		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie:Wire Room.Viewing is limited to the screening time you selected.");
-		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
-		Purchase purchase5 = new Purchase("Movie Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 
 		//Adding purchases to the list
 		customer1.getPurchaseHistory().add(purchase1);
 		customer1.getPurchaseHistory().add(purchase2);
 		customer2.getPurchaseHistory().add(purchase3);
-		customer1.getPurchaseHistory().add(purchase4);
-		customer2.getPurchaseHistory().add(purchase5);
 
 		//Saving customers
 		session.save(customer1);
@@ -166,24 +163,24 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
-
-	private static void generateNotifications(Session session) throws Exception {
+	private static void generateNotifications(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
 		Customer customer1 = session.get(Customer.class, 123123123);
 		Customer customer2 = session.get(Customer.class, 123456789);
-		Notification noti1 = new Notification("New Movie" ,"Watch \"Barbie\" today in the Cinema!\nFor more details check the movies page",
+		Notification noti1 = new Notification("New Movie" ,"Watch Barbie today in Haifa Cinema!\nFor more details check the movies page",
 				LocalDateTime.of(2024, 9, 24, 11, 11),"Unread",customer1);
 		session.save(noti1);
-		Notification noti2 = new Notification("New Movie" ,"Watch \"The Joker\" today in the Cinema!\nFor more details check the movies page",
+		Notification noti2 = new Notification("New Movie" ,"Watch The Joker today in Haifa Cinema!\nFor more details check the movies page",
 				LocalDateTime.of(2024, 9, 24, 11, 11),"Unread",customer2);
 		session.save(noti2);
 		session.flush();
 	}
+//
+//  private static void generateHomeMoviePurchases(Session session) {
+//     HomeMovie homeMovie = new HomeMovie();
+//     session.save(homeMovie);
+//     session.flush();
+//  }
 
-	private static void generateHomeMoviePurchases(Session session) {
-	//	HomeMovie homeMovie = new HomeMovie();
-	//	session.save(homeMovie);
-	//	session.flush();
-	}
 
 	private static void generateChangePriceRequest(Session session) throws Exception {
 		Cinema cinema = session.get(Cinema.class, 1);
@@ -452,7 +449,6 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
-
 	private static void generateHalls(Session session) throws Exception {
 
 		Branch haifaCinema = session.get(Branch.class, 1);
@@ -460,6 +456,8 @@ public class SimpleServer extends AbstractServer {
 		Branch eilatCinema = session.get(Branch.class, 3);
 		Branch karmielCinema = session.get(Branch.class, 4);
 		Branch jerusalemCinema = session.get(Branch.class, 5);
+
+
 		Hall hall1 = new Hall(1,4, 5, 18, "1",jerusalemCinema);
 		session.save(hall1);
 		Hall hall2 = new Hall(2,5, 5, 25, "2",haifaCinema);
@@ -523,6 +521,7 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private static void generateScreenings(Session session) throws Exception {
+
 		Branch haifaCinema = session.get(Branch.class, 1);
 		Branch telAvivCinema = session.get(Branch.class, 2);
 		Branch eilatCinema = session.get(Branch.class, 3);
@@ -541,11 +540,11 @@ public class SimpleServer extends AbstractServer {
 		Movie movie10 = session.get(Movie.class, 10);
 
 		List<LocalDateTime> screeningTimes = Arrays.asList(
-				LocalDateTime.of(2024, 9, 24, 18, 30),
-				LocalDateTime.of(2024, 9, 24, 20, 30),
-				LocalDateTime.of(2024, 9, 24, 22, 00),
-				LocalDateTime.of(2024, 9, 25, 18, 30),
-				LocalDateTime.of(2024, 9, 25, 20, 30),
+				LocalDateTime.of(2024, 9, 24, 17, 00),
+				LocalDateTime.of(2024, 9, 24, 20, 00),
+				LocalDateTime.of(2024, 9, 24, 23, 00),
+				LocalDateTime.of(2024, 9, 25, 16, 30),
+				LocalDateTime.of(2024, 9, 25, 19, 30),
 				LocalDateTime.of(2024, 9, 25, 23, 00),
 				LocalDateTime.of(2024, 9, 26, 17, 00),
 				LocalDateTime.of(2024, 9, 26, 20, 00),
@@ -553,15 +552,15 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 27, 17, 00),
 				LocalDateTime.of(2024, 9, 27, 20, 00),
 				LocalDateTime.of(2024, 9, 27, 23, 00),
-				LocalDateTime.of(2024, 9, 28, 18, 00),
-				LocalDateTime.of(2024, 9, 28, 20, 00),
-				LocalDateTime.of(2024, 9, 28, 23, 00),
-				LocalDateTime.of(2024, 9, 29, 18, 00),
-				LocalDateTime.of(2024, 9, 29, 22, 00),
+				LocalDateTime.of(2024, 9, 28, 17, 00),
+				LocalDateTime.of(2024, 9, 28, 20, 30),
+				LocalDateTime.of(2024, 9, 28, 23, 30),
+				LocalDateTime.of(2024, 9, 29, 17, 00),
+				LocalDateTime.of(2024, 9, 29, 20, 30),
 				LocalDateTime.of(2024, 9, 29, 23, 30),
 				LocalDateTime.of(2024, 9, 30, 17, 00),
-				LocalDateTime.of(2024, 9, 30, 19, 00),
-				LocalDateTime.of(2024, 9, 30, 22, 30)
+				LocalDateTime.of(2024, 9, 30, 20, 00),
+				LocalDateTime.of(2024, 9, 30, 23, 00)
 		);
 
 		Hall hall1_ = session.get(Hall.class,1);
@@ -596,7 +595,7 @@ public class SimpleServer extends AbstractServer {
 
 
 		for (LocalDateTime time : screeningTimes) {
-			movie1.addScreening(time, jerusalemCinema, hall1_);
+			movie1.addScreening(time, jerusalemCinema, hall1_);   //On each of the dates and times defined , the movie will be screened in the same hall.
 			movie1.addScreening(time, telAvivCinema,hall6_);
 			movie1.addScreening(time, eilatCinema,hall12_);
 
@@ -692,13 +691,6 @@ public class SimpleServer extends AbstractServer {
 		session.save(movie19);
 
 		session.flush();
-	}
-
-	private static List<Purchase> getAllPurchases(Session session) throws Exception {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Purchase> query = builder.createQuery(Purchase.class);
-		query.from(Purchase.class);
-		return session.createQuery(query).getResultList();
 	}
 
 	private static List<Card> getAllCards(Session session) throws Exception {
@@ -1028,18 +1020,18 @@ public class SimpleServer extends AbstractServer {
 							i++;
 						}
 					}
-					/*for(Branch y : movieBranches) {
-						String hql = "from Branch where name = :branchName";
-						Query<Branch> query = session.createQuery(hql, Branch.class);
-						query.setParameter("branchName", y.getName());
-						Branch branch = query.getSingleResult();
-						branch.getMovies().add(movie);
-						session.save(branch);
-						newBranches.add(branch);
-						Screening screening = new Screening(times.get(i), movie, branch);
-						screenings.add(screening);
-						i++;
-					}*/
+                /*for(Branch y : movieBranches) {
+                   String hql = "from Branch where name = :branchName";
+                   Query<Branch> query = session.createQuery(hql, Branch.class);
+                   query.setParameter("branchName", y.getName());
+                   Branch branch = query.getSingleResult();
+                   branch.getMovies().add(movie);
+                   session.save(branch);
+                   newBranches.add(branch);
+                   Screening screening = new Screening(times.get(i), movie, branch);
+                   screenings.add(screening);
+                   i++;
+                }*/
 					movie.setBranches(newBranches);
 					//movie.setScreenings(screenings);
 					session.save(movie);
@@ -1085,19 +1077,19 @@ public class SimpleServer extends AbstractServer {
 						HomeMovie homeMovie = session.get(HomeMovie.class, movie.getId());
 						LocalDateTime screeningTime = data.getScreeningTime();
 
-						// חיפוש ההקרנה להסרה
+
 						Screening screeningToRemove = movie.getScreenings().stream()
 								.filter(screening -> screening.getScreeningTime().equals(screeningTime))
 								.findFirst()
 								.orElse(null);
 
 						if (screeningToRemove != null) {
-							movie.getScreenings().remove(screeningToRemove); // הסרת ההקרנה מהסרט
-							session.remove(screeningToRemove); // הסרה מהמסד
+							movie.getScreenings().remove(screeningToRemove);
+							session.remove(screeningToRemove);
 						} else {
 							System.err.println("Screening not found.");
 						}
-						session.save(movie); ///////////////////////
+						session.save(movie);
 					} else {
 						Branch branch = session.get(Branch.class, data.getBranchId());
 						LocalDateTime screeningTime = data.getScreeningTime();
@@ -1107,7 +1099,6 @@ public class SimpleServer extends AbstractServer {
 							return;
 						}
 
-						// חיפוש ההקרנה להסרה
 						Screening screeningToRemove = movie.getScreenings().stream()
 								.filter(screening -> screening.getScreeningTime().equals(screeningTime) && screening.getBranch().equals(branch))
 								.findFirst()
@@ -1153,11 +1144,14 @@ public class SimpleServer extends AbstractServer {
 					ScreeningData data = (ScreeningData) message.getObject();
 					Movie movie = session.get(Movie.class, data.getMovieId());
 					Branch branch = data.getBranchId() != null ? session.get(Branch.class, data.getBranchId()) : null;
+					Hall hall = data.getHallId() != null ? session.get(Hall.class, data.getHallId()) : null;
 					LocalDateTime screeningTime = data.getScreeningTime();
 
 					// Check if the screening already exists
 					boolean screeningExists = movie.getScreenings().stream()
-							.anyMatch(screening -> screening.getScreeningTime().equals(screeningTime) && (branch == null || screening.getBranch().equals(branch)));
+							.anyMatch(screening -> screening.getScreeningTime().equals(screeningTime)
+									&& screening.getBranch().equals(branch)
+									&& screening.getHall().equals(hall));
 
 					if (!screeningExists) {
 						// Create and add the new screening
@@ -1165,17 +1159,24 @@ public class SimpleServer extends AbstractServer {
 						newScreening.setMovie(movie);
 						newScreening.setScreeningTime(screeningTime);
 						newScreening.setBranch(branch);
+						newScreening.setHall(hall);
+
 						session.persist(newScreening);
 						movie.getScreenings().add(newScreening);
+
 						if (branch != null) {
 							branch.getScreenings().add(newScreening);
 						}
+						if (hall != null) {
+							hall.getScreenings().add(newScreening);
+						}
+
 						session.getTransaction().commit();
 
 						// Load updated movie list and send to all clients
 						List<Movie> movies = getAllMovies(session);
 						NewMessage updateMessage = new NewMessage(movies, "movies");
-						sendToAllClients(updateMessage);  // שליחת העדכון לכל הלקוחות
+						sendToAllClients(updateMessage);
 
 						List<HomeMovie> homeMovies = getAllHomeMovies(session);
 						NewMessage homeMoviesMessage = new NewMessage(homeMovies, "homeMovies");
@@ -1196,7 +1197,9 @@ public class SimpleServer extends AbstractServer {
 				} catch (Exception exception) {
 					System.err.println("An error occurred while adding a screening: " + exception.getMessage());
 				}
-			} else if (msgString.equals("editScreening")) {
+			}
+
+			else if (msgString.equals("editScreening")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 
@@ -1418,10 +1421,8 @@ public class SimpleServer extends AbstractServer {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Customer customer = (Customer) message.getObject();
-					Customer customerToLogOut = session.get(Customer.class, customer.getId());
-					customerToLogOut.setLoggedIn(false);  // log out
-					//session.saveOrUpdate(customer);
-					session.save(customerToLogOut);
+					customer.setLoggedIn(false);  // log out
+					session.saveOrUpdate(customer);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred while logging out.");
@@ -1448,18 +1449,10 @@ public class SimpleServer extends AbstractServer {
 					Customer savedCustomer = session.get(Customer.class, customer.getId());
 					if (savedCustomer == null) {
 						session.save(customer);
-						//List<Purchase> purchases = customer.getPurchaseHistory();
-						List<Purchase> purchases = getAllPurchases(session);
-						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
-						sendToAllClients(responseMessage);  ////////////////////////////////////////////////////////
 					} else {
 						for (Purchase purchase : purchaseCards) {
 							savedCustomer.addPurchase(purchase);
 							session.save(purchase);
-							//List<Purchase> purchases = customer.getPurchaseHistory();
-							List<Purchase> purchases = getAllPurchases(session);
-							NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
-							sendToAllClients(responseMessage);  ////////////////////////////////////////////////////////
 						}
 					}
 					NewMessage newMessage1 = new NewMessage("purchaseSuccessful");
@@ -1475,67 +1468,17 @@ public class SimpleServer extends AbstractServer {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					List<Notification> notifications = getAllNotifications(session);
-						List<Customer> customers = getAllCustomers(session);
-						List<Movie> movies = getAllMovies(session);
-						movies.removeIf(movie -> movie instanceof HomeMovie);
-						movies.removeIf(movie -> movie instanceof SoonMovie);
-					for (Movie movie : movies) {
-						boolean hasScreeningToday = false;
-						List<Screening> screenings = movie.getScreenings();
-						// Check if this movie has a screening today
-						for (Screening screening : screenings) {
-							if (screening.getScreeningTime().toLocalDate().equals(LocalDate.now())) {
-								hasScreeningToday = true;
-								break; // Exit this loop as we only need to know if one matches
-							}}
-						// If the movie has a screening today, notify each customer who has a card purchase
-						if (hasScreeningToday) {
-							for (Customer customer : customers) {
-								List<Purchase> purchases = customer.getPurchaseHistory();
-								for (Purchase purchase : purchases) {
-									if (purchase instanceof Card) {
-										Notification cardNotification = new Notification(
-												"New Movie", "Watch \"" + movie.getEngtitle() + "\" today in the Cinema!\nFor more details check the movies page.",
-												LocalDateTime.now(), "Unread", customer);
-										int flag = 0;
-										for(Notification notification : notifications) {
-											if(notification.getCustomer().equals(customer) && notification.getMessage().equals(cardNotification.getMessage()) && notification.getTime().toLocalDate().equals(cardNotification.getTime().toLocalDate())) {
-												flag = 1;
-												break;}}
-										if(flag == 0)
-											session.save(cardNotification);
-										break; // Exit the purchase loop for this customer because a notification is sent
-									}}}}}
-					List<Notification> finalNotifications = getAllNotifications(session);
-					NewMessage newMessage = new NewMessage(finalNotifications, "notificationsList");
+					NewMessage newMessage = new NewMessage(notifications, "notificationsList");
 					client.sendToClient(newMessage);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 				}
-			} else if (msgString.equals("readNotification")) {
+			} else if (msgString.equals("fetchPurchases")) {
+				int customerId = message.getId();
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
-					Notification notification = (Notification) message.getObject();
-					Notification notification1 = session.get(Notification.class, notification.getId());
-					notification1.setStatus("read");
-					session.save(notification1);
-					List<Notification> notifications = getAllNotifications(session);
-					NewMessage message1 = new NewMessage(notifications, "notificationsList");
-					client.sendToClient(message1);
-					session.getTransaction().commit();
-				} catch (Exception e) {
-					System.err.println("An error occurred during reading notification.");
-                }
-            }
-		else if (msgString.equals("fetchPurchases")) {
-				//int customerId = message.getId();
-				try (Session session = sessionFactory.openSession()) {
-					session.beginTransaction();
-					List<Purchase> purchases = getAllPurchases(session);
-					NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
-					client.sendToClient(responseMessage);
-				/*	Customer customer = session.get(Customer.class, customerId);
+					Customer customer = session.get(Customer.class, customerId);
 					if (customer != null) {
 						List<Purchase> purchases = customer.getPurchaseHistory();
 						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
@@ -1544,72 +1487,30 @@ public class SimpleServer extends AbstractServer {
 						NewMessage responseMessage = new NewMessage("No customer found with ID: " + customerId, "error");
 						client.sendToClient(responseMessage);
 					}
-				 */
 					session.getTransaction().commit();
 				} catch (Exception e) {
 					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
 				}
-			} else if (msgString.equals("returnProduct")) {
+			} else if (msgString.equals("fetchPurchases")) {
+				int customerId = message.getId();
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
-					List<Purchase> purchases = getAllPurchases(session);
-					Purchase purchase = (Purchase) message.getObject();
-					Purchase purchaseToReturn = session.get(Purchase.class, purchase.getId());
-					Customer customer = session.get(Customer.class, purchase.getCustomer().getId());
-					Purchase masterPurchase = null;
-					List<Purchase> otherPurchases = new ArrayList<>();
-					for(Purchase purchase1 : purchases) {
-						if (purchase1.getPurchaseDate().equals(purchase.getPurchaseDate())
-								&& purchase1.getCustomer().getId() == purchase.getCustomer().getId()) {
-							if(!(purchase1 instanceof Card) && !(purchase1 instanceof HomeMoviePurchase)) { // || purchase1 instanceof MovieTicket) {
-								masterPurchase = purchase1;
-							} else {
-								otherPurchases.add(purchase1);
-							}
-						}
-					} if(masterPurchase.getQuantity()==1){
-						customer.getPurchaseHistory().remove(masterPurchase);
-						session.save(customer);
-						session.remove(masterPurchase);
-					} else if(purchase instanceof Card){
-						Purchase purchase2 = session.get(Purchase.class, masterPurchase.getId());
-						purchase2.setQuantity(purchase2.getQuantity()-1);
-						if(purchase2.getQuantity()==1)
-							purchase2.setPurchaseDescription("A cinema cards was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
-						else
-							purchase2.setPurchaseDescription(purchase2.getQuantity() + " cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
-						purchase2.setPricePaid(purchase.getPricePaid()*purchase.getQuantity());
-						session.save(purchase2);
-					}/* else  if(purchase instanceof MovieTicket){  ////////////////////////////////////////////////
-						masterPurchase.setQuantity(masterPurchase.getQuantity()-1);
-						StringBuilder result = new StringBuilder(masterPurchase.getQuantity()+ " tickets were ordered for movie:" + otherPurchases.getFirst().getMovie().getEngTitle() + ". at the " otherPurchases.getFirst.getBranch() + "" );
-						for (Purchase item : otherPurchases) {
-							if (result.length() > 0) {
-								result.append(", "); // Add a separator (e.g., a comma and space) between items
-							}
-							result.append(item);
-						}
-						String finalString = result.toString();
-						masterPurchase.setPurchaseDescription("");
-						session.save(masterPurchase);
-					}*/
-					customer.getPurchaseHistory().remove(purchaseToReturn);
-					session.save(customer);
-					session.remove(purchaseToReturn);
-					NewMessage newMessage = new NewMessage("purchaseReturned");
-					client.sendToClient(newMessage);
-
-					List<Purchase> finalPurchases = getAllPurchases(session);
-					NewMessage newMessage2 = new NewMessage(finalPurchases,"purchasesResponse");
-					sendToAllClients(newMessage2);
-					List<Card> cards = getAllCards(session);
-					NewMessage newMessage3 = new NewMessage(cards,"cardsList");
-					sendToAllClients(newMessage3);
+					Customer customer = session.get(Customer.class, customerId);
+					if (customer != null) {
+						List<Purchase> purchases = customer.getPurchaseHistory();
+						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
+						client.sendToClient(responseMessage);
+					} else {
+						NewMessage responseMessage = new NewMessage("No customer found with ID: " + customerId, "error");
+						client.sendToClient(responseMessage);
+					}
 					session.getTransaction().commit();
-				} catch (Exception exception) {
-					System.err.println("An error occurred, changes have been rolled back.");
+				} catch (Exception e) {
+					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
+					e.printStackTrace();
 				}
 			}
+
 		}
 		catch (IOException e) {
 			e.printStackTrace();
