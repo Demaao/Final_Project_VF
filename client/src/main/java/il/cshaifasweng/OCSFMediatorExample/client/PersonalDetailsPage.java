@@ -43,7 +43,7 @@ public class PersonalDetailsPage {
         // Set up the table columns
         orderPriceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPricePaid())));
         orderDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-                cellData.getValue().getPurchaseDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                cellData.getValue().getPurchaseDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
         ));
 
         // Set the value factory for orderDetailsColumn using purchaseDescription

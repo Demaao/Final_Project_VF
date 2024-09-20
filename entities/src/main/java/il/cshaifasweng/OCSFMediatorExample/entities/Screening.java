@@ -21,13 +21,12 @@ public class Screening implements Serializable {
     @JoinColumn(name = "branch_id", nullable = true) // branch יכול להיות null במקרה של סרטי בית
     private Branch branch;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    //@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hall_id", nullable = true) // hall ×××× ×××××ª null ×× ×××§×¨× × ××× × ××ª×§××××ª ××××× ××¡×××
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hall_id", nullable = true)
     private Hall hall;
 
     @OneToOne
-    @JoinColumn(name = "homeMoviePurchase_id")  // This side owns the relationship
+    @JoinColumn(name = "homeMoviePurchase_id")
     private HomeMoviePurchase homeMoviePurchase;
 
 
@@ -57,7 +56,7 @@ public class Screening implements Serializable {
 
 
     public Hall getHall() {
-        return hall;
+        return this.hall;
     }
 
     public void setHall(Hall hall) {
@@ -81,7 +80,7 @@ public class Screening implements Serializable {
     }
 
     public Branch getBranch() {
-        return branch;
+        return this.branch;
     }
 
     public void setBranch(Branch branch) {

@@ -105,8 +105,6 @@ public class SimpleClient extends AbstractClient {
                 EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
 				}
 
-
-
 			});
 		}
 	}

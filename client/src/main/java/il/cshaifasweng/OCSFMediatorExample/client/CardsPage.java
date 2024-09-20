@@ -19,9 +19,6 @@ public class CardsPage {
     private ObservableList<String> ticketType = FXCollections.observableArrayList("Regular", "VIP");
 
     @FXML
-    private Menu cardsMenue;
-
-    @FXML
     private Spinner<Integer> cardsQuantityChooser;
 
     @FXML
@@ -127,13 +124,14 @@ public class CardsPage {
             cardValue = cardValue*1.5;
         for (int i = 0; i < cardsQuantityChooser.getValue(); i++) {
             Card card = new Card("Card", null, "Credit Card", cardValue,
-                    null, null,1, null,20, ticketTypeChooser.getValue());
+                    null, null,1, "A cinema card containing 20 tickets.", 20, ticketTypeChooser.getValue());
             cards.add(card);
         }
         App.switchScreen("PurchaseProductsPage");
     }
     @FXML
     private void  switchToPersonalAreaPage() throws IOException {
+        cards.clear();
         App.switchScreen("PersonalAreaPage");
     }
 
@@ -144,7 +142,6 @@ public class CardsPage {
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -164,5 +161,3 @@ public class CardsPage {
     @Subscribe
     public void onCardEvent(UpdateCardsEvent event){}
 }
-
-

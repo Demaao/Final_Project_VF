@@ -28,7 +28,6 @@ public class Card extends Purchase implements Serializable {
         this.tickets = tickets;
         this.cardType = cardType;
     }
-
     public int getId() {
         return id;
     }
