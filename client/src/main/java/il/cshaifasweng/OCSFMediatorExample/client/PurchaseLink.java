@@ -79,7 +79,7 @@ public class PurchaseLink {
             if( purchaseItems.isEmpty()) {
                 purchaseItems.clear();
                 this.linkTicketValue = cinema.getLinkTicketPrice();
-                PurchaseItem item = new PurchaseItem(MovieLinkDetailsPage.homeMoviePurchase.getId(), "Link Ticket",
+                PurchaseItem item = new PurchaseItem(1, "Link Ticket",
                         MovieLinkDetailsPage.homeMoviePurchase.getHomeMovie().getEngtitle(),
                         MovieLinkDetailsPage.homeMoviePurchase.getScreening().myToString(), linkTicketValue);
                 // Bind the table view to the observable list

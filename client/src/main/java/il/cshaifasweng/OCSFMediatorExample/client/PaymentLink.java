@@ -1,5 +1,8 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.Customer;
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
+import il.cshaifasweng.OCSFMediatorExample.entities.Purchase;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -52,7 +57,7 @@ public class PaymentLink {
     }
 
     @FXML
-    void payForProduct(ActionEvent event) {
+    void payForProduct(ActionEvent event) throws IOException {
         List<String> errorMessages = new ArrayList<>();
 
         // Reset field styles before validation
@@ -84,15 +89,9 @@ public class PaymentLink {
             errorMessages.add("Invalid credit card number. Please enter a 16-digit number.");
         }
 
-        // Display error message based on the number of errors
+        // If there are validation errors, stop processing
         if (!errorMessages.isEmpty()) {
-            String alertMessage;
-            if (errorMessages.size() == 1) {
-                alertMessage = errorMessages.get(0);
-            } else {
-                alertMessage = "Multiple errors detected. Please review the highlighted fields and correct the issues.";
-            }
-
+            String alertMessage = String.join("\n", errorMessages);
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Validation Errors");
@@ -103,15 +102,147 @@ public class PaymentLink {
             return; // Stop processing if validation fails
         }
 
-        // If everything is valid, proceed with the payment
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                    "Payment completed successfully!");
-            alert.show();
-        });
+        // Gather data from input fields
+        int customerId = Integer.parseInt(IDNumText.getText());
+        String fullName = fullNameText.getText();
+        String email = emailText.getText();
+        String phone = phoneText.getText();
+        String creditCard = creditCardTxt.getText();
+
+        // Create a Customer object to send to the server, i will check if it works with IsLoggedIn=False
+        Customer customer = new Customer(customerId, fullName, email, phone, new ArrayList<>(), false);
+        LocalDateTime time = LocalDateTime.now();
+        MovieLinkDetailsPage.homeMoviePurchase.setCustomer(customer);
+        MovieLinkDetailsPage.homeMoviePurchase.setPurchaseDate(time);
+
+        List<Purchase> purchases = new ArrayList<>();
+        purchases.add(MovieLinkDetailsPage.homeMoviePurchase);
+
+        Purchase purchase = new Purchase("Movie Link", time, "Credit Card",
+                totalPrice, customer, "Movie link was ordered for the movie: " + MovieLinkDetailsPage.homeMoviePurchase.getHomeMovie().getEngtitle() + ". Viewing is limited to the screening time you selected.");
+
+        purchases.add(purchase);
+        // Send purchase and customer data to the server
+        NewMessage message = new NewMessage(purchases,"processPayment");
+     //   message.setCustomer(customer);  // Set the customer data in the message
+     //   message.setObject(MovieLinkDetailsPage.homeMoviePurchase);  // Send the purchase details
+
+        try {
+            SimpleClient.getClient().sendToServer(message);  // Send to the server
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Formatting the date
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String date = time.toLocalDate().format(dateFormatter);
+
+        // Formatting the time
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String time2 = time.toLocalTime().format(timeFormatter);
+
+        DateTimeFormatter timeDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Purchase Receipt");
+        alert.setHeaderText("Purchase completed successfully!");
+        alert.setContentText("Date: " + date + ",   "+  "Time: " + time2 +
+                "\nProduct Type: Movie Link\n" +
+                "Movie Title: " +  MovieLinkDetailsPage.homeMoviePurchase.getHomeMovie().getEngtitle() +
+                "\nLink: "+  MovieLinkDetailsPage.homeMoviePurchase.getHomeMovie().getLink()+
+                "\nScreening: " +  MovieLinkDetailsPage.homeMoviePurchase.getScreening().getScreeningTime().format(timeDateFormatter) +
+                "\nTotal Price: " +totalPrice + "\n\nNote: You can see your purchase details in the personal area.");
+        alert.show();
+
+        fullNameText.clear();
+        IDNumText.clear();
+        phoneText.clear();
+        emailText.clear();
+        creditCardTxt.clear();
+        totalPriceLabel.setText(null);
+
+        CardsPage.cards.clear();
+
+        switchToMoviesPage();
+
         MovieDetailsPage.movieDetailsPage = 0;
     }
 
+
+    /* @FXML
+     void payForProduct(ActionEvent event) {
+         List<String> errorMessages = new ArrayList<>();
+
+         // Reset field styles before validation
+         resetFieldStyles();
+
+         // Validate each field and track errors
+         if (fullNameText.getText().isEmpty() || !validateFullName()) {
+             highlightFieldError(fullNameText);
+             errorMessages.add("Invalid full name. Please use only letters and spaces.");
+         }
+
+         if (IDNumText.getText().isEmpty() || !validateIDNumber()) {
+             highlightFieldError(IDNumText);
+             errorMessages.add("Invalid ID number. Please enter a 9-digit number.");
+         }
+
+         if (phoneText.getText().isEmpty() || !validatePhoneNumber()) {
+             highlightFieldError(phoneText);
+             errorMessages.add("Invalid phone number. Please enter a 10-digit number.");
+         }
+
+         if (emailText.getText().isEmpty() || !validateEmail()) {
+             highlightFieldError(emailText);
+             errorMessages.add("Invalid email format.");
+         }
+
+         if (creditCardTxt.getText().isEmpty() || !validateCreditCard()) {
+             highlightFieldError(creditCardTxt);
+             errorMessages.add("Invalid credit card number. Please enter a 16-digit number.");
+         }
+
+         // If there are validation errors, stop processing
+         if (!errorMessages.isEmpty()) {
+             String alertMessage = String.join("\n", errorMessages);
+             Platform.runLater(() -> {
+                 Alert alert = new Alert(Alert.AlertType.WARNING);
+              alert.setTitle("Validation Errors");
+                 alert.setHeaderText(null);
+                 alert.setContentText(alertMessage);
+                 alert.show();
+             });
+             return; // Stop processing if validation fails
+         }
+
+         // Gather data from input fields
+         int customerId = Integer.parseInt(IDNumText.getText());
+         String fullName = fullNameText.getText();
+         String email = emailText.getText();
+         String phone = phoneText.getText();
+         String creditCard = creditCardTxt.getText();
+
+         // Create a Customer object to send to the server
+         Customer customer = new Customer(customerId, fullName, email, phone, new ArrayList<>(), true);
+
+         // Send purchase and customer data to the server
+         NewMessage message = new NewMessage("processPayment");
+         message.setCustomer(customer);  // Set the customer data in the message
+         message.setObject(MovieLinkDetailsPage.homeMoviePurchase);  // Send the purchase details
+
+         try {
+             SimpleClient.getClient().sendToServer(message);  // Send to the server
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+
+         // Notify the user of successful payment
+         Platform.runLater(() -> {
+             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Payment completed successfully!");
+             alert.show();
+         });
+
+         MovieDetailsPage.movieDetailsPage = 0;
+     }  */
     private void resetFieldStyles() {
         fullNameText.getStyleClass().remove("error");
         IDNumText.getStyleClass().remove("error");

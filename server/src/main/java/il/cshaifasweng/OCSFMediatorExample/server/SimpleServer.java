@@ -134,7 +134,7 @@ public class SimpleServer extends AbstractServer {
 		//Create purchases and add them to customers
 		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
 		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
-		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie:Wire Room.Viewing is limited to the screening time you selected.");
+		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie: Wire Room. Viewing is limited to the screening time you selected.");
 		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase5 = new Purchase("Movie Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 
@@ -188,6 +188,9 @@ public class SimpleServer extends AbstractServer {
 		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
 		homeMoviePurchase.setScreening(screening);
 		screening.getHomeMoviePurchases().add(homeMoviePurchase);
+		homeMovie.getHomeMoviePurchases().add(homeMoviePurchase);
+		homeMoviePurchase.setHomeMovie(homeMovie);
+		session.save(homeMoviePurchase);
 		session.saveOrUpdate(screening);
 		session.save(homeMoviePurchase);
 		session.flush();
@@ -949,6 +952,18 @@ public class SimpleServer extends AbstractServer {
 					session.beginTransaction();
 					HomeMovie movie = (HomeMovie) message.getObject();
 					HomeMovie movieToDelete = session.get(HomeMovie.class, movie.getId());
+					List<HomeMoviePurchase> homeMoviePurchases = movieToDelete.getHomeMoviePurchases();
+					List<HomeMoviePurchase> homeMoviePurchases2 = new ArrayList<>(movieToDelete.getHomeMoviePurchases());
+					for (HomeMoviePurchase purchase : homeMoviePurchases2) {
+						HomeMoviePurchase purchase1 = session.get(HomeMoviePurchase.class, purchase.getId());
+						movieToDelete.removeHomeMoviePurchase(purchase1);
+						purchase1.setHomeMovie(null); // Break the link, adjust as per your entity design
+						purchase1.setScreening(null);
+						session.update(purchase1);
+						session.flush();
+					}
+					movieToDelete.getHomeMoviePurchases().clear();
+					session.saveOrUpdate(movieToDelete);
 					session.remove(movieToDelete);
 					List<Movie> movies = getAllMovies(session);
 					List<HomeMovie> homeMovies = getAllHomeMovies(session);
@@ -1473,7 +1488,7 @@ public class SimpleServer extends AbstractServer {
 					} else {
 						for (Purchase purchase : purchaseCards) {
 							savedCustomer.addPurchase(purchase);
-							session.save(purchase);
+							session.save(savedCustomer);
 							//List<Purchase> purchases = customer.getPurchaseHistory();
 							List<Purchase> purchases = getAllPurchases(session);
 							NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
@@ -1637,7 +1652,49 @@ public class SimpleServer extends AbstractServer {
 				}catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 				}
+			} else if (msgString.equals("processPayment")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Purchase> purchases = (List<Purchase>) message.getObject();
+					for (Purchase purchase : purchases) {
+						if(purchase instanceof HomeMoviePurchase homeMoviePurchase) {
+							List<Screening> screenings = getScreeningsForMovie(session, homeMoviePurchase.getHomeMovie().getId());
+							screenings.removeIf(screening -> !screening.getScreeningTime().equals(homeMoviePurchase.getScreening().getScreeningTime()));
+							Screening screening = session.get(Screening.class, screenings.get(0).getId());
+							homeMoviePurchase.setScreening(screening);
+							session.save(homeMoviePurchase);
+							screening.getHomeMoviePurchases().add(homeMoviePurchase);
+							session.save(screening);
+							HomeMovie homeMovie = session.get(HomeMovie.class, homeMoviePurchase.getHomeMovie().getId());
+							homeMovie.addHomeMoviePurchase(homeMoviePurchase);
+							homeMoviePurchase.setHomeMovie(homeMovie);
+							session.save(homeMovie);
+						}
+						session.save(purchase);
+					}
+					Customer customer = purchases.get(0).getCustomer();
+					Customer savedCustomer = session.get(Customer.class, customer.getId());
+					if (savedCustomer == null) {
+						session.save(customer);
+					} else {
+						for (Purchase purchase : purchases) {
+							savedCustomer.addPurchase(purchase);
+							session.save(savedCustomer);
+						}
+					}
+					List<Purchase> allPurchases = getAllPurchases(session);
+					NewMessage responseMessage = new NewMessage(allPurchases, "purchasesResponse");
+					sendToAllClients(responseMessage);
+					NewMessage newMessage1 = new NewMessage("purchaseSuccessful");
+					client.sendToClient(newMessage1);
+					// Commit the transaction to persist the changes
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred during the payment process.");
+					exception.printStackTrace();
+				}
 			}
+
 		}
 		catch (IOException e) {
 			e.printStackTrace();
