@@ -13,7 +13,7 @@ import java.util.List;
 public class HomeMovie extends Movie implements Serializable {
     private String link;
 
-    @OneToMany(mappedBy = "homeMovie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "homeMovie", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     private List<HomeMoviePurchase> homeMoviePurchases = new ArrayList<>();
 
@@ -32,6 +32,10 @@ public class HomeMovie extends Movie implements Serializable {
         this.link = link;
     }
 
+    public List<HomeMoviePurchase> getHomeMoviePurchases() {
+        return this.homeMoviePurchases;
+    }
+
     public void addHomeMoviePurchase(HomeMoviePurchase homeMoviePurchase) {
         homeMoviePurchases.add(homeMoviePurchase);
         homeMoviePurchase.setHomeMovie(this); // Ensure the relationship is properly bidirectional
@@ -39,5 +43,9 @@ public class HomeMovie extends Movie implements Serializable {
 
     public void removeHomeMoviePurchase(HomeMoviePurchase homeMoviePurchase) {
         homeMoviePurchases.remove(homeMoviePurchase);
+    }
+
+    public void setHomeMoviePurchases(List<HomeMoviePurchase> homeMoviePurchases) {
+        this.homeMoviePurchases = homeMoviePurchases;
     }
 }

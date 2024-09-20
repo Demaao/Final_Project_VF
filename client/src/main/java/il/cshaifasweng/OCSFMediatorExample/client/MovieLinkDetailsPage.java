@@ -319,23 +319,32 @@ public class MovieLinkDetailsPage {
     @FXML
     private void switchToPurchaseProductsPage() throws IOException {
         Platform.runLater(() -> {
-            LocalDate date = chooseDatePicker.getValue();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            LocalTime time = LocalTime.parse(timeComboBox.getValue(), formatter);
-            LocalDateTime dateTime = LocalDateTime.of(date, time);
-            Screening screening = new Screening(dateTime, MovieDetailsPage.selectedMovie, null);
-            // Split the movie length into hours and minutes
-            String[] parts = MovieDetailsPage.selectedMovie.getLength().split(" ");
-            int hours = Integer.parseInt(parts[0].replace("h", ""));
-            int minutes = Integer.parseInt(parts[1].replace("m", ""));
-            // Add hours and minutes to the start time
-            LocalTime endTime = time.plusHours(hours).plusMinutes(minutes);
-            System.out.println(time);
-            System.out.println(endTime);
-            homeMoviePurchase = new HomeMoviePurchase("Link Ticket", null, null, 100, null, null,
-                    (HomeMovie) MovieDetailsPage.selectedMovie, time, endTime, screening);
-            ((HomeMovie) MovieDetailsPage.selectedMovie).addHomeMoviePurchase(homeMoviePurchase);
-            App.switchScreen("PurchaseLink");  });
+            if(chooseDatePicker.getValue() == null || timeComboBox.getValue() == null){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select date and time!");
+                alert.show();
+            }
+            else {
+                LocalDate date = chooseDatePicker.getValue();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                LocalTime time = LocalTime.parse(timeComboBox.getValue(), formatter);
+                LocalDateTime dateTime = LocalDateTime.of(date, time);
+                Screening screening = new Screening(dateTime, MovieDetailsPage.selectedMovie, null);
+                // Split the movie length into hours and minutes
+                String[] parts = MovieDetailsPage.selectedMovie.getLength().split(" ");
+                int hours = Integer.parseInt(parts[0].replace("h", ""));
+                int minutes = Integer.parseInt(parts[1].replace("m", ""));
+                // Add hours and minutes to the start time
+                LocalTime endTime = time.plusHours(hours).plusMinutes(minutes);
+                homeMoviePurchase = new HomeMoviePurchase("Link Ticket", null, "Credit Card", 100, null, "Movie link for " + MovieDetailsPage.selectedMovie.getEngtitle() + "." + "\nScreening: " + screening.getScreeningTime().format(formatter1),
+                        (HomeMovie) MovieDetailsPage.selectedMovie, time, endTime, screening);
+                homeMoviePurchase.setScreening(screening);
+                ((HomeMovie) MovieDetailsPage.selectedMovie).addHomeMoviePurchase(homeMoviePurchase);
+                App.switchScreen("PurchaseLink");
+            }});
     }
 
     @FXML
