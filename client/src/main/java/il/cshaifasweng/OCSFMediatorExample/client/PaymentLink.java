@@ -39,6 +39,18 @@ public class PaymentLink {
     @FXML
     private Button backBtn; // Added for the Back button
 
+    private  double totalPrice;
+
+    @FXML
+    private void initialize() {
+        if(MovieLinkDetailsPage.homeMoviePurchase == null)
+            totalPriceLabel.setText(null);
+        else {
+            totalPrice = MovieLinkDetailsPage.homeMoviePurchase.getPricePaid();
+            totalPriceLabel.setText(totalPrice + "$");
+        }
+    }
+
     @FXML
     void payForProduct(ActionEvent event) {
         List<String> errorMessages = new ArrayList<>();
@@ -183,5 +195,11 @@ public class PaymentLink {
     public void switchToMoviesPage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("MoviesPage");
+    }
+
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        MovieDetailsPage.movieDetailsPage = 0;
+        App.switchScreen("PersonalAreaPage");
     }
 }

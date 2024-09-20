@@ -1,5 +1,8 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import il.cshaifasweng.OCSFMediatorExample.entities.Card;
+import il.cshaifasweng.OCSFMediatorExample.entities.HomeMoviePurchase;
+import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import il.cshaifasweng.OCSFMediatorExample.entities.Purchase;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -39,7 +42,8 @@ public class PersonalDetailsPage {
     public void initialize() {
         // Register the controller to listen for events
         EventBus.getDefault().register(this);
-
+        requestPurchasesFromServer();
+        /*
         // Set up the table columns
         orderPriceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPricePaid())));
         orderDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
@@ -53,7 +57,6 @@ public class PersonalDetailsPage {
         orderDetailsColumn.setCellFactory(column -> {
             return new TableCell<Purchase, String>() {
                 private final Text text = new Text();
-
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -65,26 +68,64 @@ public class PersonalDetailsPage {
                         text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10)); // Wrap text inside the column and add padding
                         setGraphic(text);
                         setPadding(new Insets(5, 10, 5, 10));
-                    }
-                }
-            };
-        });
-
-
+                    }}};});
         // Set the cell value factory for payment method
         paymentMethodColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPaymentMethod()));
-
         // Set the items for the table
-        purchasesTable.setItems(purchaseList);
+        purchasesTable.setItems(purchaseList); */
     }
 
     // Listener for the UpdatePurchasesEvent
     @Subscribe
     public void handleUpdatePurchasesEvent(UpdatePurchasesEvent event) {
         Platform.runLater(() -> {
-            purchaseList.clear(); // Clear existing items
-            purchaseList.addAll(event.getPurchases()); // Add the new purchases
-        });
+            if(PersonalAreaPage.loggedInCustomer != null) {
+                purchaseList.clear(); // Clear existing items
+                purchaseList.addAll(event.getPurchases()); // Add the new purchases
+                purchaseList.removeIf(purchase -> purchase instanceof Card);
+                // purchaseList.removeIf(purchase -> purchase instanceof HomeMoviePurchase); /////////////////////////////
+                // purchaseList.removeIf(purchase -> purchase instanceof MovieTicket);  ///////////////////////////////////////
+                purchaseList.removeIf(purchase -> purchase.getCustomer().getId() != PersonalAreaPage.loggedInCustomer.getId());
+                // Set up the table columns
+                orderPriceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPricePaid())));
+                orderDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+                        cellData.getValue().getPurchaseDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                ));
+                // Set the value factory for orderDetailsColumn using purchaseDescription
+                orderDetailsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPurchaseDescription()));
+                // Adding text wrapping and padding for the order details column
+                orderDetailsColumn.setCellFactory(column -> {
+                    return new TableCell<Purchase, String>() {
+                        private final Text text = new Text();
+
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty || item == null) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                text.setText(item);
+                                text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10)); // Wrap text inside the column and add padding
+                                setGraphic(text);
+                                setPadding(new Insets(5, 10, 5, 10));
+                            }}};});
+                // Set the cell value factory for payment method
+                paymentMethodColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPaymentMethod()));
+                // Set the items for the table
+                purchasesTable.setItems(purchaseList);
+            }});
+    }
+
+    @FXML
+    private void requestPurchasesFromServer() {
+        try {
+            NewMessage message = new NewMessage("fetchPurchases");
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 
     @FXML
@@ -139,4 +180,7 @@ public class PersonalDetailsPage {
         PersonalAreaPage.logOutCustomer();
         App.switchScreen("PersonalAreaPage");
     }
+
+    @Subscribe
+    public void onCardEvent(UpdateCardsEvent event) {}
 }

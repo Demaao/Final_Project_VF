@@ -445,6 +445,9 @@ public class App extends Application {
                 } else if(event.getWarning().getMessage().equals("Payment completed successfully!")){
                     alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
                   //  alert.show();
+                } else if(event.getWarning().getMessage().equals("Purchase refunded successfully!")){
+                    alert = new Alert(Alert.AlertType.INFORMATION, event.getWarning().getMessage());
+                    alert.show();
                 }
                 else if (loginDeniedCounter >= 5) {
                     Stage dialogStage = new Stage();

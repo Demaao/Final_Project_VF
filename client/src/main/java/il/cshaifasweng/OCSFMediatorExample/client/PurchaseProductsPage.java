@@ -152,6 +152,11 @@ public class PurchaseProductsPage {
         App.switchScreen("ChargebackPage");
     }
 
+    @FXML
+    private void  switchToPersonalAreaPage() throws IOException {
+        CardsPage.cards.clear();
+        App.switchScreen("PersonalAreaPage");
+    }
 
     @Subscribe
     public void onCardEvent(UpdateCardsEvent event){}

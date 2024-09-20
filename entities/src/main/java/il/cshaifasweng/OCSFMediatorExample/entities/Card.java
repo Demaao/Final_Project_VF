@@ -1,14 +1,8 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Card extends Purchase implements Serializable {
@@ -28,6 +22,7 @@ public class Card extends Purchase implements Serializable {
         this.tickets = tickets;
         this.cardType = cardType;
     }
+
     public int getId() {
         return id;
     }
@@ -51,4 +46,5 @@ public class Card extends Purchase implements Serializable {
     public void setCardType(String cardType) {
         this.cardType = cardType;
     }
+
 }

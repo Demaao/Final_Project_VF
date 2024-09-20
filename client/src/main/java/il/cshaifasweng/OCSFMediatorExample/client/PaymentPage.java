@@ -121,10 +121,16 @@ public class PaymentPage {
             card.setCustomer(customer);
         }
 
-        Purchase purchase = new Purchase("Card", time, "Credit Card",
-                totalPrice,customer,null,  CardsPage.cards.size(), null);
+        if(CardsPage.cards.size() > 1){
+            Purchase purchase = new Purchase("Card", time, "Credit Card",
+                    totalPrice, customer, null, CardsPage.cards.size(), CardsPage.cards.size() + " cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
+            purchases.add(purchase);
+        } else {
+            Purchase purchase = new Purchase("Card", time, "Credit Card",
+                    totalPrice, customer, null, CardsPage.cards.size(), "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+            purchases.add(purchase);
+        }
 
-        purchases.add(purchase);
 
         NewMessage msg = new NewMessage(purchases, "purchaseCards");
         SimpleClient.getClient().sendToServer(msg);
@@ -250,4 +256,6 @@ public class PaymentPage {
     @Subscribe
     public void onCardEvent(UpdateCardsEvent event) {}
 
+    @Subscribe
+    public void handleUpdatePurchasesEvent(UpdatePurchasesEvent event) {}
 }
