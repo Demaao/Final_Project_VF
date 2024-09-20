@@ -42,12 +42,13 @@ public class PurchaseLink {
     private ObservableList<PurchaseItem> purchaseItems = FXCollections.observableArrayList();
 
     private Cinema cinema = new Cinema();
-    private double linkTicketValue;
+    private static double linkTicketValue;
+    public static int setLinkPrice = 0;
 
     @FXML
     public void initialize() {
         // Register to EventBus to listen for events
-       EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
         requestCinemaFromServer();
 
         // Set up table columns to link with PurchaseItem fields
@@ -56,8 +57,6 @@ public class PurchaseLink {
         movieColumn.setCellValueFactory(new PropertyValueFactory<>("movieTitle"));
         detailsColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-
     }
 
     @FXML
@@ -76,9 +75,13 @@ public class PurchaseLink {
         Platform.runLater(() -> {
             Cinema cinema = event.getCinema();
             this.cinema = cinema;
-            if( purchaseItems.isEmpty()) {
-                purchaseItems.clear();
+            if(setLinkPrice == 0) {
                 this.linkTicketValue = cinema.getLinkTicketPrice();
+                MovieLinkDetailsPage.homeMoviePurchase.setPricePaid(linkTicketValue);
+                setLinkPrice = 1;
+            }
+                purchaseItems.clear();
+
                 PurchaseItem item = new PurchaseItem(1, "Link Ticket",
                         MovieLinkDetailsPage.homeMoviePurchase.getHomeMovie().getEngtitle(),
                         MovieLinkDetailsPage.homeMoviePurchase.getScreening().myToString(), linkTicketValue);
@@ -89,31 +92,8 @@ public class PurchaseLink {
                 DecimalFormat decimalFormat = new DecimalFormat("#.##");
                 String strValue = decimalFormat.format(linkTicketValue);
                 totalPriceLabel.setText(strValue + "$");
-                MovieLinkDetailsPage.homeMoviePurchase.setPricePaid(linkTicketValue);
-            }});
+            });
     }
-/*
-    @Subscribe
-    public void handleUpdateHomeMoviePurchaseEvent(NewMessage message) {
-        if (message.getMessage().equals("selectedHomeMoviePurchase")) {
-            HomeMoviePurchase selectedHomeMoviePurchase = (HomeMoviePurchase) message.getObject();
-
-            // Add the selected home movie details to the table
-            PurchaseItem item = new PurchaseItem(
-                    String.valueOf(selectedHomeMoviePurchase.getHomeMovie().getId()),
-                    "Home Movie",
-                    selectedHomeMoviePurchase.getHomeMovie().getEngtitle(),
-                    String.valueOf(selectedHomeMoviePurchase.getPricePaid()) + "$"
-            );
-
-            // Add the item to the table view's observable list
-            purchaseItems.add(item);
-
-            // Update the total price label
-            totalPriceLabel.setText(selectedHomeMoviePurchase.getPricePaid() + "$");
-        }
-    }*/
-
 
     // Inner class to represent purchase items in the table
     public static class PurchaseItem {
@@ -175,6 +155,7 @@ public class PurchaseLink {
     private void switchToMovieDetailsPage() throws IOException {
         Platform.runLater(() -> {
             purchaseItems.clear();
+            setLinkPrice = 0;
             App.switchScreen("MovieLinkDetailsPage");
         });
     }
