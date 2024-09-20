@@ -97,10 +97,10 @@ public class PurchaseProductsPage {
                     }}}});
         if(CardsPage.cards.isEmpty())
             totalPriceLabel.setText(null);
-//        else {
-//            double totalPrice = CardsPage.cards.size() * CardsPage.cards.getFirst().getPricePaid();
-//            totalPriceLabel.setText(totalPrice + "$");
-//        }
+        else {
+            double totalPrice = CardsPage.cards.size() * CardsPage.cards.getFirst().getPricePaid();
+            totalPriceLabel.setText(totalPrice + "$");
+        }
     }
 
     @FXML
