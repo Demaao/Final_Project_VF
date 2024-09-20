@@ -2,6 +2,8 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "screenings")
@@ -21,14 +23,17 @@ public class Screening implements Serializable {
     @JoinColumn(name = "branch_id", nullable = true) // branch יכול להיות null במקרה של סרטי בית
     private Branch branch;
 
+    //@ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hall_id", nullable = true)
+    @JoinColumn(name = "hall_id", nullable = true) // hall ×××× ×××××ª null ×× ×××§×¨× × ××× × ××ª×§××××ª ××××× ××¡×××
     private Hall hall;
 
-    @OneToOne
-    @JoinColumn(name = "homeMoviePurchase_id")
-    private HomeMoviePurchase homeMoviePurchase;
+ /*   @OneToOne
+    @JoinColumn(name = "homeMoviePurchase_id")  // This side owns the relationship
+    private HomeMoviePurchase homeMoviePurchase;*/
 
+    @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<HomeMoviePurchase> homeMoviePurchases = new ArrayList<>();
 
     public Screening() {}
 
@@ -92,5 +97,13 @@ public class Screening implements Serializable {
             return this.screeningTime.toLocalDate().toString() + "    " + this.screeningTime.toLocalTime();
         else
             return this.screeningTime.toLocalDate().toString() + "    " + this.screeningTime.toLocalTime() + "        " + this.branch.getName();
+    }
+
+    public void setHomeMoviePurchase(List<HomeMoviePurchase> homeMoviePurchase) {
+        this.homeMoviePurchases = homeMoviePurchase;
+    }
+
+    public List<HomeMoviePurchase> getHomeMoviePurchases() {
+        return homeMoviePurchases;
     }
 }

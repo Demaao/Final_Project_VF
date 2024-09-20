@@ -12,10 +12,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -84,9 +88,10 @@ public class SimpleServer extends AbstractServer {
 			generateCustomerServiceWorker(session);
 			generateCinema(session);  ///////////////////////////////////
 			generateComplaints(session);
-			generateChangePriceRequest(session); //////////////////////////////////////////////
-//        generateHomeMoviePurchases(session);
+			generateChangePriceRequest(session);
+			generateHalls(session);
 			generateCustomersAndPurchases(session);
+			generateHomeMoviePurchases(session);
 			generateCards(session);
 			generateNotifications(session);
 			session.getTransaction().commit();
@@ -174,12 +179,19 @@ public class SimpleServer extends AbstractServer {
 		session.save(noti2);
 		session.flush();
 	}
-//
-//  private static void generateHomeMoviePurchases(Session session) {
-//     HomeMovie homeMovie = new HomeMovie();
-//     session.save(homeMovie);
-//     session.flush();
-//  }
+
+	private static void generateHomeMoviePurchases(Session session) {
+		Customer customer = session.get(Customer.class, 123456789);
+		HomeMovie homeMovie = session.get(HomeMovie.class, 16);
+		Screening screening = session.get(Screening.class, 652);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
+		homeMoviePurchase.setScreening(screening);
+		screening.getHomeMoviePurchases().add(homeMoviePurchase);
+		session.saveOrUpdate(screening);
+		session.save(homeMoviePurchase);
+		session.flush();
+	}
 
 
 	private static void generateChangePriceRequest(Session session) throws Exception {
@@ -1421,8 +1433,10 @@ public class SimpleServer extends AbstractServer {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Customer customer = (Customer) message.getObject();
-					customer.setLoggedIn(false);  // log out
-					session.saveOrUpdate(customer);
+					Customer customerToLogOut = session.get(Customer.class, customer.getId());
+					customerToLogOut.setLoggedIn(false);  // log out
+					//session.saveOrUpdate(customer);
+					session.saveOrUpdate(customerToLogOut);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred while logging out.");
@@ -1464,21 +1478,71 @@ public class SimpleServer extends AbstractServer {
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 				}
-			} else if (msgString.equals("notifications")) {
+			}  else if (msgString.equals("notifications")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					List<Notification> notifications = getAllNotifications(session);
-					NewMessage newMessage = new NewMessage(notifications, "notificationsList");
+						List<Customer> customers = getAllCustomers(session);
+						List<Movie> movies = getAllMovies(session);
+						movies.removeIf(movie -> movie instanceof HomeMovie);
+						movies.removeIf(movie -> movie instanceof SoonMovie);
+					for (Movie movie : movies) {
+						boolean hasScreeningToday = false;
+						List<Screening> screenings = movie.getScreenings();
+						// Check if this movie has a screening today
+						for (Screening screening : screenings) {
+							if (screening.getScreeningTime().toLocalDate().equals(LocalDate.now())) {
+								hasScreeningToday = true;
+								break; // Exit this loop as we only need to know if one matches
+							}}
+						// If the movie has a screening today, notify each customer who has a card purchase
+						if (hasScreeningToday) {
+							for (Customer customer : customers) {
+								List<Purchase> purchases = customer.getPurchaseHistory();
+								for (Purchase purchase : purchases) {
+									if (purchase instanceof Card) {
+										Notification cardNotification = new Notification(
+												"New Movie", "Watch \"" + movie.getEngtitle() + "\" today in the Cinema!\nFor more details check the movies page.",
+												LocalDateTime.now(), "Unread", customer);
+										int flag = 0;
+										for(Notification notification : notifications) {
+											if(notification.getCustomer().equals(customer) && notification.getMessage().equals(cardNotification.getMessage()) && notification.getTime().toLocalDate().equals(cardNotification.getTime().toLocalDate())) {
+												flag = 1;
+												break;}}
+										if(flag == 0)
+											session.save(cardNotification);
+										break; // Exit the purchase loop for this customer because a notification is sent
+									}}}}}
+					List<Notification> finalNotifications = getAllNotifications(session);
+					NewMessage newMessage = new NewMessage(finalNotifications, "notificationsList");
 					client.sendToClient(newMessage);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 				}
-			} else if (msgString.equals("fetchPurchases")) {
-				int customerId = message.getId();
+			} else if (msgString.equals("readNotification")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
-					Customer customer = session.get(Customer.class, customerId);
+					Notification notification = (Notification) message.getObject();
+					Notification notification1 = session.get(Notification.class, notification.getId());
+					notification1.setStatus("read");
+					session.save(notification1);
+					List<Notification> notifications = getAllNotifications(session);
+					NewMessage message1 = new NewMessage(notifications, "notificationsList");
+					client.sendToClient(message1);
+					session.getTransaction().commit();
+				} catch (Exception e) {
+					System.err.println("An error occurred during reading notification.");
+                }
+            }
+		else if (msgString.equals("fetchPurchases")) {
+				//int customerId = message.getId();
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Purchase> purchases = getAllPurchases(session);
+					NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
+					client.sendToClient(responseMessage);
+				/*	Customer customer = session.get(Customer.class, customerId);
 					if (customer != null) {
 						List<Purchase> purchases = customer.getPurchaseHistory();
 						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
@@ -1487,30 +1551,82 @@ public class SimpleServer extends AbstractServer {
 						NewMessage responseMessage = new NewMessage("No customer found with ID: " + customerId, "error");
 						client.sendToClient(responseMessage);
 					}
+				 */
 					session.getTransaction().commit();
 				} catch (Exception e) {
 					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
 				}
-			} else if (msgString.equals("fetchPurchases")) {
-				int customerId = message.getId();
+			} else if (msgString.equals("returnProduct")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
-					Customer customer = session.get(Customer.class, customerId);
-					if (customer != null) {
-						List<Purchase> purchases = customer.getPurchaseHistory();
-						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
-						client.sendToClient(responseMessage);
-					} else {
-						NewMessage responseMessage = new NewMessage("No customer found with ID: " + customerId, "error");
-						client.sendToClient(responseMessage);
+					List<Purchase> purchases = getAllPurchases(session);
+					Purchase purchase = (Purchase) message.getObject();
+					Purchase purchaseToReturn = session.get(Purchase.class, purchase.getId());
+					Customer customer = session.get(Customer.class, purchase.getCustomer().getId());
+					Purchase masterPurchase = null;
+					List<Purchase> otherPurchases = new ArrayList<>();
+					for(Purchase purchase1 : purchases) {
+						if (purchase1.getPurchaseDate().equals(purchase.getPurchaseDate())
+								&& purchase1.getCustomer().getId() == purchase.getCustomer().getId()) {
+							if(!(purchase1 instanceof Card) && !(purchase1 instanceof HomeMoviePurchase)) { // || purchase1 instanceof MovieTicket) {
+								masterPurchase = purchase1;
+							} else {
+								otherPurchases.add(purchase1);
+							}
+						}
+					}	if(purchase instanceof HomeMoviePurchase){
+						Screening screening = session.get(Screening.class, ((HomeMoviePurchase) purchase).getScreening().getId());
+						screening.getHomeMoviePurchases().remove((HomeMoviePurchase) purchaseToReturn);
+						session.update(screening);
+						HomeMovie homeMovie = session.get(HomeMovie.class, ((HomeMoviePurchase) purchaseToReturn).getHomeMovie().getId());
+						homeMovie.removeHomeMoviePurchase((HomeMoviePurchase) purchaseToReturn);
+						session.update(homeMovie);
+						session.update(purchaseToReturn);
 					}
+					if(masterPurchase.getQuantity()==1){
+						Purchase purchase3 = session.get(Purchase.class, masterPurchase.getId());
+						customer.getPurchaseHistory().remove(purchase3);
+						session.save(customer);
+						session.remove(purchase3);
+					} else if(purchase instanceof Card) {
+						Purchase purchase2 = session.get(Purchase.class, masterPurchase.getId());
+						purchase2.setQuantity(purchase2.getQuantity() - 1);
+						if (purchase2.getQuantity() == 1)
+							purchase2.setPurchaseDescription("A cinema cards was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+						else
+							purchase2.setPurchaseDescription(purchase2.getQuantity() + " cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
+						purchase2.setPricePaid(purchase.getPricePaid() * purchase.getQuantity());
+						session.save(purchase2);
+				/*	}/* else  if(purchase instanceof MovieTicket){  ////////////////////////////////////////////////
+						masterPurchase.setQuantity(masterPurchase.getQuantity()-1);
+						StringBuilder result = new StringBuilder(masterPurchase.getQuantity()+ " tickets were ordered for movie:" + otherPurchases.getFirst().getMovie().getEngTitle() + ". at the " otherPurchases.getFirst.getBranch() + "" );
+						for (Purchase item : otherPurchases) {
+							if (result.length() > 0) {
+								result.append(", "); // Add a separator (e.g., a comma and space) between items
+							}
+							result.append(item);
+						}
+						String finalString = result.toString();
+						masterPurchase.setPurchaseDescription("");
+						session.save(masterPurchase);
+					}*/
+					}
+					customer.getPurchaseHistory().remove(purchaseToReturn);
+					session.save(customer);
+					session.remove(purchaseToReturn);
+					NewMessage newMessage = new NewMessage("purchaseReturned");
+					client.sendToClient(newMessage);
+					List<Purchase> finalPurchases = getAllPurchases(session);
+					NewMessage newMessage2 = new NewMessage(finalPurchases,"purchasesResponse");
+					sendToAllClients(newMessage2);
+					List<Card> cards = getAllCards(session);
+					NewMessage newMessage3 = new NewMessage(cards,"cardsList");
+					sendToAllClients(newMessage3);
 					session.getTransaction().commit();
-				} catch (Exception e) {
-					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
-					e.printStackTrace();
+				}catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
 				}
 			}
-
 		}
 		catch (IOException e) {
 			e.printStackTrace();

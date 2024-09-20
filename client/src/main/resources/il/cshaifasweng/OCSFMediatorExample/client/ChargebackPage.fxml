@@ -150,27 +150,27 @@
                   <PropertyValueFactory property="id" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="typeColumn" prefWidth="77.5999755859375" style="-fx-font-size: 15;" text="Type">
+            <TableColumn fx:id="typeColumn" prefWidth="85.0" style="-fx-font-size: 15;" text="Type">
                <cellValueFactory>
                   <PropertyValueFactory property="productType" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="dateColumn" prefWidth="128.0" style="-fx-font-size: 15;" text="Purchase Date">
+            <TableColumn fx:id="dateColumn" prefWidth="125.0" style="-fx-font-size: 15;" text="Purchase Date">
                <cellValueFactory>
                   <PropertyValueFactory property="purchaseDate" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="priceColumn" prefWidth="65.5999755859375" style="-fx-font-size: 15;" text="Price">
+            <TableColumn fx:id="priceColumn" prefWidth="60.0" style="-fx-font-size: 15;" text="Price">
                <cellValueFactory>
                   <PropertyValueFactory property="pricePaid" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="methodColumn" prefWidth="132.0" style="-fx-font-size: 15;" text="Payment Method">
+            <TableColumn fx:id="methodColumn" prefWidth="126.4000244140625" style="-fx-font-size: 15;" text="Payment Method">
                <cellValueFactory>
                   <PropertyValueFactory property="paymentMethod" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="paymentDetailsColumn" prefWidth="165.60001220703123" style="-fx-font-size: 15;" text="Details">
+            <TableColumn fx:id="paymentDetailsColumn" prefWidth="162.39993896484373" style="-fx-font-size: 15;" text="Details">
                <cellValueFactory>
                   <PropertyValueFactory property="purchaseDescription" />
                </cellValueFactory>

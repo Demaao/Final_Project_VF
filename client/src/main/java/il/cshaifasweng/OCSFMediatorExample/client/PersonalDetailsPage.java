@@ -79,7 +79,7 @@ public class PersonalDetailsPage {
     @Subscribe
     public void handleUpdatePurchasesEvent(UpdatePurchasesEvent event) {
         Platform.runLater(() -> {
-            if(PersonalAreaPage.loggedInCustomer != null) {
+            if(PersonalAreaPage.loggedInCustomer != null && PersonalAreaPage.inPersonalAreaFlag == 1) {
                 purchaseList.clear(); // Clear existing items
                 purchaseList.addAll(event.getPurchases()); // Add the new purchases
                 purchaseList.removeIf(purchase -> purchase instanceof Card);

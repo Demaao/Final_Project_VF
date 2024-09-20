@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class HomeMoviePurchase extends Purchase implements Serializable {
@@ -20,8 +22,12 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
    // private String availabilityEndTime;
     private LocalTime availabilityEndTime;
 
-
+/*
     @OneToOne(mappedBy = "homeMoviePurchase", cascade = CascadeType.ALL) // Correct reference to the owning field
+    private Screening screening;*/
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "screening_id") // hall ×××× ×××××ª null ×× ×××§×¨× × ××× × ××ª×§××××ª ××××× ××¡×××
     private Screening screening;
 
     public HomeMoviePurchase() {}
