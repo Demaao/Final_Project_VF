@@ -98,7 +98,7 @@ public class PurchaseProductsPage {
         if(CardsPage.cards.isEmpty())
             totalPriceLabel.setText(null);
         else {
-            double totalPrice = CardsPage.cards.size() * CardsPage.cards.getFirst().getPricePaid();
+            double totalPrice = CardsPage.cards.size() * CardsPage.cards.get(0).getPricePaid();
             totalPriceLabel.setText(totalPrice + "$");
         }
     }
