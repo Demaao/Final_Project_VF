@@ -118,8 +118,11 @@ public class PaymentLink {
         List<Purchase> purchases = new ArrayList<>();
         purchases.add(MovieLinkDetailsPage.homeMoviePurchase);
 
+        DateTimeFormatter timeDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
         Purchase purchase = new Purchase("Movie Link", time, "Credit Card",
-                totalPrice, customer, "Movie link was ordered for the movie: " + MovieLinkDetailsPage.homeMoviePurchase.getHomeMovie().getEngtitle() + ". Viewing is limited to the screening time you selected.");
+                totalPrice, customer, "Movie link was ordered for the movie: " + MovieLinkDetailsPage.homeMoviePurchase.getHomeMovie().getEngtitle() + ". Viewing is limited to the screening time you selected: " +
+                MovieLinkDetailsPage.homeMoviePurchase.getScreening().getScreeningTime().format(timeDateFormatter));
 
         purchases.add(purchase);
         // Send purchase and customer data to the server
@@ -140,7 +143,6 @@ public class PaymentLink {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         String time2 = time.toLocalTime().format(timeFormatter);
 
-        DateTimeFormatter timeDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Purchase Receipt");
@@ -159,6 +161,8 @@ public class PaymentLink {
         emailText.clear();
         creditCardTxt.clear();
         totalPriceLabel.setText(null);
+
+        PurchaseLink.setLinkPrice = 0;
 
         CardsPage.cards.clear();
 
