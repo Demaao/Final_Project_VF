@@ -64,6 +64,14 @@ public class App extends Application {
     @Override
 	public void stop() throws Exception {
 		// TODO Auto-generated method stub
+        PersonalAreaPage.logOutCustomer();
+        try {
+            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     	EventBus.getDefault().unregister(this);
 		super.stop();
 	}
