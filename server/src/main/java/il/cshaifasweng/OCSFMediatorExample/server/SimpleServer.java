@@ -14,6 +14,7 @@ import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SimpleServer extends AbstractServer {
@@ -1531,7 +1534,7 @@ public class SimpleServer extends AbstractServer {
 					List<Notification> notifications = getAllNotifications(session);
 						List<Customer> customers = getAllCustomers(session);
 						List<Movie> movies = getAllMovies(session);
-						movies.removeIf(movie -> movie instanceof HomeMovie);
+						//movies.removeIf(movie -> movie instanceof HomeMovie);
 						movies.removeIf(movie -> movie instanceof SoonMovie);
 					for (Movie movie : movies) {
 						boolean hasScreeningToday = false;
@@ -1547,7 +1550,7 @@ public class SimpleServer extends AbstractServer {
 							for (Customer customer : customers) {
 								List<Purchase> purchases = customer.getPurchaseHistory();
 								for (Purchase purchase : purchases) {
-									if (purchase instanceof Card) {
+									if (purchase instanceof Card && !(movie instanceof HomeMovie)) {
 										Notification cardNotification = new Notification(
 												"New Movie", "Watch \"" + movie.getEngtitle() + "\" today in the Cinema!\nFor more details check the movies page.",
 												LocalDateTime.now(), "Unread", customer);
@@ -1559,7 +1562,44 @@ public class SimpleServer extends AbstractServer {
 										if(flag == 0)
 											session.save(cardNotification);
 										break; // Exit the purchase loop for this customer because a notification is sent
-									}}}}}
+									}
+									if(purchase instanceof HomeMoviePurchase && movie instanceof HomeMovie) {
+										String movieTitle = "";
+										if(((HomeMoviePurchase) purchase).getHomeMovie() == null) {
+											String details = ((HomeMoviePurchase) purchase).getPurchaseDescription();
+											Pattern pattern = Pattern.compile("Movie link for \"([^\"]+)\"");
+											Matcher matcher = pattern.matcher(details);
+											if (matcher.find()) {
+												// Extract the movie title from the matched group
+												movieTitle = matcher.group(1);
+											}
+										} else movieTitle = ((HomeMoviePurchase) purchase).getHomeMovie().getEngtitle();
+										DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+										LocalDateTime screeningTime;
+										if (((HomeMoviePurchase) purchase).getScreening() == null) {
+											String time = ((HomeMoviePurchase) purchase).getPurchaseDescription();
+											String dateTimeString = time.split("\nScreening: ")[1];
+											screeningTime = LocalDateTime.parse(dateTimeString, formatter1);
+										} else
+											screeningTime = ((HomeMoviePurchase) purchase).getScreening().getScreeningTime();
+										Duration duration = Duration.between(LocalDateTime.now(), screeningTime);
+										if (duration.toHours() <= 1 && movieTitle.equals(movie.getEngtitle())) {
+											Notification linkNotification = new Notification(
+													"Movie Link", "The link for the movie \"" + movie.getEngtitle() + "\" will be activated soon!" + "\nScreening: " + ((HomeMoviePurchase) purchase).getScreening().getScreeningTime().format(formatter1) +
+													"\nFor more details check the movie links page in the personal area.",
+													LocalDateTime.now(), "Unread", customer);
+											int flag = 0;
+											for (Notification notification : notifications) {
+												if (notification.getCustomer().equals(customer) && notification.getMessage().equals(linkNotification.getMessage()) && notification.getTime().toLocalDate().equals(linkNotification.getTime().toLocalDate())) {
+													flag = 1;
+													break;
+												}
+											}
+											if (flag == 0)
+												session.save(linkNotification);
+										}
+									}
+								}}}}
 					List<Notification> finalNotifications = getAllNotifications(session);
 					NewMessage newMessage = new NewMessage(finalNotifications, "notificationsList");
 					client.sendToClient(newMessage);
