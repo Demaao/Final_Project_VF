@@ -930,13 +930,15 @@ public class SimpleServer extends AbstractServer {
 					session.beginTransaction();
 					List<Employee> employees = getAllEmployees(session);
 					Employee employee = message.getEmployee();
-					for (Employee emp : employees) {
-						if (emp.getId() == employee.getId()) {
-							emp.setIsOnline(false);
+					if(employee != null) {
+						for (Employee emp : employees) {
+							if (emp.getId() == employee.getId()) {
+								emp.setIsOnline(false);
+							}
 						}
+						NewMessage newMessage = new NewMessage("logOut");
+						client.sendToClient(newMessage);
 					}
-					NewMessage newMessage = new NewMessage("logOut");
-					client.sendToClient(newMessage);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
@@ -1476,9 +1478,11 @@ public class SimpleServer extends AbstractServer {
 					session.beginTransaction();
 					Customer customer = (Customer) message.getObject();
 					Customer customerToLogOut = session.get(Customer.class, customer.getId());
-					customerToLogOut.setLoggedIn(false);  // log out
-					//session.saveOrUpdate(customer);
-					session.saveOrUpdate(customerToLogOut);
+					if(customerToLogOut != null) {
+						customerToLogOut.setLoggedIn(false);  // log out
+						//session.saveOrUpdate(customer);
+						session.saveOrUpdate(customerToLogOut);
+					}
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred while logging out.");
