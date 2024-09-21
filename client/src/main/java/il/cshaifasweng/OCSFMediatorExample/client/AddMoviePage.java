@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -31,6 +33,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class AddMoviePage {
+    @FXML
+    private Label hallLabel;
+
     @FXML
     private TableView<Movie> movieTable;
 
@@ -138,11 +143,18 @@ public class AddMoviePage {
 
     private List<LocalDateTime> movieCinemaDateTimes = new ArrayList<>();
 
+    private List<Hall> movieCinemaHalls = new ArrayList<>();
+
     private List<Screening> movieLinkScreenings = new ArrayList<>();
 
     private List<Branch> movieBranches = new ArrayList<>();
 
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
+
+    private ObservableList<Screening> allScreenings = FXCollections.observableArrayList();
+
+    @FXML
+    private ComboBox<Integer> hallComboBox;
 
     @FXML
     private AnchorPane screenings;
@@ -162,6 +174,7 @@ public class AddMoviePage {
     public void initialize() {
         EventBus.getDefault().register(this);
         requestMoviesFromServer();
+        requestScreeningTimes();
 
         importImageBtn.setOnAction(event -> importImage());
 
@@ -174,6 +187,10 @@ public class AddMoviePage {
         });
 
         cinemaComboBox.getItems().addAll("Haifa Cinema", "Tel Aviv Cinema", "Eilat Cinema", "Karmiel Cinema", "Jerusalem Cinema");
+
+        cinemaComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            updateHallComboBox(newSelection); // ×§×¨××× ×××ª××× ×©××¢××× ×ª ××ª ×ª×××ª ×××××¨× ×©× ×××××××ª
+        });
 
         screeningTypeColumn.setCellFactory(new Callback<TableColumn<Movie, String>, TableCell<Movie, String>>() {
             @Override
@@ -190,12 +207,7 @@ public class AddMoviePage {
                                 setText("Link");
                             } else {
                                 setText("Cinema");
-                            }
-                        }
-                    }
-                };
-            }
-        });
+                            }}}};}});
         screeningColumn.setCellFactory(new Callback<TableColumn<Movie, String>, TableCell<Movie, String>>() {
             @Override
             public TableCell<Movie, String> call(TableColumn<Movie, String> col) {
@@ -243,6 +255,8 @@ public class AddMoviePage {
         if (Objects.equals(screeningTypeSpinner.getValue(), "In The Cinema")) {
             cinemaLabel.setVisible(true);
             cinemaComboBox.setVisible(true);
+            hallComboBox.setVisible(true);
+            hallLabel.setVisible(true);
             screeningTimeTableCinema.setVisible(true);
             linkLabel.setVisible(false);
             linkText.setVisible(false);
@@ -251,6 +265,8 @@ public class AddMoviePage {
             cinemaLabel.setVisible(false);
             cinemaComboBox.setVisible(false);
             screeningTimeTableCinema.setVisible(false);
+            hallComboBox.setVisible(false);
+            hallLabel.setVisible(false);
             linkLabel.setVisible(true);
             linkText.setVisible(true);
             screeningTimeTableLink.setVisible(true);
@@ -411,7 +427,7 @@ public class AddMoviePage {
 
         if(screeningType.equals("In The Cinema")) {
             Movie movie = new Movie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, movieGenre, descriptionText, mainActors, length);
-            NewMessage msg = new NewMessage(movie, "addCinemaMovie", movieBranches, movieCinemaDateTimes); ////////////////////////add halls
+            NewMessage msg = new NewMessage(movie, "addCinemaMovie", movieBranches, movieCinemaDateTimes, movieCinemaHalls); ////////////////////////add halls
             SimpleClient.getClient().sendToServer(msg);
         } else if(screeningType.equals("Link")) {
             HomeMovie homeMovie = new HomeMovie(30, movieNameEng, movieNameHeb, directorName, movieYear, imageData, link, movieGenre, descriptionText, mainActors, length);
@@ -437,15 +453,28 @@ public class AddMoviePage {
         screeningTimeTableCinema.getItems().clear();
         addDateText.setValue(null);
         cinemaComboBox.setValue(null);
+        hallComboBox.setValue(null);
         addScreeningBtn.getStyleClass().remove("error");
     }
 
+
+    private void updateHallComboBox(String branchName) {
+        List<Integer> halls = getHallsByBranch(branchName);
+        hallComboBox.setItems(FXCollections.observableArrayList(halls));
+        hallComboBox.getSelectionModel().clearSelection(); // × ××§×× ××××¨× ×§××××ª
+    }
+
+
+
     @FXML
     void addTime(ActionEvent event) {
+
         addHoursText.getStyleClass().remove("error");
         addScreeningBtn.getStyleClass().remove("error");
         addDateText.getStyleClass().remove("error");
         cinemaComboBox.getStyleClass().remove("error");
+        hallComboBox.getStyleClass().remove("error");
+
         if (!validateHour()) {
             highlightFieldError(addHoursText);
             Platform.runLater(() -> {
@@ -467,49 +496,80 @@ public class AddMoviePage {
                 alert.setContentText("Please choose a cinema.");
                 alert.show();
             });
+        } else if (screeningTypeSpinner.getValue().equals("In The Cinema") && hallComboBox.getValue() == null) {
+            highlightFieldError(hallComboBox);
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("Please choose a hall.");
+                alert.show();
+            });
         } else {
             String hour1 = addHoursText.getText();
             String[] parts = hour1.split(":");
             String hours = parts[0];
             String minutes = parts[1];
             LocalDate date1 = addDateText.getValue();
+
+
             String cinema = cinemaComboBox.getValue();
             LocalDateTime dateTime1 = LocalDateTime.of(date1.getYear(), date1.getMonth(), date1.getDayOfMonth(), Integer.parseInt(hours), Integer.parseInt(minutes));
 
+            int selectedHallId = hallComboBox.getValue(); //save it
+
             if (screeningTypeSpinner.getValue().equals("In The Cinema")) {
-                Branch branch = new Branch();
-                branch.setName(cinema);
-                Screening screening = new Screening(dateTime1, null, branch);
-                movieBranches.add(branch);
-                movieCinemaDateTimes.add(dateTime1);
-                movieCinemaScreenings.add(screening);
-                screeningsForTableCinema.add(screening);
+                if (!isScreeningTimeOverlapping(dateTime1, selectedHallId, cinema)) {
+                    Branch branch = new Branch();
+                    branch.setName(cinema);
 
-                // Set up the date column
-                dateColumnCinema.setCellValueFactory(cellData -> {
-                    LocalDateTime dateTime = cellData.getValue().getScreeningTime();
-                    // Extract and format the date
-                    String date = dateTime.toLocalDate().toString();
-                    return new SimpleStringProperty(date);
-                });
+                    Hall hall = new Hall();
+                    hall.setId(selectedHallId);
 
-                // Set up the hour column
-                hourColumnCinema.setCellValueFactory(cellData -> {
-                    LocalDateTime dateTime = cellData.getValue().getScreeningTime();
-                    // Extract and format the hour
-                    String hour = dateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
-                    return new SimpleStringProperty(hour);
-                });
+                    Screening screening = new Screening(dateTime1, null, branch,hall);
 
-                cinemaColumn.setCellValueFactory(cellData -> {
-                    Branch branch1 = cellData.getValue().getBranch();
-                    // Extract and format the hour
-                    String cinema1 = branch1.getName();
-                    return new SimpleStringProperty(cinema1);
-                });
+                    movieBranches.add(branch);
+                    movieCinemaDateTimes.add(dateTime1);
+                    movieCinemaHalls.add(hall);
+                    movieCinemaScreenings.add(screening);
+                    screeningsForTableCinema.add(screening);
 
-                // Connect the table to the data list
-                screeningTimeTableCinema.setItems(screeningsForTableCinema);
+                    // Set up the date column
+                    dateColumnCinema.setCellValueFactory(cellData -> {
+                        LocalDateTime dateTime = cellData.getValue().getScreeningTime();
+                        // Extract and format the date
+                        String date = dateTime.toLocalDate().toString();
+                        return new SimpleStringProperty(date);
+                    });
+
+                    // Set up the hour column
+                    hourColumnCinema.setCellValueFactory(cellData -> {
+                        LocalDateTime dateTime = cellData.getValue().getScreeningTime();
+                        // Extract and format the hour
+                        String hour = dateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+                        return new SimpleStringProperty(hour);
+                    });
+
+                    cinemaColumn.setCellValueFactory(cellData -> {
+                        Branch branch1 = cellData.getValue().getBranch();
+                        // Extract and format the hour
+                        String cinema1 = branch1.getName();
+                        return new SimpleStringProperty(cinema1);
+                    });
+
+                    // Connect the table to the data list
+                    screeningTimeTableCinema.setItems(screeningsForTableCinema);
+
+                    addHoursText.clear();
+                    addDateText.setValue(null);
+                    //cinemaComboBox.setValue(null);
+                    hallComboBox.setValue(null);
+
+                } else {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setContentText("Screening time overlaps with another screening in the selected hall.");
+                        alert.show();
+                    });}
+
             } else if (screeningTypeSpinner.getValue().equals("Link")) {
                 Screening screening = new Screening(dateTime1, null, null);
                 movieLinkScreenings.add(screening);
@@ -530,19 +590,114 @@ public class AddMoviePage {
                     String hour = dateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
                     return new SimpleStringProperty(hour);
                 });
-
                 // Connect the table to the data list
                 screeningTimeTableLink.setItems(screeningsForTableLink);
+
+                addHoursText.clear();
+                addDateText.setValue(null);
+                //cinemaComboBox.setValue(null);
+                hallComboBox.setValue(null);
             }
-            addHoursText.clear();
-            addDateText.setValue(null);
-            cinemaComboBox.setValue(null);
+
             addHoursText.getStyleClass().remove("error");
             addScreeningBtn.getStyleClass().remove("error");
             addDateText.getStyleClass().remove("error");
             cinemaComboBox.getStyleClass().remove("error");
+            hallComboBox.getStyleClass().remove("error");
         }
     }
+
+
+    private List<Integer> getHallsByBranch(String branchName) {
+
+        if (branchName.equals("Haifa Cinema")) {
+            return List.of(2, 3 ,5 ,23,28);
+        } else if (branchName.equals("Tel Aviv Cinema")) {
+            return List.of(6,9,15,19,20);
+        }
+        else if (branchName.equals("Eilat Cinema")) {
+            return List.of(12,13,14,24,25,29);
+        }
+        else if (branchName.equals("Karmiel Cinema")) {
+            return List.of(8,10,11,17,18,21);
+        }
+        else if (branchName.equals("Jerusalem Cinema")) {
+            return List.of(1,4,7,16,22,26,27);
+        }
+        else {
+            return List.of();
+        }
+    }
+
+    private boolean isScreeningTimeOverlapping(LocalDateTime plannedTime, int hallId, String cinemaName) {
+        final int SCREENING_DURATION = 150; // Duration of a screening in minutes
+
+        allScreenings.removeIf(screening -> screening.getHall()==null);
+
+        boolean isOverlapping = allScreenings.stream()
+                .filter(screening -> {
+                    boolean sameHall = screening.getHall().getId() == hallId;
+                    boolean sameCinema = screening.getBranch().getName().equals(cinemaName);
+                    return sameHall && sameCinema;
+                })
+                .anyMatch(screening -> {
+                    LocalDateTime existingStart = screening.getScreeningTime();
+                    LocalDateTime existingEnd = existingStart.plusMinutes(SCREENING_DURATION);
+                    // Check overlap
+                    boolean overlap = !plannedTime.plusMinutes(SCREENING_DURATION).isBefore(existingStart) && !plannedTime.isAfter(existingEnd);
+                    return overlap;
+                });
+
+        boolean isOverlapping2 = movieCinemaScreenings.stream()
+                .filter(screening -> {
+                    boolean sameHall = screening.getHall().getId() == hallId;
+                    boolean sameCinema = screening.getBranch().getName().equals(cinemaName);
+                    return sameHall && sameCinema;
+                })
+                .anyMatch(screening -> {
+                    LocalDateTime existingStart = screening.getScreeningTime();
+                    LocalDateTime existingEnd = existingStart.plusMinutes(SCREENING_DURATION);
+                    // Check overlap
+                    boolean overlap = !plannedTime.plusMinutes(SCREENING_DURATION).isBefore(existingStart) && !plannedTime.isAfter(existingEnd);
+                    return overlap;
+                });
+        return isOverlapping || isOverlapping2;
+       // return isOverlapping;
+    }
+
+
+
+    // Method to get screenings for a specific branch and hall
+    private List<Screening> getScreeningsForBranchAndHall(int branchId, int hallId) {
+        List<Screening> filteredScreenings = allScreenings.stream()
+                .filter(screening -> screening.getBranch() != null &&
+                        screening.getHall() != null &&
+                        screening.getBranch().getId() == branchId &&
+                        screening.getHall().getId() == hallId)
+                .collect(Collectors.toList());
+        return filteredScreenings;
+    }
+
+
+
+
+    public void requestScreeningTimes() {
+        try {
+            NewMessage requestMessage = new NewMessage("allScreeningTimesRequest");
+            SimpleClient.getClient().sendToServer(requestMessage);
+        } catch (IOException e) {
+            System.err.println("Failed to send screening times request: " + e.getMessage());
+        }
+    }
+
+    @Subscribe
+    public void onScreeningTimesReceived(UpdateScreeningTimesEvent event) {
+        Platform.runLater(() -> {
+            allScreenings.clear();
+            allScreenings.addAll(event.getScreenings());
+        });
+    }
+
 
     private void resetFieldStyles() {
         Platform.runLater(() -> {
