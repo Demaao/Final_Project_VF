@@ -719,6 +719,13 @@ public class SimpleServer extends AbstractServer {
 		return session.createQuery(query).getResultList();
 	}
 
+	private static List<Screening> getAllScreenings(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Screening> query = builder.createQuery(Screening.class);
+		query.from(Screening.class);
+		return session.createQuery(query).getResultList();
+	}
+
 	private static List<Notification> getAllNotifications(Session session) throws Exception {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Notification> query = builder.createQuery(Notification.class);
@@ -947,7 +954,19 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			} else if (msgString.equals("removeHomeMovie")) {
+			}else if (msgString.equals("allScreeningTimesRequest")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Screening> screenings = getAllScreenings(session);
+					System.out.println("server " +screenings.size());
+					NewMessage newMessage = new NewMessage(screenings, "screeningTimes");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}  else if (msgString.equals("removeHomeMovie")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					HomeMovie movie = (HomeMovie) message.getObject();
@@ -1034,6 +1053,7 @@ public class SimpleServer extends AbstractServer {
 					List<Branch> newBranches = new ArrayList<>();
 					List<Screening> screenings = new ArrayList<>();
 					List<LocalDateTime> times = message.getDateTimes();
+					List<Hall> halls = message.getHalls();
 					int i;
 					for (Branch x : branches) {
 						i = 0;
@@ -1046,7 +1066,8 @@ public class SimpleServer extends AbstractServer {
 								session.save(x);
 								Screening screening = new Screening(times.get(i), movie, x);
 								screenings.add(screening);
-								movie.addScreening(times.get(i), x, null);  /////////////////////////////////////////////////////////
+								Hall hall = session.get(Hall.class, halls.get(i).getId());
+								movie.addScreening(times.get(i), x, hall);  /////////////////////////////////////////////////////////
 							}
 							i++;
 						}
