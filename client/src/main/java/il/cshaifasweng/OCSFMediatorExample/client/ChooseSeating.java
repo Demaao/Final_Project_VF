@@ -443,6 +443,7 @@ public class ChooseSeating {
             }}
     }
 
+
     boolean isOdd(int num){
         return !(num % 2 == 0);
     }
