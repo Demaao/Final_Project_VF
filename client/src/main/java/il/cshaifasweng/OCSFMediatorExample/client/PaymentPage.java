@@ -147,7 +147,7 @@ public class PaymentPage {
         alert.setTitle("Purchase Receipt");
         alert.setHeaderText("Purchase completed successfully!");
         alert.setContentText("Date: " + date + ",   "+  "Time: " + time2 +
-                "\nProduct Type: Card\nAmount: " +CardsPage.cards.size()+"\nTotal Price: " +totalPrice + "\n\nNote: You can see your purchase details in the personal area.");
+                "\nProduct Type: Card\nAmount: " +CardsPage.cards.size()+"\nTotal Price: " +totalPrice + "\n\nNote: You can see your purchase details in 'My profile' area.");
         alert.show();
 
         fullNameText.clear();

@@ -132,11 +132,11 @@ public class SimpleServer extends AbstractServer {
 		Customer customer2 = new Customer(123456789, "Shada gh", "shada.gha@example.com", "0527654321", purchases2, false);
 
 		//Create purchases and add them to customers
-		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase1 = new Purchase("Movie Ticket", LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
 		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie: Wire Room. Viewing is limited to the screening time you selected: 2024-09-24 15:00");
-		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
-		Purchase purchase5 = new Purchase("Movie Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase4 = new Purchase("Movie Card",  LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase5 = new Purchase("Movie Card",  LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 
 		//Adding purchases to the list
 		customer1.getPurchaseHistory().add(purchase1);
@@ -185,7 +185,7 @@ public class SimpleServer extends AbstractServer {
 		HomeMovie homeMovie = session.get(HomeMovie.class, 16);
 		Screening screening = session.get(Screening.class, 652);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
+		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36), screening);
 		homeMoviePurchase.setScreening(screening);
 		screening.getHomeMoviePurchases().add(homeMoviePurchase);
 		homeMovie.getHomeMoviePurchases().add(homeMoviePurchase);
@@ -395,32 +395,32 @@ public class SimpleServer extends AbstractServer {
 			homeImages[i - 1] = loadImageFromFile(String.format("forHome_images/%d.jpg", i));
 		}
 
-		HomeMovie homeMovie1 = new HomeMovie(1, "Despicable Me 4", "גנוב על החיים", "Chris Renaud", 2024, homeImages[0], "https://Despicable_Me_4_Movie_link.com","Adventure","Gru, Lucy, Margo, Edith, and Agnes welcome a new member to the family, Gru Jr., who is intent on tormenting his dad. Gru faces a new nemesis in Maxime Le Mal and his girlfriend Valentina, and the family is forced to go on the run."
+		HomeMovie homeMovie1 = new HomeMovie(1, "Despicable Me 4", "גנוב על החיים", "Chris Renaud", 2024, homeImages[0], "https://www.youtube.com/watch?v=qQlr9-rF32A","Adventure","Gru, Lucy, Margo, Edith, and Agnes welcome a new member to the family, Gru Jr., who is intent on tormenting his dad. Gru faces a new nemesis in Maxime Le Mal and his girlfriend Valentina, and the family is forced to go on the run."
 				,"Steve Carell, Kristen Wiig, Pierre Coffin","1h 34m");
 		session.save(homeMovie1);
 		session.flush();
 
-		HomeMovie homeMovie2 = new HomeMovie(2, "Bad Boys", "בחורים רעים", "Adil El Arbi", 2024, homeImages[1], "https://Bad_Boys_Movie_link.com","Comedy","When their late police captain gets linked to drug cartels, wisecracking Miami cops Mike Lowrey and Marcus Burnett embark on a dangerous mission to clear his name."
+		HomeMovie homeMovie2 = new HomeMovie(2, "Bad Boys", "בחורים רעים", "Adil El Arbi", 2024, homeImages[1], "https://www.youtube.com/watch?v=hRFY_Fesa9Q","Comedy","When their late police captain gets linked to drug cartels, wisecracking Miami cops Mike Lowrey and Marcus Burnett embark on a dangerous mission to clear his name."
 				,"Will Smith, Martin Lawrence, Vanessa Hudgens","1h 55m");
 		session.save(homeMovie2);
 		session.flush();
 
-		HomeMovie homeMovie3 = new HomeMovie(3, "Wire Room", "מלכוד בחדר", "Matt Eskandari", 2022, homeImages[2], "https://Wire_Room_Movie_link.com","Action","While on wire room duty, a federal agent listens in as the target is attacked in his home by a hit squad. Without burning the wire, he must protect the investigation and the target's life from the confines of a room fifty miles away."
+		HomeMovie homeMovie3 = new HomeMovie(3, "Wire Room", "מלכוד בחדר", "Matt Eskandari", 2022, homeImages[2], "https://www.youtube.com/watch?v=gUTjfOkVu7E","Action","While on wire room duty, a federal agent listens in as the target is attacked in his home by a hit squad. Without burning the wire, he must protect the investigation and the target's life from the confines of a room fifty miles away."
 				,"Kevin Dillon, Bruce Willis, Oliver Trevena","1h 36m");
 		session.save(homeMovie3);
 		session.flush();
 
-		HomeMovie homeMovie4 = new HomeMovie(4, "Mission Impossible", "משימה לא אפשרית", "Christopher McQuarrie", 2023, homeImages[3], "https://Mission_Impossible_Movie_link.com","Comedy","Ethan Hunt and his IMF team must track down a dangerous weapon before it falls into the wrong hands."
+		HomeMovie homeMovie4 = new HomeMovie(4, "Mission Impossible", "משימה לא אפשרית", "Christopher McQuarrie", 2023, homeImages[3], "https://www.youtube.com/watch?v=avz06PDqDbM&t=1s","Comedy","Ethan Hunt and his IMF team must track down a dangerous weapon before it falls into the wrong hands."
 				,"Tom Cruise, Hayley Atwell, Ving Rhames","2h 43m");
 		session.save(homeMovie4);
 		session.flush();
 
-		HomeMovie homeMovie5 = new HomeMovie(5, "Deadpool Wolverine", "דדפול & וולברין ", "Shawn Levy", 2024, homeImages[4], "https://Deadpool_Wolverine_Movie_link.com","Adventure","Deadpool is offered a place in the Marvel Cinematic Universe by the Time Variance Authority, but instead recruits a variant of Wolverine to save his universe from extinction"
+		HomeMovie homeMovie5 = new HomeMovie(5, "Deadpool Wolverine", "דדפול & וולברין ", "Shawn Levy", 2024, homeImages[4], "https://www.youtube.com/watch?v=K6lJSJXSdfI","Adventure","Deadpool is offered a place in the Marvel Cinematic Universe by the Time Variance Authority, but instead recruits a variant of Wolverine to save his universe from extinction"
 				,"Ryan Reynolds, Hugh Jackman, Emma Corrin","2h 8m");
 		session.save(homeMovie5);
 		session.flush();
 
-		HomeMovie homeMovie6 = new HomeMovie(6, "This Time Next Year", "מזל שנפגשנו", "Nick Moore", 2024, homeImages[5], "https://This_Time_Next_Year_Movie_link.com","Comedy","Minnie and Quinn are born on the same day, one minute apart. Their lives may begin together, but their worlds couldn't be more different. Years later they find themselves together again. Maybe it's time to take a chance on love."
+		HomeMovie homeMovie6 = new HomeMovie(6, "This Time Next Year", "מזל שנפגשנו", "Nick Moore", 2024, homeImages[5], "https://www.youtube.com/watch?v=-KiYX2AvuKc&t=23s","Comedy","Minnie and Quinn are born on the same day, one minute apart. Their lives may begin together, but their worlds couldn't be more different. Years later they find themselves together again. Maybe it's time to take a chance on love."
 				,"Sophie Cookson, Lucien Laviscount, Golda Rosheuvel","1h 56m");
 		session.save(homeMovie6);
 		session.flush();
@@ -552,27 +552,27 @@ public class SimpleServer extends AbstractServer {
 		Movie movie10 = session.get(Movie.class, 10);
 
 		List<LocalDateTime> screeningTimes = Arrays.asList(
-				LocalDateTime.of(2024, 9, 24, 17, 00),
-				LocalDateTime.of(2024, 9, 24, 20, 00),
-				LocalDateTime.of(2024, 9, 24, 23, 00),
-				LocalDateTime.of(2024, 9, 25, 16, 30),
-				LocalDateTime.of(2024, 9, 25, 19, 30),
-				LocalDateTime.of(2024, 9, 25, 23, 00),
 				LocalDateTime.of(2024, 9, 26, 17, 00),
 				LocalDateTime.of(2024, 9, 26, 20, 00),
 				LocalDateTime.of(2024, 9, 26, 23, 00),
-				LocalDateTime.of(2024, 9, 27, 17, 00),
-				LocalDateTime.of(2024, 9, 27, 20, 00),
+				LocalDateTime.of(2024, 9, 27, 16, 30),
+				LocalDateTime.of(2024, 9, 27, 19, 30),
 				LocalDateTime.of(2024, 9, 27, 23, 00),
 				LocalDateTime.of(2024, 9, 28, 17, 00),
-				LocalDateTime.of(2024, 9, 28, 20, 30),
-				LocalDateTime.of(2024, 9, 28, 23, 30),
+				LocalDateTime.of(2024, 9, 28, 20, 00),
+				LocalDateTime.of(2024, 9, 28, 23, 00),
 				LocalDateTime.of(2024, 9, 29, 17, 00),
-				LocalDateTime.of(2024, 9, 29, 20, 30),
-				LocalDateTime.of(2024, 9, 29, 23, 30),
+				LocalDateTime.of(2024, 9, 29, 20, 00),
+				LocalDateTime.of(2024, 9, 29, 23, 00),
 				LocalDateTime.of(2024, 9, 30, 17, 00),
-				LocalDateTime.of(2024, 9, 30, 20, 00),
-				LocalDateTime.of(2024, 9, 30, 23, 00)
+				LocalDateTime.of(2024, 9, 30, 20, 30),
+				LocalDateTime.of(2024, 9, 30, 23, 30),
+				LocalDateTime.of(2024, 10, 1, 17, 00),
+				LocalDateTime.of(2024, 10, 1, 20, 30),
+				LocalDateTime.of(2024, 10, 1, 23, 30),
+				LocalDateTime.of(2024, 10, 2, 17, 00),
+				LocalDateTime.of(2024, 10, 2, 20, 00),
+				LocalDateTime.of(2024, 10, 2, 23, 00)
 		);
 
 		Hall hall1_ = session.get(Hall.class,1);
@@ -664,12 +664,6 @@ public class SimpleServer extends AbstractServer {
 
 
 		List<LocalDateTime> HomeScreeningTimes = Arrays.asList(
-				LocalDateTime.of(2024, 9, 24, 15, 00),
-				LocalDateTime.of(2024, 9, 24, 19, 00),
-				LocalDateTime.of(2024, 9, 24, 23, 00),
-				LocalDateTime.of(2024, 9, 25, 15, 00),
-				LocalDateTime.of(2024, 9, 25, 19, 00),
-				LocalDateTime.of(2024, 9, 25, 23, 00),
 				LocalDateTime.of(2024, 9, 26, 15, 00),
 				LocalDateTime.of(2024, 9, 26, 19, 00),
 				LocalDateTime.of(2024, 9, 26, 23, 00),
@@ -684,7 +678,13 @@ public class SimpleServer extends AbstractServer {
 				LocalDateTime.of(2024, 9, 29, 23, 00),
 				LocalDateTime.of(2024, 9, 30, 15, 00),
 				LocalDateTime.of(2024, 9, 30, 19, 00),
-				LocalDateTime.of(2024, 9, 30, 23, 00)
+				LocalDateTime.of(2024, 9, 30, 23, 00),
+				LocalDateTime.of(2024, 10, 1, 15, 00),
+				LocalDateTime.of(2024, 10, 1, 19, 00),
+				LocalDateTime.of(2024, 10, 1, 23, 00),
+				LocalDateTime.of(2024, 10, 2, 15, 00),
+				LocalDateTime.of(2024, 10, 2, 19, 00),
+				LocalDateTime.of(2024, 10, 2, 23, 00)
 		);
 		for (LocalDateTime time : HomeScreeningTimes) {
 			movie14.addScreening(time, null,null);
@@ -1698,6 +1698,26 @@ public class SimpleServer extends AbstractServer {
 					exception.printStackTrace();
 				}
 			}
+			else if (msgString.equals("fetchHomeMoviePurchases")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					Object customerIdObject = message.getId();
+
+					int customerId = (int) customerIdObject;
+					List<HomeMoviePurchase> homeMoviePurchases = session.createQuery("FROM HomeMoviePurchase WHERE customer.id = :customerId", HomeMoviePurchase.class)
+							.setParameter("customerId", customerId)
+							.getResultList();
+
+					NewMessage responseMessage = new NewMessage(homeMoviePurchases, "homeMoviePurchasesResponse");
+					client.sendToClient(responseMessage);
+					session.getTransaction().commit();
+
+				} catch (Exception e) {
+					System.err.println("An error occurred while fetching home movie purchases: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+
 
 		}
 		catch (IOException e) {

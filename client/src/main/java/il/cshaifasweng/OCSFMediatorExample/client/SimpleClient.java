@@ -105,6 +105,10 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("purchaseReturned")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Purchase refunded successfully!")));
 				}
+				else if (message.getMessage().equals("homeMoviePurchasesResponse")) {
+					List<HomeMoviePurchase> homeMoviePurchases = (List<HomeMoviePurchase>) message.getObject();
+					EventBus.getDefault().post(new UpdateHomeMoviePurchasesEvent(homeMoviePurchases));
+				}
 			});
 		}
 	}

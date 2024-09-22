@@ -187,7 +187,6 @@ public class MovieLinkDetailsPage {
         }
 
         if (MovieDetailsPage.selectedMovie instanceof HomeMovie) {
-            // ×¢×××× ××××× ××× ××© ××§×¨× ××ª ××¡×¨×× ××××ª
             Set<LocalDate> availableDays = screenings.stream()
                     .filter(screening -> screening.getBranch() == null)
                     .map(screening -> screening.getScreeningTime().toLocalDate())
@@ -197,7 +196,7 @@ public class MovieLinkDetailsPage {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    if (!availableDays.contains(date) || date.isBefore(LocalDate.of(2024, 9, 24))) {
+                    if (!availableDays.contains(date) || date.isBefore(LocalDate.now())) {
                         setDisable(true);
                     }
                 }
@@ -338,9 +337,9 @@ public class MovieLinkDetailsPage {
                 int hours = Integer.parseInt(parts[0].replace("h", ""));
                 int minutes = Integer.parseInt(parts[1].replace("m", ""));
                 // Add hours and minutes to the start time
-                LocalTime endTime = time.plusHours(hours).plusMinutes(minutes);
-                homeMoviePurchase = new HomeMoviePurchase("Movie Link", null, "Credit Card", 100, null, "Movie link for " + MovieDetailsPage.selectedMovie.getEngtitle() + "." + "\nScreening: " + screening.getScreeningTime().format(formatter1),
-                        (HomeMovie) MovieDetailsPage.selectedMovie, time, endTime, screening);
+                LocalDateTime endTime = dateTime.plusHours(hours).plusMinutes(minutes);
+                homeMoviePurchase = new HomeMoviePurchase("Movie Link", null, "Credit Card", 100, null, "Movie link for \"" + MovieDetailsPage.selectedMovie.getEngtitle() + "\"." + "\nScreening: " + screening.getScreeningTime().format(formatter1),
+                        (HomeMovie) MovieDetailsPage.selectedMovie, dateTime, endTime, screening);
                 homeMoviePurchase.setScreening(screening);
                 ((HomeMovie) MovieDetailsPage.selectedMovie).addHomeMoviePurchase(homeMoviePurchase);
                 App.switchScreen("PurchaseLink");
@@ -349,7 +348,7 @@ public class MovieLinkDetailsPage {
 
     @FXML
     private void  switchToPersonalAreaPage() throws IOException {
-       MovieDetailsPage.movieDetailsPage = 0;
+        MovieDetailsPage.movieDetailsPage = 0;
         App.switchScreen("PersonalAreaPage");
     }
 

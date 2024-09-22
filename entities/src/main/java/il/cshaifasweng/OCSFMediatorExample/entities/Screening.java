@@ -106,4 +106,6 @@ public class Screening implements Serializable {
     public List<HomeMoviePurchase> getHomeMoviePurchases() {
         return homeMoviePurchases;
     }
+
+
 }

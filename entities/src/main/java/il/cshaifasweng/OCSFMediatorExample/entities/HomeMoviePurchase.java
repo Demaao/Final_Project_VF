@@ -18,9 +18,9 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
     private HomeMovie homeMovie;
 
     //private String availabilityStartTime;
-    private LocalTime availabilityStartTime;
-   // private String availabilityEndTime;
-    private LocalTime availabilityEndTime;
+    private LocalDateTime availabilityStartTime;
+    // private String availabilityEndTime;
+    private LocalDateTime availabilityEndTime;
 
 /*
     @OneToOne(mappedBy = "homeMoviePurchase", cascade = CascadeType.ALL) // Correct reference to the owning field
@@ -33,8 +33,8 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
     public HomeMoviePurchase() {}
 
     public HomeMoviePurchase(String productType, LocalDateTime  purchaseDate, String paymentMethod, double pricePaid,
-                             Customer customer, String purchaseDescription, HomeMovie homeMovie, LocalTime availabilityStartTime, LocalTime availabilityEndTime
-    , Screening screening) {
+                             Customer customer, String purchaseDescription, HomeMovie homeMovie, LocalDateTime availabilityStartTime, LocalDateTime availabilityEndTime
+            , Screening screening) {
         super(productType, purchaseDate, paymentMethod, pricePaid, customer, purchaseDescription);
         this.homeMovie = homeMovie;
         this.availabilityStartTime = availabilityStartTime;
@@ -62,19 +62,19 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
         this.homeMovie = homeMovie;
     }
 
-    public LocalTime getAvailabilityStartTime() {
+    public LocalDateTime getAvailabilityStartTime() {
         return availabilityStartTime;
     }
 
-    public void setAvailabilityStartTime(LocalTime availabilityStartTime) {
+    public void setAvailabilityStartTime(LocalDateTime availabilityStartTime) {
         this.availabilityStartTime = availabilityStartTime;
     }
 
-    public LocalTime getAvailabilityEndTime() {
+    public LocalDateTime getAvailabilityEndTime() {
         return availabilityEndTime;
     }
 
-    public void setAvailabilityEndTime(LocalTime availabilityEndTime) {
+    public void setAvailabilityEndTime(LocalDateTime availabilityEndTime) {
         this.availabilityEndTime = availabilityEndTime;
     }
 }

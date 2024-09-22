@@ -392,6 +392,15 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "PersonalLinkPage":
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PersonalLinkPage");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
         }
     }
 

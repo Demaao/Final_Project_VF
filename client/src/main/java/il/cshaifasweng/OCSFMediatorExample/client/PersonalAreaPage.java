@@ -36,6 +36,7 @@ public class PersonalAreaPage {
 
     public static Customer loggedInCustomer;
 
+
     public void initialize() {
         inPersonalAreaFlag = 1;
         EventBus.getDefault().register(this);
@@ -65,6 +66,8 @@ public class PersonalAreaPage {
     public static AtomicBoolean alertShown = new AtomicBoolean(false);
     public static int counter = 0;
     public static int inPersonalAreaFlag = 1;
+
+
 
     @Subscribe
     public void onPersonalMessageEvent(UpdatePersonalMessageEvent event) {
@@ -234,8 +237,7 @@ public class PersonalAreaPage {
 
     @FXML
     private void switchToMoviesLinks() throws IOException {
-        logOutCustomer();
-        App.switchScreen("MoviesLinksPage");
+        App.switchScreen("PersonalLinkPage");
     }
 
     @FXML
