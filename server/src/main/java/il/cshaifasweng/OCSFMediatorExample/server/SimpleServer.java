@@ -188,7 +188,8 @@ public class SimpleServer extends AbstractServer {
 		HomeMovie homeMovie = session.get(HomeMovie.class, 16);
 		Screening screening = session.get(Screening.class, 652);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
+		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36),screening);
+		//HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
 		homeMoviePurchase.setScreening(screening);
 		screening.getHomeMoviePurchases().add(homeMoviePurchase);
 		homeMovie.getHomeMoviePurchases().add(homeMoviePurchase);
@@ -474,64 +475,65 @@ public class SimpleServer extends AbstractServer {
 		Branch eilatCinema = session.get(Branch.class, 3);
 		Branch karmielCinema = session.get(Branch.class, 4);
 		Branch jerusalemCinema = session.get(Branch.class, 5);
-		Hall hall1 = new Hall(1,4, 5, 18, "1",jerusalemCinema);
+		Hall hall1 = new Hall(4, 5, 18, "1",jerusalemCinema);
 		session.save(hall1);
-		Hall hall2 = new Hall(2,5, 5, 25, "2",haifaCinema);
+		Hall hall2 = new Hall(5, 5, 25, "2",haifaCinema);
 		session.save(hall2);
-		Hall hall3 = new Hall(3,6, 6, 36, "3",haifaCinema);
+		Hall hall3 = new Hall(6, 6, 36, "3",haifaCinema);
 		session.save(hall3);
-		Hall hall4 = new Hall(4,5, 6, 28, "4",jerusalemCinema);
+		Hall hall4 = new Hall(5, 6, 28, "4",jerusalemCinema);
 		session.save(hall4);
-		Hall hall5 = new Hall(5,3, 6, 18, "5",haifaCinema);
+		Hall hall5 = new Hall(3, 6, 18, "5",haifaCinema);
 		session.save(hall5);
-		Hall hall6 = new Hall(6,6, 5, 30, "6",telAvivCinema);
+		Hall hall6 = new Hall(6, 5, 30, "6",telAvivCinema);
 		session.save(hall6);
-		Hall hall7 = new Hall(7,5, 5, 23, "7",jerusalemCinema);
+		Hall hall7 = new Hall(5, 5, 23, "7",jerusalemCinema);
 		session.save(hall7);
-		Hall hall8 = new Hall(8,5, 4, 20, "8",karmielCinema);
+		Hall hall8 = new Hall(5, 4, 20, "8",karmielCinema);
 		session.save(hall8);
-		Hall hall9 = new Hall(9,4, 5, 18, "9",telAvivCinema);
+		Hall hall9 = new Hall(4, 5, 18, "9",telAvivCinema);
 		session.save(hall9);
-		Hall hall10 = new Hall(10,5, 5, 23, "10",karmielCinema);
+		Hall hall10 = new Hall(5, 5, 23, "10",karmielCinema);
 		session.save(hall10);
-		Hall hall11 = new Hall(11,4, 4, 16, "11",karmielCinema);
+		Hall hall11 = new Hall(4, 4, 16, "11",karmielCinema);
 		session.save(hall11);
-		Hall hall12 = new Hall(12,4, 5, 18, "12",eilatCinema);
+		Hall hall12 = new Hall(4, 5, 18, "12",eilatCinema);
 		session.save(hall12);
-		Hall hall13 = new Hall(13,5, 5, 25, "13",eilatCinema);
+		Hall hall13 = new Hall(5, 5, 25, "13",eilatCinema);
 		session.save(hall13);
-		Hall hall14 = new Hall(14,6, 6, 36, "14",eilatCinema);
+		Hall hall14 = new Hall(6, 6, 36, "14",eilatCinema);
 		session.save(hall14);
-		Hall hall15 = new Hall(15,5, 6, 28, "15",telAvivCinema);
+		Hall hall15 = new Hall(5, 6, 28, "15",telAvivCinema);
 		session.save(hall15);
-		Hall hall16 = new Hall(16,5, 6, 28, "16",jerusalemCinema);
+		Hall hall16 = new Hall(5, 6, 28, "16",jerusalemCinema);
 		session.save(hall16);
-		Hall hall17 = new Hall(17,6, 5, 30, "17",karmielCinema);
+		Hall hall17 = new Hall(6, 5, 30, "17",karmielCinema);
 		session.save(hall17);
-		Hall hall18 = new Hall(18,5, 5, 23, "18",karmielCinema);
+		Hall hall18 = new Hall(5, 5, 23, "18",karmielCinema);
 		session.save(hall18);
-		Hall hall19 = new Hall(19,5, 4, 20, "19",telAvivCinema);
+		Hall hall19 = new Hall(5, 4, 20, "19",telAvivCinema);
 		session.save(hall19);
-		Hall hall20 = new Hall(20,4, 5, 18, "20",telAvivCinema);
+		Hall hall20 = new Hall(4, 5, 18, "20",telAvivCinema);
 		session.save(hall20);
-		Hall hall21 = new Hall(21,5, 5, 23, "21",karmielCinema);
+		Hall hall21 = new Hall(5, 5, 23, "21",karmielCinema);
 		session.save(hall21);
-		Hall hall22 = new Hall(22,4, 5, 18, "22",jerusalemCinema);
+		Hall hall22 = new Hall(4, 5, 18, "22",jerusalemCinema);
 		session.save(hall22);
-		Hall hall23 = new Hall(23,5, 5, 25, "23",haifaCinema);
+		Hall hall23 = new Hall(5, 5, 25, "23",haifaCinema);
 		session.save(hall23);
-		Hall hall24 = new Hall(24,6, 6, 36, "24",eilatCinema);
+		Hall hall24 = new Hall(6, 6, 36, "24",eilatCinema);
 		session.save(hall24);
-		Hall hall25 = new Hall(25,5, 6, 28, "25",eilatCinema);
+		Hall hall25 = new Hall(5, 6, 28, "25",eilatCinema);
 		session.save(hall25);
-		Hall hall26 = new Hall(26,3, 6, 18, "26",jerusalemCinema);
+		Hall hall26 = new Hall(3, 6, 18, "26",jerusalemCinema);
 		session.save(hall26);
-		Hall hall27 = new Hall(27,3, 6, 18, "27",jerusalemCinema);
+		Hall hall27 = new Hall(3, 6, 18, "27",jerusalemCinema);
 		session.save(hall27);
-		Hall hall28 = new Hall(28,3, 6, 18, "28",haifaCinema);
+		Hall hall28 = new Hall(3, 6, 18, "28",haifaCinema);
 		session.save(hall28);
-		Hall hall29 = new Hall(29,3, 6, 18, "29",eilatCinema);
+		Hall hall29 = new Hall(3, 6, 18, "29",eilatCinema);
 		session.save(hall29);
+
 
 		session.flush();
 	}
@@ -963,7 +965,6 @@ public class SimpleServer extends AbstractServer {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					List<Screening> screenings = getAllScreenings(session);
-					System.out.println("server " +screenings.size());
 					NewMessage newMessage = new NewMessage(screenings, "screeningTimes");
 					client.sendToClient(newMessage);
 					session.getTransaction().commit();
@@ -1039,6 +1040,8 @@ public class SimpleServer extends AbstractServer {
 						}
 						NewMessage newMessage2 = new NewMessage("movieRemoved");
 						client.sendToClient(newMessage2);
+					//	NewMessage newMessage4 = new NewMessage(branch, "movieNotAvailable", movie.getId());
+					//	sendToAllClients(newMessage4);
 					}
 					List<Movie> movies = getAllMovies(session);
 					NewMessage newMessage = new NewMessage(movies, "movies");
@@ -1761,6 +1764,139 @@ public class SimpleServer extends AbstractServer {
 				} catch (Exception exception) {
 					System.err.println("An error occurred during the payment process.");
 					exception.printStackTrace();
+				}
+			} else if (msgString.equals("processPaymentForTickets")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Purchase> purchases = (List<Purchase>) message.getObject();
+
+					Customer customer = purchases.get(0).getCustomer();
+					Customer savedCustomer = session.get(Customer.class, customer.getId());
+
+					if (savedCustomer == null) {
+						// Customer doesn't exist, save the customer first
+						session.save(customer);
+
+						// Associate each purchase with the newly saved customer
+						for (Purchase purchase : purchases) {
+							customer.addPurchase(purchase);  // Add purchase to the customer
+							purchase.setCustomer(customer);  // Ensure purchase is paired with the customer
+							session.save(purchase);  // Save the purchase
+						}
+					} else {
+						// Customer exists, associate purchases as before
+						for (Purchase purchase : purchases) {
+							savedCustomer.addPurchase(purchase);  // Add purchase to the existing customer
+							purchase.setCustomer(savedCustomer);  // Ensure purchase is paired with the existing customer
+							session.save(purchase);  // Save the purchase
+						}
+					}
+					List<Purchase> allPurchases = getAllPurchases(session);
+					NewMessage responseMessage = new NewMessage(allPurchases, "purchasesResponse");
+					sendToAllClients(responseMessage);
+					NewMessage newMessage1 = new NewMessage("purchaseSuccessful");
+					client.sendToClient(newMessage1);
+					List<Screening> screenings = getAllScreenings(session);
+					sendToAllClients(new NewMessage(screenings, "screeningTimes"));
+					// Commit the transaction to persist the changes
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred during the payment process.");
+					exception.printStackTrace();
+				}
+			} else if(msgString.equals("screeningHallsRequest")){
+				System.out.println("screeningHallsRequest 1");
+				try (Session session = sessionFactory.openSession()) {
+					System.out.println("screeningHallsRequest 2");
+					session.beginTransaction();
+					Movie requestedMovie = message.getMovie();
+					List<Screening> screenings = session.createQuery(
+									"from Screening where movie.id = :movieId", Screening.class)
+							.setParameter("movieId", requestedMovie.getId())
+							.getResultList();
+					for (Screening screening : screenings) {
+						LocalDateTime screeningTime = screening.getScreeningTime();
+						System.out.println(screeningTime);
+					}
+					NewMessage newMessage = new NewMessage(screenings, "screeningHalls");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}
+			else if (msgString.equals("SaveSeatsInHall")) {
+				System.out.println("we did get to handleFromClient:SaveSeatsInHall");
+				BookingSeatsReq request = (BookingSeatsReq) message.getObject();  // Cast message to BookingSeatsReq
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					// Get all screenings and update the corresponding screening
+					List<Screening> screeningsList = getAllScreenings(session);  // Assuming this method exists
+					for (Screening screen : screeningsList) {
+						if (screen.getId() == request.getScreening().getId()) {
+							//	System.out.println("scrn.getId() = " + screen.getId() + ", request.getScreening().getId() = " + request.getScreening().getId());
+							// Update seat information for the screening
+							for (int i = 0; i < request.getArrSize(); i++) {
+								screen.setTakenSeatAt(request.getSeats()[i]);
+							}
+							screen.setAvailableSeats(screen.getAvailableSeats() - request.getArrSize());
+							screen.setTakenSeats(screen.getTakenSeats() + request.getArrSize());
+							session.saveOrUpdate(screen);
+							// Notify client that the seats are saved
+							client.sendToClient(new NewMessage(request, "SeatsSaved"));
+							List<Screening> screenings = getAllScreenings(session);
+							sendToAllClients(new NewMessage(screenings, "screeningTimes"));
+							session.getTransaction().commit();
+							break;
+						}
+					}
+				}
+				catch (Exception e) {
+					// Handle IO exception while sending message to client
+					System.err.println("Error while sending message to client.");
+					e.printStackTrace();
+				}
+			}
+			else if (msgString.startsWith("UndoSaveSeatsInHall")) {
+				BookingSeatsReq request = (BookingSeatsReq) ((NewMessage) msg).getObject(); // Cast message to BookingSeatsReq
+
+				try (Session session = sessionFactory.openSession()) { // Open session in a try-with-resources block
+					session.beginTransaction();
+
+					// Get all screenings and find the corresponding screening
+					List<Screening> screeningsList = getAllScreenings(session); // Assuming this method exists
+					for (Screening screen : screeningsList) {
+						if (screen.getId() == request.getScreening().getId()) {
+
+							// Update seat availability for the screening
+							for (int i = 0; i < request.getArrSize(); i++) {
+								screen.setAvailableSeatAt(request.getSeats()[i]);
+							}
+							System.out.println("request size " + request.getArrSize());
+							screen.setAvailableSeats(screen.getAvailableSeats() + request.getArrSize());
+							screen.setTakenSeats(screen.getTakenSeats() - request.getArrSize());
+
+							// Save the updated screening
+							session.save(screen);
+							session.flush();
+
+
+							// Send confirmation message back to client
+							try {
+							//	client.sendToClient(new NewMessage( request,"SeatsFreed"));
+								sendToAllClients(new NewMessage( request,"SeatsFreed"));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							List<Screening> screenings = getAllScreenings(session);
+							sendToAllClients(new NewMessage(screenings, "screeningTimes"));
+							break;
+						}
+						session.getTransaction().commit();
+					}
+				} catch (Exception e) {
+					e.printStackTrace(); // Handle exception
 				}
 			}
 

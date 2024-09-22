@@ -149,6 +149,15 @@
         <ComboBox fx:id="cinemaComboBox" layoutX="229.0" layoutY="480.0" prefWidth="150.0" promptText="Select Cinema" visible="false" />
         <DatePicker fx:id="chooseDatePicker" layoutX="403.0" layoutY="480.0" prefWidth="150.0" promptText="Select Day" />
         <ComboBox fx:id="timeComboBox" layoutX="575.0" layoutY="480.0" prefWidth="150.0" promptText="Select Time" />
-
+      <Button fx:id="SBttn" layoutX="774.0" layoutY="544.0" mnemonicParsing="false" onAction="#switchToChooseSeating" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Purchase">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="cancelbtn" layoutX="658.0" layoutY="544.0" mnemonicParsing="false" onAction="#switchToMoviesPage" prefHeight="40.0" prefWidth="98.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Cancel">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

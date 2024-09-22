@@ -90,6 +90,7 @@ public class PaymentLink {
         }
 
         // If there are validation errors, stop processing
+        /*
         if (!errorMessages.isEmpty()) {
             String alertMessage = String.join("\n", errorMessages);
             Platform.runLater(() -> {
@@ -100,7 +101,25 @@ public class PaymentLink {
                 alert.show();
             });
             return; // Stop processing if validation fails
+        }*/
+        if (!errorMessages.isEmpty()) {
+            String alertMessage;
+            if (errorMessages.size() == 1) {
+                alertMessage = errorMessages.get(0);
+            } else {
+                alertMessage = "Multiple errors detected. Please review the highlighted fields and correct the issues.";
+            }
+
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Validation Errors");
+                alert.setHeaderText(null);
+                alert.setContentText(alertMessage);
+                alert.show();
+            });
+            return; // Stop processing if validation fails
         }
+
 
         // Gather data from input fields
         int customerId = Integer.parseInt(IDNumText.getText());

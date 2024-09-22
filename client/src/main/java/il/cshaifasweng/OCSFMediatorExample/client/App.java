@@ -400,6 +400,26 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "ChooseSeating":
+                System.out.println("we got to case ChooseSeating in App");
+                Platform.runLater(() -> {
+                    try {
+                        setContent("ChooseSeating");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "PaymentTickets":
+                System.out.println("we got to case PaymentTickets in App");
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PaymentTickets");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });    break;
+
         }
     }
 

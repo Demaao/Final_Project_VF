@@ -255,7 +255,7 @@ public class HandleComplaintPage {
             List<Purchase> allPurchases = event.getPurchases();
             allPurchases. removeIf(purchase -> purchase.getCustomer().getId() != selectedComplaint.getCustomerID());
             for(Purchase purchase : allPurchases) {
-                if(purchase instanceof Card || purchase instanceof HomeMoviePurchase) { // || purchase instanceof MovieTicket){
+                if(purchase instanceof Card || purchase instanceof HomeMoviePurchase || purchase.getProductType().equals("Movie Ticket")) {
                     purchases.add(purchase);
                 }
             }

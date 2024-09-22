@@ -84,7 +84,7 @@ public class PersonalDetailsPage {
                 purchaseList.addAll(event.getPurchases()); // Add the new purchases
                 purchaseList.removeIf(purchase -> purchase instanceof Card);
                 purchaseList.removeIf(purchase -> purchase instanceof HomeMoviePurchase); /////////////////////////////
-                // purchaseList.removeIf(purchase -> purchase instanceof MovieTicket);  ///////////////////////////////////////
+                purchaseList.removeIf(purchase -> purchase.getProductType().equals("Movie Ticket"));  ///////////////////////////////////////
                 purchaseList.removeIf(purchase -> purchase.getCustomer().getId() != PersonalAreaPage.loggedInCustomer.getId());
                 // Set up the table columns
                 orderPriceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPricePaid())));
