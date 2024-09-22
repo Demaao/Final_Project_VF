@@ -14,6 +14,7 @@ import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SimpleServer extends AbstractServer {
@@ -132,11 +135,11 @@ public class SimpleServer extends AbstractServer {
 		Customer customer2 = new Customer(123456789, "Shada gh", "shada.gha@example.com", "0527654321", purchases2, false);
 
 		//Create purchases and add them to customers
-		Purchase purchase1 = new Purchase("Movie Ticket", LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
 		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie: Wire Room. Viewing is limited to the screening time you selected: 2024-09-24 15:00");
-		Purchase purchase4 = new Purchase("Movie Card",  LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
-		Purchase purchase5 = new Purchase("Movie Card",  LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase5 = new Purchase("Movie Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 
 		//Adding purchases to the list
 		customer1.getPurchaseHistory().add(purchase1);
@@ -185,7 +188,8 @@ public class SimpleServer extends AbstractServer {
 		HomeMovie homeMovie = session.get(HomeMovie.class, 16);
 		Screening screening = session.get(Screening.class, 652);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36), screening);
+		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36),screening);
+		//HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
 		homeMoviePurchase.setScreening(screening);
 		screening.getHomeMoviePurchases().add(homeMoviePurchase);
 		homeMovie.getHomeMoviePurchases().add(homeMoviePurchase);
@@ -471,64 +475,65 @@ public class SimpleServer extends AbstractServer {
 		Branch eilatCinema = session.get(Branch.class, 3);
 		Branch karmielCinema = session.get(Branch.class, 4);
 		Branch jerusalemCinema = session.get(Branch.class, 5);
-		Hall hall1 = new Hall(1,4, 5, 18, "1",jerusalemCinema);
+		Hall hall1 = new Hall(4, 5, 18, "1",jerusalemCinema);
 		session.save(hall1);
-		Hall hall2 = new Hall(2,5, 5, 25, "2",haifaCinema);
+		Hall hall2 = new Hall(5, 5, 25, "2",haifaCinema);
 		session.save(hall2);
-		Hall hall3 = new Hall(3,6, 6, 36, "3",haifaCinema);
+		Hall hall3 = new Hall(6, 6, 36, "3",haifaCinema);
 		session.save(hall3);
-		Hall hall4 = new Hall(4,5, 6, 28, "4",jerusalemCinema);
+		Hall hall4 = new Hall(5, 6, 28, "4",jerusalemCinema);
 		session.save(hall4);
-		Hall hall5 = new Hall(5,3, 6, 18, "5",haifaCinema);
+		Hall hall5 = new Hall(3, 6, 18, "5",haifaCinema);
 		session.save(hall5);
-		Hall hall6 = new Hall(6,6, 5, 30, "6",telAvivCinema);
+		Hall hall6 = new Hall(6, 5, 30, "6",telAvivCinema);
 		session.save(hall6);
-		Hall hall7 = new Hall(7,5, 5, 23, "7",jerusalemCinema);
+		Hall hall7 = new Hall(5, 5, 23, "7",jerusalemCinema);
 		session.save(hall7);
-		Hall hall8 = new Hall(8,5, 4, 20, "8",karmielCinema);
+		Hall hall8 = new Hall(5, 4, 20, "8",karmielCinema);
 		session.save(hall8);
-		Hall hall9 = new Hall(9,4, 5, 18, "9",telAvivCinema);
+		Hall hall9 = new Hall(4, 5, 18, "9",telAvivCinema);
 		session.save(hall9);
-		Hall hall10 = new Hall(10,5, 5, 23, "10",karmielCinema);
+		Hall hall10 = new Hall(5, 5, 23, "10",karmielCinema);
 		session.save(hall10);
-		Hall hall11 = new Hall(11,4, 4, 16, "11",karmielCinema);
+		Hall hall11 = new Hall(4, 4, 16, "11",karmielCinema);
 		session.save(hall11);
-		Hall hall12 = new Hall(12,4, 5, 18, "12",eilatCinema);
+		Hall hall12 = new Hall(4, 5, 18, "12",eilatCinema);
 		session.save(hall12);
-		Hall hall13 = new Hall(13,5, 5, 25, "13",eilatCinema);
+		Hall hall13 = new Hall(5, 5, 25, "13",eilatCinema);
 		session.save(hall13);
-		Hall hall14 = new Hall(14,6, 6, 36, "14",eilatCinema);
+		Hall hall14 = new Hall(6, 6, 36, "14",eilatCinema);
 		session.save(hall14);
-		Hall hall15 = new Hall(15,5, 6, 28, "15",telAvivCinema);
+		Hall hall15 = new Hall(5, 6, 28, "15",telAvivCinema);
 		session.save(hall15);
-		Hall hall16 = new Hall(16,5, 6, 28, "16",jerusalemCinema);
+		Hall hall16 = new Hall(5, 6, 28, "16",jerusalemCinema);
 		session.save(hall16);
-		Hall hall17 = new Hall(17,6, 5, 30, "17",karmielCinema);
+		Hall hall17 = new Hall(6, 5, 30, "17",karmielCinema);
 		session.save(hall17);
-		Hall hall18 = new Hall(18,5, 5, 23, "18",karmielCinema);
+		Hall hall18 = new Hall(5, 5, 23, "18",karmielCinema);
 		session.save(hall18);
-		Hall hall19 = new Hall(19,5, 4, 20, "19",telAvivCinema);
+		Hall hall19 = new Hall(5, 4, 20, "19",telAvivCinema);
 		session.save(hall19);
-		Hall hall20 = new Hall(20,4, 5, 18, "20",telAvivCinema);
+		Hall hall20 = new Hall(4, 5, 18, "20",telAvivCinema);
 		session.save(hall20);
-		Hall hall21 = new Hall(21,5, 5, 23, "21",karmielCinema);
+		Hall hall21 = new Hall(5, 5, 23, "21",karmielCinema);
 		session.save(hall21);
-		Hall hall22 = new Hall(22,4, 5, 18, "22",jerusalemCinema);
+		Hall hall22 = new Hall(4, 5, 18, "22",jerusalemCinema);
 		session.save(hall22);
-		Hall hall23 = new Hall(23,5, 5, 25, "23",haifaCinema);
+		Hall hall23 = new Hall(5, 5, 25, "23",haifaCinema);
 		session.save(hall23);
-		Hall hall24 = new Hall(24,6, 6, 36, "24",eilatCinema);
+		Hall hall24 = new Hall(6, 6, 36, "24",eilatCinema);
 		session.save(hall24);
-		Hall hall25 = new Hall(25,5, 6, 28, "25",eilatCinema);
+		Hall hall25 = new Hall(5, 6, 28, "25",eilatCinema);
 		session.save(hall25);
-		Hall hall26 = new Hall(26,3, 6, 18, "26",jerusalemCinema);
+		Hall hall26 = new Hall(3, 6, 18, "26",jerusalemCinema);
 		session.save(hall26);
-		Hall hall27 = new Hall(27,3, 6, 18, "27",jerusalemCinema);
+		Hall hall27 = new Hall(3, 6, 18, "27",jerusalemCinema);
 		session.save(hall27);
-		Hall hall28 = new Hall(28,3, 6, 18, "28",haifaCinema);
+		Hall hall28 = new Hall(3, 6, 18, "28",haifaCinema);
 		session.save(hall28);
-		Hall hall29 = new Hall(29,3, 6, 18, "29",eilatCinema);
+		Hall hall29 = new Hall(3, 6, 18, "29",eilatCinema);
 		session.save(hall29);
+
 
 		session.flush();
 	}
@@ -716,6 +721,13 @@ public class SimpleServer extends AbstractServer {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Card> query = builder.createQuery(Card.class);
 		query.from(Card.class);
+		return session.createQuery(query).getResultList();
+	}
+
+	private static List<Screening> getAllScreenings(Session session) throws Exception {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Screening> query = builder.createQuery(Screening.class);
+		query.from(Screening.class);
 		return session.createQuery(query).getResultList();
 	}
 
@@ -920,13 +932,15 @@ public class SimpleServer extends AbstractServer {
 					session.beginTransaction();
 					List<Employee> employees = getAllEmployees(session);
 					Employee employee = message.getEmployee();
-					for (Employee emp : employees) {
-						if (emp.getId() == employee.getId()) {
-							emp.setIsOnline(false);
+					if(employee != null) {
+						for (Employee emp : employees) {
+							if (emp.getId() == employee.getId()) {
+								emp.setIsOnline(false);
+							}
 						}
+						NewMessage newMessage = new NewMessage("logOut");
+						client.sendToClient(newMessage);
 					}
-					NewMessage newMessage = new NewMessage("logOut");
-					client.sendToClient(newMessage);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
@@ -947,7 +961,18 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			} else if (msgString.equals("removeHomeMovie")) {
+			}else if (msgString.equals("allScreeningTimesRequest")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Screening> screenings = getAllScreenings(session);
+					NewMessage newMessage = new NewMessage(screenings, "screeningTimes");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}  else if (msgString.equals("removeHomeMovie")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					HomeMovie movie = (HomeMovie) message.getObject();
@@ -1015,6 +1040,8 @@ public class SimpleServer extends AbstractServer {
 						}
 						NewMessage newMessage2 = new NewMessage("movieRemoved");
 						client.sendToClient(newMessage2);
+					//	NewMessage newMessage4 = new NewMessage(branch, "movieNotAvailable", movie.getId());
+					//	sendToAllClients(newMessage4);
 					}
 					List<Movie> movies = getAllMovies(session);
 					NewMessage newMessage = new NewMessage(movies, "movies");
@@ -1034,6 +1061,7 @@ public class SimpleServer extends AbstractServer {
 					List<Branch> newBranches = new ArrayList<>();
 					List<Screening> screenings = new ArrayList<>();
 					List<LocalDateTime> times = message.getDateTimes();
+					List<Hall> halls = message.getHalls();
 					int i;
 					for (Branch x : branches) {
 						i = 0;
@@ -1046,7 +1074,8 @@ public class SimpleServer extends AbstractServer {
 								session.save(x);
 								Screening screening = new Screening(times.get(i), movie, x);
 								screenings.add(screening);
-								movie.addScreening(times.get(i), x, null);  /////////////////////////////////////////////////////////
+								Hall hall = session.get(Hall.class, halls.get(i).getId());
+								movie.addScreening(times.get(i), x, hall);  /////////////////////////////////////////////////////////
 							}
 							i++;
 						}
@@ -1452,9 +1481,11 @@ public class SimpleServer extends AbstractServer {
 					session.beginTransaction();
 					Customer customer = (Customer) message.getObject();
 					Customer customerToLogOut = session.get(Customer.class, customer.getId());
-					customerToLogOut.setLoggedIn(false);  // log out
-					//session.saveOrUpdate(customer);
-					session.saveOrUpdate(customerToLogOut);
+					if(customerToLogOut != null) {
+						customerToLogOut.setLoggedIn(false);  // log out
+						//session.saveOrUpdate(customer);
+						session.saveOrUpdate(customerToLogOut);
+					}
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred while logging out.");
@@ -1510,7 +1541,7 @@ public class SimpleServer extends AbstractServer {
 					List<Notification> notifications = getAllNotifications(session);
 						List<Customer> customers = getAllCustomers(session);
 						List<Movie> movies = getAllMovies(session);
-						movies.removeIf(movie -> movie instanceof HomeMovie);
+						//movies.removeIf(movie -> movie instanceof HomeMovie);
 						movies.removeIf(movie -> movie instanceof SoonMovie);
 					for (Movie movie : movies) {
 						boolean hasScreeningToday = false;
@@ -1526,7 +1557,7 @@ public class SimpleServer extends AbstractServer {
 							for (Customer customer : customers) {
 								List<Purchase> purchases = customer.getPurchaseHistory();
 								for (Purchase purchase : purchases) {
-									if (purchase instanceof Card) {
+									if (purchase instanceof Card && !(movie instanceof HomeMovie)) {
 										Notification cardNotification = new Notification(
 												"New Movie", "Watch \"" + movie.getEngtitle() + "\" today in the Cinema!\nFor more details check the movies page.",
 												LocalDateTime.now(), "Unread", customer);
@@ -1538,7 +1569,44 @@ public class SimpleServer extends AbstractServer {
 										if(flag == 0)
 											session.save(cardNotification);
 										break; // Exit the purchase loop for this customer because a notification is sent
-									}}}}}
+									}
+									if(purchase instanceof HomeMoviePurchase && movie instanceof HomeMovie) {
+										String movieTitle = "";
+										if(((HomeMoviePurchase) purchase).getHomeMovie() == null) {
+											String details = ((HomeMoviePurchase) purchase).getPurchaseDescription();
+											Pattern pattern = Pattern.compile("Movie link for \"([^\"]+)\"");
+											Matcher matcher = pattern.matcher(details);
+											if (matcher.find()) {
+												// Extract the movie title from the matched group
+												movieTitle = matcher.group(1);
+											}
+										} else movieTitle = ((HomeMoviePurchase) purchase).getHomeMovie().getEngtitle();
+										DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+										LocalDateTime screeningTime;
+										if (((HomeMoviePurchase) purchase).getScreening() == null) {
+											String time = ((HomeMoviePurchase) purchase).getPurchaseDescription();
+											String dateTimeString = time.split("\nScreening: ")[1];
+											screeningTime = LocalDateTime.parse(dateTimeString, formatter1);
+										} else
+											screeningTime = ((HomeMoviePurchase) purchase).getScreening().getScreeningTime();
+										Duration duration = Duration.between(LocalDateTime.now(), screeningTime);
+										if (duration.toHours() <= 1 && movieTitle.equals(movie.getEngtitle())) {
+											Notification linkNotification = new Notification(
+													"Movie Link", "The link for the movie \"" + movie.getEngtitle() + "\" will be activated soon!" + "\nScreening: " + ((HomeMoviePurchase) purchase).getScreening().getScreeningTime().format(formatter1) +
+													"\nFor more details check the movie links page in the personal area.",
+													LocalDateTime.now(), "Unread", customer);
+											int flag = 0;
+											for (Notification notification : notifications) {
+												if (notification.getCustomer().equals(customer) && notification.getMessage().equals(linkNotification.getMessage()) && notification.getTime().toLocalDate().equals(linkNotification.getTime().toLocalDate())) {
+													flag = 1;
+													break;
+												}
+											}
+											if (flag == 0)
+												session.save(linkNotification);
+										}
+									}
+								}}}}
 					List<Notification> finalNotifications = getAllNotifications(session);
 					NewMessage newMessage = new NewMessage(finalNotifications, "notificationsList");
 					client.sendToClient(newMessage);
@@ -1697,8 +1765,140 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred during the payment process.");
 					exception.printStackTrace();
 				}
+			} else if (msgString.equals("processPaymentForTickets")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Purchase> purchases = (List<Purchase>) message.getObject();
+
+					Customer customer = purchases.get(0).getCustomer();
+					Customer savedCustomer = session.get(Customer.class, customer.getId());
+
+					if (savedCustomer == null) {
+						// Customer doesn't exist, save the customer first
+						session.save(customer);
+
+						// Associate each purchase with the newly saved customer
+						for (Purchase purchase : purchases) {
+							customer.addPurchase(purchase);  // Add purchase to the customer
+							purchase.setCustomer(customer);  // Ensure purchase is paired with the customer
+							session.save(purchase);  // Save the purchase
+						}
+					} else {
+						// Customer exists, associate purchases as before
+						for (Purchase purchase : purchases) {
+							savedCustomer.addPurchase(purchase);  // Add purchase to the existing customer
+							purchase.setCustomer(savedCustomer);  // Ensure purchase is paired with the existing customer
+							session.save(purchase);  // Save the purchase
+						}
+					}
+					List<Purchase> allPurchases = getAllPurchases(session);
+					NewMessage responseMessage = new NewMessage(allPurchases, "purchasesResponse");
+					sendToAllClients(responseMessage);
+					NewMessage newMessage1 = new NewMessage("purchaseSuccessful");
+					client.sendToClient(newMessage1);
+					List<Screening> screenings = getAllScreenings(session);
+					sendToAllClients(new NewMessage(screenings, "screeningTimes"));
+					// Commit the transaction to persist the changes
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred during the payment process.");
+					exception.printStackTrace();
+				}
+			} else if(msgString.equals("screeningHallsRequest")){
+				System.out.println("screeningHallsRequest 1");
+				try (Session session = sessionFactory.openSession()) {
+					System.out.println("screeningHallsRequest 2");
+					session.beginTransaction();
+					Movie requestedMovie = message.getMovie();
+					List<Screening> screenings = session.createQuery(
+									"from Screening where movie.id = :movieId", Screening.class)
+							.setParameter("movieId", requestedMovie.getId())
+							.getResultList();
+					for (Screening screening : screenings) {
+						LocalDateTime screeningTime = screening.getScreeningTime();
+						System.out.println(screeningTime);
+					}
+					NewMessage newMessage = new NewMessage(screenings, "screeningHalls");
+					client.sendToClient(newMessage);
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
 			}
-			else if (msgString.equals("fetchHomeMoviePurchases")) {
+			else if (msgString.equals("SaveSeatsInHall")) {
+				System.out.println("we did get to handleFromClient:SaveSeatsInHall");
+				BookingSeatsReq request = (BookingSeatsReq) message.getObject();  // Cast message to BookingSeatsReq
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					// Get all screenings and update the corresponding screening
+					List<Screening> screeningsList = getAllScreenings(session);  // Assuming this method exists
+					for (Screening screen : screeningsList) {
+						if (screen.getId() == request.getScreening().getId()) {
+							//	System.out.println("scrn.getId() = " + screen.getId() + ", request.getScreening().getId() = " + request.getScreening().getId());
+							// Update seat information for the screening
+							for (int i = 0; i < request.getArrSize(); i++) {
+								screen.setTakenSeatAt(request.getSeats()[i]);
+							}
+							screen.setAvailableSeats(screen.getAvailableSeats() - request.getArrSize());
+							screen.setTakenSeats(screen.getTakenSeats() + request.getArrSize());
+							session.saveOrUpdate(screen);
+							// Notify client that the seats are saved
+							client.sendToClient(new NewMessage(request, "SeatsSaved"));
+							List<Screening> screenings = getAllScreenings(session);
+							sendToAllClients(new NewMessage(screenings, "screeningTimes"));
+							session.getTransaction().commit();
+							break;
+						}
+					}
+				}
+				catch (Exception e) {
+					// Handle IO exception while sending message to client
+					System.err.println("Error while sending message to client.");
+					e.printStackTrace();
+				}
+			}
+			else if (msgString.startsWith("UndoSaveSeatsInHall")) {
+				BookingSeatsReq request = (BookingSeatsReq) ((NewMessage) msg).getObject(); // Cast message to BookingSeatsReq
+
+				try (Session session = sessionFactory.openSession()) { // Open session in a try-with-resources block
+					session.beginTransaction();
+
+					// Get all screenings and find the corresponding screening
+					List<Screening> screeningsList = getAllScreenings(session); // Assuming this method exists
+					for (Screening screen : screeningsList) {
+						if (screen.getId() == request.getScreening().getId()) {
+
+							// Update seat availability for the screening
+							for (int i = 0; i < request.getArrSize(); i++) {
+								screen.setAvailableSeatAt(request.getSeats()[i]);
+							}
+							System.out.println("request size " + request.getArrSize());
+							screen.setAvailableSeats(screen.getAvailableSeats() + request.getArrSize());
+							screen.setTakenSeats(screen.getTakenSeats() - request.getArrSize());
+
+							// Save the updated screening
+							session.save(screen);
+							session.flush();
+
+
+							// Send confirmation message back to client
+							try {
+							//	client.sendToClient(new NewMessage( request,"SeatsFreed"));
+								sendToAllClients(new NewMessage( request,"SeatsFreed"));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							List<Screening> screenings = getAllScreenings(session);
+							sendToAllClients(new NewMessage(screenings, "screeningTimes"));
+							break;
+						}
+						session.getTransaction().commit();
+					}
+				} catch (Exception e) {
+					e.printStackTrace(); // Handle exception
+				}
+			} else if (msgString.equals("fetchHomeMoviePurchases")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Object customerIdObject = message.getId();
@@ -1717,7 +1917,6 @@ public class SimpleServer extends AbstractServer {
 					e.printStackTrace();
 				}
 			}
-
 
 		}
 		catch (IOException e) {

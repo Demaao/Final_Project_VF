@@ -104,6 +104,21 @@ public class SimpleClient extends AbstractClient {
                 EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
 				} else if (message.getMessage().equals("purchaseReturned")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Purchase refunded successfully!")));
+				} else if (message.getMessage().equals("screeningHalls")) {
+					System.out.println("did we get here?");
+					List<Screening> screenings = (List<Screening>) message.getObject();
+					System.out.println("maybe..");
+					EventBus.getDefault().post(new UpdateScreeningTimesEvent(screenings));
+					System.out.println("yes we did!");
+				} else if (message.getMessage().equals("SeatsSaved")) {
+					PaymentTickets.setRequest((BookingSeatsReq) ((NewMessage) msg).getObject());
+					App.switchScreen("PaymentTickets");
+				} else if (message.getMessage().equals("SeatsFreed")) {
+				//	if(PaymentTickets.paymentCanceledFlag == 1)
+						//App.switchScreen("MoviesPage");
+				} else if (message.getMessage().equals("homeMoviePurchasesResponse")) {
+					List<HomeMoviePurchase> homeMoviePurchases = (List<HomeMoviePurchase>) message.getObject();
+					EventBus.getDefault().post(new UpdateHomeMoviePurchasesEvent(homeMoviePurchases));
 				}
 				else if (message.getMessage().equals("homeMoviePurchasesResponse")) {
 					List<HomeMoviePurchase> homeMoviePurchases = (List<HomeMoviePurchase>) message.getObject();

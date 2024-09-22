@@ -64,6 +64,14 @@ public class App extends Application {
     @Override
 	public void stop() throws Exception {
 		// TODO Auto-generated method stub
+        PersonalAreaPage.logOutCustomer();
+        try {
+            NewMessage message = new NewMessage("logOut", LoginPage.employee1);
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     	EventBus.getDefault().unregister(this);
 		super.stop();
 	}
@@ -392,6 +400,26 @@ public class App extends Application {
                     }
                 });
                 break;
+            case "ChooseSeating":
+                System.out.println("we got to case ChooseSeating in App");
+                Platform.runLater(() -> {
+                    try {
+                        setContent("ChooseSeating");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case "PaymentTickets":
+                System.out.println("we got to case PaymentTickets in App");
+                Platform.runLater(() -> {
+                    try {
+                        setContent("PaymentTickets");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
             case "PersonalLinkPage":
                 Platform.runLater(() -> {
                     try {
@@ -401,6 +429,7 @@ public class App extends Application {
                     }
                 });
                 break;
+
         }
     }
 

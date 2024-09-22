@@ -39,8 +39,7 @@ public class Hall implements Serializable {
 
     public Hall() {};
 
-    public Hall(int id,int rows, int cols, int seatsNum, String hallName,Branch branch){
-        this.id = id;
+    public Hall(int rows, int cols, int seatsNum, String hallName,Branch branch){
         this.rowsNum = rows;
         this.colsNum = cols;
         this.seatsNum = seatsNum;

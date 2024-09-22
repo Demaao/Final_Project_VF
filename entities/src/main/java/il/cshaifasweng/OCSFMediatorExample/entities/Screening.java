@@ -2,6 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class Screening implements Serializable {
     private int id;
 
     private LocalDateTime screeningTime;
+    private String screeningBranch;
+    private String screeningHall;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id")
@@ -25,15 +28,30 @@ public class Screening implements Serializable {
 
     //@ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hall_id", nullable = true) // hall ×××× ×××××ª null ×× ×××§×¨× × ××× × ××ª×§××××ª ××××× ××¡×××
+    @JoinColumn(name = "hall_id", nullable = true)
     private Hall hall;
-
- /*   @OneToOne
-    @JoinColumn(name = "homeMoviePurchase_id")  // This side owns the relationship
-    private HomeMoviePurchase homeMoviePurchase;*/
 
     @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<HomeMoviePurchase> homeMoviePurchases = new ArrayList<>();
+
+    private boolean[] seatsArray;
+    private int availableSeats;
+    private int takenSeats;
+    public int getTakenSeats() {
+        return takenSeats;
+    }
+
+    public void setTakenSeats(int takenSeats) {
+        this.takenSeats = takenSeats;
+    }
+
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
+    }
 
     public Screening() {}
 
@@ -47,10 +65,31 @@ public class Screening implements Serializable {
         this.screeningTime = screeningTime;
         this.movie = movie;
         this.branch = branch;
-        this.hall = hall;
+        this.setHall(hall);
+        if (hall != null) {
+            hall.addScreening(this);
+        }
+
     }
 
-    // Getters and setters
+    public void setHall(Hall hall) {
+        this.hall = hall;
+        if (hall != null) {
+            this.setScreeningHall(hall.getHallName());
+            availableSeats = hall.getSeatsNum();
+            this.seatsArray = new boolean[availableSeats];
+            for (int i = 0; i < availableSeats; i++) {
+                seatsArray[i] = false;
+            }
+        }
+    }
+
+    public String getScreeningHourAndMinute() {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            return screeningTime.format(formatter);
+        }
+
+        // Getters and setters
     public int getId() {
         return id;
     }
@@ -59,13 +98,27 @@ public class Screening implements Serializable {
         this.id = id;
     }
 
+    public void setTakenSeatAt(int i) {
+        if (i<hall.getSeatsNum()) {
+            seatsArray[i]=true;
+        }
+    }
+    public boolean getSeatStatus(int i) {
+        return seatsArray[i];
+    }
+
+    public void setAvailableSeatAt(int i) {
+        if (i<hall.getSeatsNum()) {
+            seatsArray[i]=false;
+        }
+    }
+
+    public void setScreeningHall(String screeningHall) {
+        this.screeningHall = screeningHall;
+    }
 
     public Hall getHall() {
         return this.hall;
-    }
-
-    public void setHall(Hall hall) {
-        this.hall = hall;
     }
 
     public LocalDateTime getScreeningTime() {

@@ -115,22 +115,39 @@
         </AnchorPane>
 
         <!-- Radio Buttons for Payment Method -->
-        <RadioButton fx:id="creditCardRadioBtn" layoutX="403.0" layoutY="68.0" mnemonicParsing="false" text="Credit Card" textFill="#f6d9d9">
+        <RadioButton fx:id="creditCardRadioBtn" layoutX="472.0" layoutY="69.0" mnemonicParsing="false" text="Credit Card" textFill="#f6d9d9">
             <font>
-                <Font size="16.0" />
+                <Font size="18.0" />
             </font>
          <toggleGroup>
             <ToggleGroup fx:id="paymentMethodToggleGroup" />
          </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="ticketTabRadioBtn" layoutX="600.0" layoutY="68.0" mnemonicParsing="false" text="Ticket Tab" textFill="#f6d9d9" toggleGroup="$paymentMethodToggleGroup">
+        <RadioButton fx:id="ticketTabRadioBtn" layoutX="611.0" layoutY="67.0" mnemonicParsing="false" text="Ticket Tab" textFill="#f6d9d9" toggleGroup="$paymentMethodToggleGroup">
             <font>
-                <Font size="16.0" />
+                <Font size="18.0" />
             </font>
         </RadioButton>
-
+        <Label fx:id="movieInfo" alignment="TOP_LEFT" layoutX="226.0" layoutY="426.0" prefHeight="196.0" prefWidth="266.0" text="Order info" textFill="#f6d9d9" wrapText="true">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <Label fx:id="costInfo" alignment="TOP_LEFT" layoutX="494.0" layoutY="426.0" prefHeight="150.0" prefWidth="200.0" text="Cost Info" textFill="#f6d9d9" wrapText="true">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <Button fx:id="cancelButton" layoutX="704.0" layoutY="525.0" mnemonicParsing="false" onAction="#CancelOrder" style="-fx-background-color: #f6d9d9; -fx-cursor: hand; -fx-background-radius: 10;" text="Cancel Purchase">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
+        <Button fx:id="confirmButton" layoutX="701.0" layoutY="462.0" mnemonicParsing="false" onAction="#ConfirmOrder" style="-fx-background-color: #f6d9d9; -fx-cursor: hand; -fx-background-radius: 10;" text="Confirm &amp; Order">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
         <!-- Credit Card or Ticket Tab Number Pane -->
-        <AnchorPane fx:id="creditCardPane" layoutX="220.0" layoutY="120.0" prefHeight="300.0" prefWidth="600.0">
+        <AnchorPane fx:id="creditCardPane" layoutX="226.0" layoutY="106.0" prefHeight="300.0" prefWidth="600.0">
             <children>
                 <Label fx:id="creditCardLabel" layoutX="0.0" layoutY="260.0" prefHeight="22.0" prefWidth="104.0" text="Credit Card" textFill="#f6d9d9">
                     <font>
@@ -184,19 +201,10 @@
                 </TextField>
             </children>
         </AnchorPane>
-
-        <!-- Confirm Payment Button -->
-        <Button fx:id="payBtn" layoutX="650.0" layoutY="480.0" mnemonicParsing="false" onAction="#payForProduct" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Confirm">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Button>
-
-        <!-- Total Price Label -->
-        <Label fx:id="totalPriceLabel" layoutX="220.0" layoutY="480.0" text="Total Price: $100" textFill="#f6d9d9">
-            <font>
-                <Font name="System Bold" size="24.0" />
-            </font>
-        </Label>
+      <Label layoutX="226.0" layoutY="66.0" prefHeight="30.0" prefWidth="234.0" text="Choose Payment Method:" textFill="#f6d9d9">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

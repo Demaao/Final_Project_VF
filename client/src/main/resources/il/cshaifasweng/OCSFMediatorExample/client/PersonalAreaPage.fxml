@@ -126,7 +126,7 @@
                 <Font size="18.0" />
             </font>
         </Button>
-      <Button fx:id="messagesBtn" onAction="#switchToMessages" layoutX="297.0" layoutY="250.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="213.0" style="-fx-background-color: #d5a6bd; -fx-text-fill: black; -fx-font-size: 20; -fx-cursor: hand; -fx-background-radius: 10;" text=" Messages" textAlignment="RIGHT" visible="false">
+      <Button fx:id="messagesBtn" layoutX="297.0" layoutY="250.0" mnemonicParsing="false" onAction="#switchToMessages" prefHeight="100.0" prefWidth="213.0" style="-fx-background-color: #d5a6bd; -fx-text-fill: black; -fx-font-size: 20; -fx-cursor: hand; -fx-background-radius: 10;" text=" Messages" textAlignment="RIGHT" visible="false">
          <font>
             <Font size="24.0" />
          </font>
@@ -162,7 +162,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="moviesLinksBtn" layoutX="545.0" layoutY="410.0" mnemonicParsing="false" onAction="#switchToMoviesLinks" prefHeight="100.0" prefWidth="213.0" style="-fx-background-color: #ead1dc; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Movies links" textAlignment="RIGHT" visible="false">
+      <Button fx:id="moviesLinksBtn" layoutX="545.0" layoutY="410.0" mnemonicParsing="false" onAction="#switchToPersonalLinkPage" prefHeight="100.0" prefWidth="213.0" style="-fx-background-color: #ead1dc; -fx-text-fill: black; -fx-cursor: hand; -fx-font-size: 20; -fx-background-radius: 10;" text="Movies links" textAlignment="RIGHT" visible="false">
          <font>
             <Font size="24.0" />
          </font>
