@@ -116,7 +116,7 @@ public class ChargebackPage {
             allPurchases = event.getPurchases();
             if(!IDNumText.getText().isEmpty()){
                 for(Purchase purchase : allPurchases) {
-                    if(purchase.getCustomer().getId() == Integer.parseInt(IDNumText.getText()) && (purchase instanceof Card || purchase instanceof HomeMoviePurchase)) { // || purchase instanceof MovieTicket){
+                    if(purchase.getCustomer().getId() == Integer.parseInt(IDNumText.getText()) && (purchase instanceof Card || purchase instanceof HomeMoviePurchase || purchase.getProductType().equals("Movie Ticket"))) { // || purchase instanceof MovieTicket){
                         purchases.add(purchase);
                     }
                 } dateColumn.setCellFactory(new Callback<TableColumn<Complaint, LocalDateTime>, TableCell<Complaint, LocalDateTime>>() {
@@ -172,8 +172,9 @@ public class ChargebackPage {
                 } else {
                     refundPercentage = 0.0;
                 }
-            }/*
-            if(selectedItem instanceof MovieTicket){
+            }
+            if(selectedItem.getProductType().equals("Movie Ticket")){
+                /*
                LocalDateTime screeningTime = ((MovieTicket) selectedItem).getScreening().getScreeningTime();
                 LocalDateTime currentTime = LocalDateTime.now();
                 Duration duration = Duration.between(currentTime, screeningTime);
@@ -188,8 +189,8 @@ public class ChargebackPage {
                     refundPercentage = 50.0;
                 } else{
                 refundPercentage = 0.0;
-         }
-            }*/
+         }*/
+            }
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Refund");
             if (refundPercentage > 0) {
