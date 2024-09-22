@@ -116,6 +116,9 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("SeatsFreed")) {
 				//	if(PaymentTickets.paymentCanceledFlag == 1)
 						//App.switchScreen("MoviesPage");
+				} else if (message.getMessage().equals("homeMoviePurchasesResponse")) {
+					List<HomeMoviePurchase> homeMoviePurchases = (List<HomeMoviePurchase>) message.getObject();
+					EventBus.getDefault().post(new UpdateHomeMoviePurchasesEvent(homeMoviePurchases));
 				}
 			});
 		}

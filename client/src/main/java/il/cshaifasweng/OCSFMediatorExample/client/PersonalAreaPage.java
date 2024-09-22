@@ -233,6 +233,11 @@ public class PersonalAreaPage {
     }
 
     @FXML
+    public void switchToPersonalLinkPage() throws IOException {
+        App.switchScreen("PersonalLinkPage");
+    }
+
+    @FXML
     private void switchToMoviesLinks() throws IOException {
         logOutCustomer();
         App.switchScreen("MoviesLinksPage");
