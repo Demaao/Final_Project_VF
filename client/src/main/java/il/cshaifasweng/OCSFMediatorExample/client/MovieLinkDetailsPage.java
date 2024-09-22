@@ -197,7 +197,7 @@ public class MovieLinkDetailsPage {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    if (!availableDays.contains(date) || date.isBefore(LocalDate.of(2024, 9, 24))) {
+                    if (!availableDays.contains(date) || date.isBefore(LocalDate.now())) {
                         setDisable(true);
                     }
                 }
