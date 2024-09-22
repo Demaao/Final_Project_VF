@@ -19,7 +19,7 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
 
     //private String availabilityStartTime;
     private LocalDateTime availabilityStartTime;
-   // private String availabilityEndTime;
+    // private String availabilityEndTime;
     private LocalDateTime availabilityEndTime;
 
 /*
@@ -34,7 +34,7 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
 
     public HomeMoviePurchase(String productType, LocalDateTime  purchaseDate, String paymentMethod, double pricePaid,
                              Customer customer, String purchaseDescription, HomeMovie homeMovie, LocalDateTime availabilityStartTime, LocalDateTime availabilityEndTime
-    , Screening screening) {
+            , Screening screening) {
         super(productType, purchaseDate, paymentMethod, pricePaid, customer, purchaseDescription);
         this.homeMovie = homeMovie;
         this.availabilityStartTime = availabilityStartTime;
