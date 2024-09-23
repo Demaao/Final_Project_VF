@@ -452,7 +452,7 @@ public class AddMoviePage {
         screeningTimeTableLink.getItems().clear();
         screeningTimeTableCinema.getItems().clear();
         addDateText.setValue(null);
-        cinemaComboBox.setValue(null);
+      //  cinemaComboBox.setValue(null);
         hallComboBox.setValue(null);
         addScreeningBtn.getStyleClass().remove("error");
     }

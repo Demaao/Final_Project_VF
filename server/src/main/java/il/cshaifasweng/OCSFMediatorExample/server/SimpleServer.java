@@ -1096,6 +1096,10 @@ public class SimpleServer extends AbstractServer {
 					//movie.setScreenings(screenings);
 					session.save(movie);
 					session.flush();
+					for(Screening screening : movie.getScreenings()) {
+						session.save(screening);
+						session.flush();
+					}
 					NewMessage newMessage = new NewMessage("movieAdded");  // שליחת רשימת הסרטים לבית ללקוח עם המחרוזת "homeMovies"
 					client.sendToClient(newMessage);
 					List<Movie> movies = getAllMovies(session);
@@ -1690,7 +1694,11 @@ public class SimpleServer extends AbstractServer {
 							String[] lines = purchaseToReturn.getPurchaseDescription().split("\n");
 							String date = "";
 							String time = "";
+							String movie = "";
 							for (String line : lines) {
+								if (line.startsWith("Movie:")){
+									movie = line.split(": ")[1].trim();
+								}
 								if (line.startsWith("Date:")) {
 									date = line.split(": ")[1].trim();
 								}
@@ -1707,9 +1715,10 @@ public class SimpleServer extends AbstractServer {
 							LocalTime time1 = LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
 							LocalDateTime dateTime = LocalDateTime.of(date1, time1);
 
+							screeningsList.removeIf(screening -> screening.getBranch()==null);
+							screeningsList.removeIf(screening -> !screening.getBranch().getName().equals(purchaseToReturn.getBranchName()));
 							for (Screening screen : screeningsList) {
-								if (screen.getBranch().getName().equals(masterPurchase.getBranchName())
-										&& screen.getScreeningTime().equals(dateTime)){
+								if (screen.getScreeningTime().equals(dateTime) && screen.getMovie().getEngtitle().equals(movie)){
 									screen.setAvailableSeatAt(purchaseToReturn.getSeatNum());
 									screen.setAvailableSeats(screen.getAvailableSeats() + 1);
 									screen.setTakenSeats(screen.getTakenSeats() - 1);
@@ -1788,9 +1797,10 @@ public class SimpleServer extends AbstractServer {
 						LocalTime time1 = LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
 						LocalDateTime dateTime = LocalDateTime.of(date1, time1);
 
+						screeningsList.removeIf(screening -> screening.getBranch()==null);
+								screeningsList.removeIf(screening -> !screening.getBranch().getName().equals(purchaseToReturn.getBranchName()));
 						for (Screening screen : screeningsList) {
-							if (screen.getBranch().getName().equals(masterPurchase.getBranchName())
-							&& screen.getScreeningTime().equals(dateTime)){
+							if (screen.getScreeningTime().equals(dateTime) && screen.getMovie().getEngtitle().equals(movie)){
 									screen.setAvailableSeatAt(purchaseToReturn.getSeatNum());
 									screen.setAvailableSeats(screen.getAvailableSeats() + 1);
 									screen.setTakenSeats(screen.getTakenSeats() - 1);
