@@ -514,9 +514,9 @@ public class AddMoviePage {
             String cinema = cinemaComboBox.getValue();
             LocalDateTime dateTime1 = LocalDateTime.of(date1.getYear(), date1.getMonth(), date1.getDayOfMonth(), Integer.parseInt(hours), Integer.parseInt(minutes));
 
-            int selectedHallId = hallComboBox.getValue(); //save it
 
             if (screeningTypeSpinner.getValue().equals("In The Cinema")) {
+                int selectedHallId = hallComboBox.getValue(); //save it
                 if (!isScreeningTimeOverlapping(dateTime1, selectedHallId, cinema)) {
                     Branch branch = new Branch();
                     branch.setName(cinema);

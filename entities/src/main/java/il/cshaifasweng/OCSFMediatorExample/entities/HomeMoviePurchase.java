@@ -21,6 +21,8 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
     private LocalDateTime availabilityStartTime;
     // private String availabilityEndTime;
     private LocalDateTime availabilityEndTime;
+    private String Link;
+    private String movieTitle;
 
 /*
     @OneToOne(mappedBy = "homeMoviePurchase", cascade = CascadeType.ALL) // Correct reference to the owning field
@@ -34,12 +36,14 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
 
     public HomeMoviePurchase(String productType, LocalDateTime  purchaseDate, String paymentMethod, double pricePaid,
                              Customer customer, String purchaseDescription, HomeMovie homeMovie, LocalDateTime availabilityStartTime, LocalDateTime availabilityEndTime
-            , Screening screening) {
+            , Screening screening, String Link, String movieTitle) {
         super(productType, purchaseDate, paymentMethod, pricePaid, customer, purchaseDescription);
         this.homeMovie = homeMovie;
         this.availabilityStartTime = availabilityStartTime;
         this.availabilityEndTime = availabilityEndTime;
         this.screening = screening;
+        this.Link = Link;
+        this.movieTitle = movieTitle;
     }
 
     public HomeMovie getHomeMovie() {
@@ -76,5 +80,18 @@ public class HomeMoviePurchase extends Purchase implements Serializable {
 
     public void setAvailabilityEndTime(LocalDateTime availabilityEndTime) {
         this.availabilityEndTime = availabilityEndTime;
+    }
+
+    public String getLink() {
+        return Link;
+    }
+    public void setLink(String link) {
+        Link = link;
+    }
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
     }
 }

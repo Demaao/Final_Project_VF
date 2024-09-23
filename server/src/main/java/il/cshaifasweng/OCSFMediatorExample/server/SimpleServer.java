@@ -188,7 +188,8 @@ public class SimpleServer extends AbstractServer {
 		HomeMovie homeMovie = session.get(HomeMovie.class, 16);
 		Screening screening = session.get(Screening.class, 652);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36),screening);
+		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36),screening
+				,"https://www.youtube.com/watch?v=gUTjfOkVu7E", "Wire Room");
 		//HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
 		homeMoviePurchase.setScreening(screening);
 		screening.getHomeMoviePurchases().add(homeMoviePurchase);
@@ -1574,8 +1575,13 @@ public class SimpleServer extends AbstractServer {
 											session.save(cardNotification);
 										break; // Exit the purchase loop for this customer because a notification is sent
 									}
-									if(purchase instanceof HomeMoviePurchase && movie instanceof HomeMovie) {
-										String movieTitle = "";
+
+								}}}}
+						for (Customer customer : customers) {
+							List<Purchase> purchases = customer.getPurchaseHistory();
+							for (Purchase purchase : purchases) {
+								if(purchase instanceof HomeMoviePurchase) { // && movie instanceof HomeMovie) {
+									/*	String movieTitle = "";
 										if(((HomeMoviePurchase) purchase).getHomeMovie() == null) {
 											String details = ((HomeMoviePurchase) purchase).getPurchaseDescription();
 											Pattern pattern = Pattern.compile("Movie link for \"([^\"]+)\"");
@@ -1592,25 +1598,25 @@ public class SimpleServer extends AbstractServer {
 											String dateTimeString = time.split("\nScreening: ")[1];
 											screeningTime = LocalDateTime.parse(dateTimeString, formatter1);
 										} else
-											screeningTime = ((HomeMoviePurchase) purchase).getScreening().getScreeningTime();
-										Duration duration = Duration.between(LocalDateTime.now(), screeningTime);
-										if (duration.toHours() <= 1 && movieTitle.equals(movie.getEngtitle())) {
-											Notification linkNotification = new Notification(
-													"Movie Link", "The link for the movie \"" + movie.getEngtitle() + "\" will be activated soon!" + "\nScreening: " + ((HomeMoviePurchase) purchase).getScreening().getScreeningTime().format(formatter1) +
-													"\nFor more details check the movie links page in the personal area.",
-													LocalDateTime.now(), "Unread", customer);
-											int flag = 0;
-											for (Notification notification : notifications) {
-												if (notification.getCustomer().equals(customer) && notification.getMessage().equals(linkNotification.getMessage()) && notification.getTime().toLocalDate().equals(linkNotification.getTime().toLocalDate())) {
-													flag = 1;
-													break;
-												}
-											}
-											if (flag == 0)
-												session.save(linkNotification);
-										}
-									}
-								}}}}
+											screeningTime = ((HomeMoviePurchase) purchase).getScreening().getScreeningTime();*/
+									//	Duration duration = Duration.between(LocalDateTime.now(), screeningTime);
+									Duration duration = Duration.between(LocalDateTime.now(), ((HomeMoviePurchase) purchase).getAvailabilityStartTime());
+									DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+									if (duration.toHours() <= 1){ // && movieTitle.equals(movie.getEngtitle())) {
+										Notification linkNotification = new Notification(
+												"Movie Link", "The link for the movie \"" + ((HomeMoviePurchase) purchase).getMovieTitle() + "\" will be activated soon!" + "\nScreening: " + ((HomeMoviePurchase) purchase).getAvailabilityStartTime().format(formatter1) +
+												"\nFor more details check the movie links page in the personal area.",
+												LocalDateTime.now(), "Unread", customer);
+										int flag = 0;
+										for (Notification notification : notifications) {
+											if (notification.getCustomer().equals(customer) && notification.getMessage().equals(linkNotification.getMessage()) && notification.getTime().toLocalDate().equals(linkNotification.getTime().toLocalDate())) {
+												flag = 1;
+												break;
+											}}
+										if (flag == 0)
+											session.save(linkNotification);
+									}}}
+						}
 					List<Notification> finalNotifications = getAllNotifications(session);
 					NewMessage newMessage = new NewMessage(finalNotifications, "notificationsList");
 					client.sendToClient(newMessage);
