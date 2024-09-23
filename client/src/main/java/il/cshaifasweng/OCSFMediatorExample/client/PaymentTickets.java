@@ -196,7 +196,7 @@ public class PaymentTickets {
                     + "\nTime: " + screening.getScreeningTime().toLocalTime()
                     + "\nSeat ID: " + request.getSeatIds()[i];
             Purchase ticket = new Purchase("Movie Ticket", time, "Credit Card", MovieDetailsPage.ticketValue, customer, screening.getBranch().getName(), 1,
-                    "Movie Tickets Details: " + temp1 +"\nBranch: "+ screening.getBranch().getName());
+                    "Movie Ticket Details: " + temp1 +"\nBranch: "+ screening.getBranch().getName(), ChooseSeating.arr1[i]);
             purchases.add(ticket);
         }
 

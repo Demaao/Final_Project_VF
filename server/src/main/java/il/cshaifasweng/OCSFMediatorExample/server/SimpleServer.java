@@ -1660,9 +1660,9 @@ public class SimpleServer extends AbstractServer {
 					Purchase masterPurchase = null;
 					List<Purchase> otherPurchases = new ArrayList<>();
 					for(Purchase purchase1 : purchases) {
-						if (purchase1.getPurchaseDate().equals(purchase.getPurchaseDate())
-								&& purchase1.getCustomer().getId() == purchase.getCustomer().getId()) {
-							if(!(purchase1 instanceof Card) && !(purchase1 instanceof HomeMoviePurchase)) { // || purchase1 instanceof MovieTicket) {
+						if (purchase1.getPurchaseDate().equals(purchaseToReturn.getPurchaseDate())
+								&& purchase1.getCustomer().getId() == purchaseToReturn.getCustomer().getId()) {
+							if(!(purchase1 instanceof Card) && !(purchase1 instanceof HomeMoviePurchase) && !purchase1.getProductType().equals("Movie Ticket")) {
 								masterPurchase = purchase1;
 							} else {
 								otherPurchases.add(purchase1);
@@ -1686,6 +1686,43 @@ public class SimpleServer extends AbstractServer {
 						customer.getPurchaseHistory().remove(purchase3);
 						session.save(customer);
 						session.remove(purchase3);
+						if(purchaseToReturn.getProductType().equals("Movie Ticket")) {
+							String[] lines = purchaseToReturn.getPurchaseDescription().split("\n");
+							String date = "";
+							String time = "";
+							for (String line : lines) {
+								if (line.startsWith("Date:")) {
+									date = line.split(": ")[1].trim();
+								}
+								if (line.startsWith("Time:")) {
+									time = line.split(": ")[1].trim();
+									break;
+								}
+							}
+
+							List<Screening> screeningsList = getAllScreenings(session); // Assuming this method exists
+							LocalDate date1 = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+
+							// Parse the time string into a LocalTime
+							LocalTime time1 = LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
+							LocalDateTime dateTime = LocalDateTime.of(date1, time1);
+
+							for (Screening screen : screeningsList) {
+								if (screen.getBranch().getName().equals(masterPurchase.getBranchName())
+										&& screen.getScreeningTime().equals(dateTime)){
+									screen.setAvailableSeatAt(purchaseToReturn.getSeatNum());
+									screen.setAvailableSeats(screen.getAvailableSeats() + 1);
+									screen.setTakenSeats(screen.getTakenSeats() - 1);
+									break;
+								}
+								// Save the updated screening
+								session.save(screen);
+								session.flush();
+							}
+
+							List<Screening> screenings = getAllScreenings(session);
+							sendToAllClients(new NewMessage(screenings, "screeningTimes"));
+						}
 					} else if(purchase instanceof Card) {
 						Purchase purchase2 = session.get(Purchase.class, masterPurchase.getId());
 						purchase2.setQuantity(purchase2.getQuantity() - 1);
@@ -1695,20 +1732,79 @@ public class SimpleServer extends AbstractServer {
 							purchase2.setPurchaseDescription(purchase2.getQuantity() + " cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
 						purchase2.setPricePaid(purchase.getPricePaid() * purchase.getQuantity());
 						session.save(purchase2);
-				/*	}/* else  if(purchase instanceof MovieTicket){  ////////////////////////////////////////////////
-						masterPurchase.setQuantity(masterPurchase.getQuantity()-1);
-						StringBuilder result = new StringBuilder(masterPurchase.getQuantity()+ " tickets were ordered for movie:" + otherPurchases.getFirst().getMovie().getEngTitle() + ". at the " otherPurchases.getFirst.getBranch() + "" );
-						for (Purchase item : otherPurchases) {
-							if (result.length() > 0) {
-								result.append(", "); // Add a separator (e.g., a comma and space) between items
+				} else if (purchase.getProductType().equals("Movie Ticket")) {
+						Purchase purchase2 = session.get(Purchase.class, masterPurchase.getId());
+						purchase2.setQuantity(purchase2.getQuantity() - 1);
+						session.update(purchase2);
+
+						String[] lines = purchaseToReturn.getPurchaseDescription().split("\n");
+						String movie = "";
+						String date = "";
+						String time = "";
+						String seatToDelete = "";
+						for (String line : lines) {
+							if (line.startsWith("Movie:")) {
+								movie = line.split(": ")[1].trim();
 							}
-							result.append(item);
+							if (line.startsWith("Date:")) {
+								date = line.split(": ")[1].trim();
+							}
+							if (line.startsWith("Time:")) {
+								time = line.split(": ")[1].trim();
+							}
+							if (line.startsWith("Seat ID:")) {
+								seatToDelete = line.split(": ")[1].trim();
+								break;
+							}
 						}
-						String finalString = result.toString();
-						masterPurchase.setPurchaseDescription("");
-						session.save(masterPurchase);
-					}*/
+
+						List<String> seats = new ArrayList<>();
+						for (Purchase item : otherPurchases) {
+							String[] lines2 = item.getPurchaseDescription().split("\n");
+							String seat = "";
+							for (String line : lines2) {
+								if (line.startsWith("Seat ID:")) {
+									seat = line.split(": ")[1].trim();
+									break;
+								}
+							}
+							if (!seat.equals(seatToDelete))
+								seats.add(seat);
+						}
+						String seatsString = String.join(" ", seats);
+
+						purchase2.setPurchaseDescription("Movie Tickets Details: Order Summary:\nMovie: " + movie +
+								"\nDate: " + date + "\nTime: " + time + "\nNumber of tickets: " + purchase2.getQuantity() +
+								"\nSeats IDs: " + seatsString +
+								"\nBranch: " + masterPurchase.getBranchName());
+
+						purchase2.setPricePaid(purchase2.getPricePaid() - purchaseToReturn.getPricePaid());
+						session.save(purchase2);
+
+						List<Screening> screeningsList = getAllScreenings(session); // Assuming this method exists
+						LocalDate date1 = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+
+						// Parse the time string into a LocalTime
+						LocalTime time1 = LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
+						LocalDateTime dateTime = LocalDateTime.of(date1, time1);
+
+						for (Screening screen : screeningsList) {
+							if (screen.getBranch().getName().equals(masterPurchase.getBranchName())
+							&& screen.getScreeningTime().equals(dateTime)){
+									screen.setAvailableSeatAt(purchaseToReturn.getSeatNum());
+									screen.setAvailableSeats(screen.getAvailableSeats() + 1);
+									screen.setTakenSeats(screen.getTakenSeats() - 1);
+									break;
+							}
+							// Save the updated screening
+							session.save(screen);
+							session.flush();
+						}
+
+					List<Screening> screenings = getAllScreenings(session);
+					sendToAllClients(new NewMessage(screenings, "screeningTimes"));
 					}
+
 					customer.getPurchaseHistory().remove(purchaseToReturn);
 					session.save(customer);
 					session.remove(purchaseToReturn);
@@ -1805,9 +1901,7 @@ public class SimpleServer extends AbstractServer {
 					exception.printStackTrace();
 				}
 			} else if(msgString.equals("screeningHallsRequest")){
-				System.out.println("screeningHallsRequest 1");
 				try (Session session = sessionFactory.openSession()) {
-					System.out.println("screeningHallsRequest 2");
 					session.beginTransaction();
 					Movie requestedMovie = message.getMovie();
 					List<Screening> screenings = session.createQuery(
@@ -1816,7 +1910,6 @@ public class SimpleServer extends AbstractServer {
 							.getResultList();
 					for (Screening screening : screenings) {
 						LocalDateTime screeningTime = screening.getScreeningTime();
-						System.out.println(screeningTime);
 					}
 					NewMessage newMessage = new NewMessage(screenings, "screeningHalls");
 					client.sendToClient(newMessage);
@@ -1827,7 +1920,6 @@ public class SimpleServer extends AbstractServer {
 				}
 			}
 			else if (msgString.equals("SaveSeatsInHall")) {
-				System.out.println("we did get to handleFromClient:SaveSeatsInHall");
 				BookingSeatsReq request = (BookingSeatsReq) message.getObject();  // Cast message to BookingSeatsReq
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
@@ -1873,14 +1965,12 @@ public class SimpleServer extends AbstractServer {
 							for (int i = 0; i < request.getArrSize(); i++) {
 								screen.setAvailableSeatAt(request.getSeats()[i]);
 							}
-							System.out.println("request size " + request.getArrSize());
 							screen.setAvailableSeats(screen.getAvailableSeats() + request.getArrSize());
 							screen.setTakenSeats(screen.getTakenSeats() - request.getArrSize());
 
 							// Save the updated screening
 							session.save(screen);
 							session.flush();
-
 
 							// Send confirmation message back to client
 							try {
