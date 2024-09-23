@@ -105,11 +105,8 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("purchaseReturned")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Purchase refunded successfully!")));
 				} else if (message.getMessage().equals("screeningHalls")) {
-					System.out.println("did we get here?");
 					List<Screening> screenings = (List<Screening>) message.getObject();
-					System.out.println("maybe..");
 					EventBus.getDefault().post(new UpdateScreeningTimesEvent(screenings));
-					System.out.println("yes we did!");
 				} else if (message.getMessage().equals("SeatsSaved")) {
 					PaymentTickets.setRequest((BookingSeatsReq) ((NewMessage) msg).getObject());
 					App.switchScreen("PaymentTickets");

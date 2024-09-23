@@ -223,6 +223,7 @@ public class PaymentTickets {
         alert.setContentText(temp + "\n\nNote: You can see your purchase details in the personal area.");
         alert.show();
 
+        MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
         App.switchScreen("MoviesPage");
         // showAlert(Alert.AlertType.INFORMATION, "Payment Completed", "Payment completed successfully!\n"+temp) ;

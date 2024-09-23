@@ -135,7 +135,7 @@ public class SimpleServer extends AbstractServer {
 		Customer customer2 = new Customer(123456789, "Shada gh", "shada.gha@example.com", "0527654321", purchases2, false);
 
 		//Create purchases and add them to customers
-		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"Haifa Cinema",2,"Movie Ticket Details:\n" + "Movie: Inside out\n" + "Date: 2024-10-01\n" + "Time: 17:00\n" + "Seat ID: E2\n" + "Branch: Haifa Cinema");
 		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie: Wire Room. Viewing is limited to the screening time you selected: 2024-09-24 15:00");
 		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
