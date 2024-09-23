@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ChooseSeating {
     private Hall hall;//An instance hall class, representing the specific hall where the screening is taking place.
-    private static Screening screening;//A static variable representing the screening event, including details about the movie, time, and seat availability.
+    public static Screening screening;//A static variable representing the screening event, including details about the movie, time, and seat availability.
     private int counter = 0;//Tracks the number of seats currently selected by the user.
     private String pickedSeats;//A String that stores a description of the seats chosen by the user.
 

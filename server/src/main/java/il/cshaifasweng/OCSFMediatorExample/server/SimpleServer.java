@@ -1014,7 +1014,7 @@ public class SimpleServer extends AbstractServer {
 					String branch = message.getBranchName();
 					if (branch.equals("All") || movieToDelete.getBranches().size() == 1) {
 						session.remove(movieToDelete);
-						NewMessage newMessage4 = new NewMessage(movie.getId(), "movieNotAvailable");
+						NewMessage newMessage4 = new NewMessage(movie.getId(), "movieNotAvailable", "All");
 						sendToAllClients(newMessage4);
 						NewMessage newMessage2 = new NewMessage("movieRemoved");
 						client.sendToClient(newMessage2);
@@ -1041,8 +1041,8 @@ public class SimpleServer extends AbstractServer {
 						}
 						NewMessage newMessage2 = new NewMessage("movieRemoved");
 						client.sendToClient(newMessage2);
-					//	NewMessage newMessage4 = new NewMessage(branch, "movieNotAvailable", movie.getId());
-					//	sendToAllClients(newMessage4);
+						NewMessage newMessage4 = new NewMessage(movie.getId(), "movieNotAvailable", branch);
+						sendToAllClients(newMessage4);
 					}
 					List<Movie> movies = getAllMovies(session);
 					NewMessage newMessage = new NewMessage(movies, "movies");
@@ -1936,9 +1936,9 @@ public class SimpleServer extends AbstractServer {
 				}
 			}
 			else if (msgString.equals("SaveSeatsInHall")) {
-				BookingSeatsReq request = (BookingSeatsReq) message.getObject();  // Cast message to BookingSeatsReq
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
+					BookingSeatsReq request = (BookingSeatsReq) message.getObject();  // Cast message to BookingSeatsReq
 					// Get all screenings and update the corresponding screening
 					List<Screening> screeningsList = getAllScreenings(session);  // Assuming this method exists
 					for (Screening screen : screeningsList) {
@@ -1955,10 +1955,10 @@ public class SimpleServer extends AbstractServer {
 							client.sendToClient(new NewMessage(request, "SeatsSaved"));
 							List<Screening> screenings = getAllScreenings(session);
 							sendToAllClients(new NewMessage(screenings, "screeningTimes"));
-							session.getTransaction().commit();
 							break;
 						}
 					}
+					session.getTransaction().commit();
 				}
 				catch (Exception e) {
 					// Handle IO exception while sending message to client
@@ -1967,11 +1967,9 @@ public class SimpleServer extends AbstractServer {
 				}
 			}
 			else if (msgString.startsWith("UndoSaveSeatsInHall")) {
-				BookingSeatsReq request = (BookingSeatsReq) ((NewMessage) msg).getObject(); // Cast message to BookingSeatsReq
-
 				try (Session session = sessionFactory.openSession()) { // Open session in a try-with-resources block
 					session.beginTransaction();
-
+					BookingSeatsReq request = (BookingSeatsReq) ((NewMessage) msg).getObject(); // Cast message to BookingSeatsReq
 					// Get all screenings and find the corresponding screening
 					List<Screening> screeningsList = getAllScreenings(session); // Assuming this method exists
 					for (Screening screen : screeningsList) {
@@ -1999,8 +1997,8 @@ public class SimpleServer extends AbstractServer {
 							sendToAllClients(new NewMessage(screenings, "screeningTimes"));
 							break;
 						}
-						session.getTransaction().commit();
 					}
+					session.getTransaction().commit();
 				} catch (Exception e) {
 					e.printStackTrace(); // Handle exception
 				}
