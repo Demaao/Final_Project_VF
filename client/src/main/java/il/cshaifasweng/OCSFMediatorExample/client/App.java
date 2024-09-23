@@ -1,6 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
+import il.cshaifasweng.OCSFMediatorExample.entities.HomeMovie;
 import il.cshaifasweng.OCSFMediatorExample.entities.NewMessage;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
@@ -541,17 +542,49 @@ public class App extends Application {
 
     @Subscribe
     public void onMovieUpdateEvent(NewMessage event){
-        event.getMessage();
         if(Objects.equals(event.getMessage(), "movieNotAvailable") && (MovieDetailsPage.movieDetailsPage == 1)
-        && ((int)event.getObject() == MovieDetailsPage.selectedMovie.getId())){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Sorry, the movie is no longer available.");
-            alert.show();
-            try {
-                MovieDetailsPage.movieDetailsPage = 0;
-                switchScreen("MoviesPage");
-            } catch (Exception e) {
-                e.printStackTrace();
+        && ((int)event.getObject() == MovieDetailsPage.selectedMovie.getId())) {
+            if (PaymentTickets.getRequest() != null) {
+                if(PaymentTickets.getRequest().getScreening().getBranch().getName().equals(event.getBranchName()) || event.getBranchName().equals("All")) {
+                    MovieDetailsPage.movieDetailsPage = 0;
+                    MovieDetailsPage.setTicketPrice = 0;
+                    try {
+                        SimpleClient.getClient().sendToServer(new NewMessage(PaymentTickets.getRequest(), "UndoSaveSeatsInHall"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("Sorry, the movie is no longer available.");
+                    alert.show();
+                    try {
+                        switchScreen("MoviesPage");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
+            } if(ChooseSeating.screening != null){
+                if (ChooseSeating.screening.getBranch().getName().equals(event.getBranchName()) || event.getBranchName().equals("All")){
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setContentText("Sorry, the movie is no longer available.");
+                        alert.show();
+                        try {
+                            MovieDetailsPage.movieDetailsPage = 0;
+                            switchScreen("MoviesPage");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+            } else if (MovieDetailsPage.selectedMovie instanceof HomeMovie || event.getBranchName().equals("All")){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Sorry, the movie is no longer available.");
+                alert.show();
+                try {
+                    MovieDetailsPage.movieDetailsPage = 0;
+                    switchScreen("MoviesPage");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

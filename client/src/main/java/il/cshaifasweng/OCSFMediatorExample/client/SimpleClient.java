@@ -54,7 +54,8 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("screeningRemoved")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Screening removed successfully!")));
 				} else if (message.getMessage().equals("movieNotAvailable")) {
-					EventBus.getDefault().post(new NewMessage(message.getObject(), "movieNotAvailable"));
+					//EventBus.getDefault().post(new NewMessage(message.getObject(), "movieNotAvailable"));
+					EventBus.getDefault().post(message);
 				} else if (message.getMessage().equals("screeningUpdated")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Screening time updated successfully!")));
 				} else if (message.getMessage().equals("screeningUpdateFailed")) {
