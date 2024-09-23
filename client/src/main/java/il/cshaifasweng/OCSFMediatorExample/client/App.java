@@ -570,6 +570,7 @@ public class App extends Application {
                         alert.show();
                         try {
                             MovieDetailsPage.movieDetailsPage = 0;
+                            MovieDetailsPage.setTicketPrice = 0;
                             switchScreen("MoviesPage");
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -581,6 +582,7 @@ public class App extends Application {
                 alert.show();
                 try {
                     MovieDetailsPage.movieDetailsPage = 0;
+                    PurchaseLink.setLinkPrice = 0;
                     switchScreen("MoviesPage");
                 } catch (Exception e) {
                     e.printStackTrace();
