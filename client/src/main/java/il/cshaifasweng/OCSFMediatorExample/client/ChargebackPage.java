@@ -13,7 +13,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.time.Duration;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -174,11 +176,32 @@ public class ChargebackPage {
                 }
             }
             if(selectedItem.getProductType().equals("Movie Ticket")){
-                /*
-               LocalDateTime screeningTime = ((MovieTicket) selectedItem).getScreening().getScreeningTime();
+                String details = selectedItem.getPurchaseDescription();
+                // Extract the date and time from the string
+                String[] lines = details.split("\n");
+
+                String dateStr = "";
+                String timeStr = "";
+
+                // Find and extract the date and time values
+                for (String line : lines) {
+                    if (line.startsWith("Date:")) {
+                        dateStr = line.split(": ")[1].trim();
+                    } else if (line.startsWith("Time:")) {
+                        timeStr = line.split(": ")[1].trim();
+                    }
+                }
+
+                // Parse the date and time
+                LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalTime time = LocalTime.parse(timeStr, DateTimeFormatter.ofPattern("HH:mm"));
+
+                // Combine into a LocalDateTime
+                LocalDateTime dateTime = LocalDateTime.of(date, time);
+
                 LocalDateTime currentTime = LocalDateTime.now();
-                Duration duration = Duration.between(currentTime, screeningTime);
-                double refundPercentage;
+                Duration duration = Duration.between(currentTime, dateTime);
+              //  double refundPercentage2;
                 // Get the difference in hours
                 long hoursDifference = duration.toHours();
 
@@ -189,7 +212,7 @@ public class ChargebackPage {
                     refundPercentage = 50.0;
                 } else{
                 refundPercentage = 0.0;
-         }*/
+                }
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Refund");

@@ -204,10 +204,12 @@ public class ChooseSeating {
         }
     }
 
+    public static int[] arr1;
+
     @FXML
     void bookChosenSeats() {
         int counter1 = 0;
-        int[] arr1 = new int[counter];
+        arr1 = new int[counter];   ///////////////////////////////////////////////////
         String[] arr2 = new String[counter];
         int seatcount = 0;
         pickedSeats = "";

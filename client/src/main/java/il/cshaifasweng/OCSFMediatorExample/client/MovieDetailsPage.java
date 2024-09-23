@@ -128,10 +128,13 @@ public class MovieDetailsPage {
                 timeComboBox.setVisible(false);
                 bookNowLabel.setVisible(false);
                 lengthLabel.setVisible(false);
+                SBttn.setVisible(false);
+                cancelBtn.setText("Back");
             }
 
             else {
                 SBttn.setVisible(true);
+                cancelBtn.setVisible(true);
                 cinemaComboBox.setVisible(true);
                 chooseDatePicker.setVisible(true);
                 timeComboBox.setVisible(true);
@@ -167,7 +170,6 @@ public class MovieDetailsPage {
 
     @Subscribe
     public void onUpdateScreeningEvent(UpdateScreeningTimesEvent event) {
-        System.out.println("onUpdateScreeningEvent screenings size: " +  event.getScreenings().size());
         selectedScreening = event.getScreenings();
 
     }
@@ -195,10 +197,8 @@ public class MovieDetailsPage {
 
     void setScreeningToHall() {
         LocalDate localDate = chooseDatePicker.getValue();
-        System.out.println("localDate: " + localDate);
         String time = timeComboBox.getValue();
         LocalTime time1 = LocalTime.parse(time);
-        System.out.println("time1: " + time1);
         LocalDateTime screeningTime = localDate.atTime(time1.minusHours(3));
         requestScreeningFromServer();
         // System.out.println("my sister 1  me6");
@@ -218,14 +218,10 @@ public class MovieDetailsPage {
 
 
     private void requestScreeningFromServer() {
-        System.out.println("requestHallFromServer1 ");
         try {
-            System.out.println("requestHallFromServer 2");
             NewMessage message = new NewMessage("screeningHallsRequest");
             message.setMovie(selectedMovie);
-            System.out.println("requestHallFromServer 3");
             SimpleClient.getClient().sendToServer(message);
-            System.out.println("requestHallFromServer 4");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -414,7 +410,6 @@ public class MovieDetailsPage {
             this.cinema = cinema;
             if(setTicketPrice == 0 && MovieDetailsPage.movieDetailsPage == 1) {
                 ticketValue = cinema.getTicketPrice();
-                System.out.println(ticketValue);
                 setTicketPrice = 1;
             }
         });

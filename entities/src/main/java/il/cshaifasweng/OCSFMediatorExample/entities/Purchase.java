@@ -19,6 +19,7 @@ public class Purchase implements Serializable {
     private String branchName;
     private double pricePaid;
     private int quantity;
+    private int seatNum;
 
 
     @ManyToOne
@@ -38,6 +39,22 @@ public class Purchase implements Serializable {
         this.branchName = branchName;
         this.quantity = Quantity;
         this.purchaseDescription = purchaseDescription;
+    }
+
+    public Purchase(String productType, LocalDateTime purchaseDate, String paymentMethod, double pricePaid, Customer customer,String branchName, int Quantity, String purchaseDescription, int seatNum) {
+        this.productType = productType;
+        this.purchaseDate = purchaseDate;
+        this.paymentMethod = paymentMethod;
+        this.pricePaid = pricePaid;
+        this.customer = customer;
+        this.branchName = branchName;
+        this.quantity = Quantity;
+        this.purchaseDescription = purchaseDescription;
+        this.seatNum = seatNum;
+    }
+
+    public int getSeatNum(){
+        return seatNum;
     }
 
     //for home movies purchases
