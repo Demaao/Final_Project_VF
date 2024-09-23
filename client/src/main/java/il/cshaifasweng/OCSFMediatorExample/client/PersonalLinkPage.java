@@ -68,8 +68,8 @@ public class PersonalLinkPage {
 
 
     private void setupTableColumns() {
-        movieNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHomeMovie().getEngtitle()));
-        movieLinkColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHomeMovie().getLink()));
+        movieNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMovieTitle()));
+        movieLinkColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLink()));
 
         movieLinkColumn.setCellFactory(col -> new TableCell<HomeMoviePurchase, String>() {
             private final Hyperlink hyperlink = new Hyperlink();

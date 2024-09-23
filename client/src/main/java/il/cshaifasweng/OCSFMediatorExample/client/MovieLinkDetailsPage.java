@@ -340,7 +340,7 @@ public class MovieLinkDetailsPage {
                 // Add hours and minutes to the start time
                 LocalDateTime endTime = dateTime.plusHours(hours).plusMinutes(minutes);
                 homeMoviePurchase = new HomeMoviePurchase("Movie Link", null, "Credit Card", 100, null, "Movie link for \"" + MovieDetailsPage.selectedMovie.getEngtitle() + "\"." + "\nScreening: " + screening.getScreeningTime().format(formatter1),
-                        (HomeMovie) MovieDetailsPage.selectedMovie, dateTime, endTime, screening);
+                        (HomeMovie) MovieDetailsPage.selectedMovie, dateTime, endTime, screening, ((HomeMovie) MovieDetailsPage.selectedMovie).getLink(), ((HomeMovie) MovieDetailsPage.selectedMovie).getEngtitle());
                 homeMoviePurchase.setScreening(screening);
                 ((HomeMovie) MovieDetailsPage.selectedMovie).addHomeMoviePurchase(homeMoviePurchase);
                 App.switchScreen("PurchaseLink");
