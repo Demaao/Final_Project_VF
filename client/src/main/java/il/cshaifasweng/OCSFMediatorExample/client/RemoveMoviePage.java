@@ -12,6 +12,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -84,6 +89,7 @@ public class RemoveMoviePage {
   public void initialize() {
         EventBus.getDefault().register(this);
         requestMoviesFromServer();
+        requestPurchasesFromServer();
         screeningTypeColumn.setCellFactory(new Callback<TableColumn<Movie, String>, TableCell<Movie, String>>() {
           @Override
           public TableCell<Movie, String> call(TableColumn<Movie, String> col) {
@@ -200,6 +206,39 @@ public class RemoveMoviePage {
     public void removeMovie(){
         Platform.runLater(() -> {
             Movie movie = movieTable.getSelectionModel().getSelectedItem();
+            for (Purchase purchase: purchases){
+                if ((!(movie instanceof HomeMovie) && chooseCinemaBox.getValue().equals("All"))
+                || (!(movie instanceof HomeMovie) && chooseCinemaBox.getValue().equals(purchase.getBranchName()))){
+                    String[] lines = purchase.getPurchaseDescription().split("\n");
+                    String date = "";
+                    String time = "";
+                    String movieTitle = "";
+                    for (String line : lines) {
+                        if (line.startsWith("Movie:")) {
+                            movieTitle = line.split(": ")[1].trim();
+                        }
+                        if (line.startsWith("Date:")) {
+                            date = line.split(": ")[1].trim();
+                        }
+                        if (line.startsWith("Time:")) {
+                            time = line.split(": ")[1].trim();
+                            break;
+                        }
+                    }
+                    LocalDate date1 = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+                    // Parse the time string into a LocalTime
+                    LocalTime time1 = LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
+                    LocalDateTime dateTime = LocalDateTime.of(date1, time1);
+                    if(movie.getEngtitle().equals(movieTitle) && dateTime.isAfter(LocalDateTime.now())){
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Remove Movie");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Cannot remove movie! Tickets for this movie have already been sold");
+                        alert.show();
+                        return;
+                    }
+                }
+            }
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Remove Movie");
             alert.setHeaderText(movie.getEngtitle());
@@ -234,4 +273,29 @@ public class RemoveMoviePage {
 
     @Subscribe
     public void onUpdateScreeningEvent(UpdateScreeningTimesEvent event) {}
+
+    @FXML
+    private void requestPurchasesFromServer() {
+        try {
+            NewMessage message = new NewMessage("fetchPurchases");
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<Purchase> purchases = new ArrayList<>();
+    @Subscribe
+    public void handleUpdatePurchasesEvent(UpdatePurchasesEvent event) {
+        Platform.runLater(() -> {
+            purchases = event.getPurchases();
+            purchases.removeIf(purchase -> purchase instanceof  Card);
+            purchases.removeIf(purchase -> purchase instanceof HomeMoviePurchase);
+            purchases.removeIf(purchase -> purchase.getProductType().equals("Movie Tickets"));
+            purchases.removeIf(purchase -> purchase.getProductType().equals("Movie Card"));
+            purchases.removeIf(purchase -> purchase.getProductType().equals("Movie Link"));
+
+        });
+    }
+
 }
