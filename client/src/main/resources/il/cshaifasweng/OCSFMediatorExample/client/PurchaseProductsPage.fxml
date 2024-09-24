@@ -120,16 +120,11 @@
         </Button>
         <TableView fx:id="purchaseCardsTable" layoutX="229.0" layoutY="83.0" prefHeight="250.0" prefWidth="612.0">
             <columns>
-                <TableColumn fx:id="NOColumn" prefWidth="94.39996337890625" style="-fx-font-size: 15;" text="Product NO.">
+                <TableColumn fx:id="NOColumn" prefWidth="141.6000518798828" style="-fx-font-size: 15;" text="Product NO.">
                 </TableColumn>
-                <TableColumn fx:id="TypeColumn" prefWidth="98.4000244140625" style="-fx-font-size: 15;" text="Type">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="productType" />
-                    </cellValueFactory>
+                <TableColumn fx:id="detailsColumn" prefWidth="348.79998779296875" style="-fx-font-size: 15;" text="Details">
                 </TableColumn>
-                <TableColumn fx:id="detailsColumn" prefWidth="313.6000671386719" style="-fx-font-size: 15;" text="Details">
-                </TableColumn>
-                <TableColumn fx:id="priceColumn" prefWidth="108.7999267578125" style="-fx-font-size: 15;" text="Price">
+                <TableColumn fx:id="priceColumn" prefWidth="120.800048828125" style="-fx-font-size: 15;" text="Price">
                     <cellValueFactory>
                         <PropertyValueFactory property="pricePaid" />
                     </cellValueFactory>

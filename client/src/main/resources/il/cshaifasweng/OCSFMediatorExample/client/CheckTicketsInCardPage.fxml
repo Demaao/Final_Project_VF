@@ -5,12 +5,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.CheckTicketsInCardPage">
     <children>
         <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
@@ -135,17 +135,12 @@
                         <PropertyValueFactory property="id" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="ticketTypeColumn" prefWidth="137.59991455078125" style="-fx-font-size: 15;" text="Tickets Type">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="cardType" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="dateColumn" prefWidth="212.80007934570312" style="-fx-font-size: 15;" text="Purchase Time">
+                <TableColumn fx:id="dateColumn" prefWidth="312.800048828125" style="-fx-font-size: 15;" text="Purchase Time">
                     <cellValueFactory>
                         <PropertyValueFactory property="purchaseDate" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="ticketsAmountColumn" prefWidth="122.39999999999998" style="-fx-font-size: 15;" text="Tickets Amount">
+                <TableColumn fx:id="ticketsAmountColumn" prefWidth="160.7999267578125" style="-fx-font-size: 15;" text="Tickets Amount">
                     <cellValueFactory>
                         <PropertyValueFactory property="tickets" />
                     </cellValueFactory>

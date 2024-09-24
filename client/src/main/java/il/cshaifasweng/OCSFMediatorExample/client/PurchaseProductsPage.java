@@ -21,7 +21,6 @@ public class PurchaseProductsPage {
 
     public TableView<Card> purchaseCardsTable;
     public TableColumn NOColumn;
-    public TableColumn TypeColumn;
     public TableColumn detailsColumn;
     public TableColumn priceColumn;
 
@@ -90,7 +89,7 @@ public class PurchaseProductsPage {
                     int index = getIndex();
                     if (index >= 0 && index < getTableView().getItems().size()) {
                         Card card = getTableView().getItems().get(index);
-                        String customText = "Tickets Type: " + card.getCardType() + ",   Tickets Amount: 20";
+                        String customText = "Tickets Amount: 20";
                         setText(customText);
                     } else {
                         setText(null);

@@ -19,7 +19,6 @@ import java.util.List;
 
 public class CheckTicketsInCardPage {
     public TableColumn cardNOColumn;
-    public TableColumn ticketTypeColumn;
     public TableColumn dateColumn;
     public TableColumn ticketsAmountColumn;
     @FXML
