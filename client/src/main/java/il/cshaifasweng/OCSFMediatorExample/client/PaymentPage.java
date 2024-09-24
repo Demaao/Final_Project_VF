@@ -122,11 +122,11 @@ public class PaymentPage {
         }
 
         if(CardsPage.cards.size() > 1){
-            Purchase purchase = new Purchase("Card", time, "Credit Card",
+            Purchase purchase = new Purchase("Movie Card", time, "Credit Card",
                     totalPrice, customer, null, CardsPage.cards.size(), CardsPage.cards.size() + " cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
             purchases.add(purchase);
         } else {
-            Purchase purchase = new Purchase("Card", time, "Credit Card",
+            Purchase purchase = new Purchase("Movie Card", time, "Credit Card",
                     totalPrice, customer, null, CardsPage.cards.size(), "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
             purchases.add(purchase);
         }

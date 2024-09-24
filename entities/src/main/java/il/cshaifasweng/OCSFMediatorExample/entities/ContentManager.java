@@ -13,8 +13,8 @@ public class ContentManager extends Employee implements Serializable {
 
     // Parameterized constructor
     public ContentManager(int id, String fullName,String username, String password, String position,
-                       boolean isOnline, String phoneNumber, String email) {
-        super(id, fullName, password, username, position, isOnline, phoneNumber, email); // Initialize inherited fields
+                       boolean isOnline, String phoneNumber, String email, String branchName) {
+        super(id, fullName, password, username, position, isOnline, phoneNumber, email, branchName); // Initialize inherited fields
     }
     public void updatePrice() {
         // Implementation
