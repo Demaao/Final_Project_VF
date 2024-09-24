@@ -125,6 +125,9 @@ public class SimpleClient extends AbstractClient {
 					// Post the event to EventBus so the client UI can handle the data
 					UpdateMonthlyReportEvent event = new UpdateMonthlyReportEvent(reportData);
 					EventBus.getDefault().post(event);
+				} else if (message.getMessage().equals("complaintsByMonthAndBranch")) {
+					Map<Integer, Integer> complaintsByDay = (Map<Integer, Integer>) message.getObject();
+					EventBus.getDefault().post(new UpdateComplaintReportEvent(complaintsByDay));
 				}
 			});
 		}

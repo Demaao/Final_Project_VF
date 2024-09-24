@@ -11,8 +11,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.service.ServiceRegistry;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+
+import javax.persistence.Tuple;
+import javax.persistence.criteria.*;
 import java.io.*;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -120,10 +121,56 @@ public class SimpleServer extends AbstractServer {
 				"Screening", "bob@example.com", "When will the new movie be released?", LocalDateTime.of(2024, 9, 5, 22, 4),
 				"Thank you for reaching out,\nthe release date for the new movie has not yet been announced.\nPlease stay tuned for future updates.", true);
 
+		Complaint complaint5 = new Complaint("customer", 111111111L, "1111111111", "Haifa Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 9, 11, 20, 30),
+				"answered", true
+		);
+		Complaint complaint6 = new Complaint("customer", 111111111L, "1111111111", "Eilat Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 5, 8, 20, 30),
+				"answered", true
+		);
+		Complaint complaint7 = new Complaint("customer", 111111111L, "1111111111", "Karmiel Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 7, 11, 20, 30),
+				"answered", true
+		);
+		Complaint complaint8 = new Complaint("customer", 111111111L, "1111111111", "Tel Aviv Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 8, 19, 20, 30),
+				"answered", true
+		);
+		Complaint complaint9 = new Complaint("customer", 111111111L, "1111111111", "Haifa Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 6, 3, 20, 30),
+				"answered", true
+		);
+		Complaint complaint10 = new Complaint("customer", 111111111L, "1111111111", "Jerusalem Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 6, 30, 20, 30),
+				"answered", true
+		);
+		Complaint complaint11 = new Complaint("customer", 111111111L, "1111111111", "Jerusalem Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 8, 15, 20, 30),
+				"answered", true
+		);
+		Complaint complaint12 = new Complaint("customer", 111111111L, "1111111111", "Tel Aviv Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 8, 15, 20, 30),
+				"answered", true
+		);
+		Complaint complaint13 = new Complaint("customer", 111111111L, "1111111111", "Haifa Cinema",
+				"a@gmail.com", "complaint " , LocalDateTime.of(2024, 8, 17, 20, 30),
+				"answered", true
+		);
+
 		session.save(complaint1);
 		session.save(complaint2);
 		session.save(complaint3);
 		session.save(complaint4);
+		session.save(complaint5);
+		session.save(complaint6);
+		session.save(complaint7);
+		session.save(complaint8);
+		session.save(complaint9);
+		session.save(complaint10);
+		session.save(complaint11);
+		session.save(complaint12);
+		session.save(complaint13);
 		session.flush();
 	}
 
@@ -985,7 +1032,51 @@ public class SimpleServer extends AbstractServer {
 		return session.createQuery(query).getResultList();
 	}
 
+	private Map<Integer, Integer> getComplaintCountByDayAndBranch(Session session, int month, String branchName) throws Exception {
+		// Initialize the CriteriaBuilder and create a query
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Tuple> query = builder.createTupleQuery();  // Tuple to handle multiple fields in result
 
+		// Define the root of the query (the Complaint entity)
+		Root<Complaint> root = query.from(Complaint.class);
+
+		// Assuming 'submissionDate' is the field representing the date of the complaint
+		// Extract the day, month, and year from the date
+		Expression<Integer> dayExpression = builder.function("DAY", Integer.class, root.get("submissionDate"));
+		Expression<Integer> monthExpression = builder.function("MONTH", Integer.class, root.get("submissionDate"));
+		Expression<Integer> yearExpression = builder.function("YEAR", Integer.class, root.get("submissionDate"));
+
+		// Select the day and the count of complaints
+		query.multiselect(dayExpression, builder.count(root.get("id")));  // Replace "id" with your complaint identifier field
+
+		// Add conditions to filter by the specified month and year
+		List<Predicate> predicates = new ArrayList<>();
+		predicates.add(builder.equal(monthExpression, month));
+		predicates.add(builder.equal(yearExpression, 2024));
+
+		if (!branchName.equals("All")) {
+			predicates.add(builder.equal(root.get("subject"), branchName)); // Filter by branch name if provided
+		}
+
+		// Apply the predicates to the query
+		query.where(predicates.toArray(new Predicate[0]));
+
+		// Group by the day of the month
+		query.groupBy(dayExpression);
+
+		// Execute the query and store the result as a list of tuples
+		List<Tuple> results = session.createQuery(query).getResultList();
+
+		// Convert the result to a Map<Integer, Integer> where the key is the day and the value is the count
+		Map<Integer, Integer> complaintCountByDay = new HashMap<>();
+		for (Tuple tuple : results) {
+			Integer day = tuple.get(0, Integer.class);
+			Long count = tuple.get(1, Long.class); // Note: Count is returned as Long
+			complaintCountByDay.put(day, count.intValue()); // Convert to Integer if necessary
+		}
+
+		return complaintCountByDay;
+	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -2168,6 +2259,19 @@ public class SimpleServer extends AbstractServer {
 					NewMessage responseMessage = new NewMessage(reportData, "monthlyReport");
 					client.sendToClient(responseMessage);
 
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			} else if (msgString.equals("dataForComplaintsReport")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					int month = message.getMonth();
+					String branchName = message.getBranchName();
+					Map<Integer, Integer> complaintsByDay = getComplaintCountByDayAndBranch(session, month, branchName);
+					NewMessage newMessage = new NewMessage(complaintsByDay, "complaintsByMonthAndBranch");
+					client.sendToClient(newMessage);
 					session.getTransaction().commit();
 				} catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");

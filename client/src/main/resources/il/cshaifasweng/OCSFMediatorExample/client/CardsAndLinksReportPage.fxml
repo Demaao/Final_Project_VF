@@ -103,12 +103,12 @@
         </Label>
         <TableView fx:id="cardsAndLinksReportTable" layoutX="211.0" layoutY="143.0" prefHeight="464.0" prefWidth="666.0">
             <columns>
-                <TableColumn fx:id="dateColumn" prefWidth="118.39996337890625" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Date" />
-                <TableColumn fx:id="cardsSoldColumn" prefWidth="97.5999755859375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Cards Sold" />
-                <TableColumn fx:id="linksSoldColumn" prefWidth="90.40005493164062" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Links Sold" />
-                <TableColumn fx:id="cardRevenueColumn" prefWidth="103.20001220703125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Card Price" />
-                <TableColumn fx:id="linkRevenueColumn" prefWidth="99.2000732421875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Link Price" />
-                <TableColumn fx:id="totalRevenueColumn" prefWidth="160.7999267578125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Total Sales" />
+                <TableColumn fx:id="dateColumn" prefWidth="118.39996337890625" style="-fx-font-size: 15;" text="Date" />
+                <TableColumn fx:id="cardsSoldColumn" prefWidth="97.5999755859375" style="-fx-font-size: 15;" text="Cards Sold" />
+                <TableColumn fx:id="linksSoldColumn" prefWidth="90.40005493164062" style="-fx-font-size: 15;" text="Links Sold" />
+                <TableColumn fx:id="cardRevenueColumn" prefWidth="103.20001220703125" style="-fx-font-size: 15;" text="Card Price" />
+                <TableColumn fx:id="linkRevenueColumn" prefWidth="99.2000732421875" style="-fx-font-size: 15;" text="Link Price" />
+                <TableColumn fx:id="totalRevenueColumn" prefWidth="160.7999267578125" style="-fx-font-size: 15;" text="Total Sales" />
             </columns>
         </TableView>
 

@@ -64,8 +64,8 @@ public class ComplaintPage {
     public void initialize() {
         EventBus.getDefault().register(this);
         subjectComboBox.getItems().addAll("Website",
-                "Movie link", "Screening", "Purchases", "Haifa Branch", "Tel Aviv Branch",
-                "Eilat Branch", "Karmiel Branch", "Jerusalem Branch", "Other");
+                "Movie link", "Screening", "Purchases", "Haifa Cinema", "Tel Aviv Cinema",
+                "Eilat Cinema", "Karmiel Cinema", "Jerusalem Cinema", "Other");
 
     }
 
