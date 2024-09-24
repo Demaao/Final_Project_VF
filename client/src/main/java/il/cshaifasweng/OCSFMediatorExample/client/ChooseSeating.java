@@ -184,7 +184,7 @@ public class ChooseSeating {
         if (((Node) event.getSource()).getStyle()
                 .equals("-fx-fill:#dc48d5; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
             ((Node) event.getSource()).setStyle(
-                    "-fx-fill:#6e2c71; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
+                    "-fx-fill:#ffcd81; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
             counter++;
             chosenNum.setText("Number of chosen seats: " +counter);
             warning.setVisible(false);
@@ -195,7 +195,7 @@ public class ChooseSeating {
 
 
         } else if (((Node) event.getSource()).getStyle()
-                .equals("-fx-fill:#6e2c71; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
+                .equals("-fx-fill:#ffcd81; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
             ((Node) event.getSource()).setStyle(
                     "-fx-fill:#dc48d5; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;");
             counter--;
@@ -218,7 +218,7 @@ public class ChooseSeating {
                 int j = 3 + (hall.getCols() - 1) / 2;
                 while (i <= j && seatcount < hall.getSeatsNum()) {
                     if (gridSeats.getChildren().get(i + k * 7).getStyle()
-                            .equals("-fx-fill:#6e2c71; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
+                            .equals("-fx-fill:#ffcd81; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
                         pickedSeats += Character.toString((char) 65 + k);
                         pickedSeats += (i + 1 - (3 - (hall.getCols() - 1) / 2)) + " ";
                         if (confirmation.isVisible()) {
@@ -241,7 +241,7 @@ public class ChooseSeating {
                 while (i <= j && seatcount < hall.getSeatsNum()) {
                     if (i != 3) {
                         if (gridSeats.getChildren().get(i + k * 7).getStyle()
-                                .equals("-fx-fill:#6e2c71; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
+                                .equals("-fx-fill:#ffcd81; -fx-font-family: 'Material Icons'; -fx-font-size: 40.0;")) {
                             pickedSeats += Character.toString((char) 65 + k);
 
                             if (i < 3) {
@@ -408,6 +408,7 @@ public class ChooseSeating {
             while (j <= k) {
                 Label text = new Label(" ");
                 text.setText(Integer.toString(i));
+                text.setStyle("-fx-text-fill: WHITE; -fx-font-size: 12; -fx-alignment: center;");
                 colsGrids.add(text, j, 0);
                 i++;
                 j++;
@@ -436,6 +437,7 @@ public class ChooseSeating {
                 if (j != 3) {
                     Label text = new Label(" ");
                     text.setText(Integer.toString(i));
+                    text.setStyle("-fx-text-fill: WHITE; -fx-font-size: 12; -fx-alignment: center;");
                     colsGrids.add(text, j, 0);
                     i++;
                 }
