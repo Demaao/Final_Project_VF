@@ -102,27 +102,33 @@
                 <Font name="Britannic Bold" size="40.0" />
             </font>
         </Label>
-        <Label layoutX="211.0" layoutY="94.0" prefHeight="35.0" prefWidth="175.0" text="Choose month:" textFill="#f6d9d9">
+        <Label layoutX="192.0" layoutY="94.0" prefHeight="35.0" prefWidth="175.0" text="Choose month:" textFill="#f6d9d9">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <ComboBox fx:id="monthComboBox" layoutX="386.0" layoutY="94.0" prefHeight="35.0" prefWidth="150.0" />
-      <BarChart fx:id="complaintsReportGraph" layoutX="192.0" layoutY="140.0" prefHeight="444.0" prefWidth="689.0">
-        <xAxis>
-          <CategoryAxis endMargin="31.0" side="BOTTOM" startMargin="1.0" tickLabelFill="#f6d9d9" tickLabelGap="1.0">
-               <tickLabelFont>
-                  <Font size="15.0" />
-               </tickLabelFont>
-            </CategoryAxis>
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" style="-fx-font-color: #f6d9d9;" tickLabelFill="#f6d9d9" upperBound="90.0">
-               <tickLabelFont>
-                  <Font size="15.0" />
-               </tickLabelFont>
-            </NumberAxis>
-        </yAxis>
-      </BarChart>
+        <ComboBox fx:id="branchComboBox" layoutX="711.0" layoutY="94.0" onAction="#changeBranch" prefHeight="35.0" prefWidth="150.0" />
+        <BarChart fx:id="complaintsReportGraph" layoutX="192.0" layoutY="140.0" prefHeight="444.0" prefWidth="689.0">
+            <xAxis>
+                <CategoryAxis endMargin="31.0" side="BOTTOM" startMargin="1.0" tickLabelFill="#f6d9d9" tickLabelGap="1.0">
+                    <tickLabelFont>
+                        <Font size="15.0" />
+                    </tickLabelFont>
+                </CategoryAxis>
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT" style="-fx-font-color: #f6d9d9;" tickLabelFill="#f6d9d9" upperBound="90.0">
+                    <tickLabelFont>
+                        <Font size="15.0" />
+                    </tickLabelFont>
+                </NumberAxis>
+            </yAxis>
+        </BarChart>
+        <Label fx:id="chooseBranchText" layoutX="536.0" layoutY="94.0" prefHeight="35.0" prefWidth="175.0" text="Choose branch:" textFill="#f6d9d9">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="monthComboBox" layoutX="360.0" layoutY="96.0" onAction="#changeMonth" prefHeight="35.0" prefWidth="150.0" />
     </children>
 </AnchorPane>

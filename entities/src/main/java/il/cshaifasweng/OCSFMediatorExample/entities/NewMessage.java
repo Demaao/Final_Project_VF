@@ -81,6 +81,16 @@ public class NewMessage implements Serializable {
         this.id = id;
     }
 
+    public NewMessage( String message, String branchName) {////////////////////
+        this.message = message;
+        this.branchName = branchName;
+    }
+    public NewMessage(String message, int month, String branchName) {
+        this.message = message;
+        this.month = month;
+        this.branchName = branchName;
+    }
+
     public Employee getEmployee() {
         return employee;
     }
