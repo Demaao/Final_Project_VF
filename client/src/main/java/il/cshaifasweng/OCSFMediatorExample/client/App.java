@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
 
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -36,6 +37,8 @@ public class App extends Application {
     private static Scene scene;
     static SimpleClient client;
     private static Stage appStage;
+
+
 
     public static AbstractClient getClient() {
         return client;
@@ -519,7 +522,6 @@ public class App extends Application {
             }
         }
     }
-
 	public static void main(String[] args) {
         launch();
     }

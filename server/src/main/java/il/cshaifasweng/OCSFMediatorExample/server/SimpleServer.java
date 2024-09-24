@@ -1,9 +1,11 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 
+import com.mysql.cj.xdevapi.Client;
 import il.cshaifasweng.OCSFMediatorExample.entities.Branch;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
+import net.bytebuddy.asm.Advice;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,6 +17,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
 import java.time.LocalDate;
+import java.util.concurrent.CountDownLatch;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,6 +26,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.util.*;
+import org.hibernate.query.Query;
 
 
 public class SimpleServer extends AbstractServer {
@@ -127,16 +132,24 @@ public class SimpleServer extends AbstractServer {
 	private static void generateCustomersAndPurchases(Session session) {
 		List<Purchase> purchases1 = new ArrayList<>();
 		List<Purchase> purchases2 = new ArrayList<>();
+		List<Purchase> purchases6 = new ArrayList<>();
 
 		Customer customer1 = new Customer(123123123, "Dima om", "dima.oma@example.com", "0501234567", purchases1, false);
 		Customer customer2 = new Customer(123456789, "Shada gh", "shada.gha@example.com", "0527654321", purchases2, false);
+		Customer customer3 = new Customer(111111111, "Rozaline", "roz@example.com", "0549195105", purchases6, false);
 
 		//Create purchases and add them to customers
-		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"haifaCinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
-		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"Tel Aviv Cinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie: Wire Room. Viewing is limited to the screening time you selected: 2024-09-24 15:00");
 		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase5 = new Purchase("Movie Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+
+		Purchase purchase6 = new Purchase("Movie Ticket", LocalDateTime.of(2024, 9, 8, 11, 11), "Credit Card", 1500, customer2, "Haifa Cinema", 18, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase8 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase9 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase10 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase11 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
 
 		//Adding purchases to the list
 		customer1.getPurchaseHistory().add(purchase1);
@@ -849,6 +862,8 @@ public class SimpleServer extends AbstractServer {
 
 
 
+
+
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		NewMessage message = (NewMessage) msg;
@@ -1377,7 +1392,62 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred, changes have been rolled back.");
 					exception.printStackTrace();
 				}
-			} else if (msgString.equals("confirmPriceUpdate")) {
+			} else if (msgString.equals("getTicketPrice")) {
+				try (Session session = sessionFactory.openSession()) {
+				 	session.beginTransaction();
+					NewMessage newMessage = new NewMessage(null, "getTicketPriceResponse");
+					client.sendToClient(newMessage);
+				} catch (Exception exception) {
+				System.err.println("An error occurred, changes have been rolled back.");
+			}
+				/*int totalSales = 0;
+				int ticketsSold = message.getTicketsSold();
+				int ticketPrice = message.getTicketPrice();
+				LocalDateTime date = message.getDate();
+				String branchLocation = message.getBranch();
+
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+
+					String hql = "SELECT SUM (p.quantity)" +
+							"FROM Purchase p " +
+							"WHERE p.productType = :productType " +
+							"AND p.purchaseDate = :purchaseDate " +
+							"AND p.branchName = :branchName ";
+
+					Query <Integer> query = session.createQuery(hql,Integer.class);
+
+					query.setParameter("productType","Movie Ticket");
+					query.setParameter("productDate",date);
+					query.setParameter("branchName",branchLocation);
+
+					ticketsSold = query.uniqueResult();
+
+					NewMessage respond = new NewMessage(null,"TicketsReportAnswered",
+							ticketsSold,ticketPrice,totalSales);
+
+
+					session.getTransaction().commit();
+
+					client.sendToClient(respond);
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+
+				client.sendToClient("TicketsReportAnswered");
+
+
+
+				int ticketsSold=0;
+				int ticketPrice = 0;
+
+				String branchLocation = message.getBranch();
+				LocalDateTime date = message.getDate();
+
+
+			*/}
+			else if (msgString.equals("confirmPriceUpdate")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					Cinema cinema = session.get(Cinema.class, 1);
@@ -1589,21 +1659,22 @@ public class SimpleServer extends AbstractServer {
 					List<Purchase> purchases = getAllPurchases(session);
 					NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
 					client.sendToClient(responseMessage);
-				/*	Customer customer = session.get(Customer.class, customerId);
-					if (customer != null) {
-						List<Purchase> purchases = customer.getPurchaseHistory();
-						NewMessage responseMessage = new NewMessage(purchases, "purchasesResponse");
-						client.sendToClient(responseMessage);
-					} else {
-						NewMessage responseMessage = new NewMessage("No customer found with ID: " + customerId, "error");
-						client.sendToClient(responseMessage);
-					}
-				 */
 					session.getTransaction().commit();
 				} catch (Exception e) {
 					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
 				}
-			} else if (msgString.equals("returnProduct")) {
+			}else if (msgString.equals("getAllPurchasesForReport")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Purchase> purchases = getAllPurchases(session);
+					NewMessage responseMessage = new NewMessage(purchases, "getAllPurchasesForReportResponse");
+					client.sendToClient(responseMessage);
+					session.getTransaction().commit();
+				} catch (Exception e) {
+					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
+				}
+			}
+		else if (msgString.equals("returnProduct")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					List<Purchase> purchases = getAllPurchases(session);
@@ -1677,7 +1748,9 @@ public class SimpleServer extends AbstractServer {
 				}catch (Exception exception) {
 					System.err.println("An error occurred, changes have been rolled back.");
 				}
-			} else if (msgString.equals("processPayment")) {
+			}
+
+		else if (msgString.equals("processPayment")) {
 				try (Session session = sessionFactory.openSession()) {
 					session.beginTransaction();
 					List<Purchase> purchases = (List<Purchase>) message.getObject();
@@ -1719,6 +1792,19 @@ public class SimpleServer extends AbstractServer {
 					exception.printStackTrace();
 				}
 			}
+
+			else if (msgString.equals("loadPurchases")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					List<Purchase> purchases = getAllPurchases(session);
+					NewMessage responseMessage = new NewMessage(purchases, "loadPurchasesResponse");
+					client.sendToClient(responseMessage);
+					session.getTransaction().commit();
+				} catch (Exception e) {
+					System.err.println("An error occurred during fetchPurchases: " + e.getMessage());
+				}
+			}
+
 
 		}
 		catch (IOException e) {

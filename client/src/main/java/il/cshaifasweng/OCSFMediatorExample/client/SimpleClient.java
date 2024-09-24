@@ -2,9 +2,13 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.greenrobot.eventbus.EventBus;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
+import il.cshaifasweng.OCSFMediatorExample.client.TicketReportModelClass;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class SimpleClient extends AbstractClient {
@@ -104,6 +108,11 @@ public class SimpleClient extends AbstractClient {
                 EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
 				} else if (message.getMessage().equals("purchaseReturned")) {
 					EventBus.getDefault().post(new WarningEvent(new Warning("Purchase refunded successfully!")));
+				}
+
+				else if (message.getMessage().equals("getAllPurchasesForReportResponse")) {
+					List<Purchase> purchases = (List<Purchase>) message.getObject();
+					EventBus.getDefault().post(new UpdatePurchasesEvent(purchases));
 				}
 			});
 		}

@@ -120,7 +120,7 @@ public class PersonalDetailsPage {
     @FXML
     private void requestPurchasesFromServer() {
         try {
-            NewMessage message = new NewMessage("fetchPurchases");
+            NewMessage message = new NewMessage("loadPurchasesResponse");
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
             e.printStackTrace();

@@ -7,6 +7,7 @@ package il.cshaifasweng.OCSFMediatorExample.client.ocsf;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 /**
 * The <code> AbstractClient </code> contains all the
@@ -100,6 +101,8 @@ public abstract class AbstractClient implements Runnable
   * The port number.
   */
   private int port;
+
+
 
 // CONSTRUCTORS *****************************************************
 
@@ -389,5 +392,7 @@ public abstract class AbstractClient implements Runnable
       clientSocket = null;
     }
   }
+
+
 }
 // end of AbstractClient class

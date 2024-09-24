@@ -18,6 +18,12 @@ public class NewMessage implements Serializable {
     List<LocalDateTime> dateTimes;
     List<Hall> halls;
     int id;
+    private String branch;
+    private LocalDateTime date;
+
+    int ticketsSold;
+    int ticketPrice;
+    int totalSales;
 
 
 
@@ -64,6 +70,23 @@ public class NewMessage implements Serializable {
         this.message = message;
         this.id = id;
     }
+    public NewMessage(Object object, String message, String branch, LocalDateTime date) {
+        this.object = object;
+        this.message = message;
+        this.branch = branch;
+        this.date = date;
+    }
+
+    public NewMessage(Object object, String message, int ticketsSold, int ticketPrice, int totalSales) {
+        this.object = object;
+        this.message = message;
+        this.ticketsSold = ticketsSold;
+        this.ticketPrice= ticketPrice;
+        this.totalSales = totalSales;
+    }
+
+
+
 
     public Employee getEmployee() {
         return employee;
@@ -106,9 +129,37 @@ public class NewMessage implements Serializable {
         this.id = id;
     }
 
+    public String getBranch() { return branch; }
+    public void setBranch(String branch) { this.branch = branch; }
 
+    public LocalDateTime getDate() { return date; }
+    public void setDate(LocalDateTime date) { this.date = date; }
 
+    public int getTicketsSold() {
+        return ticketsSold;
+    }
 
+    public void setTicketsSold(int ticketsSold) {
+        this.ticketsSold = ticketsSold;
+    }
+
+    // Getter and Setter for ticketPrice
+    public int getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(int ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
+
+    // Getter and Setter for totalSales
+    public int getTotalSales() {
+        return totalSales;
+    }
+
+    public void setTotalSales(int totalSales) {
+        this.totalSales = totalSales;
+    }
 
 
 //    public LocalDate getSelectedDate() { return selectedDate; }

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.TicketsReportPage">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.TicketsReportPage">
     <children>
         <AnchorPane prefHeight="650.0" prefWidth="180.0" style="-fx-background-color: #f6d9d9;">
             <children>
@@ -101,20 +101,25 @@
                 <Font name="Britannic Bold" size="40.0" />
             </font>
         </Label>
-      <TableView fx:id="ticketsReportTable" layoutX="211.0" layoutY="143.0" prefHeight="464.0" prefWidth="666.0">
+      <TableView fx:id="ticketsReportTable" layoutX="259.0" layoutY="143.0" prefHeight="464.0" prefWidth="540.0">
          <columns>
-            <TableColumn prefWidth="114.39990234375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Date" />
-            <TableColumn prefWidth="116.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Cinema" />
-            <TableColumn prefWidth="155.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Tickets Sold" />
-            <TableColumn prefWidth="127.2000732421875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Ticket Price" />
-            <TableColumn prefWidth="152.7999267578125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Total Sales" />
+            <TableColumn fx:id="Date" prefWidth="114.39990234375" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Date" />
+            <TableColumn fx:id="Cinema" prefWidth="116.0" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Cinema" />
+            <TableColumn fx:id="TicketsSold" prefWidth="155.199951171875" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Tickets Sold" />
+            <TableColumn fx:id="TotalSales" prefWidth="152.7999267578125" style="-fx-background-color: #f6d9d9; -fx-font-size: 15;" text="Total Sales" />
          </columns>
       </TableView>
-      <Label layoutX="211.0" layoutY="94.0" prefHeight="35.0" prefWidth="175.0" text="Choose month:" textFill="#f6d9d9">
+      <Label layoutX="539.0" layoutY="94.0" prefHeight="35.0" prefWidth="175.0" text="Choose month:" textFill="#f6d9d9">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <ComboBox fx:id="monthComboBox" layoutX="386.0" layoutY="94.0" prefHeight="35.0" prefWidth="150.0" />
+      <ComboBox fx:id="monthComboBox" layoutX="707.0" layoutY="94.0" onAction="#userSettedMonth" prefHeight="35.0" prefWidth="150.0" />
+      <Label layoutX="243.0" layoutY="93.0" prefHeight="35.0" prefWidth="175.0" text="Choose Year:" textFill="#f6d9d9">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="yearComboBox" layoutX="384.0" layoutY="91.0" onAction="#userSettedYear" prefHeight="35.0" prefWidth="150.0" />
     </children>
 </AnchorPane>
