@@ -5,7 +5,9 @@ import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class SimpleClient extends AbstractClient {
 
@@ -117,6 +119,12 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("homeMoviePurchasesResponse")) {
 					List<HomeMoviePurchase> homeMoviePurchases = (List<HomeMoviePurchase>) message.getObject();
 					EventBus.getDefault().post(new UpdateHomeMoviePurchasesEvent(homeMoviePurchases));
+				} else if (message.getMessage().equals("monthlyReport")) {
+					// Retrieve the report data from the message
+					Map<LocalDate, DailyReportData> reportData = (Map<LocalDate, DailyReportData>) message.getObject();
+					// Post the event to EventBus so the client UI can handle the data
+					UpdateMonthlyReportEvent event = new UpdateMonthlyReportEvent(reportData);
+					EventBus.getDefault().post(event);
 				}
 			});
 		}

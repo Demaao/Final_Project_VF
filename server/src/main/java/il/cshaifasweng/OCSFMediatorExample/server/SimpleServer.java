@@ -176,6 +176,37 @@ public class SimpleServer extends AbstractServer {
 		Card card2 = new Card("Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card"
 				, 1500, customer2, null,1, "A cinema card containing 20 tickets.",4, "VIP");
 		session.save(card2);
+
+
+		int numberOfCards = 30;  // Total number of card purchases
+		int cardsPerDay = 2;  // Number of card purchases per day
+
+		double price = 1000;  // Fixed price for all cards
+		String paymentMethod = "Credit Card";
+		String cardDescription = "A cinema card containing 20 tickets.";  // Same description for all cards
+		int tickets = 20;  // Number of tickets for each card
+		String cardType = "Regular";  // Fixed card type
+
+		// Loop to generate multiple card purchases
+		for (int i = 0; i < numberOfCards; i++) {
+			// Calculate the day and time for each card purchase
+			int dayOfMonth = (i / cardsPerDay) + 1;  // Ensure every day gets `cardsPerDay` purchases
+			int hourOffset = (i % cardsPerDay) * 3;  // Spread out purchases within the same day by 3 hours
+
+			LocalDateTime purchaseDate = LocalDateTime.of(2024, 9, dayOfMonth, 12 + hourOffset, 0);  // Purchases at different hours each day (12:00, 15:00, etc.)
+
+			// Alternate between customers for each card purchase
+			Customer currentCustomer = (i % 2 == 0) ? customer1 : customer2;
+
+			// Create new Card for each iteration
+			Card card = new Card(
+					"Card", purchaseDate, paymentMethod, price, currentCustomer, null, 1,
+					cardDescription, tickets, cardType
+			);
+
+			// Save the card purchase
+			session.save(card);
+		}
 		session.flush();
 	}
 
@@ -192,14 +223,17 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
+
+
 	private static void generateHomeMoviePurchases(Session session) {
-		Customer customer = session.get(Customer.class, 123456789);
+		Customer customer1 = session.get(Customer.class, 123123123);
+		Customer customer2 = session.get(Customer.class, 123456789);
 		HomeMovie homeMovie = session.get(HomeMovie.class, 16);
 		Screening screening = session.get(Screening.class, 652);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36),screening
+		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer2, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36),screening
 				,"https://www.youtube.com/watch?v=gUTjfOkVu7E", "Wire Room");
-		//HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie, LocalTime.of(15,0), LocalTime.of(16,36), screening);
+
 		homeMoviePurchase.setScreening(screening);
 		screening.getHomeMoviePurchases().add(homeMoviePurchase);
 		homeMovie.getHomeMoviePurchases().add(homeMoviePurchase);
@@ -207,8 +241,45 @@ public class SimpleServer extends AbstractServer {
 		session.save(homeMoviePurchase);
 		session.saveOrUpdate(screening);
 		session.save(homeMoviePurchase);
+
+		int numberOfPurchases = 60;  // Total purchases
+		int purchasesPerDay = 2;  // Number of purchases per day
+		double price = 90;
+		String paymentMethod = "Credit Card";
+		String purchaseDescription = "Movie link for \"Wire Room\".\nScreening: " + screening.getScreeningTime().format(formatter);
+
+		// Loop to generate multiple purchases
+		for (int i = 0; i < numberOfPurchases; i++) {
+			// Calculate the day and time for each purchase
+			int dayOfMonth = (i / purchasesPerDay) + 1;  // Ensure every day gets `purchasesPerDay` purchases
+			int hourOffset = (i % purchasesPerDay) * 3;  // Spread out purchases within the same day by 3 hours
+
+			LocalDateTime purchaseDate = LocalDateTime.of(2024, 9, dayOfMonth, 12 + hourOffset, 0);  // Purchases at different hours each day (12:00, 15:00, etc.)
+			LocalDateTime availabilityStart = purchaseDate.plusDays(1).withHour(15).withMinute(0);  // Availability starts the day after purchase
+			LocalDateTime availabilityEnd = availabilityStart.plusHours(1).plusMinutes(36);  // Availability lasts 1 hour and 36 minutes
+
+			// Alternate between customers
+			Customer currentCustomer = (i % 2 == 0) ? customer1 : customer2;
+
+			// Create new HomeMoviePurchase for each iteration
+			HomeMoviePurchase homeMoviePurchase1 = new HomeMoviePurchase(
+					"Link", purchaseDate, paymentMethod, price, currentCustomer, purchaseDescription,
+					homeMovie, availabilityStart, availabilityEnd, screening,"https://www.youtube.com/watch?v=gUTjfOkVu7E", "Wire Room");
+
+			// Add purchase to screening and home movie
+			homeMoviePurchase1.setScreening(screening);
+			screening.getHomeMoviePurchases().add(homeMoviePurchase1);
+			homeMovie.getHomeMoviePurchases().add(homeMoviePurchase1);
+
+			// Save the home movie purchase
+			session.save(homeMoviePurchase1);
+		}
+
+		// Save the screening and flush the session to persist changes
+		session.saveOrUpdate(screening);
 		session.flush();
 	}
+
 
 	private static void generateChangePriceRequest(Session session) throws Exception {
 		Cinema cinema = session.get(Cinema.class, 1);
@@ -725,6 +796,58 @@ public class SimpleServer extends AbstractServer {
 		CriteriaQuery<Purchase> query = builder.createQuery(Purchase.class);
 		query.from(Purchase.class);
 		return session.createQuery(query).getResultList();
+	}
+
+	// Fetch purchases based on productType for both links and cards
+	List<Purchase> getMonthlyPurchases(Session session, int year, int month) {
+		try {
+			// Retrieve purchases with productType 'Link' for home movie links
+			List<Purchase> linkPurchases = session.createQuery("FROM Purchase WHERE productType = 'Link' AND YEAR(purchaseDate) = :year AND MONTH(purchaseDate) = :month", Purchase.class)
+					.setParameter("year", year)
+					.setParameter("month", month)
+					.getResultList();
+
+			// Retrieve purchases with productType 'Card' for regular cards
+			List<Purchase> cardPurchases = session.createQuery("FROM Purchase WHERE productType = 'Card' AND YEAR(purchaseDate) = :year AND MONTH(purchaseDate) = :month", Purchase.class)
+					.setParameter("year", year)
+					.setParameter("month", month)
+					.getResultList();
+
+			// Combine the two lists
+			List<Purchase> allPurchases = new ArrayList<>(linkPurchases);
+			allPurchases.addAll(cardPurchases);
+
+			// Debugging: print the results
+			for (Purchase purchase : allPurchases) {
+				System.out.println("Purchase: " + purchase.getPurchaseDescription() + ", Product Type: " + purchase.getProductType() + ", Date: " + purchase.getPurchaseDate());
+			}
+
+			return allPurchases;  // Return combined purchases
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+	private Map<LocalDate, DailyReportData> generateMonthlyReportData(List<Purchase> purchases) {
+		Map<LocalDate, DailyReportData> reportData = new HashMap<>();
+
+		// Process all purchases
+		for (Purchase purchase : purchases) {
+			LocalDate purchaseDate = purchase.getPurchaseDate().toLocalDate();
+			reportData.putIfAbsent(purchaseDate, new DailyReportData(purchaseDate));
+			DailyReportData dailyData = reportData.get(purchaseDate);
+
+			// Handle based on productType
+			if (purchase.getProductType().equals("Link")) {
+				dailyData.addLinkSold();
+				dailyData.addLinkRevenue(purchase.getPricePaid());
+			} else if (purchase.getProductType().equals("Card")) {
+				dailyData.addCardSold();
+				dailyData.addCardRevenue(purchase.getPricePaid());
+			}
+		}
+
+		return reportData;
 	}
 
 	private static List<Card> getAllCards(Session session) throws Exception {
@@ -2029,8 +2152,28 @@ public class SimpleServer extends AbstractServer {
 					System.err.println("An error occurred while fetching home movie purchases: " + e.getMessage());
 					e.printStackTrace();
 				}
-			}
+			} else if (msgString.equals("generateMonthlyReport")) {
+				try (Session session = sessionFactory.openSession()) {
+					session.beginTransaction();
+					int year = message.getYear();
+					int month = message.getMonth();
 
+					// Fetch purchases of both links and cards based on productType
+					List<Purchase> purchases = getMonthlyPurchases(session, year, month);
+
+					// Generate the monthly report data
+					Map<LocalDate, DailyReportData> reportData = generateMonthlyReportData(purchases);
+
+					// Send the report data back to the client
+					NewMessage responseMessage = new NewMessage(reportData, "monthlyReport");
+					client.sendToClient(responseMessage);
+
+					session.getTransaction().commit();
+				} catch (Exception exception) {
+					System.err.println("An error occurred, changes have been rolled back.");
+					exception.printStackTrace();
+				}
+			}
 		}
 		catch (IOException e) {
 			e.printStackTrace();

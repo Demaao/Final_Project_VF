@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 public class NewMessage implements Serializable {
     Object object;
@@ -20,7 +21,22 @@ public class NewMessage implements Serializable {
     int id;
 
 
+    // New fields for year and month
+    private int year;
+    private int month;
 
+    // Constructor for monthly report data (Map<LocalDate, DailyReportData>)
+    public NewMessage(String message, Map<LocalDate, DailyReportData> reportData) {
+        this.message = message;
+        this.object = reportData; // Store report data in the object field
+    }
+
+    // Constructor for year and month
+    public NewMessage(String message, int year, int month) {
+        this.message = message;
+        this.year = year;
+        this.month = month;
+    }
 
     public NewMessage(Object object, String message) {
         this.object = object;
@@ -108,6 +124,14 @@ public class NewMessage implements Serializable {
 
 
 
+    // Getters for year and month
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
 
 
 
