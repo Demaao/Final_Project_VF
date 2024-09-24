@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CardsPage {
-    private ObservableList<String> ticketType = FXCollections.observableArrayList("Regular", "VIP");
-
     @FXML
     private Spinner<Integer> cardsQuantityChooser;
 
@@ -49,9 +47,6 @@ public class CardsPage {
     private Button signUpBtn;
 
     @FXML
-    private Spinner<String> ticketTypeChooser;
-
-    @FXML
     public void initialize() {
         EventBus.getDefault().register(this);
         requestCinemaFromServer();
@@ -61,8 +56,6 @@ public class CardsPage {
         valueFactory.setValue(1);
         cardsQuantityChooser.setValueFactory(valueFactory);
 
-        SpinnerValueFactory<String> valueFactory2 = new SpinnerValueFactory.ListSpinnerValueFactory<String>(ticketType);
-        ticketTypeChooser.setValueFactory(valueFactory2);
     }
 
     @FXML
@@ -120,11 +113,9 @@ public class CardsPage {
 
     @FXML
     private void switchToPurchaseProductsPage() throws IOException{
-        if(ticketTypeChooser.getValue().equals("VIP"))
-            cardValue = cardValue*1.5;
         for (int i = 0; i < cardsQuantityChooser.getValue(); i++) {
             Card card = new Card("Card", null, "Credit Card", cardValue,
-                    null, null,1, "A cinema card containing 20 tickets.", 20, ticketTypeChooser.getValue());
+                    null, null,1, "A cinema card containing 20 tickets.", 20, null);
             cards.add(card);
         }
         App.switchScreen("PurchaseProductsPage");
