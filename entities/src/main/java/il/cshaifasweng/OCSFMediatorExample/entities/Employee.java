@@ -18,9 +18,10 @@ public class Employee implements Serializable{
     protected boolean isOnline;
     protected String phoneNumber;
     protected String email;
+    protected String branchName;
 
     public Employee(int id, String fullName, String password, String username, String position,
-                    boolean isOnline, String phoneNumber, String email) {
+                    boolean isOnline, String phoneNumber, String email, String branchName) {
         this.id = id;
         this.fullName = fullName;
         this.password = password;
@@ -29,6 +30,7 @@ public class Employee implements Serializable{
         this.isOnline = isOnline;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.branchName = branchName;
     }
 
     public Employee() {
@@ -69,6 +71,13 @@ public class Employee implements Serializable{
 
     public int getId() {
         return id;
+    }
+
+    public String getBranchName() {
+        return branchName;
+    }
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
     }
 
    /* public int login(String username, String password) {

@@ -16,8 +16,8 @@ public class BranchManager extends Employee implements Serializable {
 
     // Parameterized constructor
     public BranchManager(int id, String fullName,String username, String password, String position,
-                       boolean isOnline, String phoneNumber, String email, Branch branch) {
-        super(id, fullName, password, username, position, isOnline, phoneNumber, email); // Initialize inherited fields
+                       boolean isOnline, String phoneNumber, String email, String branchName, Branch branch) {
+        super(id, fullName, password, username, position, isOnline, phoneNumber, email, branchName); // Initialize inherited fields
         this.branch = branch;
     }
 

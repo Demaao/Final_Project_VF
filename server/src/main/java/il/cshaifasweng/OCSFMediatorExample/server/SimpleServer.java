@@ -130,16 +130,25 @@ public class SimpleServer extends AbstractServer {
 	private static void generateCustomersAndPurchases(Session session) {
 		List<Purchase> purchases1 = new ArrayList<>();
 		List<Purchase> purchases2 = new ArrayList<>();
+		List<Purchase> purchases6 = new ArrayList<>();
 
 		Customer customer1 = new Customer(123123123, "Dima om", "dima.oma@example.com", "0501234567", purchases1, false);
 		Customer customer2 = new Customer(123456789, "Shada gh", "shada.gha@example.com", "0527654321", purchases2, false);
+		Customer customer3 = new Customer(111111111, "Rozaline", "roz@example.com", "0549195105", purchases6, false);
 
 		//Create purchases and add them to customers
-		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2024,9,15,12,40), "Credit Card", 200.00, customer1,"Haifa Cinema",2,"Movie Ticket Details:\n" + "Movie: Inside out\n" + "Date: 2024-10-01\n" + "Time: 17:00\n" + "Seat ID: E2\n" + "Branch: Haifa Cinema");
+		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2021,9,15,12,40), "Credit Card", 200.00, customer1,"Haifa Cinema",2,"Movie Ticket Details:\n" + "Movie: Inside out\n" + "Date: 2024-10-01\n" + "Time: 17:00\n" + "Seat ID: E2\n" + "Branch: Haifa Cinema");
 		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie: Wire Room. Viewing is limited to the screening time you selected: 2024-09-24 15:00");
 		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase5 = new Purchase("Movie Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+
+		Purchase purchase6 = new Purchase("Movie Ticket", LocalDateTime.of(2024, 9, 8, 11, 11), "Credit Card", 1500, customer2, "Haifa Cinema", 18, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase8 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase9 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase10 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase11 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+
 
 		//Adding purchases to the list
 		customer1.getPurchaseHistory().add(purchase1);
@@ -234,7 +243,7 @@ public class SimpleServer extends AbstractServer {
 
 		HeadManager headManager = new HeadManager(324122258, "Shada Ghanem", "shadaGh0512",
 				"shada0512", "Head Manager", false, "0527990807",
-				"shada.5.12.2001@gmail.com", CinemaBranches);
+				"shada.5.12.2001@gmail.com", "",CinemaBranches);
 		session.save(headManager);
 		session.flush();
 	}
@@ -248,31 +257,31 @@ public class SimpleServer extends AbstractServer {
 
 		BranchManager branchManager1 = new BranchManager(200134667, "Dema Omar","dema123",
 				"dema123", "Branch Manager", false, "0508873332",
-				"dema@gmail.com", haifaCinema);
+				"dema@gmail.com", "Haifa Cinema", haifaCinema);
 		session.save(branchManager1);
 		session.flush();
 
 		BranchManager branchManager2 = new BranchManager(304134667, "Hala Ishan","hala123",
 				"hala123", "Branch Manager", false, "0520073332",
-				"hala@gmail.com", telAvivCinema);
+				"hala@gmail.com", "Tel Aviv Cinema", telAvivCinema);
 		session.save(branchManager2);
 		session.flush();
 
 		BranchManager branchManager3 = new BranchManager(230134667, "Shatha Maree","shatha123",
 				"shatha123", "Branch Manager", false, "0508855532",
-				"shatha@gmail.com", eilatCinema);
+				"shatha@gmail.com", "Eilat Cinema",eilatCinema);
 		session.save(branchManager3);
 		session.flush();
 
 		BranchManager branchManager4 = new BranchManager(300664667, "Lian Natour","lian99",
 				"lian99", "Branch Manager", false, "0508866332",
-				"lain@gmail.com", karmielCinema);
+				"lain@gmail.com", "Karmiel Cinema",karmielCinema);
 		session.save(branchManager4);
 		session.flush();
 
 		BranchManager branchManager5 = new BranchManager(200100667, "Rozaline Kozly","roza123",
 				"roza123", "Branch Manager", false, "0520073332",
-				"raza@gmail.com", jerusalemCinema);
+				"raza@gmail.com", "Jerusalem Cinema",jerusalemCinema);
 		session.save(branchManager5);
 		session.flush();
 	}
@@ -280,7 +289,7 @@ public class SimpleServer extends AbstractServer {
 	private static void generateContentManager(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
 		ContentManager contentManager1 = new ContentManager(300134667, "Anna Collins","anna123",
 				"anna123", "Content Manager", false, "0508000032",
-				"annaa@gmail.com");
+				"annaa@gmail.com", "");
 		session.save(contentManager1);
 		session.flush();
 	}
@@ -288,7 +297,7 @@ public class SimpleServer extends AbstractServer {
 	private static void generateCustomerServiceWorker(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
 		CustomerServiceWorker customerServiceWorker1 = new CustomerServiceWorker(300100007, "Emma Thompson","emma123",
 				"emma123", "Customer Service Worker", false, "0500000032",
-				"annaa@gmail.com");
+				"annaa@gmail.com", "");
 		session.save(customerServiceWorker1);
 		session.flush();
 	}
