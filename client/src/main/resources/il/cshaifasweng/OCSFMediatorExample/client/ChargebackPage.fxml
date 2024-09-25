@@ -170,7 +170,7 @@
                   <PropertyValueFactory property="paymentMethod" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="paymentDetailsColumn" prefWidth="162.39993896484373" style="-fx-font-size: 15;" text="Details">
+            <TableColumn fx:id="paymentDetailsColumn" prefWidth="175.0" style="-fx-font-size: 15;" text="Details">
                <cellValueFactory>
                   <PropertyValueFactory property="purchaseDescription" />
                </cellValueFactory>

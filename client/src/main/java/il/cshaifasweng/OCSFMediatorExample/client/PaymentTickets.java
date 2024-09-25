@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class PaymentTickets {
     public static Screening screening; //////////////////////////////////////////////////////////////////
     private static String temp;
     private static  String temp1;
+    private static int status;
     @FXML
     private TextField IDNumText;
 
@@ -66,11 +69,15 @@ public class PaymentTickets {
 
     @FXML
     void initialize() {
+        EventBus.getDefault().register(this);
+        status = 1;
         paymentMethodToggleGroup.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
             if (newToggle == creditCardRadioBtn) {
+                status = 1;
                 creditCardLabel.setVisible(true);
                 creditCardTxt.setVisible(true);
             } else if (newToggle == ticketTabRadioBtn) {
+                status = 0;
                 creditCardLabel.setVisible(false);
                 creditCardTxt.setVisible(false);
             }
@@ -95,6 +102,7 @@ public class PaymentTickets {
     void CancelOrder(ActionEvent event) {
         paymentCanceledFlag = 1;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try {
             SimpleClient.getClient().sendToServer(new NewMessage( request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
@@ -141,7 +149,7 @@ public class PaymentTickets {
                 errorMessages.add("Invalid ID number. Please enter a 9-digit number.");
             }
 
-            if (creditCardTxt.getText().isEmpty()) {
+            if (creditCardTxt.getText().isEmpty() && status == 1) {
                 highlightFieldError(creditCardTxt);
                 errorMessages.add("Invalid ticket tab number. Please enter a valid number.");
             }
@@ -184,10 +192,16 @@ public class PaymentTickets {
         LocalDateTime time = LocalDateTime.now();
         List<Purchase> purchases = new ArrayList<>();
 
-
+        String x;
         Purchase purchase = new Purchase("Movie Tickets", time, "Credit Card",
                 MovieDetailsPage.ticketValue*request.getArrSize(), customer, screening.getBranch().getName(), request.getArrSize(), "Movie Tickets Details: " + temp+"\nBranch: "+ screening.getBranch().getName());
-
+        if (status == 0) {
+            purchase.setPaymentMethod("Ticket Tab");
+            x = "Ticket Tab";
+        } else {
+            purchase.setPaymentMethod("Credit Card");
+            x = "Credit Card";
+        }
         purchases.add(purchase);
 
         for(int i = 0; i< request.getArrSize(); i++){
@@ -195,7 +209,7 @@ public class PaymentTickets {
                     + "\nDate: " + screening.getScreeningTime().toLocalDate()
                     + "\nTime: " + screening.getScreeningTime().toLocalTime()
                     + "\nSeat ID: " + request.getSeatIds()[i];
-            Purchase ticket = new Purchase("Movie Ticket", time, "Credit Card", MovieDetailsPage.ticketValue, customer, screening.getBranch().getName(), 1,
+            Purchase ticket = new Purchase("Movie Ticket", time, x, MovieDetailsPage.ticketValue, customer, screening.getBranch().getName(), 1,
                     "Movie Ticket Details: " + temp1 +"\nBranch: "+ screening.getBranch().getName(), ChooseSeating.arr1[i]);
             purchases.add(ticket);
         }
@@ -208,7 +222,7 @@ public class PaymentTickets {
             e.printStackTrace();
         }
 
-        temp = "Order Summary:\nMovie: " + screening.getMovie().getEngtitle() + " - " + screening.getMovie().getHebtitle()
+     /*   temp = "Order Summary:\nMovie: " + screening.getMovie().getEngtitle() + " - " + screening.getMovie().getHebtitle()
                 + "\nScreening day is: " + screening.getScreeningTime().toLocalDate()
                 + "\nScreening time is: " + screening.getScreeningTime().toLocalTime()
                 + "\nNumber of tickets: " + request.getArrSize() + "\nSeats IDs: ";
@@ -225,7 +239,7 @@ public class PaymentTickets {
 
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
-        App.switchScreen("MoviesPage");
+        App.switchScreen("MoviesPage");*/
         // showAlert(Alert.AlertType.INFORMATION, "Payment Completed", "Payment completed successfully!\n"+temp) ;
     }
 
@@ -269,23 +283,74 @@ public class PaymentTickets {
     }
 
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
+    @Subscribe
+    public void handleWarningEvent(WarningEvent event) {
+        if (event.getWarning().getMessage().equals("purchaseFailed")) {
+            Platform.runLater(() -> {
+                // Show the warning message to the user
+                showAlert(Alert.AlertType.WARNING, "Payment Failed", event.getWarning().getMessage(), null);
+            });
+        }
+    }
+
+
+    @Subscribe
+    public void handlePurchaseSuccessEvent(UpdateTicketsPurchasesEvent event) {
+        // Display the pop-up here
+  /*     temp = "Order Summary:\nMovie: " + screening.getMovie().getEngtitle() + " - " + screening.getMovie().getHebtitle()
+                + "\nScreening day is: " + screening.getScreeningTime().toLocalDate()
+                + "\nScreening time is: " + screening.getScreeningTime().toLocalTime()
+                + "\nNumber of tickets: " + request.getArrSize() + "\nSeats IDs: ";
+        for (int i = 0; i < request.getArrSize(); i++) {
+            temp += request.getSeatIds()[i] + " ";
+        }
+        temp += "\nScreening hall: " + screening.getHall().getHallName() + "\nBranch: " + screening.getBranch().getName()
+                + "\n\n Order summary will be sent to your E-mail right away!";
+*/
+        temp = "Order Summary:\nMovie: " + screening.getMovie().getEngtitle() + " - " + screening.getMovie().getHebtitle()
+                + "\nScreening day is: " + screening.getScreeningTime().toLocalDate()
+                + "\nScreening time is: " + screening.getScreeningTime().toLocalTime()
+                + "\nNumber of tickets: " + request.getArrSize() + "\nSeats IDs: ";
+        for (int i = 0; i < request.getArrSize(); i++) {
+            temp += request.getSeatIds()[i] + " ";
+        }
+        temp+="\nScreening hall: "+ screening.getHall().getHallName()+ "\nBranch: "+ screening.getBranch().getName(); //+ "\n\n Order summary will be sent to your E-mail right away!";
+
+        Platform.runLater(() -> showAlert(Alert.AlertType.INFORMATION, "Purchase Receipt", temp + "\n\nNote: You can see your purchase details in the personal area.", "Purchase completed successfully!"));
+
+    }
+
+
+    private void showAlert(Alert.AlertType alertType, String title, String message, String headerText) {
         Platform.runLater(() -> {
             Alert alert = new Alert(alertType);
             alert.setTitle(title);
-            alert.setHeaderText(null);
+            alert.setHeaderText(headerText);
             alert.setContentText(message);
-
-            // Add a handler for both "OK" and "X" (alert close)
-            alert.showAndWait().ifPresentOrElse(response -> {
-                if (response == ButtonType.OK) {
-                    // User pressed "OK" button
-                    App.switchScreen("MoviesPage");  // Replace with your actual navigation logic
+            alert.show();
+            EventBus.getDefault().unregister(this);
+            // Navigate to MoviesPage if the title is "Payment Completed" and the user pressed OK
+            MovieDetailsPage.movieDetailsPage = 0;
+            MovieDetailsPage.setTicketPrice = 0;
+            App.switchScreen("MoviesPage");
+            // Handle "OK" button press or close (X)
+        /*    alert.showAndWait().ifPresentOrElse(response -> {
+                if ("Payment Completed".equals(title)) {
+                    EventBus.getDefault().unregister(this);
+                    // Navigate to MoviesPage if the title is "Payment Completed" and the user pressed OK
+                    MovieDetailsPage.movieDetailsPage = 0;
+                    MovieDetailsPage.setTicketPrice = 0;
+                    App.switchScreen("MoviesPage");
                 }
             }, () -> {
-                // User closed the alert (clicked "X")
-                App.switchScreen("MoviesPage");  // Navigate to the next page as well
-            });
+                if ("Payment Completed".equals(title)) {
+                    EventBus.getDefault().unregister(this);
+                    // Navigate to MoviesPage if the title is "Payment Completed" and the user closed the alert (X)
+                    MovieDetailsPage.movieDetailsPage = 0;
+                    MovieDetailsPage.setTicketPrice = 0;
+                    App.switchScreen("MoviesPage");
+                }// Navigate to the next page as well
+            });*/
         });
     }
 
@@ -302,6 +367,7 @@ public class PaymentTickets {
     public void switchToMoviesPage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try { SimpleClient.getClient().sendToServer(new NewMessage( request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
             e.printStackTrace();}
@@ -312,6 +378,7 @@ public class PaymentTickets {
     private void switchToHomePage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try { SimpleClient.getClient().sendToServer(new NewMessage( request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
             e.printStackTrace();}
@@ -322,6 +389,7 @@ public class PaymentTickets {
     private void switchToLoginPage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try { SimpleClient.getClient().sendToServer(new NewMessage( request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
             e.printStackTrace();}
@@ -332,6 +400,7 @@ public class PaymentTickets {
     private void switchToCardsPage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try { SimpleClient.getClient().sendToServer(new NewMessage( request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
             e.printStackTrace();}
@@ -342,6 +411,7 @@ public class PaymentTickets {
     private void switchToHostPage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try { SimpleClient.getClient().sendToServer(new NewMessage( request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
             e.printStackTrace();}
@@ -352,6 +422,7 @@ public class PaymentTickets {
     private void switchToComplaintPage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try { SimpleClient.getClient().sendToServer(new NewMessage(request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
             e.printStackTrace();}
@@ -362,6 +433,7 @@ public class PaymentTickets {
     private void switchToChargebackPage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try { SimpleClient.getClient().sendToServer(new NewMessage( request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
             e.printStackTrace();}
@@ -372,6 +444,7 @@ public class PaymentTickets {
     private void  switchToPersonalAreaPage() throws IOException {
         MovieDetailsPage.movieDetailsPage = 0;
         MovieDetailsPage.setTicketPrice = 0;
+        EventBus.getDefault().unregister(this);
         try { SimpleClient.getClient().sendToServer(new NewMessage( request,"UndoSaveSeatsInHall"));
         } catch (IOException e) {
             e.printStackTrace();}
