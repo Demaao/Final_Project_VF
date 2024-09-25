@@ -2,6 +2,7 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
@@ -28,6 +29,9 @@ public class HostPage {
     private TextField HostIP; // Value injected by FXMLLoader
 
     @FXML
+    private TextField Port;
+/*
+    @FXML
     void enterHostIP(ActionEvent event) throws IOException {
         flag = 1;
         if (!HostIP.getText().startsWith("localhost")) {
@@ -41,6 +45,31 @@ public class HostPage {
                 IOException e) {
             e.printStackTrace();
         }
+    }*/
+
+    @FXML
+    void enterHostIP(ActionEvent event) throws IOException {
+        flag = 1;
+        try{
+            if (SimpleClient.client != null) {
+                SimpleClient.client.closeConnection();
+            }
+            // Create a new client instance with the provided host address
+            SimpleClient.client = new SimpleClient(HostIP.getText(), Integer.parseInt(Port.getText()));
+            SimpleClient.client.openConnection(); // Connect to the server
+
+        switchToHomePage();
+    } catch (IOException e) {
+        // Display an alert if the connection fails
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to connect to server. Please check your IP address and port, and try again.");
+        alert.setHeaderText("Connection Error");
+        alert.showAndWait();
+    } catch (NumberFormatException e) {
+        // Handle cases where the port number isn't a valid integer
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid port number. Please enter a valid integer.");
+        alert.setHeaderText("Input Error");
+        alert.showAndWait();
+    }
     }
 
     @FXML
@@ -61,17 +90,4 @@ public class HostPage {
             App.switchScreen("HomePage");
     }
     }
-
-
-        // try {//////////////////////////////////////////////////////////////////////////////////////
-        // SimpleClient.getClient().sendToServer(new NewMessage("movieList"));
-        //  } catch (IOException e) {
-        //   e.printStackTrace();
-        // }
-        //  try {///////////////////////////////////////////////////////////
-        //    SimpleClient.getClient().sendToServer(new NewMessage("movieListUpdate"));
-        //  } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
-        //  }
 
