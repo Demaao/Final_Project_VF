@@ -128,6 +128,13 @@ public class SimpleClient extends AbstractClient {
 				} else if (message.getMessage().equals("complaintsByMonthAndBranch")) {
 					Map<Integer, Integer> complaintsByDay = (Map<Integer, Integer>) message.getObject();
 					EventBus.getDefault().post(new UpdateComplaintReportEvent(complaintsByDay));
+				} 	else if (message.getMessage().equals("purchaseFailed")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("You haven't bought a Card yet in order to use Ticket tab as a payment method!\n\nIn order to complete your"+
+							" purchase, you can either buy a Card first, or pay by Credit Card.")));
+				} else if (message.getMessage().equals("notEnoughTicketsInCard")) {
+					EventBus.getDefault().post(new WarningEvent(new Warning("You don't have enough tickets in your ticket tab!\n\nYou can either pay with Credit Card, or buy another Card.")));
+				} else if (message.getMessage().equals("purchasingTicketsCompleted")) {
+					EventBus.getDefault().post(new UpdateTicketsPurchasesEvent()); // Custom event
 				}
 			});
 		}

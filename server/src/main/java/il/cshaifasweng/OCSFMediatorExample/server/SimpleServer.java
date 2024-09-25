@@ -33,7 +33,7 @@ public class SimpleServer extends AbstractServer {
 
 	public SimpleServer(int port) throws Exception {
 		super(port);
-		initializeDatabase();
+		initializeDatabase(); System.out.println("Server initialized");
 	}
 
 	private static SessionFactory getSessionFactory() throws HibernateException {
@@ -109,15 +109,15 @@ public class SimpleServer extends AbstractServer {
 
 	private static void generateComplaints(Session session) throws Exception {
 		Complaint complaint1 = new Complaint("Dema Omar", 123123123L, "1234567890",
-				"Purchases", "john@example.com", "Overcharged for my last order.", LocalDateTime.of(2024, 9, 11, 20, 30),
+				"Purchases", "john@example.com", "Overcharged for my last order.", LocalDateTime.of(2024, 9, 25, 12, 30),
 				"Thank you for reaching out,\nyou will be refunded accordingly.", false);
-		Complaint complaint2 = new Complaint("Jane Smith", 987654321L, "0987654321",
-				"Movie link", "jane@example.com", "Unable to access the link.", LocalDateTime.of(2024, 9, 11, 19, 56),
+		Complaint complaint2 = new Complaint("Shada Ghanem", 123456789L, "0987654321",
+				"Movie link", "shada@example.com", "Unable to access the link.", LocalDateTime.of(2024, 9, 25, 13, 30),
 				"Thank you for reaching out,\nthe link will be activated at the screening's scheduled time.", false);
 		Complaint complaint3 = new Complaint("Alice Johnson", 555666777L, "1122334455",
 				"Other", "alice@example.com", "Loved the new movie selection!", LocalDateTime.of(2024, 9, 9, 11, 32),
 				"Thank you for reaching out,\nnew movies are coming out soon!", true);
-		Complaint complaint4 = new Complaint("Shada Ghanem", 123456789L, "9988776655",
+		Complaint complaint4 = new Complaint("Jane Smith", 987654321L, "9988776655",
 				"Screening", "bob@example.com", "When will the new movie be released?", LocalDateTime.of(2024, 9, 5, 22, 4),
 				"Thank you for reaching out,\nthe release date for the new movie has not yet been announced.\nPlease stay tuned for future updates.", true);
 
@@ -182,47 +182,61 @@ public class SimpleServer extends AbstractServer {
 		Customer customer1 = new Customer(123123123, "Dima om", "dima.oma@example.com", "0501234567", purchases1, false);
 		Customer customer2 = new Customer(123456789, "Shada gh", "shada.gha@example.com", "0527654321", purchases2, false);
 		Customer customer3 = new Customer(111111111, "Rozaline", "roz@example.com", "0549195105", purchases6, false);
-
+		Customer customer4 = new Customer(444555666, "Dana m", "dana@example.com", "0540095105", purchases6, false);
 		//Create purchases and add them to customers
-		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2021,9,15,12,40), "Credit Card", 200.00, customer1,"Haifa Cinema",2,"Movie Ticket Details:\n" + "Movie: Inside out\n" + "Date: 2024-10-01\n" + "Time: 17:00\n" + "Seat ID: E2\n" + "Branch: Haifa Cinema");
+		Purchase purchase1 = new Purchase("Movie Ticket",LocalDateTime.of(2021,9,15,12,40), "Credit Card", 200.00, customer3,"Haifa Cinema",2,"Movie Ticket Details:\n" + "Movie: Inside out\n" + "Date: 2024-10-01\n" + "Time: 17:00\n" + "Seat ID: E2\n" + "Branch: Haifa Cinema");
 		Purchase purchase2 = new Purchase("Movie Card",  LocalDateTime.of(2024,9,18,10,15), "Cash", 800, customer1,"telAvivCinema",1,"A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
-		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie: Wire Room. Viewing is limited to the screening time you selected: 2024-09-24 15:00");
+		Purchase purchase3 = new Purchase("Movie Link",  LocalDateTime.of(2024,9,23,21,10),"Credit Card", 120, customer2,"Movie link was ordered for the movie: Wire Room. Viewing is limited to the screening time you selected: 2024-09-26 15:00");
 		Purchase purchase4 = new Purchase("Movie Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card", 1000, customer1, null, 2, "2 cinema cards were ordered containing 20 tickets each, which allows access to movie screenings at all our branches based on available seating.");
 		Purchase purchase5 = new Purchase("Movie Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card", 1500, customer2, null, 1, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
 
-		Purchase purchase6 = new Purchase("Movie Ticket", LocalDateTime.of(2024, 9, 8, 11, 11), "Credit Card", 1500, customer2, "Haifa Cinema", 18, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
-		Purchase purchase8 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
-		Purchase purchase9 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
-		Purchase purchase10 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
-		Purchase purchase11 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer1,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase6 = new Purchase("Movie Ticket", LocalDateTime.of(2024, 9, 8, 11, 11), "Credit Card", 1500, customer3, "Haifa Cinema", 18, "A cinema card was ordered containing 20 tickets, which allows access to movie screenings at all our branches based on available seating.");
+		Purchase purchase8 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer4,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase9 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer4,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase10 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer3,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
+		Purchase purchase11 = new Purchase("Movie Ticket",LocalDateTime.of(2021,7,15,12,40), "Credit Card", 1200.00, customer3,"Haifa Cinema",2,"Two tickets were ordered for movie:Inside out. at the Haifa branch cinema, Hall number: 2, seats numbers: 12,13. This order has been successfully confirmed.");
 
 
 		//Adding purchases to the list
-		customer1.getPurchaseHistory().add(purchase1);
+		//customer1.getPurchaseHistory().add(purchase1);
 		customer1.getPurchaseHistory().add(purchase2);
 		customer2.getPurchaseHistory().add(purchase3);
 		customer1.getPurchaseHistory().add(purchase4);
 		customer2.getPurchaseHistory().add(purchase5);
 
+		customer3.getPurchaseHistory().add(purchase6);
+		customer3.getPurchaseHistory().add(purchase10);
+		customer3.getPurchaseHistory().add(purchase11);
+
+		customer4.getPurchaseHistory().add(purchase8);
+		customer4.getPurchaseHistory().add(purchase9);
+
 		//Saving customers
 		session.save(customer1);
 		session.save(customer2);
+		session.save(customer3);
+		session.save(customer4);
 		session.flush();
 
 	}
 
 	private static void generateCards(Session session) throws Exception {  ///////////////////////////////////////////////////////////////////
-		Customer customer1 = session.get(Customer.class, 123123123);
-		Customer customer2 = session.get(Customer.class, 123456789);
+		Customer customer1 = session.get(Customer.class, 111111111);
+		Customer customer2 = session.get(Customer.class, 444555666);
+		Customer customer3 = session.get(Customer.class, 123123123);
+		Customer customer4 = session.get(Customer.class, 123456789);
 		Card card1 = new Card("Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card"
-				, 1000, customer1, null, 1, "A cinema card containing 20 tickets.", 15, "Regular");
+				, 1000, customer3, null, 1, "A cinema card containing 20 tickets.", 15, "Regular");
 		session.save(card1);
 		Card card3 = new Card("Card", LocalDateTime.of(2024, 9, 11, 20, 30), "Credit Card"
-				, 1000, customer1, null, 1, "A cinema card containing 20 tickets.", 13, "Regular");
+				, 1000, customer3, null, 1, "A cinema card containing 20 tickets.", 13, "Regular");
 		session.save(card3);
 		Card card2 = new Card("Card", LocalDateTime.of(2024, 8, 8, 11, 11), "Credit Card"
-				, 1500, customer2, null,1, "A cinema card containing 20 tickets.",4, "VIP");
+				, 1500, customer4, null,1, "A cinema card containing 20 tickets.",5, "VIP");
 		session.save(card2);
+		Card card4 = new Card("Card", LocalDateTime.of(2024, 9, 18, 10, 15), "Credit Card"
+				, 1500, customer3, null,1, "A cinema card containing 20 tickets.",4, "VIP");
+		session.save(card4);
 
 
 		int numberOfCards = 30;  // Total number of card purchases
@@ -270,15 +284,15 @@ public class SimpleServer extends AbstractServer {
 		session.flush();
 	}
 
-
-
 	private static void generateHomeMoviePurchases(Session session) {
 		Customer customer1 = session.get(Customer.class, 123123123);
 		Customer customer2 = session.get(Customer.class, 123456789);
+		Customer customer3 = session.get(Customer.class, 111111111);
+		Customer customer4 = session.get(Customer.class, 444555666);
 		HomeMovie homeMovie = session.get(HomeMovie.class, 16);
 		Screening screening = session.get(Screening.class, 652);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Movie Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer2, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36),screening
+		HomeMoviePurchase homeMoviePurchase = new HomeMoviePurchase("Link", LocalDateTime.of(2024,9,23,21,10), "Credit Card", 120, customer2, "Movie link for \"Wire Room\".\nScreening: "+ screening.getScreeningTime().format(formatter),homeMovie,  LocalDateTime.of(2024, 9, 24, 15, 0), LocalDateTime.of(2024, 9, 24, 16, 36),screening
 				,"https://www.youtube.com/watch?v=gUTjfOkVu7E", "Wire Room");
 
 		homeMoviePurchase.setScreening(screening);
@@ -306,7 +320,7 @@ public class SimpleServer extends AbstractServer {
 			LocalDateTime availabilityEnd = availabilityStart.plusHours(1).plusMinutes(36);  // Availability lasts 1 hour and 36 minutes
 
 			// Alternate between customers
-			Customer currentCustomer = (i % 2 == 0) ? customer1 : customer2;
+			Customer currentCustomer = (i % 2 == 0) ? customer3 : customer4;
 
 			// Create new HomeMoviePurchase for each iteration
 			HomeMoviePurchase homeMoviePurchase1 = new HomeMoviePurchase(
@@ -338,7 +352,7 @@ public class SimpleServer extends AbstractServer {
 		session.save(changePriceRequest2);
 		session.flush();
 
-		ChangePriceRequest changePriceRequest3 = new ChangePriceRequest(cinema.getLinkTicketPrice(), 80, "Link Ticket", "Received", LocalDateTime.of(2024, 8, 8, 9, 55));
+		ChangePriceRequest changePriceRequest3 = new ChangePriceRequest(cinema.getLinkTicketPrice(), 80, "Link Ticket", "Received", LocalDateTime.of(2024, 9, 20, 9, 55));
 		session.save(changePriceRequest3);
 		session.flush();
 	}
@@ -865,9 +879,9 @@ public class SimpleServer extends AbstractServer {
 			allPurchases.addAll(cardPurchases);
 
 			// Debugging: print the results
-			for (Purchase purchase : allPurchases) {
+			/*for (Purchase purchase : allPurchases) {
 				System.out.println("Purchase: " + purchase.getPurchaseDescription() + ", Product Type: " + purchase.getProductType() + ", Date: " + purchase.getPurchaseDate());
-			}
+			}*/
 
 			return allPurchases;  // Return combined purchases
 		} catch (Exception e) {
@@ -2107,32 +2121,78 @@ public class SimpleServer extends AbstractServer {
 
 					Customer customer = purchases.get(0).getCustomer();
 					Customer savedCustomer = session.get(Customer.class, customer.getId());
+					String paymentMethod=purchases.get(0).getPaymentMethod();
+					if (paymentMethod.equals("Credit Card")) {
+						if (savedCustomer == null) {
+							// Customer doesn't exist, save the customer first
+							session.save(customer);
 
-					if (savedCustomer == null) {
-						// Customer doesn't exist, save the customer first
-						session.save(customer);
-
-						// Associate each purchase with the newly saved customer
-						for (Purchase purchase : purchases) {
-							customer.addPurchase(purchase);  // Add purchase to the customer
-							purchase.setCustomer(customer);  // Ensure purchase is paired with the customer
-							session.save(purchase);  // Save the purchase
+							// Associate each purchase with the newly saved customer
+							for (Purchase purchase : purchases) {
+								customer.addPurchase(purchase);  // Add purchase to the customer
+								purchase.setCustomer(customer);  // Ensure purchase is paired with the customer
+								session.save(purchase);  // Save the purchase
+							}
+						} else {
+							// Customer exists, associate purchases as before
+							for (Purchase purchase : purchases) {
+								savedCustomer.addPurchase(purchase);  // Add purchase to the existing customer
+								purchase.setCustomer(savedCustomer);  // Ensure purchase is paired with the existing customer
+								session.save(purchase);  // Save the purchase
+							}
 						}
-					} else {
-						// Customer exists, associate purchases as before
-						for (Purchase purchase : purchases) {
-							savedCustomer.addPurchase(purchase);  // Add purchase to the existing customer
-							purchase.setCustomer(savedCustomer);  // Ensure purchase is paired with the existing customer
-							session.save(purchase);  // Save the purchase
+					} 	else if (paymentMethod.equals("Ticket Tab")) {
+						int status = 0;
+						if (savedCustomer == null) {
+							// Customer is not in the database
+							NewMessage newMessage1 = new NewMessage("purchaseFailed", "purchaseFailed");
+							client.sendToClient(newMessage1);
+							session.getTransaction().commit();
+							return;
+						} else {
+							boolean hasTicketTab = false;
+							for (Purchase purchase : savedCustomer.getPurchaseHistory()) {
+								if (purchase instanceof Card) {
+									hasTicketTab = true;
+
+									int remainingTickets = ((Card) purchase).getTickets();
+									if (remainingTickets >= purchases.get(0).getQuantity()) {
+										((Card) purchase).setTickets(remainingTickets - purchases.get(0).getQuantity());
+										status = 1;
+										break;
+									}
+								}
+							}
+							if (hasTicketTab) {
+								if (status == 0) {// the customer has a card but the card does not have enough tickets left-> he cant pay with card
+									NewMessage newMessage2 = new NewMessage(/*"purchaseFailed",*/ "notEnoughTicketsInCard");
+									client.sendToClient(newMessage2);
+									session.getTransaction().commit();
+									return;
+								}
+								for (Purchase purchase : purchases) {
+									savedCustomer.addPurchase(purchase);
+									purchase.setCustomer(savedCustomer);
+									session.save(purchase);
+								}
+							} else {
+								NewMessage newMessage2 = new NewMessage("purchaseFailed");
+								client.sendToClient(newMessage2);
+								session.getTransaction().commit();
+								return;
+							}
 						}
 					}
 					List<Purchase> allPurchases = getAllPurchases(session);
 					NewMessage responseMessage = new NewMessage(allPurchases, "purchasesResponse");
 					sendToAllClients(responseMessage);
-					NewMessage newMessage1 = new NewMessage("purchaseSuccessful");
+					NewMessage newMessage1 = new NewMessage("purchasingTicketsCompleted");
 					client.sendToClient(newMessage1);
 					List<Screening> screenings = getAllScreenings(session);
 					sendToAllClients(new NewMessage(screenings, "screeningTimes"));
+					List<Card> cards = getAllCards(session);
+					NewMessage newMessage3 = new NewMessage(cards,"cardsList");
+					sendToAllClients(newMessage3);
 					// Commit the transaction to persist the changes
 					session.getTransaction().commit();
 				} catch (Exception exception) {
