@@ -118,7 +118,7 @@ public class PaymentTickets {
 
         resetFieldStyles();
 
-        if (creditCardRadioBtn.isSelected()) {
+        if (status==1) {
             if (fullNameText.getText().isEmpty() || !validateFullName()) {
                 highlightFieldError(fullNameText);
                 errorMessages.add("Invalid full name. Please use only letters and spaces.");
@@ -130,6 +130,8 @@ public class PaymentTickets {
             }
 
             if (phoneText.getText().isEmpty() || !validatePhoneNumber()) {
+                boolean lmao=validatePhoneNumber();
+                System.out.println("yn3n ann7"+lmao);
                 highlightFieldError(phoneText);
                 errorMessages.add("Invalid phone number. Please enter a 10-digit number.");
             }
@@ -148,12 +150,17 @@ public class PaymentTickets {
                 highlightFieldError(IDNumText);
                 errorMessages.add("Invalid ID number. Please enter a 9-digit number.");
             }
+            if (emailText.getText().isEmpty() || !validateEmail()) {
+                highlightFieldError(emailText);
+                errorMessages.add("Invalid email format.");
+            }
 
-            if (creditCardTxt.getText().isEmpty() && status == 1) {
-                highlightFieldError(creditCardTxt);
-                errorMessages.add("Invalid ticket tab number. Please enter a valid number.");
+            if (phoneText.getText().isEmpty() || !validatePhoneNumber()) {
+                highlightFieldError(phoneText);
+                errorMessages.add("Invalid phone number. Please enter a 10-digit number.");
             }
         }
+
         if (!errorMessages.isEmpty()) {
             String alertMessage;
             if (errorMessages.size() == 1) {
