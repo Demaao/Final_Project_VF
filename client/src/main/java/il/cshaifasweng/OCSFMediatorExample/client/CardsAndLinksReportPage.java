@@ -119,12 +119,12 @@ public class CardsAndLinksReportPage {
         ObservableList<DailyReportData> tableData = FXCollections.observableArrayList(reportData.values());
 
         cardsAndLinksReportTable.setItems(tableData);
-        if(cardsAndLinksReportTable.getItems().isEmpty()) {
+     /*   if(cardsAndLinksReportTable.getItems().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
             alert.setContentText("No data found");
             alert.show();
-        }
+        }*/
     }
 
     @Subscribe

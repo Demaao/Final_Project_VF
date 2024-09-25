@@ -122,12 +122,16 @@ public class CustomerServiceWorkerPage {
                     long hoursLeft = java.time.Duration.between(currentTime, deadline).toHours();
                     long minutesLeft = java.time.Duration.between(currentTime, deadline).toMinutesPart();
 
-                    if (hoursLeft < 2) {
+                    if (hoursLeft < 2 && LoginPage.employee1!=null && LoginPage.employee1.getPosition().equals("Customer Service Worker")) {
                         String timeLeftMessage = String.format(
                                 "Time remaining for Complaint NO. %d: %d hours and %d minutes.\nImmediate action is needed.",
                                 complaint.getId(),
                                 hoursLeft,
                                 minutesLeft);
+                   /*     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setContentText(timeLeftMessage);
+                        alert.show();*/
                         EventBus.getDefault().post(new WarningEvent(new Warning(timeLeftMessage)));
                     }}}} });
     //    alertShown.set(false);
