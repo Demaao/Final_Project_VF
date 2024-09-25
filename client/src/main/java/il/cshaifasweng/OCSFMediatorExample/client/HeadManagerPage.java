@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HeadManagerPage {
 
@@ -81,6 +82,7 @@ public class HeadManagerPage {
     @FXML
     private void requestLogoutFromServer() {
         counter = 0;///////////////////////////////////////////////////
+        EventBus.getDefault().unregister(this);
         try {
             NewMessage message = new NewMessage("logOut", LoginPage.employee1);
             SimpleClient.getClient().sendToServer(message);
@@ -104,6 +106,7 @@ public class HeadManagerPage {
             e.printStackTrace();
         }
     }
+
     private List<ChangePriceRequest> requests = new ArrayList<>();
     public static int counter = 0;
 
@@ -118,7 +121,11 @@ public class HeadManagerPage {
                     x++;
                 }
             }
-            if (x > counter && x > 0) {
+            if (x > counter && x > 0 && LoginPage.employee1!=null && LoginPage.employee1.getPosition().equals("Head Manager")) {
+           /*     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("You have " + x + " unanswered change price requests");
+                alert.show();*/
                 EventBus.getDefault().post(new WarningEvent(new Warning("You have " + x + " unanswered change price requests")));
                 counter = x;
             }
