@@ -36,24 +36,34 @@
             </Button>
         </children>
     </AnchorPane>
-    <Label layoutX="321.0" layoutY="349.0" prefHeight="30.0" prefWidth="71.0" text="Host IP" textFill="#f6d9d9">
+    <Label layoutX="321.0" layoutY="334.0" prefHeight="30.0" prefWidth="71.0" text="Host IP" textFill="#f6d9d9">
         <font>
             <Font size="20.0" />
         </font>
     </Label>
-    <TextField fx:id="HostIP" layoutX="400.0" layoutY="344.0" prefHeight="34.0" prefWidth="232.0" text="localhost">
+    <TextField fx:id="HostIP" layoutX="422.0" layoutY="329.0" prefHeight="34.0" prefWidth="232.0" text="localhost">
          <font>
             <Font size="18.0" />
          </font></TextField>
-    <Button fx:id="EnterIP" layoutX="651.0" layoutY="344.0" mnemonicParsing="false" onAction="#enterHostIP" prefHeight="40.0" prefWidth="93.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Enter">
+    <Button fx:id="EnterIP" layoutX="491.0" layoutY="457.0" mnemonicParsing="false" onAction="#enterHostIP" prefHeight="40.0" prefWidth="93.0" style="-fx-background-color: #f6d9d9; -fx-background-radius: 10; -fx-cursor: hand;" text="Enter">
         <font>
             <Font size="18.0" />
         </font>
     </Button>
-    <Label layoutX="262.0" layoutY="231.0" text="Please enter the host IP address" textFill="#f6d9d9">
+    <Label layoutX="250.0" layoutY="231.0" text="Please enter the host IP address" textFill="#f6d9d9">
         <font>
             <Font name="Britannic Bold" size="40.0" />
         </font>
     </Label>
+      <Label layoutX="321.0" layoutY="393.0" prefHeight="30.0" prefWidth="71.0" text="Port" textFill="#f6d9d9">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="Port" layoutX="422.0" layoutY="389.0" prefHeight="34.0" prefWidth="232.0" text="3000">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
 </children>
 </AnchorPane>
