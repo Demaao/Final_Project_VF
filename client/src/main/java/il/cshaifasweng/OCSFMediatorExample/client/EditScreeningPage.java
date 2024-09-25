@@ -5,11 +5,13 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -20,8 +22,7 @@ import java.util.stream.Collectors;
 public class EditScreeningPage {
     @FXML private DatePicker addDateText;
     @FXML private TextField addHoursText;
-    @FXML private Button addTimeBtn;
-    @FXML private Button removeTimeBtn;
+
     @FXML private TableView<Movie> complaintTable;
     @FXML private TableColumn<Movie, String> nameEngColumn;
     @FXML private TableColumn<Movie, String> TypeColumn;
@@ -44,6 +45,7 @@ public class EditScreeningPage {
         EventBus.getDefault().register(this);
         requestMoviesFromServer();
         setupComboBoxes();
+        setupDatePickers();
     }
 
     private void setupComboBoxes() {
@@ -56,11 +58,25 @@ public class EditScreeningPage {
             updateEditComboBox();
         });
 
-
         chooseCinemaBox.setOnAction(event -> {
             updateTableBasedOnCinemaSelection();
             updateEditComboBox();
         });
+    }
+
+    private void setupDatePickers() {
+        final Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                }
+            }
+        };
+        //if the date is before today then it cannot be selected
+        addDateText.setDayCellFactory(dayCellFactory);
+        editNewDateText.setDayCellFactory(dayCellFactory);
     }
 
     private void resetDateTimeInputs() {
@@ -140,9 +156,9 @@ public class EditScreeningPage {
                 return;
             }
 
-            // אם מדובר בסרט בית, ניצור הקרנה ללא צורך בסניף או אולם
+            // if it is a home movie, we will create a screening without the need for a branch or hall
             if (selectedMovie instanceof HomeMovie) {
-                // בדיקה אם כבר קיימת הקרנה באותו זמן
+                // Check if a  screenung time already exists at that tim
                 boolean screeningExists = selectedMovie.getScreenings().stream()
                         .anyMatch(screening -> screening.getScreeningTime().equals(dateTime));
 
@@ -151,15 +167,15 @@ public class EditScreeningPage {
                     return;
                 }
 
-                // יצירת הקרנה חדשה והוספתה לסרט
-                ScreeningData data = new ScreeningData(selectedMovie.getId(), null, dateTime); // אין צורך באולם או בסניף
+                // Create a newr time and add it to the movie
+                ScreeningData data = new ScreeningData(selectedMovie.getId(), null, dateTime);
                 NewMessage addMessage = new NewMessage(data, "addScreening");
                 SimpleClient.getClient().sendToServer(addMessage);
 
-                selectedMovie.addScreening(dateTime, null, null); // עבור סרט בית, אין צורך בסניף או אולם
+                selectedMovie.addScreening(dateTime, null, null);
 
             } else {
-                // הטיפול הקיים בסרטי קולנוע
+                //if we have cinema movie
                 String cinemaName = chooseCinemaBox.getValue();
                 Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
                 if (selectedBranch == null) {
@@ -194,7 +210,6 @@ public class EditScreeningPage {
             updateRemoveComboBox();
 
         } catch (Exception e) {
-            showAlert("An unexpected error occurred. Please check your inputs and try again.");
         } finally {
             restoreSelections();
         }
@@ -269,7 +284,7 @@ public class EditScreeningPage {
                 showAlert("No movie selected.");
                 return;
             }
-
+            // Retrieves the selected time string from the ComboBox and converts it to a LocalDateTime object
             String selectedTimeStr = removeComboBox.getValue();
             LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
             Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
@@ -279,7 +294,7 @@ public class EditScreeningPage {
                 return;
             }
 
-
+            // Handles removal based on the type of movie (Home or Cinema)
             if(selectedMovie instanceof HomeMovie){
                 ScreeningData data = new ScreeningData(selectedMovie.getId(), null, selectedTime);
                 NewMessage removeMessage = new NewMessage(data, "removeScreening");
@@ -289,7 +304,7 @@ public class EditScreeningPage {
                 NewMessage removeMessage = new NewMessage(data, "removeScreening");
                 SimpleClient.getClient().sendToServer(removeMessage);
             }
-
+            // Removes the screening from the local data
             selectedMovie.getScreenings().removeIf(screening ->
                     screening.getScreeningTime().equals(selectedTime) && (screening.getBranch() == selectedBranch));
             updateTable(selectedMovie, cinemaName);
@@ -304,7 +319,6 @@ public class EditScreeningPage {
             restoreSelections();
         }
     }
-
 
 
     private void updateRemoveComboBox() {
@@ -354,7 +368,7 @@ public class EditScreeningPage {
             }
 
             if (selectedMovie instanceof HomeMovie) {
-                // הטיפול בסרטי הבית: אין צורך בבדיקת סניפים ואולמות
+                // The handling of home movies: there is no need to check branches and halls
                 String selectedTimeStr = editComboBox.getValue();
                 LocalDateTime selectedTime = LocalDateTime.parse(selectedTimeStr);
 
@@ -368,12 +382,12 @@ public class EditScreeningPage {
                 }
 
                 screeningToUpdate.setScreeningTime(newDateTime);
-                ScreeningData updateData = new ScreeningData(selectedMovie.getId(), null, newDateTime); // אין צורך בסניף או אולם
+                ScreeningData updateData = new ScreeningData(selectedMovie.getId(), null, newDateTime); //  there is no need to check branches and halls
                 NewMessage updateMessage = new NewMessage(updateData, "editScreening");
                 SimpleClient.getClient().sendToServer(updateMessage);
 
             } else {
-                // הטיפול הקיים בסרטי קולנוע
+                //if we want to edit time for cinema movie
                 String cinemaName = chooseCinemaBox.getValue();
                 Branch selectedBranch = cinemaName != null ? getSelectedBranch(selectedMovie, cinemaName) : null;
 
@@ -411,7 +425,7 @@ public class EditScreeningPage {
             showAlert("Screening time updated successfully.");
 
         } catch (Exception e) {
-            showAlert("An unexpected error occurred while editing the screening time. Please check your inputs and try again.");
+
         } finally {
             restoreSelections();
         }
@@ -424,10 +438,10 @@ public class EditScreeningPage {
     }
 
 
-
     private void updateEditComboBox() {
         Movie selectedMovie = getSelectedMovie();
         String cinemaName = chooseCinemaBox.isVisible() ? chooseCinemaBox.getValue() : null;
+        // Proceeds only if a movie is selected
         if (selectedMovie != null) {
             List<Screening> screenings = new ArrayList<>(selectedMovie.getScreenings());
             if (cinemaName != null) {
@@ -436,6 +450,7 @@ public class EditScreeningPage {
                         .collect(Collectors.toList());
             }
             editComboBox.getItems().clear();
+            // Adds the filtered screenings to the removeComboBox, transforming each screening time to a string
             editComboBox.getItems().addAll(screenings.stream()
                     .map(screening -> screening.getScreeningTime().toString())
                     .collect(Collectors.toList()));
